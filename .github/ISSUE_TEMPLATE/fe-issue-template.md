@@ -1,7 +1,7 @@
 ---
 name: FE issue template
 about: FE issue template입니다
-title: "[FE] "
+title: ""
 labels: ''
 assignees: ''
 

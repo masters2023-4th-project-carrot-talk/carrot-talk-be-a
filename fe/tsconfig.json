@@ -32,6 +32,6 @@
       "@hooks/*": ["hooks/*"]
     }
   },
-  "include": ["src", "svg.d.ts"],
+  "include": ["src", "svg.d.ts", ".storybook/*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

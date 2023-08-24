@@ -9,7 +9,7 @@ const meta: Meta<typeof MenuItem> = {
   },
   argTypes: {
     children: {
-      control: { type: 'text'},
+      control: { type: 'text' },
       defaultValue: 'Item 1',
     },
     state: {
@@ -19,7 +19,7 @@ const meta: Meta<typeof MenuItem> = {
     variant: {
       control: { type: 'select', options: ['default', 'warning'] },
       defaultValue: 'default',
-    }
+    },
   },
 };
 
@@ -31,29 +31,29 @@ export const Default: Story = {
     children: 'Item 1',
     state: 'default',
     variant: 'default',
-  }
-} 
+  },
+};
 
 export const Selected: Story = {
   args: {
     children: 'Item 1',
     state: 'selected',
     variant: 'default',
-  }
-}
+  },
+};
 
 export const Warning: Story = {
   args: {
     children: 'Delete All',
     state: 'selected',
     variant: 'warning',
-  }
-}
+  },
+};
 
 export const WarningSelected: Story = {
   args: {
     children: 'Delete All',
     state: 'selected',
     variant: 'warning',
-  }
-}
+  },
+};

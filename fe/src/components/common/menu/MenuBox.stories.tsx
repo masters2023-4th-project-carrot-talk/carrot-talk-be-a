@@ -6,7 +6,7 @@ const meta: Meta<typeof MenuBox> = {
   title: 'Example/MenuBox',
   component: MenuBox,
   parameters: {
-     layout: 'centered',
+    layout: 'centered',
   },
   argTypes: {},
 };
@@ -39,7 +39,7 @@ export const Warning: Story = {
     <MenuBox>
       <MenuItem state="selected">Item 1</MenuItem>
       <MenuItem>Item 2</MenuItem>
-      <MenuItem variant='warning'>Delete All</MenuItem>
+      <MenuItem variant="warning">Delete All</MenuItem>
     </MenuBox>
   ),
-}
+};

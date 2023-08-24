@@ -21,7 +21,7 @@ const meta: Meta<typeof Dropdown> = {
       control: {
         type: 'boolean',
       },
-    }
+    },
   },
 };
 

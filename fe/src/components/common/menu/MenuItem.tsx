@@ -1,6 +1,6 @@
+import { useDropdownStore } from '@/store/dropdownStore';
 import { Theme, css } from '@emotion/react';
-import { FC, useContext } from 'react';
-import { DropdownContext } from '../dropdown/Dropdown';
+import { FC } from 'react';
 
 type Props = {
   children?: string;
@@ -10,7 +10,10 @@ type Props = {
 };
 
 export const MenuItem: FC<Props> = ({ children, state, variant, onClick }) => {
-  const { closeMenu, autoClose } = useContext(DropdownContext);
+  const { closeMenu, autoClose } = useDropdownStore((state) => ({
+    closeMenu: state.closeMenu,
+    autoClose: state.autoClose,
+  }));
 
   const handleClick = () => {
     onClick?.();

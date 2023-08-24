@@ -76,5 +76,9 @@ const ButtonStyle = (
     &:hover, &:active {
       opacity: 0.8;
     }
+
+    &:disabled {
+      opacity: 0.32;
+    }
   `;
 };

@@ -1,6 +1,7 @@
 import { MenuBox } from '@components/common/menu/MenuBox';
 import { MenuItem } from '@components/common/menu/MenuItem';
 import type { Meta, StoryObj } from '@storybook/react';
+import { Backdrop } from './Backdrop';
 import { Dropdown } from './Dropdown';
 
 const meta: Meta<typeof Dropdown> = {
@@ -16,6 +17,11 @@ const meta: Meta<typeof Dropdown> = {
         options: ['left', 'right'],
       },
     },
+    autoClose: {
+      control: {
+        type: 'boolean',
+      },
+    }
   },
 };
 
@@ -26,10 +32,11 @@ export const Default: Story = {
   render: () => (
     <Dropdown>
       <button>열기</button>
-      <ul>
-        <li>Item 1</li>
-        <li>Item 2</li>
-      </ul>
+      <MenuBox>
+        <MenuItem>옵션1</MenuItem>
+        <MenuItem>옵션2</MenuItem>
+        <MenuItem>옵션3</MenuItem>
+      </MenuBox>
     </Dropdown>
   ),
 };
@@ -37,23 +44,8 @@ export const Default: Story = {
 export const NotRender: Story = {
   render: () => (
     <Dropdown>
-      <ul>
-        <li>Item 1</li>
-        <li>Item 2</li>
-      </ul>
-    </Dropdown>
-  ),
-};
-
-export const WithMenuBox: Story = {
-  render: () => (
-    <Dropdown>
       <button>열기</button>
-      <MenuBox>
-        <MenuItem>옵션1</MenuItem>
-        <MenuItem>옵션2</MenuItem>
-        <MenuItem>옵션3</MenuItem>
-      </MenuBox>
+      <Backdrop />
     </Dropdown>
   ),
 };
@@ -71,9 +63,9 @@ export const AlignRight: Story = {
   ),
 };
 
-export const AlignLeft: Story = {
+export const AutoClose: Story = {
   render: () => (
-    <Dropdown align="left">
+    <Dropdown autoClose>
       <button>열기</button>
       <MenuBox>
         <MenuItem>옵션1</MenuItem>

@@ -9,9 +9,9 @@ export const findButtonElement = (childrenArray: ReactNode[]) => {
   return button;
 };
 
-export const findListElement = (childrenArray: ReactNode[]) => {
+export const findMenuBox = (childrenArray: ReactNode[]) => {
   const list = childrenArray.find((child) => {
-    return isValidElement(child) && (child.type === 'ul' || child.type === MenuBox);
+    return isValidElement(child) && child.type === MenuBox;
   });
 
   return list;

@@ -1,15 +1,29 @@
 import { Theme, css } from '@emotion/react';
-import { FC } from 'react';
+import { FC, useContext } from 'react';
+import { DropdownContext } from '../dropdown/Dropdown';
 
 type Props = {
   children?: string;
   state?: 'default' | 'selected';
   variant?: 'default' | 'warning';
+  onClick?: () => void;
 };
 
-export const MenuItem: FC<Props> = ({ children, state, variant }) => {
+export const MenuItem: FC<Props> = ({ children, state, variant, onClick }) => {
+  const { closeMenu, autoClose } = useContext(DropdownContext);
+
+  const handleClick = () => {
+    onClick?.();
+    autoClose && closeMenu();
+  };
+
   return (
-    <li css={(theme) => menuItemStyle(theme, state, variant)}>{children}</li>
+    <li
+      css={(theme) => menuItemStyle(theme, state, variant)}
+      onClick={handleClick}
+    >
+      {children}
+    </li>
   );
 };
 

@@ -1,11 +1,18 @@
 import { Theme, css } from '@emotion/react';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useContext } from 'react';
+import { DropdownContext } from '../dropdown/Dropdown';
 
 type Props = {
   children?: ReactNode;
 };
 
 export const MenuBox: FC<Props> = ({ children }) => {
+  const { isOpen } = useContext(DropdownContext);
+
+  if (!isOpen) {
+    return null;
+  }
+
   return <ul css={menuItemStyle}>{children}</ul>;
 };
 
@@ -15,7 +22,7 @@ const menuItemStyle = (theme: Theme) => css`
   flex-direction: column;
   align-items: flex-start;
   border-radius: 12px;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 4px 4px 0px ${theme.color.neutral.overlay};
 
   & > li {
     &:first-of-type {

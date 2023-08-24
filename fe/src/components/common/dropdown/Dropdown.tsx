@@ -1,34 +1,51 @@
 import { css } from '@emotion/react';
-import { findButtonElement, findListElement } from '@utils/findElement';
-import { Children, FC, ReactNode, useState } from 'react';
+import { findButtonElement, findMenuBox } from '@utils/findElement';
+import {
+  Children,
+  FC,
+  ReactElement,
+  ReactNode,
+  cloneElement,
+  createContext,
+  useState,
+} from 'react';
 import { Backdrop } from './Backdrop';
 
 type Props = {
   children?: ReactNode;
   align?: 'left' | 'right';
+  autoClose?: boolean;
 };
 
-export const Dropdown: FC<Props> = ({ children, align }) => {
+export const DropdownContext = createContext({
+  isOpen: false,
+  closeMenu: () => {},
+  autoClose: false,
+});
+
+export const Dropdown: FC<Props> = ({ children, align, autoClose = false }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const childrenArray = Children.toArray(children);
 
   const button = findButtonElement(childrenArray);
-  const list = findListElement(childrenArray);
+  const menu = findMenuBox(childrenArray);
 
-  if (!button || !list) {
+  if (!button || !menu) {
     return null;
   }
 
-  const openList = () => setIsOpen(true);
-  const closeList = () => setIsOpen(false);
+  const openMenu = () => setIsOpen(true);
+  const closeMenu = () => setIsOpen(false);
 
   return (
-    <div css={() => dropdownStyle(align)}>
-      <div onClick={openList}>{button}</div>
-      {isOpen && list}
-      {isOpen && <Backdrop onClick={closeList} />}
-    </div>
+    <DropdownContext.Provider value={{ isOpen, closeMenu, autoClose }}>
+      <div css={() => dropdownStyle(align)}>
+        <div onClick={openMenu}>{button}</div>
+        {cloneElement(menu as ReactElement, { onClick: closeMenu })}
+        <Backdrop onClick={closeMenu} />
+      </div>
+    </DropdownContext.Provider>
   );
 };
 

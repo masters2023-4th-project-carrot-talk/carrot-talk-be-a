@@ -10,12 +10,14 @@ const meta: Meta = {
   },
   argTypes: {
     variant: {
-      control: { type: 'select', options: ['rectangle', 'category'] },
+      control: {
+        type: 'select',
+        options: ['rectangle', 'category', 'text', 'fab'],
+      },
       defaultValue: 'rectangle',
     },
     state: {
       control: { type: 'select', options: ['default', 'active'] },
-      defaultValue: 'default',
     },
     size: {
       control: { type: 'select', options: ['s', 'l'] },
@@ -53,10 +55,25 @@ export const CategoryDefault: Story = {
   },
 };
 
-export const CategoryActive: Story = {
+export const Text: Story = {
   args: {
-    variant: 'category',
-    state: 'active',
-    children: 'Category Active',
+    variant: 'text',
+    children: 'text',
+  },
+};
+
+export const FabLarge: Story = {
+  args: {
+    variant: 'fab',
+    size: 'l',
+    children: 'FabLarge',
+  },
+};
+
+export const FabSmall: Story = {
+  args: {
+    variant: 'fab',
+    size: 's',
+    children: 'FabSmall',
   },
 };

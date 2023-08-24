@@ -1,18 +1,11 @@
 import { Theme, css } from '@emotion/react';
-import { FC, ReactNode, useContext } from 'react';
-import { DropdownContext } from '../dropdown/Dropdown';
+import { FC, ReactNode } from 'react';
 
 type Props = {
   children?: ReactNode;
 };
 
 export const MenuBox: FC<Props> = ({ children }) => {
-  const { isOpen } = useContext(DropdownContext);
-
-  if (!isOpen) {
-    return null;
-  }
-
   return <ul css={menuItemStyle}>{children}</ul>;
 };
 

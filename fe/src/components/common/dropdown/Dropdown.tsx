@@ -42,8 +42,8 @@ export const Dropdown: FC<Props> = ({ children, align, autoClose = false }) => {
     <DropdownContext.Provider value={{ isOpen, closeMenu, autoClose }}>
       <div css={() => dropdownStyle(align)}>
         <div onClick={openMenu}>{button}</div>
-        {cloneElement(menu as ReactElement, { onClick: closeMenu })}
         <Backdrop onClick={closeMenu} />
+        {isOpen && cloneElement(menu as ReactElement, { onClick: closeMenu })}
       </div>
     </DropdownContext.Provider>
   );

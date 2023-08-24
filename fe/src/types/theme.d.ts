@@ -2,7 +2,7 @@ import '@emotion/react';
 
 declare module '@emotion/react' {
   export interface Theme {
-    colors: {
+    color: {
       neutral: {
         text: string;
         textWeak: string;
@@ -34,7 +34,7 @@ declare module '@emotion/react' {
     backdropFilter: {
       blur: string;
     };
-    fonts: {
+    font: {
       displayStrong20: string;
       displayStrong16: string;
       displayDefault16: string;

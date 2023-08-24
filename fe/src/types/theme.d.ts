@@ -34,7 +34,7 @@ declare module '@emotion/react' {
     backdropFilter: {
       blur: string;
     };
-    fonts: {
+    font: {
       displayStrong20: string;
       displayStrong16: string;
       displayDefault16: string;

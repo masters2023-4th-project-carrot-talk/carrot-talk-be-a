@@ -2,11 +2,15 @@ import { FC } from 'react';
 import { useTheme } from '@emotion/react';
 import { Modal } from '@components/common/modal/Modal';
 import { ModalHeader } from '@components/common/modal/ModalHeader';
-import { ReactComponent as X } from '@assets/x.svg';
+import { ReactComponent as XIcon } from '@assets/x.svg';
 import { Button } from '@components/common/button/Button';
 import { useModalStore } from '@stores/PopupStore';
 import { useAlertStore } from '@stores/PopupStore';
 import { Alert } from '@components/common/alert/Alert';
+import { AlertContent } from '@components/common/alert/AlertContent';
+import { AlertButtons } from '@components/common/alert/AlertButtons';
+import { ModalList } from '@components/common/modal/ModalList';
+import { ModalListItem } from '@components/common/modal/ModalListItem';
 
 export const TestPage: FC = () => {
   const theme = useTheme();
@@ -49,6 +53,19 @@ export const TestPage: FC = () => {
     openModalDim();
   };
 
+  const modalList = [
+    { id: 0, text: '역삼1동' },
+    { id: 1, text: '역삼2동' },
+    { id: 2, text: '역삼3동' },
+    { id: 3, text: '역삼4동' },
+    { id: 4, text: '역삼5동' },
+    { id: 5, text: '역삼6동' },
+    { id: 6, text: '역삼7동' },
+    { id: 7, text: '역삼8동' },
+    { id: 8, text: '역삼9동' },
+    { id: 9, text: '역삼10동' },
+  ];
+
   return (
     <div
       css={{
@@ -66,16 +83,38 @@ export const TestPage: FC = () => {
             <span>동네 설정</span>
 
             <Button variant="text" onClick={modalCloseHandler}>
-              <X stroke={theme.color.neutral.textStrong} />
+              <XIcon stroke={theme.color.neutral.textStrong} />
             </Button>
           </ModalHeader>
         }
       >
+        <ModalList>
+          {modalList.map((item) => (
+            <ModalListItem
+              onClick={() => console.log(item.id)}
+              text={item.text}
+              key={item.id}
+            />
+          ))}
+        </ModalList>
+
         <button onClick={alertOpenHandler}>열어 Alert</button>
       </Modal>
 
       <Alert isOpen={alert} isDimOpen={alertDim}>
-        <button onClick={alertCloseHandler}>닫아 Alert</button>
+        <AlertContent>'역삼1동'을 삭제하시겠어요?</AlertContent>
+        <AlertButtons>
+          <Button variant="text" onClick={alertCloseHandler}>
+            취소
+          </Button>
+          <Button
+            css={{ color: theme.color.system.warning }}
+            variant="text"
+            onClick={alertCloseHandler}
+          >
+            삭제
+          </Button>
+        </AlertButtons>
       </Alert>
     </div>
   );

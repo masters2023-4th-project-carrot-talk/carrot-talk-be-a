@@ -29,7 +29,8 @@
       "@pages/*": ["pages/*"],
       "@styles/*": ["styles/*"],
       "@utils/*": ["utils/*"],
-      "@hooks/*": ["hooks/*"]
+      "@hooks/*": ["hooks/*"],
+      "@stores/*": ["stores/*"]
     }
   },
   "include": ["src", "svg.d.ts", ".storybook/*"],

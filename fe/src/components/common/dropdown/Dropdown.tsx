@@ -1,4 +1,4 @@
-import { useDropdownStore } from '@/store/dropdownStore';
+import { useDropdownStore } from '@/store/DropdownStore';
 import { css } from '@emotion/react';
 import { findButtonElement, findMenuBox } from '@utils/findElement';
 import { Children, FC, ReactNode, useEffect } from 'react';
@@ -11,14 +11,7 @@ type Props = {
 };
 
 export const Dropdown: FC<Props> = ({ children, align, autoClose = false }) => {
-  const { isOpen, setAutoClose, closeMenu, openMenu } = useDropdownStore(
-    (state) => ({
-      isOpen: state.isOpen,
-      setAutoClose: state.setAutoClose,
-      closeMenu: state.closeMenu,
-      openMenu: state.openMenu,
-    }),
-  );
+  const { isOpen, setAutoClose, closeMenu, openMenu } = useDropdownStore();
 
   useEffect(() => {
     setAutoClose(autoClose);

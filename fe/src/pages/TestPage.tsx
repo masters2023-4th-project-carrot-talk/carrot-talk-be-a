@@ -4,14 +4,14 @@ import { Modal } from '@components/common/modal/Modal';
 import { ModalHeader } from '@components/common/modal/ModalHeader';
 import { ReactComponent as XIcon } from '@assets/x.svg';
 import { Button } from '@components/common/button/Button';
-import { useModalStore } from '@stores/PopupStore';
-import { useAlertStore } from '@stores/PopupStore';
+import { useModalStore } from '@store/PopupStore';
+import { useAlertStore } from '@store/PopupStore';
 import { Alert } from '@components/common/alert/Alert';
 import { AlertContent } from '@components/common/alert/AlertContent';
 import { AlertButtons } from '@components/common/alert/AlertButtons';
 import { ModalList } from '@components/common/modal/ModalList';
 import { ModalListItem } from '@components/common/modal/ModalListItem';
-
+// 모달, alert동작 test용 페이지
 export const TestPage: FC = () => {
   const theme = useTheme();
   const {
@@ -22,6 +22,7 @@ export const TestPage: FC = () => {
     openAlertDim,
     closeAlertDim,
   } = useAlertStore();
+
   const {
     modal,
     modalDim,

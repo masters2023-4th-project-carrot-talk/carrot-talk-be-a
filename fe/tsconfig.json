@@ -30,7 +30,7 @@
       "@styles/*": ["styles/*"],
       "@utils/*": ["utils/*"],
       "@hooks/*": ["hooks/*"],
-      "@stores/*": ["stores/*"]
+      "@store/*": ["store/*"]
     }
   },
   "include": ["src", "svg.d.ts", ".storybook/*"],

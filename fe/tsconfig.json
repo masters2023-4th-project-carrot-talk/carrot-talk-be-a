@@ -24,6 +24,7 @@
     /* Path Alias */
     "baseUrl": "./src",
     "paths": {
+      "@/*": ["*"],
       "@assets/*": ["assets/*"],
       "@components/*": ["components/*"],
       "@pages/*": ["pages/*"],
@@ -33,6 +34,6 @@
       "@store/*": ["store/*"]
     }
   },
-  "include": ["src", "svg.d.ts", ".storybook/*"],
+  "include": ["src", "svg.d.ts", "theme.d.ts", ".storybook/*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -69,5 +69,5 @@ export default {
   backdropFilter: {
     blur: 'blur(8px)',
   },
-  fonts,
+  font: fonts,
 };

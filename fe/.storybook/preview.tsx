@@ -1,5 +1,5 @@
-import type { Preview } from '@storybook/react';
 import { Global, ThemeProvider } from '@emotion/react';
+import type { Preview } from '@storybook/react';
 import designSystem from '@styles/designSystem';
 import { globalStyle } from '@styles/globalStyle';
 

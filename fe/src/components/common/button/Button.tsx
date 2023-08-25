@@ -30,12 +30,12 @@ const ButtonStyle = (
       s: {
         padding: '8px 16px',
         width: 'fit-content',
-        font: theme.fonts.availableStrong12,
+        font: theme.font.availableStrong12,
       },
       l: {
         padding: '16px',
         width: '329px',
-        font: theme.fonts.availableStrong16,
+        font: theme.font.availableStrong16,
       },
     },
     fab: {
@@ -60,7 +60,7 @@ const ButtonStyle = (
       height: '32px',
       padding: '0px 16px',
       borderRadius: '50px',
-      font: theme.fonts.displayDefault12,
+      font: theme.font.displayDefault12,
     },
     fab: {
       ...SIZE_STYLES.fab[size],
@@ -69,7 +69,7 @@ const ButtonStyle = (
     },
     text: {
       gap: '8px',
-      font: theme.fonts.availableStrong16,
+      font: theme.font.availableStrong16,
       color: theme.color.neutral.text,
     },
   };

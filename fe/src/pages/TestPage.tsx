@@ -4,7 +4,7 @@ import { Modal } from '@components/common/modal/Modal';
 import { ModalHeader } from '@components/common/modal/ModalHeader';
 import { ReactComponent as XIcon } from '@assets/x.svg';
 import { Button } from '@components/common/button/Button';
-import { useModalStore } from '@store/PopupStore';
+import { useModalStore, usePopupStore } from '@store/PopupStore';
 import { useAlertStore } from '@store/PopupStore';
 import { Alert } from '@components/common/alert/Alert';
 import { AlertContent } from '@components/common/alert/AlertContent';
@@ -15,43 +15,34 @@ import { ModalListItem } from '@components/common/modal/ModalListItem';
 export const TestPage: FC = () => {
   const theme = useTheme();
   const {
-    alert,
-    alertDim,
-    openAlert,
-    closeAlert,
-    openAlertDim,
-    closeAlertDim,
-  } = useAlertStore();
-
-  const {
     modal,
+    alert,
     modalDim,
-    openModal,
-    closeModal,
-    openModalDim,
-    closeModalDim,
-  } = useModalStore();
+    alertDim,
+    openPopup,
+    closePopup,
+    openDim,
+    closeDim,
+  } = usePopupStore();
 
   const modalOpenHandler = () => {
-    openModal();
-    openModalDim();
+    openPopup('modal');
+    openDim('modal');
   };
 
   const modalCloseHandler = () => {
-    closeModal();
-    closeModalDim();
+    closePopup('modal');
+    closeDim('modal');
   };
 
   const alertOpenHandler = () => {
-    openAlert();
-    openAlertDim();
-    closeModalDim();
+    openPopup('alert');
+    openDim('alert');
   };
 
   const alertCloseHandler = () => {
-    closeAlert();
-    closeAlertDim();
-    openModalDim();
+    closePopup('alert');
+    closeDim('alert');
   };
 
   const modalList = [

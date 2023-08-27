@@ -1,37 +1,35 @@
 import { create } from 'zustand';
 
-type ModalState = {
+type PopupState = {
   modal: boolean;
-  modalDim: boolean;
-  openModal: () => void;
-  closeModal: () => void;
-  openModalDim: () => void;
-  closeModalDim: () => void;
-};
-
-type AlertState = {
   alert: boolean;
+  modalDim: boolean;
   alertDim: boolean;
-  openAlert: () => void;
-  closeAlert: () => void;
-  openAlertDim: () => void;
-  closeAlertDim: () => void;
+  openPopup: (type: 'modal' | 'alert') => void;
+  closePopup: (type: 'modal' | 'alert') => void;
+  openDim: (type: 'modal' | 'alert') => void;
+  closeDim: (type: 'modal' | 'alert') => void;
 };
 
-export const useModalStore = create<ModalState>((set) => ({
+export const usePopupStore = create<PopupState>((set) => ({
   modal: false,
-  modalDim: false,
-  openModal: () => set(() => ({ modal: true })),
-  closeModal: () => set(() => ({ modal: false })),
-  openModalDim: () => set(() => ({ modalDim: true })),
-  closeModalDim: () => set(() => ({ modalDim: false })),
-}));
-
-export const useAlertStore = create<AlertState>((set) => ({
   alert: false,
+  modalDim: false,
   alertDim: false,
-  openAlert: () => set(() => ({ alert: true })),
-  closeAlert: () => set(() => ({ alert: false })),
-  openAlertDim: () => set(() => ({ alertDim: true })),
-  closeAlertDim: () => set(() => ({ alertDim: false })),
+  openPopup: (type) => {
+    if (type === 'modal') set({ modal: true });
+    else if (type === 'alert') set({ alert: true });
+  },
+  closePopup: (type) => {
+    if (type === 'modal') set({ modal: false });
+    else if (type === 'alert') set({ alert: false });
+  },
+  openDim: (type) => {
+    if (type === 'modal') set({ modalDim: true });
+    else if (type === 'alert') set({ alertDim: true, modalDim: false });
+  },
+  closeDim: (type) => {
+    if (type === 'modal') set({ modalDim: false });
+    else if (type === 'alert') set({ alertDim: false, modalDim: true });
+  },
 }));

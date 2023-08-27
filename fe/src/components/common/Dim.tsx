@@ -3,10 +3,11 @@ import { Theme, css } from '@emotion/react';
 
 type Props = {
   isOpen: boolean;
+  onClose?: () => void;
 };
 
-export const Dim: FC<Props> = ({ isOpen }) => {
-  return <>{isOpen && <div css={DimStyle} />}</>;
+export const Dim: FC<Props> = ({ isOpen, onClose }) => {
+  return <>{isOpen && <div css={DimStyle} onClick={onClose} />}</>;
 };
 
 const DimStyle = (theme: Theme) => {

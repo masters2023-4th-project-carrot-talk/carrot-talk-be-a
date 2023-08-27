@@ -1,13 +1,12 @@
-import { FC } from 'react';
 import { useTheme } from '@emotion/react';
+import { usePopupStore } from '@store/PopupStore';
 import { Modal } from '@components/common/modal/Modal';
 import { ModalHeader } from '@components/common/modal/ModalHeader';
-import { ReactComponent as XIcon } from '@assets/x.svg';
-import { Button } from '@components/common/button/Button';
-import { usePopupStore } from '@store/PopupStore';
 import { ModalListItem } from '@components/common/modal/ModalListItem';
+import { Button } from '@components/common/button/Button';
+import { ReactComponent as XIcon } from '@assets/x.svg';
 
-export const CategoryModal: FC = () => {
+export const CategoryModal: React.FC = () => {
   const theme = useTheme();
   const { isOpen, isDimOpen, togglePopup, toggleDim } = usePopupStore();
 

@@ -1,5 +1,4 @@
 import { Theme, css } from '@emotion/react';
-import React, { FC } from 'react';
 import { Dim } from '../Dim';
 
 type Props = {
@@ -9,7 +8,12 @@ type Props = {
   children: React.ReactNode;
 };
 
-export const Modal: FC<Props> = ({ isOpen, isDimOpen, header, children }) => {
+export const Modal: React.FC<Props> = ({
+  isOpen,
+  isDimOpen,
+  header,
+  children,
+}) => {
   console.log('Modal render');
 
   return (

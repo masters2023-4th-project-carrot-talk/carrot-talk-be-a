@@ -1,12 +1,11 @@
 import { Theme, css } from '@emotion/react';
-import { FC } from 'react';
 
 type Props = {
   text: string;
   onClick: () => void;
 };
 
-export const ModalListItem: FC<Props> = ({ text, onClick }) => {
+export const ModalListItem: React.FC<Props> = ({ text, onClick }) => {
   return (
     <li onClick={onClick} css={ModalListItemStyle}>
       <span>{text}</span>

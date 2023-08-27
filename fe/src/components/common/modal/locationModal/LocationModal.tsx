@@ -1,13 +1,13 @@
+import { useState } from 'react';
 import { useTheme } from '@emotion/react';
 import { Modal } from '@components/common/modal/Modal';
-import { ModalHeader } from '@components/common/modal/ModalHeader';
-import { useState } from 'react';
-import { ReactComponent as XIcon } from '@assets/x.svg';
-import { ReactComponent as ChevronLeft } from '@assets/chevron-left.svg';
-import { Button } from '@components/common/button/Button';
 import { usePopupStore } from '@store/PopupStore';
+import { ModalHeader } from '@components/common/modal/ModalHeader';
 import { ControlLocation } from './content/ControlLocation';
 import { SearchLocation } from './content/SearchLocation';
+import { Button } from '@components/common/button/Button';
+import { ReactComponent as XIcon } from '@assets/x.svg';
+import { ReactComponent as ChevronLeft } from '@assets/chevron-left.svg';
 
 export const LocationModal: React.FC = () => {
   const theme = useTheme();

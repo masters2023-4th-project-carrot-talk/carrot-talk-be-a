@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { css } from '@emotion/react';
 import { Theme } from '@emotion/react/macro';
 
@@ -6,7 +5,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-export const ModalHeader: FC<Props> = ({ children }) => {
+export const ModalHeader: React.FC<Props> = ({ children }) => {
   return <div css={ModalHeaderStyle}>{children}</div>;
 };
 

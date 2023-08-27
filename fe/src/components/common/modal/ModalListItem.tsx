@@ -8,7 +8,7 @@ type Props = {
 
 export const ModalListItem: FC<Props> = ({ text, onClick }) => {
   return (
-    <li onClick={onClick} css={(theme) => ModalListItemStyle(theme)}>
+    <li onClick={onClick} css={ModalListItemStyle}>
       <span>{text}</span>
     </li>
   );

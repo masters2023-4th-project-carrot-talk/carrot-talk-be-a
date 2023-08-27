@@ -15,7 +15,7 @@ export const Modal: FC<Props> = ({ isOpen, isDimOpen, header, children }) => {
   return (
     <>
       {isOpen && (
-        <div css={(theme) => ModalStyle(theme)}>
+        <div css={ModalStyle}>
           <Dim isOpen={isDimOpen} />
           <div className="modal">
             {header}

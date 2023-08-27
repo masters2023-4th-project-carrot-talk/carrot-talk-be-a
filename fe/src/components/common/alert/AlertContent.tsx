@@ -5,7 +5,7 @@ type Props = {
 };
 
 export const AlertContent: FC<Props> = ({ children }) => {
-  return <div css={(theme) => AlertContentStyle(theme)}>{children}</div>;
+  return <div css={AlertContentStyle}>{children}</div>;
 };
 
 const AlertContentStyle = (theme: Theme) => {

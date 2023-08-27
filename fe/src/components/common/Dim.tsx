@@ -6,7 +6,7 @@ type Props = {
 };
 
 export const Dim: FC<Props> = ({ isOpen }) => {
-  return <>{isOpen && <div css={(theme) => DimStyle(theme)} />}</>;
+  return <>{isOpen && <div css={DimStyle} />}</>;
 };
 
 const DimStyle = (theme: Theme) => {

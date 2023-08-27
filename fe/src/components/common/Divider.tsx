@@ -4,7 +4,7 @@ import { Theme, css } from '@emotion/react';
 // 구분선
 
 export const Divider: FC = () => {
-  return <div css={(theme) => DividerStyle(theme)}></div>;
+  return <div css={DividerStyle}></div>;
 };
 
 const DividerStyle = (theme: Theme) => {

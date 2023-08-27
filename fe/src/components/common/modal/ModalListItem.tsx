@@ -29,5 +29,11 @@ const ModalListItemStyle = (theme: Theme) => {
       font: ${theme.font.enabledStrong16};
       color: ${theme.color.neutral.textStrong};
     }
+
+    &:hover {
+      cursor: pointer;
+      font: ${theme.font.enabledStrong16};
+      color: ${theme.color.neutral.textStrong};
+    }
   `;
 };

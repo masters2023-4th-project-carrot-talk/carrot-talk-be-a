@@ -53,5 +53,22 @@ const ModalStyle = (theme: Theme) => {
       background-color: ${theme.color.neutral.background};
       box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     }
+
+    ul {
+      display: flex;
+      padding: 0px 24px;
+      flex-direction: column;
+      align-items: flex-start;
+      align-self: stretch;
+      overflow-y: scroll;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    li:not(:last-child) {
+      border-bottom: 1px solid ${theme.color.neutral.border};
+    }
   `;
 };

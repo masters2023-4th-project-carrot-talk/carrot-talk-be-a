@@ -1,35 +1,36 @@
 import { create } from 'zustand';
 
 type PopupState = {
-  modal: boolean;
-  alert: boolean;
-  modalDim: boolean;
-  alertDim: boolean;
-  openPopup: (type: 'modal' | 'alert') => void;
-  closePopup: (type: 'modal' | 'alert') => void;
-  openDim: (type: 'modal' | 'alert') => void;
-  closeDim: (type: 'modal' | 'alert') => void;
+  isOpen: Record<PopupType, boolean>;
+  isDimOpen: Record<PopupType, boolean>;
+  togglePopup: (type: PopupType, open: boolean) => void;
+  toggleDim: (type: PopupType, open: boolean) => void;
 };
 
 export const usePopupStore = create<PopupState>((set) => ({
-  modal: false,
-  alert: false,
-  modalDim: false,
-  alertDim: false,
-  openPopup: (type) => {
-    if (type === 'modal') set({ modal: true });
-    else if (type === 'alert') set({ alert: true });
+  isOpen: {
+    modal: false,
+    alert: false,
   },
-  closePopup: (type) => {
-    if (type === 'modal') set({ modal: false });
-    else if (type === 'alert') set({ alert: false });
+  isDimOpen: {
+    modal: false,
+    alert: false,
   },
-  openDim: (type) => {
-    if (type === 'modal') set({ modalDim: true });
-    else if (type === 'alert') set({ alertDim: true, modalDim: false });
-  },
-  closeDim: (type) => {
-    if (type === 'modal') set({ modalDim: false });
-    else if (type === 'alert') set({ alertDim: false, modalDim: true });
-  },
+  togglePopup: (type, open) =>
+    set((state) => ({
+      ...state,
+      isOpen: { ...state.isOpen, [type]: open },
+    })),
+  toggleDim: (type, open) =>
+    set((state) => {
+      const otherDim = type === 'modal' ? 'alert' : 'modal';
+      return {
+        ...state,
+        isDimOpen: {
+          ...state.isDimOpen,
+          [type]: open,
+          [otherDim]: !open,
+        },
+      };
+    }),
 }));

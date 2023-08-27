@@ -4,8 +4,7 @@ import { Modal } from '@components/common/modal/Modal';
 import { ModalHeader } from '@components/common/modal/ModalHeader';
 import { ReactComponent as XIcon } from '@assets/x.svg';
 import { Button } from '@components/common/button/Button';
-import { useModalStore, usePopupStore } from '@store/PopupStore';
-import { useAlertStore } from '@store/PopupStore';
+import { usePopupStore } from '@store/PopupStore';
 import { Alert } from '@components/common/alert/Alert';
 import { AlertContent } from '@components/common/alert/AlertContent';
 import { AlertButtons } from '@components/common/alert/AlertButtons';
@@ -14,35 +13,26 @@ import { ModalListItem } from '@components/common/modal/ModalListItem';
 // 모달, alert동작 test용 페이지
 export const TestPage: FC = () => {
   const theme = useTheme();
-  const {
-    modal,
-    alert,
-    modalDim,
-    alertDim,
-    openPopup,
-    closePopup,
-    openDim,
-    closeDim,
-  } = usePopupStore();
+  const { isOpen, isDimOpen, togglePopup, toggleDim } = usePopupStore();
 
   const modalOpenHandler = () => {
-    openPopup('modal');
-    openDim('modal');
+    togglePopup('modal', true);
+    toggleDim('modal', true);
   };
 
   const modalCloseHandler = () => {
-    closePopup('modal');
-    closeDim('modal');
+    togglePopup('modal', false);
+    toggleDim('modal', false);
   };
 
   const alertOpenHandler = () => {
-    openPopup('alert');
-    openDim('alert');
+    togglePopup('alert', true);
+    toggleDim('alert', true);
   };
 
   const alertCloseHandler = () => {
-    closePopup('alert');
-    closeDim('alert');
+    togglePopup('alert', false);
+    toggleDim('alert', false);
   };
 
   const modalList = [
@@ -68,8 +58,8 @@ export const TestPage: FC = () => {
       <button onClick={modalOpenHandler}>열어 모달</button>
 
       <Modal
-        isOpen={modal}
-        isDimOpen={modalDim}
+        isOpen={isOpen.modal}
+        isDimOpen={isDimOpen.modal}
         header={
           <ModalHeader>
             <span>동네 설정</span>
@@ -93,7 +83,7 @@ export const TestPage: FC = () => {
         <button onClick={alertOpenHandler}>열어 Alert</button>
       </Modal>
 
-      <Alert isOpen={alert} isDimOpen={alertDim}>
+      <Alert isOpen={isOpen.alert} isDimOpen={isDimOpen.alert}>
         <AlertContent>'역삼1동'을 삭제하시겠어요?</AlertContent>
         <AlertButtons>
           <Button variant="text" onClick={alertCloseHandler}>

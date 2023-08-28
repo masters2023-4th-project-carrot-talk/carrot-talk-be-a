@@ -2,7 +2,7 @@ import { Theme, css } from '@emotion/react';
 import { Button } from '../button/Button';
 import { usePopupStore } from '@/store/PopupStore';
 type Props = {
-  buttonText?: '취소' | '닫기';
+  buttonText: '취소' | '닫기';
   onDelete?: () => void;
 };
 

@@ -1,6 +1,10 @@
 import { css, Theme } from '@emotion/react';
 
 export const globalStyle = (theme: Theme) => css`
+  #root {
+    position: relative;
+  }
+
   body {
     height: 100vh;
     display: flex;

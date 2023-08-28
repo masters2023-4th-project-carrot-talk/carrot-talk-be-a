@@ -1,10 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
-
+import { ReactComponent as ChevronLeft } from '@assets/chevron-left.svg';
+import { ReactComponent as Plus } from '@assets/plus.svg';
+import { ReactComponent as Send } from '@assets/send.svg';
 import { Button } from './Button';
 
 const meta: Meta = {
-  title: 'Example/Button',
+  title: 'Button',
   component: Button,
+  tags: ['autodocs'],
   parameters: {
     layout: 'centered',
   },
@@ -55,10 +58,22 @@ export const CategoryDefault: Story = {
   },
 };
 
+export const TextWithIcon: Story = {
+  args: {
+    variant: 'text',
+    children: (
+      <>
+        <ChevronLeft stroke="#000" />
+        뒤로
+      </>
+    ),
+  },
+};
+
 export const Text: Story = {
   args: {
     variant: 'text',
-    children: 'text',
+    children: '닫기',
   },
 };
 
@@ -66,7 +81,7 @@ export const FabLarge: Story = {
   args: {
     variant: 'fab',
     size: 'l',
-    children: 'FabLarge',
+    children: <Plus stroke="#fff" />,
   },
 };
 
@@ -74,6 +89,6 @@ export const FabSmall: Story = {
   args: {
     variant: 'fab',
     size: 's',
-    children: 'FabSmall',
+    children: <Send css={{ width: '16px', height: '16px' }} stroke="#fff" />,
   },
 };

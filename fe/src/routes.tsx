@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { Layout } from './layout/Layout';
-import { Home } from './pages/Home';
 import { NotFound } from './pages/NotFound';
+import { Home } from './pages/Home';
 import { Sales } from './pages/Sales';
 import { Interests } from './pages/Interests';
 import { Chat } from './pages/Chat';
@@ -14,6 +14,11 @@ export const AppRoutes: React.FC = () => {
   return (
     <div css={globalStyle}>
       <Routes>
+        {/* TODO: 하단바 X - 카테고리 페이지 */}
+        {/* TODO: 하단바 X - 회원가입 페이지(리다이렉트) */}
+        {/* TODO: 하단바 O - 등록페이지 */}
+        {/* TODO: 하단바 O - 상세페이지 */}
+        {/* TODO: 하단바 O - 채팅페이지 */}
         <Route element={<Layout />}>
           <Route path={PATH.notFound} element={<NotFound />} />
           {/* TODO Private routes 구현 */}

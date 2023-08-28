@@ -15,31 +15,26 @@ export const NavBar: React.FC = () => {
 
   const tabs = [
     {
-      id: 1,
       label: '홈',
       path: PATH.home,
       icon: <Home />,
     },
     {
-      id: 2,
       label: '판매내역',
       path: PATH.sales,
       icon: <News />,
     },
     {
-      id: 3,
       label: '관심상품',
       path: PATH.interests,
       icon: <Heart />,
     },
     {
-      id: 4,
       label: '채팅',
       path: PATH.chat,
       icon: messageTabIcon,
     },
     {
-      id: 5,
       label: '내 계정',
       path: PATH.auth,
       icon: <UserCircle />,
@@ -50,7 +45,7 @@ export const NavBar: React.FC = () => {
     <>
       <nav css={(theme) => NavStyle(theme)}>
         {tabs.map((tab) => (
-          <NavLink key={tab.id} to={tab.path} className="tab">
+          <NavLink key={tab.path} to={tab.path} className="tab">
             {tab.icon}
             {tab.label}
           </NavLink>

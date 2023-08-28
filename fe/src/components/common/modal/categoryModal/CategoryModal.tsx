@@ -1,21 +1,16 @@
-import { useTheme } from '@emotion/react';
 import { usePopupStore } from '@store/PopupStore';
 import { Modal } from '@components/common/modal/Modal';
 import { ModalHeader } from '@components/common/modal/ModalHeader';
 import { ModalListItem } from '@components/common/modal/ModalListItem';
-import { Button } from '@components/common/button/Button';
-import { ReactComponent as XIcon } from '@assets/x.svg';
 
 export const CategoryModal: React.FC = () => {
-  const theme = useTheme();
   const { isOpen, isDimOpen, togglePopup, toggleDim } = usePopupStore();
 
-  // TODO 핸들러 이름 상의하기 on + 동작,  동작 + Handler
   const onSelectCategory = (id: number) => {
     console.log('카테고리 선택:', id);
   };
 
-  const modalCloseHandler = () => {
+  const onCloseModal = () => {
     togglePopup('modal', false);
     toggleDim('modal', false);
   };
@@ -40,19 +35,8 @@ export const CategoryModal: React.FC = () => {
   ];
 
   return (
-    <Modal
-      isOpen={isOpen.modal}
-      isDimOpen={isDimOpen.modal}
-      header={
-        <ModalHeader>
-          <span>카테고리</span>
-
-          <Button variant="text" onClick={modalCloseHandler}>
-            <XIcon stroke={theme.color.neutral.textStrong} />
-          </Button>
-        </ModalHeader>
-      }
-    >
+    <Modal isOpen={isOpen.modal} isDimOpen={isDimOpen.modal}>
+      <ModalHeader title="카테고리" onCloseModal={onCloseModal} />
       <ul>
         {modalList.map((item) => (
           <ModalListItem
@@ -60,7 +44,7 @@ export const CategoryModal: React.FC = () => {
             key={item.id}
             onClick={() => {
               onSelectCategory(item.id);
-              modalCloseHandler();
+              onCloseModal();
             }}
           />
         ))}

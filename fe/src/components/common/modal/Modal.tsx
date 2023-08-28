@@ -1,30 +1,19 @@
 import { Theme, css } from '@emotion/react';
-import { Dim } from '../Dim';
+import { Dim } from './Dim';
 
 type Props = {
   isOpen: boolean;
   isDimOpen: boolean;
-  header: React.ReactNode;
   children: React.ReactNode;
 };
 
-export const Modal: React.FC<Props> = ({
-  isOpen,
-  isDimOpen,
-  header,
-  children,
-}) => {
-  console.log('Modal render');
-
+export const Modal: React.FC<Props> = ({ isOpen, isDimOpen, children }) => {
   return (
     <>
       {isOpen && (
         <div css={ModalStyle}>
           <Dim isOpen={isDimOpen} />
-          <div className="modal">
-            {header}
-            {children}
-          </div>
+          <div className="modal">{children}</div>
         </div>
       )}
     </>

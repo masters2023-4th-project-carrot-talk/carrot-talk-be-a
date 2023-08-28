@@ -1,12 +1,33 @@
 import { css } from '@emotion/react';
 import { Theme } from '@emotion/react/macro';
+import { Button } from '../button/Button';
+import { ReactComponent as XIcon } from '@assets/x.svg';
+import { ReactComponent as ChevronLeft } from '@assets/chevron-left.svg';
 
 type Props = {
-  children: React.ReactNode;
+  title?: string;
+  onNavigateBack?: () => void;
+  onCloseModal: () => void;
 };
 
-export const ModalHeader: React.FC<Props> = ({ children }) => {
-  return <div css={ModalHeaderStyle}>{children}</div>;
+export const ModalHeader: React.FC<Props> = ({
+  title,
+  onNavigateBack,
+  onCloseModal,
+}) => {
+  return (
+    <div css={ModalHeaderStyle}>
+      {onNavigateBack && (
+        <Button variant="text" onClick={onNavigateBack}>
+          <ChevronLeft className="chevron-left" />
+        </Button>
+      )}
+      {title && title}
+      <Button variant="text" onClick={onCloseModal}>
+        <XIcon className="x-icon" />
+      </Button>
+    </div>
+  );
 };
 
 const ModalHeaderStyle = (theme: Theme) => {
@@ -18,7 +39,14 @@ const ModalHeaderStyle = (theme: Theme) => {
     justify-content: space-between;
     background-color: transparent;
     padding: 12px 12px 16px 24px;
-
     font: ${theme.font.displayStrong20};
+
+    .chevron-left {
+      stroke: ${theme.color.neutral.textStrong};
+    }
+
+    .x-icon {
+      stroke: ${theme.color.neutral.textStrong};
+    }
   `;
 };

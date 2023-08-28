@@ -1,35 +1,17 @@
 import { useState } from 'react';
-import { useTheme } from '@emotion/react';
 import { Modal } from '@components/common/modal/Modal';
 import { usePopupStore } from '@store/PopupStore';
 import { ModalHeader } from '@components/common/modal/ModalHeader';
 import { ControlLocation } from './content/ControlLocation';
 import { SearchLocation } from './content/SearchLocation';
-import { Button } from '@components/common/button/Button';
-import { ReactComponent as XIcon } from '@assets/x.svg';
-import { ReactComponent as ChevronLeft } from '@assets/chevron-left.svg';
 
 export const LocationModal: React.FC = () => {
-  const theme = useTheme();
   const { isOpen, isDimOpen, togglePopup, toggleDim } = usePopupStore();
   const [toggleContent, setToggleContent] = useState<'control' | 'search'>(
     'control',
   );
 
-  // TODO 핸들러 이름 상의하기 on + 동작,  동작 + Handler
-  const onSelectLocation = (id: number) => {
-    console.log('동네 선택:', id);
-  };
-
-  const onAddLocation = () => {
-    console.log('동네 추가');
-  };
-
-  const onDeleteLocation = (id: number) => {
-    console.log('동네 삭제:', id);
-  };
-
-  const modalCloseHandler = () => {
+  const onCloseModal = () => {
     togglePopup('modal', false);
     toggleDim('modal', false);
   };
@@ -53,35 +35,20 @@ export const LocationModal: React.FC = () => {
   ];
 
   return (
-    <Modal
-      isOpen={isOpen.modal}
-      isDimOpen={isDimOpen.modal}
-      header={
-        <ModalHeader>
-          {toggleContent === 'control' ? (
-            <>
-              동네 설정
-              <Button variant="text" onClick={modalCloseHandler}>
-                <XIcon stroke={theme.color.neutral.textStrong} />
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button variant="text" onClick={() => onToggleContent('control')}>
-                <ChevronLeft stroke={theme.color.neutral.textStrong} />
-              </Button>
-              <Button variant="text" onClick={modalCloseHandler}>
-                <XIcon stroke={theme.color.neutral.textStrong} />
-              </Button>
-            </>
-          )}
-        </ModalHeader>
-      }
-    >
+    <Modal isOpen={isOpen.modal} isDimOpen={isDimOpen.modal}>
       {toggleContent === 'control' ? (
-        <ControlLocation onToggleContent={onToggleContent} />
+        <>
+          <ModalHeader title="동네 설정" onCloseModal={onCloseModal} />
+          <ControlLocation onToggleContent={onToggleContent} />
+        </>
       ) : (
-        <SearchLocation locationList={locationList} />
+        <>
+          <ModalHeader
+            onNavigateBack={() => onToggleContent('control')}
+            onCloseModal={onCloseModal}
+          />
+          <SearchLocation locationList={locationList} />
+        </>
       )}
     </Modal>
   );

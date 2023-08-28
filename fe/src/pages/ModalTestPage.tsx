@@ -14,11 +14,6 @@ export const ModalTestPage: FC = () => {
     toggleDim('modal', true);
   };
 
-  const onCloseAlert = () => {
-    togglePopup('alert', false);
-    toggleDim('alert', false);
-  };
-
   return (
     <div
       css={{
@@ -34,7 +29,7 @@ export const ModalTestPage: FC = () => {
 
       <Alert isOpen={isOpen.alert} isDimOpen={isDimOpen.alert}>
         <AlertContent>'역삼1동'을 삭제하시겠어요?</AlertContent>
-        <AlertButtons buttonText="취소" onCloseAlert={onCloseAlert} />
+        <AlertButtons buttonText="취소" onDelete={() => {}} />
       </Alert>
     </div>
   );

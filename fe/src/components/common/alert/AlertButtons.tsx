@@ -1,16 +1,24 @@
 import { Theme, css } from '@emotion/react';
 import { Button } from '../button/Button';
+import { usePopupStore } from '@/store/PopupStore';
 type Props = {
   buttonText?: '취소' | '닫기';
-  onCloseAlert: () => void;
+  // onCloseAlert: () => void;
   onDelete?: () => void;
 };
 
 export const AlertButtons: React.FC<Props> = ({
   buttonText,
-  onCloseAlert,
+  // onCloseAlert,
   onDelete,
 }) => {
+  const { togglePopup, toggleDim } = usePopupStore();
+
+  const onCloseAlert = () => {
+    togglePopup('alert', false);
+    toggleDim('alert', false);
+  };
+
   return (
     <div css={AlertButtonsStyle}>
       <Button variant="text" onClick={onCloseAlert}>

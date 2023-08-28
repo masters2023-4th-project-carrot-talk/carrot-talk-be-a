@@ -9,6 +9,7 @@ import { Chat } from './pages/Chat';
 import { Auth } from './pages/Auth';
 import { PATH } from './constants/path';
 
+
 // TODO Private routes 구현
 export const AppRoutes: React.FC = () => {
   return (
@@ -21,7 +22,6 @@ export const AppRoutes: React.FC = () => {
         {/* TODO: 하단바 O - 채팅페이지 / 인증 필요 */}
         <Route element={<Layout />}>
           <Route path={PATH.notFound} element={<NotFound />} />
-
           <Route>
             <Route path={PATH.home} element={<Home />} />
             <Route path={PATH.sales} element={<Sales />} />

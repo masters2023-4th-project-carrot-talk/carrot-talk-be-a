@@ -23,6 +23,21 @@ const meta: Meta<typeof Input> = {
         defaultValue: undefined,
       },
     },
+    label: {
+      control: {
+        type: 'text',
+      },
+    },
+    warningMessage: {
+      control: {
+        type: 'text',
+      },
+    },
+    value: {
+      control: {
+        type: 'text',
+      },
+    },
   },
 };
 
@@ -47,7 +62,7 @@ export const Address: Story = {
 export const Ghost: Story = {
   args: {
     variant: 'ghost',
-    placeholder: '내용을 입력하세요'  ,
+    placeholder: '내용을 입력하세요',
   },
 };
 
@@ -71,7 +86,7 @@ export const Price: Story = {
   args: {
     variant: 'ghost',
     placeholder: '가격(선택사항)',
-    children: '₩'
+    label: '₩',
   },
 };
 
@@ -80,5 +95,13 @@ export const WithValue: Story = {
     variant: 'ghost',
     placeholder: '내용을 입력하세요',
     value: '내용이 입력되어 있습니다',
+  },
+};
+
+export const WithWarning: Story = {
+  args: {
+    variant: 'ghost',
+    placeholder: '내용을 입력하세요',
+    warningMessage: '돈이 부족합니다!',
   },
 };

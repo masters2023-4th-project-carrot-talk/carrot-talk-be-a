@@ -38,11 +38,13 @@ export const Input: React.FC<Props> = ({
   return (
     <div css={(theme) => inputStyle(theme, variant, radius)}>
       <div className="input__content">
-        <span>{label}</span>
+        {label && <span>{label}</span>}
         <input {...props} onChange={onInputChange} onKeyDown={onInputKeyDown} />
-        {props.value && <Button variant="text" onClick={onDeleteClick}>
-          <CircleXFilled fill="#000" />
-        </Button>}
+        {props.value && (
+          <Button variant="text" onClick={onDeleteClick}>
+            <CircleXFilled fill="#000" />
+          </Button>
+        )}
       </div>
       {warningMessage && (
         <div className="warning__message">{warningMessage}</div>
@@ -124,6 +126,7 @@ const inputStyle = (
       bottom: 0;
       width: 100%;
       height: 16px;
+      padding: 0 4px;
       font: ${theme.font.enabledStrong12};
       color: ${theme.color.system.warning};
     }

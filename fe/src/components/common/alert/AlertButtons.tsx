@@ -3,15 +3,10 @@ import { Button } from '../button/Button';
 import { usePopupStore } from '@/store/PopupStore';
 type Props = {
   buttonText?: '취소' | '닫기';
-  // onCloseAlert: () => void;
   onDelete?: () => void;
 };
 
-export const AlertButtons: React.FC<Props> = ({
-  buttonText,
-  // onCloseAlert,
-  onDelete,
-}) => {
+export const AlertButtons: React.FC<Props> = ({ buttonText, onDelete }) => {
   const { togglePopup, toggleDim } = usePopupStore();
 
   const onCloseAlert = () => {

@@ -1,5 +1,5 @@
 import { Global, ThemeProvider } from '@emotion/react';
-import { TestPage } from '@pages/TestPage';
+import { ModalTestPage } from '@pages/ModalTestPage';
 import designSystem from '@styles/designSystem';
 import { globalStyle } from '@styles/globalStyle';
 
@@ -7,7 +7,7 @@ function App() {
   return (
     <ThemeProvider theme={designSystem}>
       <Global styles={globalStyle} />
-      <TestPage></TestPage>
+      <ModalTestPage></ModalTestPage>
     </ThemeProvider>
   );
 }

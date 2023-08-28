@@ -1,7 +1,7 @@
 import { Theme, css } from '@emotion/react';
 import React, { FC } from 'react';
 import { createPortal } from 'react-dom';
-import { Dim } from '../Dim';
+import { Dim } from '../modal/Dim';
 
 type Props = {
   isOpen: boolean;

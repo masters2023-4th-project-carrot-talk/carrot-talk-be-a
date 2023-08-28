@@ -1,18 +1,41 @@
-import { css } from '@emotion/react';
-import { FC } from 'react';
+import { Theme, css } from '@emotion/react';
+import { Button } from '../button/Button';
 type Props = {
-  children: React.ReactNode;
+  buttonText?: '취소' | '닫기';
+  onCloseAlert: () => void;
+  onDelete?: () => void;
 };
 
-export const AlertButtons: FC<Props> = ({ children }) => {
-  return <div css={AlertButtonsStyle}>{children}</div>;
+export const AlertButtons: React.FC<Props> = ({
+  buttonText,
+  onCloseAlert,
+  onDelete,
+}) => {
+  return (
+    <div css={AlertButtonsStyle}>
+      <Button variant="text" onClick={onCloseAlert}>
+        {buttonText}
+      </Button>
+      {onDelete && (
+        <Button className="delete-button" variant="text" onClick={onDelete}>
+          삭제
+        </Button>
+      )}
+    </div>
+  );
 };
 
-const AlertButtonsStyle = css`
-  display: flex;
-  padding: 24px 32px;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 16px;
-  align-self: stretch;
-`;
+const AlertButtonsStyle = (theme: Theme) => {
+  return css`
+    display: flex;
+    padding: 24px 32px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+    align-self: stretch;
+
+    .delete-button {
+      color: ${theme.color.system.warning};
+    }
+  `;
+};

@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { Layout } from './layout/Layout';
 import { Home } from './pages/Home';
 import { NotFound } from './pages/NotFound';
+import { InputTestPage } from './pages/InputTestPage';
 
 // TODO 경로 상수화
 export const AppRoutes: React.FC = () => {
@@ -18,6 +19,7 @@ export const AppRoutes: React.FC = () => {
             <Route path="/interests" element={<Home />} />
             <Route path="/chat" element={<Home />} />
             <Route path="/auth" element={<Home />} />
+            <Route path="/test" element={<InputTestPage />} />
           </Route>
         </Route>
       </Routes>

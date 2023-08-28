@@ -30,7 +30,7 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
       </div>
       <div className="buttons">
         {modalList.map((item) => (
-          <div className="buttons__location">
+          <div className="buttons__location" key={item.id}>
             {item.text}
             <CircleXFilled
               className="buttons__location__x-icon"

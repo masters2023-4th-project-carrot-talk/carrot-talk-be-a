@@ -1,7 +1,7 @@
 import { Theme, css } from '@emotion/react';
 
 type Props = {
-  state: string; //TODO : state 예약중, 판매중, 판매완료
+  state: '예약중' | '판매중' | '판매완료';
 };
 
 export const Label: React.FC<Props> = ({ state }) => {
@@ -17,7 +17,8 @@ const LabelStyle = (theme: Theme) => {
     justify-content: center;
     align-items: center;
     gap: 10px;
-
+    border-radius: 8px;
+    background-color: ${theme.color.accent.backgroundSecondary};
     font: ${theme.font.displayDefault12};
     color: ${theme.color.accent.text};
   `;

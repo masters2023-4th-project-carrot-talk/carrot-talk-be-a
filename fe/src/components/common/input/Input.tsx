@@ -42,7 +42,7 @@ export const Input: React.FC<Props> = ({
         <input {...props} onChange={onInputChange} onKeyDown={onInputKeyDown} />
         {props.value && (
           <Button variant="text" onClick={onDeleteClick}>
-            <CircleXFilled fill="#000" />
+            <CircleXFilled className='circle-x-filled'/>
           </Button>
         )}
       </div>
@@ -129,6 +129,10 @@ const inputStyle = (
       padding: 0 4px;
       font: ${theme.font.enabledStrong12};
       color: ${theme.color.system.warning};
+    }
+
+    & .circle-x-filled {
+      fill: ${theme.color.neutral.textStrong};
     }
   `;
 };

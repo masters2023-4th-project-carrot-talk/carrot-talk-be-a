@@ -23,7 +23,7 @@ export const InputTestPage: React.FC = () => {
         value={price}
         onChange={(newValue) => setPrice(newValue)}
         warningMessage="돈이 부족합니다!"
-      ></Input>
+      />
     </div>
   );
 };

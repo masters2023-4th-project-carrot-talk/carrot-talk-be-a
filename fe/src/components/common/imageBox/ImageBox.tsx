@@ -6,19 +6,15 @@ type Props = {
   imgUrl: string;
 };
 
-export const ImageContainer: React.FC<Props> = ({
+export const ImageBox: React.FC<Props> = ({
   variant = 'rectangle',
   size,
   imgUrl,
 }) => {
-  return (
-    <div css={(theme) => ImageContainerStyle(theme, variant, size, imgUrl)}>
-      {/* <img src={imgUrl} alt="" /> */}
-    </div>
-  );
+  return <div css={(theme) => ImageBoxStyle(theme, variant, size, imgUrl)} />;
 };
 
-const ImageContainerStyle = (
+const ImageBoxStyle = (
   theme: Theme,
   variant: 'rectangle' | 'circle',
   size: 's' | 'm' | 'l',

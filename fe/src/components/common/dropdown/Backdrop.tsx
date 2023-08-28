@@ -1,11 +1,10 @@
 import { css, Theme } from '@emotion/react';
-import { FC } from 'react';
 
 type Props = {
   onClick?: () => void;
 };
 
-export const Backdrop: FC<Props> = ({ onClick }) => {
+export const Backdrop: React.FC<Props> = ({ onClick }) => {
   return <div css={(theme) => backdropStyle(theme)} onClick={onClick}></div>;
 };
 

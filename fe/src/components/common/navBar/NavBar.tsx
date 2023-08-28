@@ -6,6 +6,7 @@ import { ReactComponent as Heart } from '@assets/heart.svg';
 import { ReactComponent as Message } from '@assets/message.svg';
 import { ReactComponent as MessageNoti } from '@assets/message-noti.svg';
 import { ReactComponent as UserCircle } from '@assets/user-circle.svg';
+import { PATH } from '@/constants/path';
 
 export const NavBar: React.FC = () => {
   const isMessageNoti = false; //TODO 추후 교체합니다
@@ -16,31 +17,31 @@ export const NavBar: React.FC = () => {
     {
       id: 1,
       label: '홈',
-      path: '/',
+      path: PATH.home,
       icon: <Home />,
     },
     {
       id: 2,
       label: '판매내역',
-      path: '/sales',
+      path: PATH.sales,
       icon: <News />,
     },
     {
       id: 3,
       label: '관심상품',
-      path: '/interests',
+      path: PATH.interests,
       icon: <Heart />,
     },
     {
       id: 4,
       label: '채팅',
-      path: '/chat',
+      path: PATH.chat,
       icon: messageTabIcon,
     },
     {
       id: 5,
       label: '내 계정',
-      path: '/auth',
+      path: PATH.auth,
       icon: <UserCircle />,
     },
   ];

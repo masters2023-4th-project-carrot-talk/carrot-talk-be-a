@@ -4,7 +4,7 @@ type PopupState = {
   isOpen: Record<PopupType, boolean>;
   currentDim: PopupType | null;
   togglePopup: (type: PopupType, open: boolean) => void;
-  toggleDim: (type: PopupType | null) => void;
+  setCurrentDim: (type: PopupType | null) => void;
 };
 
 export const usePopupStore = create<PopupState>((set) => ({
@@ -18,5 +18,5 @@ export const usePopupStore = create<PopupState>((set) => ({
       ...state,
       isOpen: { ...state.isOpen, [type]: open },
     })),
-  toggleDim: (type) => set({ currentDim: type }),
+  setCurrentDim: (type) => set({ currentDim: type }),
 }));

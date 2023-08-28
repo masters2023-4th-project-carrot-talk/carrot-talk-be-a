@@ -6,14 +6,14 @@ import { ControlLocation } from './content/ControlLocation';
 import { SearchLocation } from './content/SearchLocation';
 
 export const LocationModal: React.FC = () => {
-  const { isOpen, isDimOpen, togglePopup, toggleDim } = usePopupStore();
+  const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
   const [toggleContent, setToggleContent] = useState<'control' | 'search'>(
     'control',
   );
 
   const onCloseModal = () => {
     togglePopup('modal', false);
-    toggleDim('modal', false);
+    setCurrentDim(null);
     setToggleContent('control');
   };
 
@@ -36,7 +36,7 @@ export const LocationModal: React.FC = () => {
   ];
 
   return (
-    <Modal isOpen={isOpen.modal} isDimOpen={isDimOpen.modal}>
+    <Modal isOpen={isOpen.modal} currentDim={currentDim}>
       {toggleContent === 'control' ? (
         <>
           <ModalHeader title="동네 설정" onCloseModal={onCloseModal} />

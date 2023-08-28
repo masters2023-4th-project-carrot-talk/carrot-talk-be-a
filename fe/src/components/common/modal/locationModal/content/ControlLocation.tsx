@@ -9,11 +9,11 @@ type Props = {
 };
 
 export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
-  const { togglePopup, toggleDim } = usePopupStore();
+  const { togglePopup, setCurrentDim } = usePopupStore();
 
   const alertOpenHandler = () => {
     togglePopup('alert', true);
-    toggleDim('alert', true);
+    setCurrentDim('alert');
   };
 
   // TODO mock data 교체 필요

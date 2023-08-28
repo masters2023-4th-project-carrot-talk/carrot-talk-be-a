@@ -5,18 +5,18 @@ import { Dim } from '../modal/Dim';
 
 type Props = {
   isOpen: boolean;
-  isDimOpen: boolean;
+  currentDim: PopupType | null;
   children: React.ReactNode;
 };
 
-export const Alert: FC<Props> = ({ isOpen, isDimOpen, children }) => {
+export const Alert: FC<Props> = ({ isOpen, currentDim, children }) => {
   return (
     <>
       {isOpen && (
         <>
           {createPortal(
             <div css={AlertStyle}>
-              <Dim isOpen={isDimOpen} />
+              <Dim isOpen={currentDim === 'alert'} />
               <div className="alert">{children}</div>
             </div>,
             document.getElementById('root') as HTMLElement,

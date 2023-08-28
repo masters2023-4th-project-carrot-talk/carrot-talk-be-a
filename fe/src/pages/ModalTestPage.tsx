@@ -7,11 +7,11 @@ import { CategoryModal } from '@components/common/modal/categoryModal/CategoryMo
 import { LocationModal } from '@components/common/modal/locationModal/LocationModal';
 // 모달, alert동작 test용 페이지
 export const ModalTestPage: FC = () => {
-  const { isOpen, isDimOpen, togglePopup, toggleDim } = usePopupStore();
+  const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
 
   const onOpenModal = () => {
     togglePopup('modal', true);
-    toggleDim('modal', true);
+    setCurrentDim('modal');
   };
 
   return (
@@ -24,7 +24,7 @@ export const ModalTestPage: FC = () => {
       <LocationModal />
       {/* 내부에 각각의 open상태 및 모달 컨텐츠 변경 로직을 가지고 있어 사용처에서는 고려하지 않아도 됩니다 */}
 
-      <Alert isOpen={isOpen.alert} isDimOpen={isDimOpen.alert}>
+      <Alert isOpen={isOpen.alert} currentDim={currentDim}>
         <AlertContent>'역삼1동'을 삭제하시겠어요?</AlertContent>
         <AlertButtons buttonText="취소" onDelete={() => {}} />
         <AlertButtons buttonText="취소" />

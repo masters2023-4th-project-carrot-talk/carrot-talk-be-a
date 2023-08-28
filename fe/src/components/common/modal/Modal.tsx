@@ -3,16 +3,16 @@ import { Dim } from './Dim';
 
 type Props = {
   isOpen: boolean;
-  isDimOpen: boolean;
+  currentDim: PopupType | null;
   children: React.ReactNode;
 };
 
-export const Modal: React.FC<Props> = ({ isOpen, isDimOpen, children }) => {
+export const Modal: React.FC<Props> = ({ isOpen, currentDim, children }) => {
   return (
     <>
       {isOpen && (
         <div css={ModalStyle}>
-          <Dim isOpen={isDimOpen} />
+          <Dim isOpen={currentDim === 'modal'} />
           <div className="modal">{children}</div>
         </div>
       )}

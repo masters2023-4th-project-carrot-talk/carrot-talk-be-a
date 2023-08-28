@@ -4,7 +4,7 @@ import { ModalHeader } from '@components/common/modal/ModalHeader';
 import { ModalListItem } from '@components/common/modal/ModalListItem';
 
 export const CategoryModal: React.FC = () => {
-  const { isOpen, isDimOpen, togglePopup, toggleDim } = usePopupStore();
+  const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
 
   const onSelectCategory = (id: number) => {
     console.log('카테고리 선택:', id);
@@ -12,7 +12,7 @@ export const CategoryModal: React.FC = () => {
 
   const onCloseModal = () => {
     togglePopup('modal', false);
-    toggleDim('modal', false);
+    setCurrentDim(null);
   };
 
   // TODO mock data 교체 필요
@@ -35,7 +35,7 @@ export const CategoryModal: React.FC = () => {
   ];
 
   return (
-    <Modal isOpen={isOpen.modal} isDimOpen={isDimOpen.modal}>
+    <Modal isOpen={isOpen.modal} currentDim={currentDim}>
       <ModalHeader title="카테고리" onCloseModal={onCloseModal} />
       <ul>
         {modalList.map((item) => (

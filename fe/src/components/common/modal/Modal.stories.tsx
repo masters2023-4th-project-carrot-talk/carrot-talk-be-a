@@ -19,7 +19,7 @@ type Story = StoryObj<typeof meta>;
 
 export const LocationModalControl: Story = {
   render: () => (
-    <Modal isOpen={true} isDimOpen={true}>
+    <Modal isOpen={true} currentDim="modal">
       <ModalHeader title="동네 설정" onCloseModal={() => {}} />
       <ControlLocation onToggleContent={() => {}} />
     </Modal>
@@ -40,7 +40,7 @@ const locationList = [
 
 export const LocationModalSearch: Story = {
   render: () => (
-    <Modal isOpen={true} isDimOpen={true}>
+    <Modal isOpen={true} currentDim="modal">
       <ModalHeader onNavigateBack={() => {}} onCloseModal={() => {}} />
       <SearchLocation locationList={locationList} />
     </Modal>
@@ -67,7 +67,7 @@ const categoryList = [
 
 export const CategoryModaldefault: Story = {
   render: () => (
-    <Modal isOpen={true} isDimOpen={true}>
+    <Modal isOpen={true} currentDim="modal">
       <ModalHeader title="카테고리" onCloseModal={() => {}} />
       <ul>
         {categoryList.map((item) => (

@@ -7,11 +7,11 @@ type Props = {
 };
 
 export const AlertButtons: React.FC<Props> = ({ buttonText, onDelete }) => {
-  const { togglePopup, toggleDim } = usePopupStore();
+  const { togglePopup, setCurrentDim } = usePopupStore();
 
   const onCloseAlert = () => {
     togglePopup('alert', false);
-    toggleDim('alert', false);
+    setCurrentDim('modal');
   };
 
   return (

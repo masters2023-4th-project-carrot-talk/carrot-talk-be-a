@@ -3,6 +3,10 @@ import { css } from '@emotion/react';
 import { Layout } from './layout/Layout';
 import { Home } from './pages/Home';
 import { NotFound } from './pages/NotFound';
+import { Sales } from './pages/Sales';
+import { Interests } from './pages/Interests';
+import { Chat } from './pages/Chat';
+import { Auth } from './pages/Auth';
 
 // TODO 경로 상수화
 export const AppRoutes: React.FC = () => {
@@ -14,10 +18,10 @@ export const AppRoutes: React.FC = () => {
           {/* TODO Private routes 구현 */}
           <Route>
             <Route path="/" element={<Home />} />
-            <Route path="/sales" element={<Home />} />
-            <Route path="/interests" element={<Home />} />
-            <Route path="/chat" element={<Home />} />
-            <Route path="/auth" element={<Home />} />
+            <Route path="/sales" element={<Sales />} />
+            <Route path="/interests" element={<Interests />} />
+            <Route path="/chat" element={<Chat />} />
+            <Route path="/auth" element={<Auth />} />
           </Route>
         </Route>
       </Routes>

@@ -14,6 +14,7 @@ export const LocationModal: React.FC = () => {
   const onCloseModal = () => {
     togglePopup('modal', false);
     toggleDim('modal', false);
+    setToggleContent('control');
   };
 
   const onToggleContent = (content: 'control' | 'search') => {

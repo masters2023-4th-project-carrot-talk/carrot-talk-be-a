@@ -1,5 +1,4 @@
 import { Theme, css } from '@emotion/react';
-import { FC, ReactNode } from 'react';
 
 type Props = {
   children?: React.ReactNode;

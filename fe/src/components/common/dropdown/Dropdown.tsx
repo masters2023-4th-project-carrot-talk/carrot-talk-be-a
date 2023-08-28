@@ -1,7 +1,7 @@
-import { useDropdownStore } from '@/store/DropdownStore';
+import { DropdownContext } from '@/contexts/DropdownContext';
 import { css } from '@emotion/react';
 import { findButtonElement, findMenuBox } from '@utils/findElement';
-import { Children, useEffect } from 'react';
+import { Children, useState } from 'react';
 import { Backdrop } from './Backdrop';
 
 type Props = {
@@ -15,11 +15,7 @@ export const Dropdown: React.FC<Props> = ({
   align,
   autoClose = false,
 }) => {
-  const { isOpen, setAutoClose, closeMenu, openMenu } = useDropdownStore();
-
-  useEffect(() => {
-    setAutoClose(autoClose);
-  }, [autoClose, setAutoClose]);
+  const [isOpen, setIsOpen] = useState(false);
 
   const childrenArray = Children.toArray(children);
 
@@ -30,16 +26,26 @@ export const Dropdown: React.FC<Props> = ({
     return null;
   }
 
+  const openMenu = () => {
+    setIsOpen(true);
+  };
+
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <div css={() => dropdownStyle(align)}>
-      <div onClick={openMenu}>{button}</div>
-      {isOpen && (
-        <>
-          <Backdrop onClick={closeMenu} />
-          {menu}
-        </>
-      )}
-    </div>
+    <DropdownContext.Provider value={{ isOpen, autoClose, closeMenu }}>
+      <div css={() => dropdownStyle(align)}>
+        <div onClick={openMenu}>{button}</div>
+        {isOpen && (
+          <>
+            <Backdrop onClick={closeMenu} />
+            {menu}
+          </>
+        )}
+      </div>
+    </DropdownContext.Provider>
   );
 };
 

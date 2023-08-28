@@ -25,9 +25,9 @@ const ModalStyle = (theme: Theme) => {
     display: flex;
     width: 393px;
     height: 852px;
-    position: fixed;
-    top: 0;
-    left: 0;
+    position: absolute;
+    inset: 0;
+
     z-index: 105;
     justify-content: center;
     align-items: center;

@@ -15,16 +15,11 @@ export const ModalTestPage: FC = () => {
   };
 
   return (
-    <div
-      css={{
-        width: '100%',
-        height: '100%',
-      }}
-    >
+    <div>
       <button onClick={onOpenModal}>열어 모달</button>
       {/* 모달을 열어주는 역할의 요소가 필요합니다 */}
 
-      <CategoryModal />
+      {/* <CategoryModal /> */}
       {/* 사용처에서는 둘 중 하나만 렌더링 하면 됩니다 */}
       <LocationModal />
       {/* 내부에 각각의 open상태 및 모달 컨텐츠 변경 로직을 가지고 있어 사용처에서는 고려하지 않아도 됩니다 */}

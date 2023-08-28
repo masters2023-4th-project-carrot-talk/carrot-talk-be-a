@@ -22,7 +22,7 @@ export const ModalHeader: React.FC<Props> = ({
           <ChevronLeft className="chevron-left" />
         </Button>
       )}
-      {title && title}
+      {title}
       <Button variant="text" onClick={onCloseModal}>
         <XIcon className="x-icon" />
       </Button>

@@ -13,9 +13,8 @@ export const Dim: FC<Props> = ({ isOpen, onClose }) => {
 
 const DimStyle = (theme: Theme) => {
   return css`
-    position: fixed;
-    top: 0;
-    left: 0;
+    position: absolute;
+    inset: 0;
     z-index: 105;
     width: 393px;
     height: 852px;

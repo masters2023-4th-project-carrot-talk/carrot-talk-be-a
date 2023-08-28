@@ -6,7 +6,7 @@ type Props = {
 };
 
 export const MenuBox: FC<Props> = ({ children }) => {
-  return <ul css={menuItemStyle}>{children}</ul>;
+  return <ul css={(theme) => menuItemStyle(theme)}>{children}</ul>;
 };
 
 const menuItemStyle = (theme: Theme) => css`

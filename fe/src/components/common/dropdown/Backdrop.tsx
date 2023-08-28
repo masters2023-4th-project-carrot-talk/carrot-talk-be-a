@@ -6,7 +6,7 @@ type Props = {
 };
 
 export const Backdrop: FC<Props> = ({ onClick }) => {
-  return <div css={backdropStyle} onClick={onClick}></div>;
+  return <div css={(theme) => backdropStyle(theme)} onClick={onClick}></div>;
 };
 
 const backdropStyle = (theme: Theme) => css`

@@ -2,6 +2,7 @@ import { css, Theme } from '@emotion/react';
 
 export const globalStyle = (theme: Theme) => css`
   body {
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;

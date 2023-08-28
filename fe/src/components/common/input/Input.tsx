@@ -4,11 +4,20 @@ import { InputHTMLAttributes } from 'react';
 type Props = {
   variant: 'filled' | 'outlined' | 'ghost';
   radius?: 's' | 'l';
+  children?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-export const Input: React.FC<Props> = ({ variant, radius, ...props }) => {
+export const Input: React.FC<Props> = ({
+  variant,
+  radius,
+  children,
+  ...props
+}) => {
   return (
-    <input css={(theme) => inputStyle(theme, variant, radius)} {...props} />
+    <div css={(theme) => inputStyle(theme, variant, radius)}>
+      {children}
+      <input {...props} />
+    </div>
   );
 };
 
@@ -20,8 +29,6 @@ const inputStyle = (
   const VARIANT = {
     filled: {
       padding: '8px',
-      font: theme.font.availableDefault16,
-      color: theme.color.neutral.textWeak,
       border: 'none',
       background: theme.color.neutral.backgroundBold,
     },
@@ -33,7 +40,6 @@ const inputStyle = (
     ghost: {
       paddingBottom: '16px',
       border: 'none',
-      borderBottom: `1px solid ${theme.color.neutral.border}`,
     },
   };
 
@@ -50,15 +56,27 @@ const inputStyle = (
   };
 
   return css`
-    width: '100%';  
     display: flex;
     gap: 4px;
+    font: ${theme.font.displayStrong16};
+    color: ${theme.color.neutral.textStrong};
 
-    ${VARIANT[variant]}
-    ${RADIUS[radius ?? 'none']}
+    & > input {
+      width: '100%';
+      display: flex;
+      font: ${theme.font.availableDefault16};
+      caret-color: ${theme.color.accent.backgroundSecondary};
 
-    &:focus {
-      outline: none;
+      ${VARIANT[variant]}
+      ${RADIUS[radius ?? 'none']}
+
+      &:focus {
+        outline: none;
+      }
+
+      &::placeholder {
+        color: ${theme.color.neutral.textWeak};
+      }
     }
   `;
 };

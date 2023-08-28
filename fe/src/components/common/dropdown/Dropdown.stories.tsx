@@ -7,6 +7,7 @@ import { Dropdown } from './Dropdown';
 const meta: Meta<typeof Dropdown> = {
   title: 'Example/Dropdown',
   component: Dropdown,
+  tags: ['autodocs'],
   parameters: {
     layout: 'centered',
   },

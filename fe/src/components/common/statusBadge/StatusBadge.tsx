@@ -13,7 +13,7 @@ const statusBadgeStyle = (theme: Theme) => {
   return css`
     display: flex;
     height: 22px;
-    padding: 10px 8px;
+    padding: 0 8px;
     justify-content: center;
     align-items: center;
     gap: 10px;

@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.example.carrot.global.common.BaseTimeEntity;
 import com.example.carrot.product.entity.Product;
 
 import lombok.Builder;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Category {
+public class Category extends BaseTimeEntity {
 	@Id
 	@GeneratedValue
 	private Long categoryId;

@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.example.carrot.global.common.BaseTimeEntity;
 import com.example.carrot.product.entity.Product;
 import com.example.carrot.user.entity.User;
 
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class SalesHistory {
+public class SalesHistory extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue

@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.example.carrot.category.entity.Category;
+import com.example.carrot.global.common.BaseTimeEntity;
 import com.example.carrot.like.entity.Like;
 import com.example.carrot.location.entity.Location;
 import com.example.carrot.product_image.entity.ProductImage;
@@ -28,7 +29,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Product {
+public class Product extends BaseTimeEntity {
 	@Id
 	@GeneratedValue
 	private Long productId;
@@ -40,7 +41,7 @@ public class Product {
 
 	@Enumerated(EnumType.STRING)
 	private ProductStatus status;
-	private LocalDateTime createdAt;
+	private LocalDateTime modifiedAt;
 
 	@OneToMany(mappedBy = "product")
 	private List<Like> likes = new ArrayList<>();
@@ -61,7 +62,7 @@ public class Product {
 
 	@Builder
 	public Product(Long productId, String name, Long price, String content, Long hits, ProductStatus status,
-		LocalDateTime createdAt, List<Like> likes, List<SalesHistory> salesHistories, Category category,
+		LocalDateTime modifiedAt, List<Like> likes, List<SalesHistory> salesHistories, Category category,
 		Location location,
 		List<ProductImage> productImages) {
 		this.productId = productId;
@@ -70,7 +71,7 @@ public class Product {
 		this.content = content;
 		this.hits = hits;
 		this.status = status;
-		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
 		this.likes = likes;
 		this.salesHistories = salesHistories;
 		this.category = category;

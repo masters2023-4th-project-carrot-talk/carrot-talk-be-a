@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.example.carrot.global.common.BaseTimeEntity;
 import com.example.carrot.product_image.entity.ProductImage;
 
 import lombok.Builder;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Image {
+public class Image extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue

@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.example.carrot.global.common.BaseTimeEntity;
 import com.example.carrot.product.entity.Product;
 import com.example.carrot.user.entity.User;
 
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "likes")
-public class Like {
+public class Like extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue

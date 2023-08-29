@@ -15,7 +15,7 @@ export const AlertButtons: React.FC<Props> = ({ buttonText, onDelete }) => {
   };
 
   return (
-    <div css={AlertButtonsStyle}>
+    <div css={alertButtonsStyle}>
       <Button variant="text" onClick={onCloseAlert}>
         {buttonText}
       </Button>
@@ -28,7 +28,7 @@ export const AlertButtons: React.FC<Props> = ({ buttonText, onDelete }) => {
   );
 };
 
-const AlertButtonsStyle = (theme: Theme) => {
+const alertButtonsStyle = (theme: Theme) => {
   return css`
     display: flex;
     padding: 24px 32px;

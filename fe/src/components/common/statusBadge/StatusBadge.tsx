@@ -4,16 +4,16 @@ type Props = {
   state: '예약중' | '판매중' | '판매완료';
 };
 
-export const Label: React.FC<Props> = ({ state }) => {
-  return <div css={LabelStyle}>{state}</div>;
+export const StatusBadge: React.FC<Props> = ({ state }) => {
+  return <div css={statusBadgeStyle}>{state}</div>;
 };
 
 // TODO state 따라 배경색이 달라야하는지..?
-const LabelStyle = (theme: Theme) => {
+const statusBadgeStyle = (theme: Theme) => {
   return css`
     display: flex;
     height: 22px;
-    padding: 10px 8px;
+    padding: 0 8px;
     justify-content: center;
     align-items: center;
     gap: 10px;

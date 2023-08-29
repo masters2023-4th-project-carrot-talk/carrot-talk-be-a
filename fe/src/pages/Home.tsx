@@ -95,7 +95,7 @@ export const Home: React.FC = () => {
 
 const pageStyle = (theme: Theme) => {
   return css`
-    min-height: 100%;
+    flex: 1;
 
     ul {
       display: flex;

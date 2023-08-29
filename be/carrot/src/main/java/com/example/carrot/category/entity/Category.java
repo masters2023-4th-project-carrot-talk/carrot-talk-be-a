@@ -4,15 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
-import com.example.carrot.global.common.BaseTimeEntity;
+import com.example.carrot.global.common.BaseCreatedTimeEntity;
 import com.example.carrot.product.entity.Product;
 
 import lombok.Builder;
@@ -22,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Category extends BaseTimeEntity {
+public class Category extends BaseCreatedTimeEntity {
 	@Id
 	@GeneratedValue
 	private Long categoryId;

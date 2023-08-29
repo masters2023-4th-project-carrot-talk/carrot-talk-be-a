@@ -1,6 +1,6 @@
 package com.example.carrot.location.entity;
 
-import com.example.carrot.global.common.BaseTimeEntity;
+import com.example.carrot.global.common.BaseCreatedTimeEntity;
 import com.example.carrot.product.entity.Product;
 import com.example.carrot.user_location.entity.UserLocation;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Location extends BaseTimeEntity {
+public class Location extends BaseCreatedTimeEntity {
     @Id
     @GeneratedValue
     private Long locationId;

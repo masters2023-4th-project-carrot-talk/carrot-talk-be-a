@@ -8,10 +8,10 @@ type Props = {
 
 // TODO alert가 아닌 딤일때만 onClose 필요
 export const Dim: FC<Props> = ({ isOpen, onClose }) => {
-  return <>{isOpen && <div css={DimStyle} onClick={onClose} />}</>;
+  return <>{isOpen && <div css={dimStyle} onClick={onClose} />}</>;
 };
 
-const DimStyle = (theme: Theme) => {
+const dimStyle = (theme: Theme) => {
   return css`
     position: absolute;
     inset: 0;

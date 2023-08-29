@@ -15,7 +15,7 @@ export const Alert: FC<Props> = ({ isOpen, currentDim, children }) => {
       {isOpen && (
         <>
           {createPortal(
-            <div css={AlertStyle}>
+            <div css={alertStyle}>
               <Dim isOpen={currentDim === 'alert'} />
               <div className="alert">{children}</div>
             </div>,
@@ -27,7 +27,7 @@ export const Alert: FC<Props> = ({ isOpen, currentDim, children }) => {
   );
 };
 
-const AlertStyle = (theme: Theme) => {
+const alertStyle = (theme: Theme) => {
   return css`
     display: flex;
     width: 393px;

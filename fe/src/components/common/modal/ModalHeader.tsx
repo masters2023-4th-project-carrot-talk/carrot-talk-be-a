@@ -16,7 +16,7 @@ export const ModalHeader: React.FC<Props> = ({
   onCloseModal,
 }) => {
   return (
-    <div css={ModalHeaderStyle}>
+    <div css={modalHeaderStyle}>
       {onNavigateBack && (
         <Button variant="text" onClick={onNavigateBack}>
           <ChevronLeft className="chevron-left" />
@@ -30,7 +30,7 @@ export const ModalHeader: React.FC<Props> = ({
   );
 };
 
-const ModalHeaderStyle = (theme: Theme) => {
+const modalHeaderStyle = (theme: Theme) => {
   return css`
     width: 100%;
     box-sizing: border-box;

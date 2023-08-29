@@ -1,6 +1,6 @@
 import { DropdownContext } from '@/contexts/DropdownContext';
 import { css } from '@emotion/react';
-import { findButtonElement, findMenuBox } from '@utils/findElement';
+import { findButton, findMenuBox } from '@utils/findElement';
 import { Children, useState } from 'react';
 import { Backdrop } from './Backdrop';
 
@@ -19,8 +19,11 @@ export const Dropdown: React.FC<Props> = ({
 
   const childrenArray = Children.toArray(children);
 
-  const button = findButtonElement(childrenArray);
+  const button = findButton(childrenArray);
   const menu = findMenuBox(childrenArray);
+
+  console.log('button', button);
+  console.log('menu', menu);
 
   if (!button || !menu) {
     return null;

@@ -30,6 +30,7 @@ const topBarStyle = (theme: Theme, transparent?: boolean) => {
     top: 0;
     flex-shrink: 0;
     box-sizing: border-box;
+    width: 393px;
     height: 56px;
     display: flex;
     justify-content: center;

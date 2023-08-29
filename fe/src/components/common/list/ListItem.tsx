@@ -137,8 +137,6 @@ const listItemStyle = (theme: Theme) => {
       }
     }
 
-    &:not(:last-of-type) {
-      border-bottom: 0.8px solid ${theme.color.neutral.border};
-    }
+    border-bottom: 0.8px solid ${theme.color.neutral.border};
   `;
 };

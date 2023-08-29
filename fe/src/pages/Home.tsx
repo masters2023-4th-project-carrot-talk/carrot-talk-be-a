@@ -1,4 +1,13 @@
+import { ReactComponent as ChevronDown } from '@/assets/chevron-down.svg';
+import { ReactComponent as LayoutGrid } from '@/assets/layout-grid.svg';
+import { Button } from '@/components/common/button/Button';
+import { Dropdown } from '@/components/common/dropdown/Dropdown';
 import { ListItem } from '@/components/common/list/ListItem';
+import { MenuBox } from '@/components/common/menu/MenuBox';
+import { MenuItem } from '@/components/common/menu/MenuItem';
+import { LeftButton } from '@/components/common/topBar/LeftButton';
+import { RightButton } from '@/components/common/topBar/RightButton';
+import { TopBar } from '@/components/common/topBar/TopBar';
 import { Theme, css } from '@emotion/react';
 
 const mock = {
@@ -52,20 +61,42 @@ const mock = {
 
 export const Home: React.FC = () => {
   return (
-    <div css={pageStyle}>
-      Home
-      <ul>
-        {mock.products.map((product) => (
-          /*  key={product.id} id가 타입에 없음.. 실종.. */
-          <ListItem product={product} />
-        ))}
-      </ul>
-    </div>
+    <>
+      <TopBar>
+        <LeftButton>
+          <Dropdown>
+            <Button variant="text">
+              역삼1동
+              <ChevronDown stroke="#000" />
+            </Button>
+            <MenuBox>
+              <MenuItem state="selected">역삼1동</MenuItem>
+              <MenuItem>내 동네 설정하기</MenuItem>
+            </MenuBox>
+          </Dropdown>
+        </LeftButton>
+        <RightButton>
+          <Button variant="text">
+            <LayoutGrid stroke="#000" />
+          </Button>
+        </RightButton>
+      </TopBar>
+      <div css={pageStyle}>
+        <ul>
+          {mock.products.map((product) => (
+            /*  key={product.id} id가 타입에 없음.. 실종.. */
+            <ListItem product={product} />
+          ))}
+        </ul>
+      </div>
+    </>
   );
 };
 
 const pageStyle = (theme: Theme) => {
   return css`
+    min-height: 100%;
+
     ul {
       display: flex;
       box-sizing: border-box;

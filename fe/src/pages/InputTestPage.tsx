@@ -1,4 +1,10 @@
+import { Button } from '@/components/common/button/Button';
 import { Input } from '@/components/common/input/Input';
+import { LeftButton } from '@/components/common/topBar/LeftButton';
+import { RightButton } from '@/components/common/topBar/RightButton';
+import { Title } from '@/components/common/topBar/Title';
+import { TopBar } from '@/components/common/topBar/TopBar';
+import { css } from '@emotion/react';
 import { useState } from 'react';
 
 export const InputTestPage: React.FC = () => {
@@ -14,7 +20,16 @@ export const InputTestPage: React.FC = () => {
   };
 
   return (
-    <div>
+    <div css={testPageStyle}>
+      <TopBar>
+        <Title>Page Name</Title>
+        <LeftButton>
+          <Button variant="text">뒤로</Button>
+        </LeftButton>
+        <RightButton>
+          <Button variant="text">완료</Button>
+        </RightButton>
+      </TopBar>
       <h2>InputTestPage</h2>
       <Input variant="ghost" {...{ value, onChange, onPressEnter }} />
       <Input
@@ -27,3 +42,7 @@ export const InputTestPage: React.FC = () => {
     </div>
   );
 };
+
+const testPageStyle = css`
+  height: 200vh;
+`;

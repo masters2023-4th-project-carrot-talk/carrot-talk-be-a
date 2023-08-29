@@ -6,8 +6,9 @@ import { ReactComponent as Heart } from '@assets/heart.svg';
 import { ReactComponent as Dots } from '@assets/dots.svg';
 import { Button } from '../button/Button';
 import { StatusBadge } from '../statusBadge/StatusBadge';
-import { getTimeStamp } from '@/utils/getTimeStamp';
-import { getPrice } from '@/utils/getPrice';
+import { formatTimeStamp } from '@/utils/formatTimeStamp';
+import { formatPrice } from '@/utils/formatPrice';
+import { formatCount } from '@/utils/formatCount';
 
 type Props = {
   product: any; // TODO : product 타입 변경
@@ -15,8 +16,10 @@ type Props = {
 
 export const ListItem: FC<Props> = ({ product }) => {
   const isAuthor = true; // TODO : user인지 아닌지 / product를 올린 사람의 id와 user의 id 비교가 필요함 product의 id도 없음..? ???
-  const formattedPrice = getPrice(product.price);
-  const formattedTimeStamp = getTimeStamp(product.createdAt);
+  const formattedPrice = formatPrice(product.price);
+  const formattedTimeStamp = formatTimeStamp(product.createdAt);
+  const formattedChatCount = formatCount(product.chatCount);
+  const formattedLikeCount = formatCount(product.likeCount);
 
   return (
     <li css={listItemStyle}>
@@ -42,15 +45,15 @@ export const ListItem: FC<Props> = ({ product }) => {
 
         <div className="text-area__icons">
           {product.chatCount > 0 && (
-            <div className="text-area__icons-chat">
+            <div>
               <Message />
-              <span>{product.chatCount}</span>
+              <span>{formattedChatCount}</span>
             </div>
           )}
           {product.likeCount > 0 && (
-            <div className="text-area__icons-like">
+            <div>
               <Heart />
-              <span>{product.likeCount}</span>
+              <span>{formattedLikeCount}</span>
             </div>
           )}
         </div>
@@ -120,7 +123,7 @@ const listItemStyle = (theme: Theme) => {
       &__icons {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 8px;
 
         font: ${theme.font.displayDefault12};
         color: ${theme.color.neutral.textWeak};
@@ -133,6 +136,7 @@ const listItemStyle = (theme: Theme) => {
         > div {
           display: flex;
           align-items: center;
+          gap: 4px;
         }
       }
     }

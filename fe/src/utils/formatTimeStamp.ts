@@ -1,4 +1,4 @@
-export const getTimeStamp = (createdAt: string) => {
+export const formatTimeStamp = (createdAt: string) => {
   const currentTime = new Date();
   const time = new Date(createdAt);
 

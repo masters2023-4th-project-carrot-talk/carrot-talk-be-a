@@ -43,7 +43,7 @@ export const NavBar: React.FC = () => {
 
   return (
     <>
-      <nav css={(theme) => navStyle(theme)}>
+      <nav css={(theme) => NavStyle(theme)}>
         {tabs.map((tab) => (
           <NavLink key={tab.path} to={tab.path} className="tab">
             {tab.icon}
@@ -55,10 +55,11 @@ export const NavBar: React.FC = () => {
   );
 };
 
-const navStyle = (theme: Theme) => {
+const NavStyle = (theme: Theme) => {
   return css`
-    position: absolute;
+    position: sticky;
     bottom: 0;
+
     box-sizing: border-box;
     display: flex;
     width: 393px;

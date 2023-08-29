@@ -9,6 +9,7 @@ import { Input } from '@/components/common/input/Input';
 
 import { ReactComponent as Heart } from '@assets/heart.svg';
 import { ReactComponent as Send } from '@assets/send.svg';
+import { formatPrice } from '@/utils/formatPrice';
 
 const mock = [
   {
@@ -36,7 +37,7 @@ export const ActionBarTest: React.FC = () => {
   }, []);
 
   const isLiked = true; // TODO : user가 좋아요를 눌렀는지 안눌렀는지
-  const price = '15,800 원'; // TODO : price를 어떻게 받아올지
+  const formattedPrice = formatPrice(158000); // TODO : price 데이터 필요
 
   return (
     <div css={pageStyle}>
@@ -56,12 +57,13 @@ export const ActionBarTest: React.FC = () => {
       <PostBar isLiked={isLiked}>
         <div className="info">
           <Heart onClick={() => {}} />
-          {price}
+          {formattedPrice}
         </div>
         <Button variant="rectangle" size="s" state="active" onClick={() => {}}>
           대화 중인 채팅방{/* count가 추가될 수 있습니다 */}
         </Button>
       </PostBar>
+
       <ChatBar>
         <Input
           onChange={() => {}}

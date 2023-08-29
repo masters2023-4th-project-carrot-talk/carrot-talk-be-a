@@ -2,12 +2,11 @@ import { Theme, css } from '@emotion/react';
 
 type Props = {
   children: React.ReactNode;
-  className?: string;
-};
+} & React.HTMLAttributes<HTMLDivElement>;
 
-export const ActionBar: React.FC<Props> = ({ children, className }) => {
+export const ActionBar: React.FC<Props> = ({ children, ...props }) => {
   return (
-    <div className={className} css={(theme) => actionBarStyle(theme)}>
+    <div {...props} css={(theme) => actionBarStyle(theme)}>
       {children}
     </div>
   );

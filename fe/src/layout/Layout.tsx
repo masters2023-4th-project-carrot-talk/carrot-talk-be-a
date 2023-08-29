@@ -1,11 +1,12 @@
-import { NavLink, Outlet } from 'react-router-dom';
 import { Theme, css } from '@emotion/react';
+import { NavLink, Outlet } from 'react-router-dom';
 
 export const Layout: React.FC = () => {
   return (
     <>
-      <header>헤더</header>
-      <Outlet />
+      <div css={contentStyle}>
+        <Outlet />
+      </div>
       <nav css={(theme) => NavStyle(theme)}>
         <NavLink to="/">홈</NavLink>
         <NavLink to="/sales">판매내역</NavLink>
@@ -15,6 +16,19 @@ export const Layout: React.FC = () => {
       </nav>
     </>
   );
+};
+
+const contentStyle = (theme: Theme) => {
+  return css`
+    /* TODO: navBar 높이와 맞춰 계산 필요함 */
+    height: 97%;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  `;
 };
 
 const NavStyle = (theme: Theme) => {

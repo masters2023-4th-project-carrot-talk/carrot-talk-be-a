@@ -3,22 +3,22 @@ import { Theme, css } from '@emotion/react';
 type Props = {
   variant?: 'rectangle' | 'circle';
   size: 's' | 'm' | 'l';
-  imgUrl: string;
+  imageUrl: string;
 };
 
 export const ImageBox: React.FC<Props> = ({
   variant = 'rectangle',
   size,
-  imgUrl,
+  imageUrl,
 }) => {
-  return <div css={(theme) => imageBoxStyle(theme, variant, size, imgUrl)} />;
+  return <div css={(theme) => imageBoxStyle(theme, variant, size, imageUrl)} />;
 };
 
 const imageBoxStyle = (
   theme: Theme,
   variant: 'rectangle' | 'circle',
   size: 's' | 'm' | 'l',
-  imgUrl: string,
+  imageUrl: string,
 ) => {
   const SIZE_STYLES = {
     s: {
@@ -41,6 +41,7 @@ const imageBoxStyle = (
   return css`
     ${SIZE_STYLES[size]}
     border: 1px solid ${theme.color.neutral.border};
-    background: ${imgUrl && `url(${imgUrl})`} lightgray 50% / cover no-repeat;
+    background: ${imageUrl && `url(${imageUrl})`} lightgray 50% / cover
+      no-repeat;
   `;
 };

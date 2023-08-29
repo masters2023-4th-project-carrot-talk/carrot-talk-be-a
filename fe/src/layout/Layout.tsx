@@ -14,8 +14,7 @@ export const Layout: React.FC = () => {
 };
 
 const contentStyle = css`
-  /* TODO: navBar 높이와 맞춰 계산 필요함 */
-  height: 97%;
+  flex: 1;
   overflow-x: hidden;
   overflow-y: auto;
 

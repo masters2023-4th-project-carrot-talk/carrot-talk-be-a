@@ -57,8 +57,6 @@ export const NavBar: React.FC = () => {
 
 const NavStyle = (theme: Theme) => {
   return css`
-    position: absolute;
-    bottom: 0;
     box-sizing: border-box;
     display: flex;
     width: 393px;

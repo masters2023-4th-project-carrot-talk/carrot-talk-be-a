@@ -1,14 +1,14 @@
-import { Route, Routes } from 'react-router-dom';
 import { css } from '@emotion/react';
-import { Layout } from './layout/Layout';
-import { NotFound } from './pages/NotFound';
-import { Home } from './pages/Home';
-import { Sales } from './pages/Sales';
-import { Interests } from './pages/Interests';
-import { Chat } from './pages/Chat';
-import { Auth } from './pages/Auth';
+import { Route, Routes } from 'react-router-dom';
 import { PATH } from './constants/path';
-
+import { Layout } from './layout/Layout';
+import { Auth } from './pages/Auth';
+import { Chat } from './pages/Chat';
+import { Home } from './pages/Home';
+import { Interests } from './pages/Interests';
+import { NotFound } from './pages/NotFound';
+import { Sales } from './pages/Sales';
+import { InputTestPage } from './pages/InputTestPage';
 
 // TODO Private routes 구현
 export const AppRoutes: React.FC = () => {
@@ -30,6 +30,7 @@ export const AppRoutes: React.FC = () => {
             {/* 인증필요 */}
             <Route path={PATH.chat} element={<Chat />} />
             <Route path={PATH.auth} element={<Auth />} />
+            <Route path='/test' element={<InputTestPage />} />
           </Route>
         </Route>
       </Routes>
@@ -38,6 +39,8 @@ export const AppRoutes: React.FC = () => {
 };
 
 const globalStyle = css`
+  display: flex;
+  flex-direction: column;
   width: 393px;
   height: 852px;
   margin: auto;

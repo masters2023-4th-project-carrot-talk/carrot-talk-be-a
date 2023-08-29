@@ -9,7 +9,6 @@ import { Chat } from './pages/Chat';
 import { Auth } from './pages/Auth';
 import { PATH } from './constants/path';
 
-
 // TODO Private routes 구현
 export const AppRoutes: React.FC = () => {
   return (
@@ -42,4 +41,11 @@ const globalStyle = css`
   height: 852px;
   margin: auto;
   border: 1px solid black;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;

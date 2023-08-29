@@ -4,6 +4,7 @@ import { Theme, css } from '@emotion/react';
 const mock = {
   products: [
     {
+      id: 1,
       name: '빈티지 밀크 그래스 램프',
       imageUrl: 'https://cdn.imweb.me/thumbnail/20230616/e53bba24afb76.jpg',
       location: '역삼1동', // 이름만
@@ -14,17 +15,52 @@ const mock = {
       likeCount: 1, // long     // 없으면 0
     },
     {
-      name: '도자기 화병 5종',
-      imageUrl:
-        'https://img.29cm.co.kr/next-product/2023/08/02/f138eefeb2da4b3f9e545547f6793c15_20230802142041.jpg?width=300',
+      id: 2,
+      name: '빈티지 밀크 그래스 램프',
+      imageUrl: 'https://cdn.imweb.me/thumbnail/20230616/e53bba24afb76.jpg',
       location: '역삼1동', // 이름만
-      createdAt: '2023-08-28T14:59', //localDateTime(UTC)
-      price: 14500000, // Long
+      createdAt: '2023-08-10T14:59', //localDateTIme(UTC)
+      price: 15800, // Long   // 없으면 null
       status: '예약중', // 판매중, 판매완료
-      chatCount: 2, // long
-      likeCount: 2, // long
+      chatCount: 0, // long    // 없으면 0
+      likeCount: 1, // long     // 없으면 0
     },
     {
+      id: 3,
+      name: '빈티지 밀크 그래스 램프',
+      imageUrl: 'https://cdn.imweb.me/thumbnail/20230616/e53bba24afb76.jpg',
+      location: '역삼1동', // 이름만
+      createdAt: '2023-08-10T14:59', //localDateTIme(UTC)
+      price: 15800, // Long   // 없으면 null
+      status: '예약중', // 판매중, 판매완료
+      chatCount: 0, // long    // 없으면 0
+      likeCount: 1, // long     // 없으면 0
+    },
+    {
+      id: 4,
+      name: '빈티지 밀크 그래스 램프',
+      imageUrl: 'https://cdn.imweb.me/thumbnail/20230616/e53bba24afb76.jpg',
+      location: '역삼1동', // 이름만
+      createdAt: '2023-08-10T14:59', //localDateTIme(UTC)
+      price: 15800, // Long   // 없으면 null
+      status: '예약중', // 판매중, 판매완료
+      chatCount: 0, // long    // 없으면 0
+      likeCount: 1, // long     // 없으면 0
+    },
+    {
+      id: 5,
+      name: '빈티지 밀크 그래스 램프',
+      imageUrl: 'https://cdn.imweb.me/thumbnail/20230616/e53bba24afb76.jpg',
+      location: '역삼1동', // 이름만
+      createdAt: '2023-08-10T14:59', //localDateTIme(UTC)
+      price: 15800, // Long   // 없으면 null
+      status: '예약중', // 판매중, 판매완료
+      chatCount: 0, // long    // 없으면 0
+      likeCount: 1, // long     // 없으면 0
+    },
+
+    {
+      id: 6,
       name: '도자기 화병 5종',
       imageUrl:
         'https://img.29cm.co.kr/next-product/2023/08/02/f138eefeb2da4b3f9e545547f6793c15_20230802142041.jpg?width=300',
@@ -36,6 +72,7 @@ const mock = {
       likeCount: 0, // long
     },
     {
+      id: 7,
       name: '도자기 화병 5종',
       imageUrl:
         'https://img.29cm.co.kr/next-product/2023/08/02/f138eefeb2da4b3f9e545547f6793c15_20230802142041.jpg?width=300',
@@ -51,21 +88,32 @@ const mock = {
 };
 
 export const Home: React.FC = () => {
+  const onOpenDetail = (id: number) => {
+    //TODO : 상세페이지 보여주기
+    console.log(id);
+  };
+
   return (
-    <div css={pageStyle}>
-      Home
-      <ul>
-        {mock.products.map((product) => (
-          /*  key={product.id} id가 타입에 없음.. 실종.. */
-          <ListItem product={product} />
-        ))}
-      </ul>
-    </div>
+    <>
+      <div css={pageStyle}>
+        Home
+        <ul>
+          {mock.products.map((product) => (
+            /*  key={product.id} id가 타입에 없음.. 실종.. */
+            <ListItem
+              product={product}
+              onOpenDetail={() => onOpenDetail(product.id)}
+            />
+          ))}
+        </ul>
+      </div>
+    </>
   );
 };
 
 const pageStyle = (theme: Theme) => {
   return css`
+    min-height: 100%;
     ul {
       display: flex;
       box-sizing: border-box;

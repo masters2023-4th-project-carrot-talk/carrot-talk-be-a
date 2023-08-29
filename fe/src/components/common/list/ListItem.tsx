@@ -1,40 +1,144 @@
 import { FC } from 'react';
 import { Theme, css } from '@emotion/react';
+import { ImageBox } from '../imageBox/ImageBox';
+import { ReactComponent as Message } from '@assets/message.svg';
+import { ReactComponent as Heart } from '@assets/heart.svg';
+import { ReactComponent as Dots } from '@assets/dots.svg';
+import { Button } from '../button/Button';
+import { StatusBadge } from '../statusBadge/StatusBadge';
+import { getTimeStamp } from '@/utils/getTimeStamp';
+import { getPrice } from '@/utils/getPrice';
 
 type Props = {
-  item: any; // TODO : item의 타입 변경
-  isUser: boolean;
+  product: any; // TODO : product 타입 변경
 };
 
-/* 
-title 글제목
-location 역삼1동
-dot ·
-createdAt 2시간 전
-stateBadge 예약중
-price 가격
+export const ListItem: FC<Props> = ({ product }) => {
+  const isAuthor = true; // TODO : user인지 아닌지 / product를 올린 사람의 id와 user의 id 비교가 필요함 product의 id도 없음..? ???
+  const formattedPrice = getPrice(product.price);
+  const formattedTimeStamp = getTimeStamp(product.createdAt);
 
+  return (
+    <li css={listItemStyle}>
+      <ImageBox imageUrl={product.imageUrl} size="l" />
+      <div className="text-area">
+        <div className="text-area__information">
+          <div className="text-area__information-title">
+            <span>{product.name}</span>
+            {isAuthor && (
+              <Button variant="text" onClick={() => {}}>
+                <Dots />
+              </Button>
+            )}
+          </div>
+          <div className="text-area__information-location">
+            {product.location} · {formattedTimeStamp}
+          </div>
+          <div className="text-area__information-state">
+            {product.status && <StatusBadge state={product.status} />}
+            {formattedPrice}
+          </div>
+        </div>
 
-icon dots 내가 글 주인일때만
-icon message + 카운터 < 0이상 있을때만
-icon heart + 카운터 < 0이상 있을때만  
-
-*/
-
-export const ListItem: FC<Props> = ({ item, isUser }) => {
-  return <li css={listItemStyle}></li>;
+        <div className="text-area__icons">
+          {product.chatCount > 0 && (
+            <div className="text-area__icons-chat">
+              <Message />
+              <span>{product.chatCount}</span>
+            </div>
+          )}
+          {product.likeCount > 0 && (
+            <div className="text-area__icons-like">
+              <Heart />
+              <span>{product.likeCount}</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </li>
+  );
 };
 
 const listItemStyle = (theme: Theme) => {
   return css`
+    box-sizing: border-box;
     display: flex;
     padding: 16px 0px;
     align-items: flex-start;
     gap: 16px;
     align-self: stretch;
 
-    li:not(:last-child) {
-      border-bottom: 1px solid ${theme.color.neutral.border};
+    .text-area {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex: 1 0 0;
+      align-self: stretch;
+
+      &__information {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        align-self: stretch;
+
+        &-title {
+          display: flex;
+          min-height: 24px;
+          max-height: 48px;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 4px;
+          align-self: stretch;
+          font: ${theme.font.displayDefault16};
+          color: ${theme.color.neutral.textStrong};
+
+          button {
+            padding: 0;
+          }
+
+          svg {
+            fill: ${theme.color.neutral.textStrong};
+          }
+        }
+
+        &-location {
+          font: ${theme.font.displayDefault12};
+          color: ${theme.color.neutral.textWeak};
+        }
+
+        &-state {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          font: ${theme.font.displayStrong16};
+          color: ${theme.color.neutral.textStrong};
+        }
+      }
+
+      &__icons {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        font: ${theme.font.displayDefault12};
+        color: ${theme.color.neutral.textWeak};
+        svg {
+          width: 16px;
+          height: 16px;
+          stroke: ${theme.color.neutral.textWeak};
+        }
+
+        > div {
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+
+    &:not(:last-of-type) {
+      border-bottom: 0.8px solid ${theme.color.neutral.border};
     }
   `;
 };

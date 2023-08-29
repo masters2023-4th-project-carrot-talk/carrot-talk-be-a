@@ -23,7 +23,7 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
   ];
 
   return (
-    <div css={ControlLocationStyle}>
+    <div css={controlLocationStyle}>
       <div className="noticeText">
         <p>지역은 최소 1개,</p>
         <p>최대 2개까지 설정 가능해요.</p>
@@ -55,7 +55,7 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
   );
 };
 
-const ControlLocationStyle = (theme: Theme) => {
+const controlLocationStyle = (theme: Theme) => {
   return css`
     box-sizing: border-box;
     display: flex;

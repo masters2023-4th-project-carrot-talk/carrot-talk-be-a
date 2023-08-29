@@ -11,10 +11,10 @@ export const ImageBox: React.FC<Props> = ({
   size,
   imgUrl,
 }) => {
-  return <div css={(theme) => ImageBoxStyle(theme, variant, size, imgUrl)} />;
+  return <div css={(theme) => imageBoxStyle(theme, variant, size, imgUrl)} />;
 };
 
-const ImageBoxStyle = (
+const imageBoxStyle = (
   theme: Theme,
   variant: 'rectangle' | 'circle',
   size: 's' | 'm' | 'l',

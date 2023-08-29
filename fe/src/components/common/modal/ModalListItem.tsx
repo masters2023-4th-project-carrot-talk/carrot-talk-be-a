@@ -7,13 +7,13 @@ type Props = {
 
 export const ModalListItem: React.FC<Props> = ({ text, onClick }) => {
   return (
-    <li onClick={onClick} css={ModalListItemStyle}>
+    <li onClick={onClick} css={modalListItemStyle}>
       <span>{text}</span>
     </li>
   );
 };
 
-const ModalListItemStyle = (theme: Theme) => {
+const modalListItemStyle = (theme: Theme) => {
   return css`
     display: flex;
     padding: 16px 0px;

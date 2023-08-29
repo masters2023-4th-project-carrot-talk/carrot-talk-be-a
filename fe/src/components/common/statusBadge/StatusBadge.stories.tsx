@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Label } from './Label';
+import { StatusBadge } from './StatusBadge';
 
 const meta: Meta = {
-  title: 'Label',
-  component: Label,
+  title: 'StatusBadge',
+  component: StatusBadge,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
@@ -19,7 +19,7 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const LabelDefault: Story = {
+export const StatusBadgeDefault: Story = {
   args: {
     state: '예약중',
   },

@@ -11,7 +11,7 @@ export const Modal: React.FC<Props> = ({ isOpen, currentDim, children }) => {
   return (
     <>
       {isOpen && (
-        <div css={ModalStyle}>
+        <div css={modalStyle}>
           <Dim isOpen={currentDim === 'modal'} />
           <div className="modal">{children}</div>
         </div>
@@ -20,7 +20,7 @@ export const Modal: React.FC<Props> = ({ isOpen, currentDim, children }) => {
   );
 };
 
-const ModalStyle = (theme: Theme) => {
+const modalStyle = (theme: Theme) => {
   return css`
     display: flex;
     width: 393px;

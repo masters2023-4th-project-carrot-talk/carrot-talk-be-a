@@ -10,7 +10,7 @@ type Props = {
 
 export const SearchLocation: React.FC<Props> = ({ locationList }) => {
   return (
-    <div css={SearchLocationStyle}>
+    <div css={searchLocationStyle}>
       <input type="text" />
       <ul>
         {locationList.map((location) => (
@@ -25,7 +25,7 @@ export const SearchLocation: React.FC<Props> = ({ locationList }) => {
   );
 };
 
-const SearchLocationStyle = css`
+const searchLocationStyle = css`
   width: 100%;
   display: flex;
   flex-direction: column;

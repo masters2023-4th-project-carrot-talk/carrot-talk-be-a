@@ -1,12 +1,12 @@
+import { PATH } from '@/constants/path';
+import { ReactComponent as Heart } from '@assets/heart.svg';
+import { ReactComponent as Home } from '@assets/home.svg';
+import { ReactComponent as MessageNoti } from '@assets/message-noti.svg';
+import { ReactComponent as Message } from '@assets/message.svg';
+import { ReactComponent as News } from '@assets/news.svg';
+import { ReactComponent as UserCircle } from '@assets/user-circle.svg';
 import { Theme, css } from '@emotion/react';
 import { NavLink } from 'react-router-dom';
-import { ReactComponent as Home } from '@assets/home.svg';
-import { ReactComponent as News } from '@assets/news.svg';
-import { ReactComponent as Heart } from '@assets/heart.svg';
-import { ReactComponent as Message } from '@assets/message.svg';
-import { ReactComponent as MessageNoti } from '@assets/message-noti.svg';
-import { ReactComponent as UserCircle } from '@assets/user-circle.svg';
-import { PATH } from '@/constants/path';
 
 export const NavBar: React.FC = () => {
   const isMessageNoti = false; //TODO 추후 교체합니다
@@ -57,6 +57,8 @@ export const NavBar: React.FC = () => {
 
 const NavStyle = (theme: Theme) => {
   return css`
+    position: sticky;
+    bottom: 0;
     box-sizing: border-box;
     display: flex;
     width: 393px;

@@ -13,7 +13,7 @@ import { InputTestPage } from './pages/InputTestPage';
 // TODO Private routes 구현
 export const AppRoutes: React.FC = () => {
   return (
-    <div css={globalStyle}>
+    <div css={globalStyle} id="app-layout">
       <Routes>
         {/* TODO: 하단바 X - 카테고리 페이지 */}
         {/* TODO: 하단바 X - 회원가입 페이지(리다이렉트) */}
@@ -39,10 +39,15 @@ export const AppRoutes: React.FC = () => {
 };
 
 const globalStyle = css`
-  display: flex;
-  flex-direction: column;
   width: 393px;
   height: 852px;
   margin: auto;
   border: 1px solid black;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;

@@ -22,18 +22,19 @@ export const Dropdown: React.FC<Props> = ({
   const button = findButton(childrenArray);
   const menu = findMenuBox(childrenArray);
 
-  console.log('button', button);
-  console.log('menu', menu);
-
   if (!button || !menu) {
     return null;
   }
-
+  
   const openMenu = () => {
+    const appLayout = document.getElementById('app-layout') as HTMLElement;
+    appLayout.style.overflowY = 'hidden';
     setIsOpen(true);
   };
 
   const closeMenu = () => {
+    const appLayout = document.getElementById('app-layout') as HTMLElement;
+    appLayout.style.overflowY = 'auto';
     setIsOpen(false);
   };
 
@@ -57,7 +58,6 @@ const dropdownStyle = (align?: 'left' | 'right') => css`
 
   & ul {
     position: absolute;
-    z-index: 9999;
     ${align ?? 'left'}: 0;
   }
 `;

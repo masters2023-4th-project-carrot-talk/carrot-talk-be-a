@@ -10,6 +10,8 @@ export const Backdrop: React.FC<Props> = ({ onClick }) => {
 
 const backdropStyle = (theme: Theme) => css`
   position: fixed;
-  inset: 0;
+  top: 0;
+  width: 393px;
+  height: 852px;
   background-color: ${theme.color.neutral.overlay};
 `;

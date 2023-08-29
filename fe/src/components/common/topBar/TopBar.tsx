@@ -37,7 +37,7 @@ const topBarStyle = (theme: Theme, transparent?: boolean) => {
     align-items: center;
     padding: 8px 0px;
     backdrop-filter: blur(4px);
-    z-index: 99;
+    z-index: 9;
 
     ${transparent ? transparentStyle : notTransparentStyle}
   `;

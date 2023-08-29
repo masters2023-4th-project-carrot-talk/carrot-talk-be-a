@@ -7,6 +7,7 @@ import { MenuItem } from '@/components/common/menu/MenuItem';
 import { LeftButton } from '@/components/common/topBar/LeftButton';
 import { RightButton } from '@/components/common/topBar/RightButton';
 import { TopBar } from '@/components/common/topBar/TopBar';
+import { css } from '@emotion/react';
 
 export const Home: React.FC = () => {
   return (
@@ -30,6 +31,11 @@ export const Home: React.FC = () => {
           </Button>
         </RightButton>
       </TopBar>
+      <div css={homeStyle}></div>
     </>
   );
 };
+
+const homeStyle = css`
+  min-height: 100%;
+`;

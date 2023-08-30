@@ -1,6 +1,7 @@
 package com.example.carrot.user.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,11 +13,12 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class UserController {
 
 	private final UserService userService;
 
-	@GetMapping("/oauth/redirected/kakao")
+	@GetMapping("/users/login")
 	public ApiResponse<LoginResponseDto> kakaoLogin(@RequestParam String code) {
 		LoginResponseDto loginResponseDto = userService.kakaoLogin(code);
 		return ApiResponse.success(true, loginResponseDto);

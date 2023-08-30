@@ -50,4 +50,12 @@ public class User extends BaseAllTimeEntity {
         this.likes = likes;
         this.salesHistories = salesHistories;
     }
+
+    public static User of(Long userId, String nickName, String imageUrl) {
+        return User.builder()
+            .userId(userId)
+            .nickName(nickName)
+            .imageUrl(imageUrl)
+            .build();
+    }
 }

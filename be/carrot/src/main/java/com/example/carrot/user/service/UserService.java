@@ -2,6 +2,7 @@ package com.example.carrot.user.service;
 
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -11,8 +12,12 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.example.carrot.global.jwt.Jwt;
+import com.example.carrot.global.jwt.JwtProvider;
 import com.example.carrot.user.dto.response.LoginResponseDto;
 import com.example.carrot.user.dto.response.OauthTokenResponseDto;
+import com.example.carrot.user.entity.User;
+import com.example.carrot.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +40,9 @@ public class UserService {
 	@Value("${oauth.kakao.redirect_uri}")
 	private String redirectUri;
 
+	private final UserRepository userRepository;
+	private final JwtProvider jwtProvider;
+
 
 	public LoginResponseDto kakaoLogin(String code) {
 		OauthTokenResponseDto tokenResponse = getToken(code);
@@ -42,10 +50,29 @@ public class UserService {
 		log.info("scope : "+tokenResponse.getScope());
 
 		Map<String, Object> userInfo = findUserInfo(tokenResponse.getAccessToken());
-		log.info("social id : "+String.valueOf(userInfo.get("id")));
-		log.info("profile img : "+String.valueOf(((Map)((Map) userInfo.get("kakao_account")).get("profile")).get("thumbnail_image_url")));
+		log.info("social id : "+userInfo.get("id"));
+		log.info("profile img : "+((Map)((Map) userInfo.get("kakao_account")).get("profile")).get("thumbnail_image_url"));
 
-		return null;
+		String socialId = String.valueOf(userInfo.get("id"));
+		String imgUrl = String.valueOf(
+			((Map)((Map)userInfo.get("kakao_account")).get("profile")).get("thumbnail_image_url"));
+
+		Optional<User> user = userRepository.findBySocialId(socialId);
+
+		if (user.isEmpty()) {
+			log.info("최초 로그인 유저");
+			Jwt jwt = jwtProvider.createJwt(Map.of("imgUrl", imgUrl, "socialId", socialId));
+			return LoginResponseDto.of(jwt.getAccessToken(), false);
+		}
+
+		log.info("로그인 유저");
+		User findUser = user.get();
+		Jwt jwt = jwtProvider.createJwt(Map.of("userId", findUser.getUserId()));
+
+		return LoginResponseDto.of(
+			jwt,
+			User.of(findUser.getUserId(), findUser.getNickName(), findUser.getImageUrl()),
+			true);
 	}
 
 	private OauthTokenResponseDto getToken(String code) {

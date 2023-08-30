@@ -1,7 +1,6 @@
 package com.example.carrot.user.dto.response;
 
 import com.example.carrot.global.jwt.Jwt;
-import com.example.carrot.user.entity.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class LoginResponseDto {
+public class UserResponseDto {
 	@JsonProperty("accessToken")
 	private String accessToken;
 	@JsonProperty("refreshToken")
@@ -22,28 +21,29 @@ public class LoginResponseDto {
 	private boolean isUser;
 
 	@JsonProperty("user")
-	private User user;
+	private LoginUserResponseDto loginUserResponseDto;
 
 	@Builder
-	public LoginResponseDto(String accessToken, String refreshToken, boolean isUser, User user) {
+	public UserResponseDto(String accessToken, String refreshToken, boolean isUser,
+		LoginUserResponseDto loginUserResponseDto) {
 		this.accessToken = accessToken;
 		this.refreshToken = refreshToken;
 		this.isUser = isUser;
-		this.user = user;
+		this.loginUserResponseDto = loginUserResponseDto;
 	}
 
-	public static LoginResponseDto of(String accessToken, boolean isUser) {
-		return LoginResponseDto.builder()
+	public static UserResponseDto of(String accessToken, boolean isUser) {
+		return UserResponseDto.builder()
 			.accessToken(accessToken)
 			.isUser(isUser)
 			.build();
 	}
 
-	public static LoginResponseDto of(Jwt jwt, User user, boolean isUser) {
-		return LoginResponseDto.builder()
+	public static UserResponseDto of(Jwt jwt, LoginUserResponseDto loginUserResponseDto, boolean isUser) {
+		return UserResponseDto.builder()
 			.accessToken(jwt.getAccessToken())
 			.refreshToken(jwt.getRefreshToken())
-			.user(user)
+			.loginUserResponseDto(loginUserResponseDto)
 			.isUser(isUser)
 			.build();
 	}

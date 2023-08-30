@@ -39,16 +39,12 @@ public class User extends BaseAllTimeEntity {
     private List<SalesHistory> salesHistories = new ArrayList<>();
 
     @Builder
-    public User(Long userId, String nickName, String imageUrl, String refreshToken, String socialId,
-        List<UserLocation> userLocations, List<Like> likes, List<SalesHistory> salesHistories) {
+    public User(Long userId, String nickName, String imageUrl, String refreshToken, String socialId) {
         this.userId = userId;
         this.nickName = nickName;
         this.imageUrl = imageUrl;
         this.refreshToken = refreshToken;
         this.socialId = socialId;
-        this.userLocations = userLocations;
-        this.likes = likes;
-        this.salesHistories = salesHistories;
     }
 
     public static User of(Long userId, String nickName, String imageUrl) {

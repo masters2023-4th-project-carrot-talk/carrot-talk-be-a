@@ -38,4 +38,19 @@ public class UserLocation extends BaseCreatedTimeEntity {
         this.user = user;
         this.location = location;
     }
+
+    public void addUser(User user) {
+        this.user = user;
+        user.getUserLocations().add(this);
+    }
+
+    public static UserLocation of(User user, Location location, boolean isMain) {
+        UserLocation userLocation = UserLocation.builder()
+            .isMain(isMain)
+            .location(location)
+            .build();
+
+        userLocation.addUser(user);
+        return userLocation;
+    }
 }

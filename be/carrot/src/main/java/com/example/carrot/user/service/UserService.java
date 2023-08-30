@@ -14,10 +14,16 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.example.carrot.global.jwt.Jwt;
 import com.example.carrot.global.jwt.JwtProvider;
-import com.example.carrot.user.dto.response.LoginResponseDto;
+import com.example.carrot.location.entity.Location;
+import com.example.carrot.location.service.LocationService;
+import com.example.carrot.user.dto.request.SignUpRequestDto;
+import com.example.carrot.user.dto.response.LoginUserResponseDto;
+import com.example.carrot.user.dto.response.UserResponseDto;
 import com.example.carrot.user.dto.response.OauthTokenResponseDto;
 import com.example.carrot.user.entity.User;
 import com.example.carrot.user.repository.UserRepository;
+import com.example.carrot.user_location.entity.UserLocation;
+import com.example.carrot.user_location.service.UserLocationService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,11 +46,13 @@ public class UserService {
 	@Value("${oauth.kakao.redirect_uri}")
 	private String redirectUri;
 
+	private final LocationService locationService;
+	private final UserLocationService userLocationService;
 	private final UserRepository userRepository;
 	private final JwtProvider jwtProvider;
 
 
-	public LoginResponseDto kakaoLogin(String code) {
+	public UserResponseDto kakaoLogin(String code) {
 		OauthTokenResponseDto tokenResponse = getToken(code);
 		log.info("access token : "+tokenResponse.getAccessToken());
 		log.info("scope : "+tokenResponse.getScope());
@@ -62,16 +70,16 @@ public class UserService {
 		if (user.isEmpty()) {
 			log.info("최초 로그인 유저");
 			Jwt jwt = jwtProvider.createJwt(Map.of("imgUrl", imgUrl, "socialId", socialId));
-			return LoginResponseDto.of(jwt.getAccessToken(), false);
+			return UserResponseDto.of(jwt.getAccessToken(), false);
 		}
 
 		log.info("로그인 유저");
 		User findUser = user.get();
 		Jwt jwt = jwtProvider.createJwt(Map.of("userId", findUser.getUserId()));
 
-		return LoginResponseDto.of(
+		return UserResponseDto.of(
 			jwt,
-			User.of(findUser.getUserId(), findUser.getNickName(), findUser.getImageUrl()),
+			LoginUserResponseDto.of(findUser.getUserId(), findUser.getNickName(), findUser.getImageUrl()),
 			true);
 	}
 
@@ -103,5 +111,25 @@ public class UserService {
 			.bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
 			})
 			.block();
+	}
+
+	@Transactional
+	public UserResponseDto kakaoSignUp(SignUpRequestDto signUpRequestDto, String socialId, String imgUrl) {
+		User user = userRepository.save(SignUpRequestDto.toEntity(signUpRequestDto.getNickname(), socialId, imgUrl));
+		log.info("user id : {}", user.getUserId());
+		Location mainLocation = locationService.findLocation(signUpRequestDto.getMainLocationId());
+		userLocationService.saveUserLocation(UserLocation.of(user, mainLocation, true));
+
+		if (signUpRequestDto.getSubLocationId() != null) {
+			Location subLocation = locationService.findLocation(signUpRequestDto.getSubLocationId());
+			userLocationService.saveUserLocation(UserLocation.of(user, subLocation, false));
+		}
+
+		Jwt jwt = jwtProvider.createJwt(Map.of("userId", user.getUserId()));
+
+		return UserResponseDto.of(
+			jwt,
+			LoginUserResponseDto.of(user.getUserId(), user.getNickName(), user.getImageUrl()),
+			true);
 	}
 }

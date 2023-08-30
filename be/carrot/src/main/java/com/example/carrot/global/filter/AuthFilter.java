@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthFilter implements Filter {
 
 	private final String[] whiteListUris = new String[] {"/", "/api/users/login", "/api/users/signup",
-		"/oauth/redirect"};
+		"/oauth/redirect", "/api/users"};
 
 	private final ObjectMapper objectMapper;
 

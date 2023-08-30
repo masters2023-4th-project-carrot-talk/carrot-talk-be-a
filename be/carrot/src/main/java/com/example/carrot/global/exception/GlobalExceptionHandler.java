@@ -24,7 +24,6 @@ public class GlobalExceptionHandler {
 		log.debug("BindException handling : {}", e.toString());
 
 		return ApiResponse.fail(
-			false,
 			e.getBindingResult().getFieldErrors().stream().map(
 				error -> {
 					Map<String, String> errors = new HashMap<>();
@@ -40,6 +39,6 @@ public class GlobalExceptionHandler {
 	public ApiResponse<ErrorCode> handleCustomException(CustomException e) {
 		StatusCode statusCode = e.getStatusCode();
 
-		return ApiResponse.fail(false, new ErrorCode(statusCode.getStatus(), statusCode.getMessage()));
+		return ApiResponse.fail(new ErrorCode(statusCode.getStatus(), statusCode.getMessage()));
 	}
 }

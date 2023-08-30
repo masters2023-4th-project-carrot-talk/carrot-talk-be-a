@@ -1,10 +1,13 @@
 package com.example.carrot.global.common;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
 
 	private boolean success;
@@ -18,22 +21,22 @@ public class ApiResponse<T> {
 		this.errorCode = errorCode;
 	}
 
-	public static <T> ApiResponse<T> success(boolean success) {
+	public static <T> ApiResponse<T> success() {
 		return (ApiResponse<T>)ApiResponse.builder()
-			.success(success)
+			.success(true)
 			.build();
 	}
 
-	public static <T> ApiResponse<T> success(boolean success, T data) {
+	public static <T> ApiResponse<T> success(T data) {
 		return (ApiResponse<T>) ApiResponse.builder()
-			.success(success)
+			.success(true)
 			.data(data)
 			.build();
 	}
 
-	public static <T> ApiResponse<T> fail(boolean success, T errorCode) {
+	public static <T> ApiResponse<T> fail(T errorCode) {
 		return (ApiResponse<T>) ApiResponse.builder()
-			.success(success)
+			.success(false)
 			.errorCode(errorCode)
 			.build();
 	}

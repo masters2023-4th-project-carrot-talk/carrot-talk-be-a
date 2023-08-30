@@ -1,6 +1,5 @@
 package com.example.carrot.global.common;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Builder;
@@ -28,14 +27,14 @@ public class ApiResponse<T> {
 	}
 
 	public static <T> ApiResponse<T> success(T data) {
-		return (ApiResponse<T>) ApiResponse.builder()
+		return (ApiResponse<T>)ApiResponse.builder()
 			.success(true)
 			.data(data)
 			.build();
 	}
 
 	public static <T> ApiResponse<T> fail(T errorCode) {
-		return (ApiResponse<T>) ApiResponse.builder()
+		return (ApiResponse<T>)ApiResponse.builder()
 			.success(false)
 			.errorCode(errorCode)
 			.build();

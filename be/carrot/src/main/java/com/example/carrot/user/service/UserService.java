@@ -1,6 +1,5 @@
 package com.example.carrot.user.service;
 
-
 import java.util.Map;
 import java.util.Optional;
 
@@ -18,8 +17,8 @@ import com.example.carrot.location.entity.Location;
 import com.example.carrot.location.service.LocationService;
 import com.example.carrot.user.dto.request.SignUpRequestDto;
 import com.example.carrot.user.dto.response.LoginUserResponseDto;
-import com.example.carrot.user.dto.response.UserResponseDto;
 import com.example.carrot.user.dto.response.OauthTokenResponseDto;
+import com.example.carrot.user.dto.response.UserResponseDto;
 import com.example.carrot.user.entity.User;
 import com.example.carrot.user.repository.UserRepository;
 import com.example.carrot.user_location.entity.UserLocation;
@@ -51,15 +50,15 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final JwtProvider jwtProvider;
 
-
 	public UserResponseDto kakaoLogin(String code) {
 		OauthTokenResponseDto tokenResponse = getToken(code);
-		log.info("access token : "+tokenResponse.getAccessToken());
-		log.info("scope : "+tokenResponse.getScope());
+		log.info("access token : " + tokenResponse.getAccessToken());
+		log.info("scope : " + tokenResponse.getScope());
 
 		Map<String, Object> userInfo = findUserInfo(tokenResponse.getAccessToken());
-		log.info("social id : "+userInfo.get("id"));
-		log.info("profile img : "+((Map)((Map) userInfo.get("kakao_account")).get("profile")).get("thumbnail_image_url"));
+		log.info("social id : " + userInfo.get("id"));
+		log.info(
+			"profile img : " + ((Map)((Map)userInfo.get("kakao_account")).get("profile")).get("thumbnail_image_url"));
 
 		String socialId = String.valueOf(userInfo.get("id"));
 		String imgUrl = String.valueOf(

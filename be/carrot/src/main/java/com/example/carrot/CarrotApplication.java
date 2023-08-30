@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 public class CarrotApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(CarrotApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(CarrotApplication.class, args);
+	}
 
 }

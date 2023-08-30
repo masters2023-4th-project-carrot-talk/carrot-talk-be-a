@@ -1,13 +1,9 @@
 package com.example.carrot.user.dto.request;
 
-import java.util.List;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.example.carrot.user.entity.User;
-import com.example.carrot.user_location.entity.UserLocation;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Builder;
 import lombok.Getter;

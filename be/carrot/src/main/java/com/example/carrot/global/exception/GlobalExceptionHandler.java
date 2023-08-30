@@ -1,6 +1,5 @@
 package com.example.carrot.global.exception;
 
-
 import java.util.HashMap;
 import java.util.Map;
 

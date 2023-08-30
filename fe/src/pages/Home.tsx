@@ -1,5 +1,5 @@
-import { ReactComponent as ChevronDown } from '@/assets/chevron-down.svg';
-import { ReactComponent as LayoutGrid } from '@/assets/layout-grid.svg';
+import { Theme, css } from '@emotion/react';
+import { useState } from 'react';
 import { Button } from '@/components/common/button/Button';
 import { Dropdown } from '@/components/common/dropdown/Dropdown';
 import { ListItem } from '@/components/common/list/ListItem';
@@ -8,7 +8,16 @@ import { MenuItem } from '@/components/common/menu/MenuItem';
 import { LeftButton } from '@/components/common/topBar/LeftButton';
 import { RightButton } from '@/components/common/topBar/RightButton';
 import { TopBar } from '@/components/common/topBar/TopBar';
-import { Theme, css } from '@emotion/react';
+
+import { ReactComponent as ChevronDown } from '@/assets/chevron-down.svg';
+import { ReactComponent as LayoutGrid } from '@/assets/layout-grid.svg';
+import { ReactComponent as Plus } from '@/assets/plus.svg';
+import { ListBox } from '@/components/common/list/ListBox';
+import { usePopupStore } from '@/store/PopupStore';
+import { LocationModal } from '@/components/common/modal/locationModal/LocationModal';
+import { AlertButtons } from '@/components/common/alert/AlertButtons';
+import { AlertContent } from '@/components/common/alert/AlertContent';
+import { Alert } from '@/components/common/alert/Alert';
 
 const mock = {
   products: [
@@ -97,60 +106,86 @@ const mock = {
 };
 
 export const Home: React.FC = () => {
+  const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
+  const [selected, setSelected] = useState('역삼1동');
+
+  const onOpenModal = () => {
+    //TODO : 내 동네 설정 모달 보여주기
+    togglePopup('modal', true);
+    setCurrentDim('modal');
+  };
+
   const onOpenDetail = (id: number) => {
     //TODO : 상세페이지 보여주기
     console.log(id);
   };
 
+  const onSelectMainLocation = () => {
+    //대표 동네 설정 api
+  };
+
   return (
-    <>
+    <div css={pageStyle}>
       <TopBar>
         <LeftButton>
-          <Dropdown>
-            <Button variant="text">
+          <Dropdown autoClose>
+            <Button variant="text" className="button__topbar">
               역삼1동
-              <ChevronDown stroke="#000" />
+              <ChevronDown />
             </Button>
             <MenuBox>
-              <MenuItem state="selected">역삼1동</MenuItem>
-              <MenuItem>내 동네 설정하기</MenuItem>
+              {locations.map((location) => (
+                <MenuItem
+                  key={location.id}
+                  state={selected.id === location.id ? 'selected' : 'default'}
+                  onClick={onSelectMainLocation}
+                >
+                  {location.name}
+                </MenuItem>
+              ))}
+              <MenuItem onClick={onOpenModal}>내 동네 설정하기</MenuItem>
             </MenuBox>
           </Dropdown>
         </LeftButton>
         <RightButton>
-          <Button variant="text">
-            <LayoutGrid stroke="#000" />
+          <Button variant="text" className="button__topbar">
+            <LayoutGrid />
           </Button>
         </RightButton>
       </TopBar>
-      <>
-        <div css={pageStyle}>
-          <ul>
-            {mock.products.map((product) => (
-              /*  key={product.id} id가 타입에 없음.. 실종.. */
-              <ListItem
-                product={product}
-                onOpenDetail={() => onOpenDetail(product.id)}
-              />
-            ))}
-          </ul>
-        </div>
-      </>
-    </>
+      <Button variant="fab" size="l" className="button__add">
+        <Plus />
+      </Button>
+      <ListBox>
+        {mock.products.map((product) => (
+          <ListItem
+            product={product}
+            onOpenDetail={() => onOpenDetail(product.id)}
+          />
+        ))}
+      </ListBox>
+      <LocationModal />
+      <Alert isOpen={isOpen.alert} currentDim={currentDim}>
+        <AlertContent>'역삼1동'을 삭제하시겠어요?</AlertContent>
+        <AlertButtons buttonText="취소" onDelete={() => {}} />
+      </Alert>
+    </div>
   );
 };
 
 const pageStyle = (theme: Theme) => {
   return css`
-    min-height: 100%;
+    flex: 1;
 
-    ul {
-      display: flex;
-      box-sizing: border-box;
-      width: 393px;
-      padding: 0px 16px;
-      flex-direction: column;
-      align-items: flex-start;
+    .button__topbar {
+      stroke: ${theme.color.neutral.textStrong};
+    }
+
+    .button__add {
+      position: absolute;
+      bottom: 88px;
+      right: 24px;
+      stroke: ${theme.color.accent.text};
     }
   `;
 };

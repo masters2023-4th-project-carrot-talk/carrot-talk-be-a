@@ -22,6 +22,8 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
     { id: 1, text: '안양99동' },
   ];
 
+  const isUser = true; // TODO 유저인지 아닌지 확인 필요
+
   return (
     <div css={controlLocationStyle}>
       <div className="noticeText">
@@ -45,7 +47,7 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
           size="l"
           state="default"
           onClick={() => onToggleContent('search')}
-          disabled={false} // TODO disabled조건으로 교체 필요
+          disabled={isUser ? false : true} // TODO disabled조건으로 교체 필요
         >
           <Plus className="buttons__plus-icon" />
           추가

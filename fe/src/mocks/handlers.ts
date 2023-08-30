@@ -3,7 +3,6 @@ let locations: LocationType[] = [
   { id: 1, name: '안양99동', isMainLocation: true },
   { id: 2, name: '안양100동', isMainLocation: false },
 ];
-
 export const handlers = [
   rest.get(`/users/locations`, (_, res, ctx) => {
     // 딜레이 주기

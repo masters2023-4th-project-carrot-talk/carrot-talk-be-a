@@ -8,7 +8,7 @@ import { Home } from './pages/Home';
 import { Interests } from './pages/Interests';
 import { NotFound } from './pages/NotFound';
 import { Sales } from './pages/Sales';
-import { InputTestPage } from './pages/InputTestPage';
+import { InputTestPage } from './pages/test/InputTestPage';
 
 // TODO Private routes 구현
 export const AppRoutes: React.FC = () => {
@@ -30,7 +30,7 @@ export const AppRoutes: React.FC = () => {
             {/* 인증필요 */}
             <Route path={PATH.chat} element={<Chat />} />
             <Route path={PATH.auth} element={<Auth />} />
-            <Route path='/test' element={<InputTestPage />} />
+            <Route path="/test" element={<InputTestPage />} />
           </Route>
         </Route>
       </Routes>

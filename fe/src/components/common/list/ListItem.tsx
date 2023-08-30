@@ -12,9 +12,10 @@ import { formatCount } from '@/utils/formatCount';
 
 type Props = {
   product: any; // TODO : product 타입 변경
+  onOpenDetail?: () => void;
 };
 
-export const ListItem: FC<Props> = ({ product }) => {
+export const ListItem: FC<Props> = ({ product, onOpenDetail }) => {
   const isAuthor = true; // TODO : user인지 아닌지 / product를 올린 사람의 id와 user의 id 비교가 필요함 product의 id도 없음..? ???
   const formattedPrice = formatPrice(product.price);
   const formattedTimeStamp = formatTimeStamp(product.createdAt);
@@ -22,7 +23,7 @@ export const ListItem: FC<Props> = ({ product }) => {
   const formattedLikeCount = formatCount(product.likeCount);
 
   return (
-    <li css={listItemStyle}>
+    <li css={listItemStyle} onClick={onOpenDetail}>
       <ImageBox imageUrl={product.imageUrl} size="l" />
       <div className="text-area">
         <div className="text-area__information">

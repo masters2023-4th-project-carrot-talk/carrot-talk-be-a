@@ -58,13 +58,8 @@ public class UserService {
 	@Transactional
 	public UserResponseDto kakaoLogin(String code) {
 		OauthTokenResponseDto tokenResponse = getToken(code);
-		log.info("access token : " + tokenResponse.getAccessToken());
-		log.info("scope : " + tokenResponse.getScope());
 
 		Map<String, Object> userInfo = findUserInfo(tokenResponse.getAccessToken());
-		log.info("social id : " + userInfo.get("id"));
-		log.info(
-			"profile img : " + ((Map)((Map)userInfo.get("kakao_account")).get("profile")).get("thumbnail_image_url"));
 
 		String socialId = String.valueOf(userInfo.get("id"));
 		String imgUrl = String.valueOf(
@@ -122,7 +117,7 @@ public class UserService {
 	@Transactional
 	public UserResponseDto kakaoSignUp(SignUpRequestDto signUpRequestDto, String socialId, String imgUrl) {
 		User user = userRepository.save(SignUpRequestDto.toEntity(signUpRequestDto.getNickname(), socialId, imgUrl));
-		log.info("user id : {}", user.getUserId());
+
 		Location mainLocation = locationService.findLocation(signUpRequestDto.getMainLocationId());
 		userLocationService.saveUserLocation(UserLocation.of(user, mainLocation, true));
 

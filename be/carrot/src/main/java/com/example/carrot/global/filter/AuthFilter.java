@@ -40,13 +40,12 @@ public class AuthFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws
 		IOException,
 		ServletException {
-		log.info("doFilter 진입");
+
 		HttpServletRequest httpServletRequest = (HttpServletRequest)request;
 		HttpServletResponse httpServletResponse = (HttpServletResponse)response;
 
 		if (whiteListCheck(httpServletRequest.getRequestURI())) {
 			log.info("whileListCheck 진입");
-			log.info("request uri : {}", httpServletRequest.getRequestURI());
 			if (httpServletRequest.getRequestURI().equals("/api/users/signup")) {
 				try {
 					Claims claims = jwtProvider.getClaims(getToken(httpServletRequest));

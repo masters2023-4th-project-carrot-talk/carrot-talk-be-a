@@ -1,6 +1,5 @@
 package com.example.carrot.user.controller;
 
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +32,12 @@ public class UserController {
 	public ApiResponse<UserResponseDto> kakaoLogin(@RequestParam String code) {
 		UserResponseDto loginResponseDto = userService.kakaoLogin(code);
 		return ApiResponse.success(loginResponseDto);
+	}
+
+	@GetMapping("/users")
+	public ApiResponse<?> checkNickname(@RequestParam String nickname) {
+		userService.checkNickNameDuplicate(nickname);
+		return ApiResponse.success();
 	}
 
 	@PostMapping("/users/signup")

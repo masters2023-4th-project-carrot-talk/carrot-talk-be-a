@@ -14,7 +14,6 @@ public class OauthTokenResponseDto {
 
 	private String scope;
 
-
 	@Builder
 	public OauthTokenResponseDto(String accessToken, String scope) {
 		this.accessToken = accessToken;

@@ -29,14 +29,17 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class AuthFilter implements Filter {
 
-	private final String[] whiteListUris = new String[] {"/", "/api/users/login", "/api/users/signup", "/oauth/redirect"};
+	private final String[] whiteListUris = new String[] {"/", "/api/users/login", "/api/users/signup",
+		"/oauth/redirect", "/api/users"};
 
 	private final ObjectMapper objectMapper;
 
 	private final JwtProvider jwtProvider;
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws
+		IOException,
+		ServletException {
 		log.info("doFilter 진입");
 		HttpServletRequest httpServletRequest = (HttpServletRequest)request;
 		HttpServletResponse httpServletResponse = (HttpServletResponse)response;

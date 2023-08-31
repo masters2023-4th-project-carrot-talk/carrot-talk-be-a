@@ -42,7 +42,7 @@ export const Input: React.FC<Props> = ({
         <input {...props} onChange={onInputChange} onKeyDown={onInputKeyDown} />
         {props.value && (
           <Button variant="text" onClick={onDeleteClick}>
-            <CircleXFilled className='circle-x-filled'/>
+            <CircleXFilled className="circle-x-filled" />
           </Button>
         )}
       </div>
@@ -91,7 +91,6 @@ const inputStyle = (
     display: flex;
     flex-direction: column;
     gap: 4px;
-    padding-bottom: 16px;
     font: ${theme.font.displayStrong16};
     color: ${theme.color.neutral.textStrong};
 

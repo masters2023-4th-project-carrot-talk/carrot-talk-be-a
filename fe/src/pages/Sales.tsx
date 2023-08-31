@@ -8,7 +8,7 @@ export const Sales: React.FC = () => {
       <TopBar>
         <Title>판매 내역</Title>
       </TopBar>
-      <div css={pageStyle}></div>
+      <div css={(theme) => pageStyle(theme)}></div>
     </>
   );
 };

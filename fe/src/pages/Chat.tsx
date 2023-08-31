@@ -8,7 +8,7 @@ export const Chat: React.FC = () => {
       <TopBar>
         <Title>채팅</Title>
       </TopBar>
-      <div css={pageStyle}></div>
+      <div css={(theme) => pageStyle(theme)}></div>
     </>
   );
 };

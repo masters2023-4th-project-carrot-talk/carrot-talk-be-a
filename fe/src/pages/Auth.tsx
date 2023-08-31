@@ -2,15 +2,20 @@ import { ReactComponent as UserCircle } from '@/assets/user-circle.svg';
 import { Button } from '@/components/common/button/Button';
 import { Title } from '@/components/common/topBar/Title';
 import { TopBar } from '@/components/common/topBar/TopBar';
+import { PATH } from '@/constants/path';
 import kakaoLogin from '@assets/kakao_login.png';
 import { Theme, css } from '@emotion/react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const Auth: React.FC = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const navigate = useNavigate();
+
+  const [isLogin, setIsLogin] = useState(false);
 
   const onClickLogin = () => {
-    setIsLogin(true);
+    navigate(PATH.redirect);
+    // setIsLogin(true);
   };
 
   const onClickLogout = () => {
@@ -22,7 +27,7 @@ export const Auth: React.FC = () => {
       <TopBar>
         <Title>내 계정</Title>
       </TopBar>
-      <div css={pageStyle}>
+      <div css={(theme) => pageStyle(theme)}>
         {isLogin ? (
           <>
             <div className="auth__info">

@@ -8,7 +8,7 @@ export const Interests: React.FC = () => {
       <TopBar>
         <Title>관심 목록</Title>
       </TopBar>
-      <div css={pageStyle}></div>
+      <div css={(theme) => pageStyle(theme)}></div>
     </>
   );
 };

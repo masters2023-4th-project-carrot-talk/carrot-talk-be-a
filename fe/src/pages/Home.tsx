@@ -64,7 +64,7 @@ export const Home: React.FC = () => {
     <>
       <TopBar>
         <LeftButton>
-          <Dropdown>
+          <Dropdown autoClose>
             <Button variant="text">
               역삼1동
               <ChevronDown stroke="#000" />
@@ -81,7 +81,7 @@ export const Home: React.FC = () => {
           </Button>
         </RightButton>
       </TopBar>
-      <div css={pageStyle}>
+      <div css={(theme) => pageStyle(theme)}>
         <ul>
           {mock.products.map((product) => (
             /*  key={product.id} id가 타입에 없음.. 실종.. */

@@ -1,4 +1,9 @@
-import { deleteLocation, getMyLocations, patchMainLocation } from '@/api/api';
+import {
+  deleteLocation,
+  getLocationWithQuery,
+  getMyLocations,
+  patchMainLocation,
+} from '@/api/api';
 import { QUERY_KEY } from '@/constants/queryKey';
 import { useQueryClient, useMutation, useQuery } from 'react-query';
 
@@ -10,6 +15,24 @@ export const useMyLocations = () => {
   } = useQuery<LocationType[]>(QUERY_KEY.locations, getMyLocations);
 
   return { locations, status, error };
+};
+
+export const useLocationWithQuery = (query: string) => {
+  // 엔터 칠때만 요청함
+  const {
+    data: locations,
+    status,
+    error,
+    refetch,
+    remove,
+  } = useQuery<LocationType[]>(
+    [QUERY_KEY.locations, query],
+    () => getLocationWithQuery(query),
+    {
+      enabled: false,
+    },
+  );
+  return { locations, status, error, refetch, remove };
 };
 
 export const useDeleteLocation = () => {

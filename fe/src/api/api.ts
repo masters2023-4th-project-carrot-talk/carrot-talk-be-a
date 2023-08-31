@@ -47,4 +47,11 @@ export const patchMainLocation = async (id: number) => {
   });
 };
 
-// export const postLocation = async (name: string) => {
+export const getLocationWithQuery = async (query: string) => {
+  // /api/locations?keyword=”강남구”
+
+  // TODO 액세스 토큰을 헤더에 담아서 보내야 함
+  // TODO const accesToken =
+
+  return await fetchData(`/locations?keyword="${query}"`);
+};

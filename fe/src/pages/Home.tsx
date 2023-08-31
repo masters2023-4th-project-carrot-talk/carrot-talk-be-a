@@ -51,8 +51,11 @@ export const Home: React.FC = () => {
     console.log(id);
   };
 
+  const onOpenCategory = () => {
+    //TODO : 카테고리 페이지 보여주기
+  };
+
   const onFilterProducts = (id: number) => {
-    //TODO 대표 동네 설정 api(안해줘도 됨)
     //TODO 필터링만 수행
     setSelected(id);
   };
@@ -82,7 +85,11 @@ export const Home: React.FC = () => {
           </Dropdown>
         </LeftButton>
         <RightButton>
-          <Button variant="text" className="button__topbar">
+          <Button
+            variant="text"
+            className="button__topbar"
+            onClick={onOpenCategory}
+          >
             <LayoutGrid />
           </Button>
         </RightButton>

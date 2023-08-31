@@ -4,7 +4,6 @@ import { Theme, css } from '@emotion/react';
 import { ReactComponent as Plus } from '@assets/plus.svg';
 import { ReactComponent as CircleXFilled } from '@assets/circle-x-filled.svg';
 import { usePopupStore } from '@store/popupStore';
-
 import {
   useDeleteLocation,
   useMyLocations,
@@ -17,13 +16,9 @@ import { ModalHeader } from '../../ModalHeader';
 
 type Props = {
   onToggleContent: (content: 'control' | 'search') => void;
-  onCloseModal: () => void;
 };
 
-export const ControlLocation: React.FC<Props> = ({
-  onToggleContent,
-  onCloseModal,
-}) => {
+export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
   const { locations } = useMyLocations();
   const deleteLocationById = useDeleteLocation(); // TODO delete, patch 에러 핸들링
   const patchMainLocationById = usePatchMainLocation();
@@ -51,15 +46,29 @@ export const ControlLocation: React.FC<Props> = ({
     setCurrentDim('modal');
   };
 
+  const onCloseModal = () => {
+    togglePopup('modal', false);
+    setCurrentDim(null);
+  };
+
   const onDeleteLocation = (id?: number) => {
     if (id == null) return;
-    deleteLocationById(id);
     onAlertClose();
+    deleteLocationById(id);
+    setLocationsList((prevLocations) =>
+      prevLocations
+        .filter((location) => location.id !== id)
+        .map((location) => ({
+          ...location,
+          isMainLocation: true,
+        })),
+    );
   };
 
   const onChangeMainLocation = () => {
-    // 모달을 닫을 때 변경 요청을 보낸다
+    // 모달을 닫을 때만 변경 요청을 보낸다
     selectLocation && patchMainLocationById(selectLocation.id);
+    setSelectLocation(null);
   };
 
   const onSelectLocation = (selectedLocation: LocationType) => {
@@ -106,7 +115,10 @@ export const ControlLocation: React.FC<Props> = ({
                 {location.name}
                 <CircleXFilled
                   className="buttons__location__x-icon"
-                  onClick={() => onAlertOpen(location)}
+                  onClick={(event) => {
+                    event?.stopPropagation();
+                    onAlertOpen(location);
+                  }}
                 />
               </LocationButton>
             ))}
@@ -121,7 +133,7 @@ export const ControlLocation: React.FC<Props> = ({
                 onToggleContent('search');
               }
             }}
-            disabled={isUser || shouldBlockAdd}
+            disabled={shouldBlockAdd} // TODO user인지 아닌지 추가하기
           >
             <Plus className="buttons__plus-icon" />
             추가

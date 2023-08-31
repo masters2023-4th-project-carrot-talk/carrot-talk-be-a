@@ -31,7 +31,7 @@ export const Home: React.FC = () => {
 
   if (status === 'loading') {
     // TODO 상품목록 loading이 메인이 돼야함
-    // TODO 메인페이지에 들어와있을때 locations프리페치가 가능하다면 locations의 loading은 무의미함
+    // TODO 메인페이지에 들어와있을때 locations의 loading은 무의미함
     return <LoadingPage />;
   }
 

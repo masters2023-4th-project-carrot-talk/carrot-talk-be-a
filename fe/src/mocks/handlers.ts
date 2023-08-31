@@ -1,8 +1,10 @@
 import { rest } from 'msw';
+
 let locations: LocationType[] = [
   { id: 1, name: '안양99동', isMainLocation: true },
   { id: 2, name: '안양100동', isMainLocation: false },
 ];
+
 export const handlers = [
   rest.get(`/users/locations`, (_, res, ctx) => {
     // 딜레이 주기
@@ -39,14 +41,14 @@ export const handlers = [
   rest.patch(`/users/locations`, (req, res, ctx) => {
     const { id } = req.body as { id: number };
 
-    // 기존 주요 위치를 일반 위치로 변경
-    locations.find((location) => location.isMainLocation)!.isMainLocation =
-      false;
+    console.log('patch', id);
+    locations = locations.map((location) => ({
+      ...location,
+      isMainLocation: location.id === id,
+    }));
 
-    // 새로운 주요 위치를 설정
-    locations.find((location) => location.id === id)!.isMainLocation = true;
+    console.log('patch', locations);
 
-    // 반환 데이터
     const data = {
       success: true,
       data: {

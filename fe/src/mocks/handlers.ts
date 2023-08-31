@@ -1,4 +1,6 @@
 import { rest } from 'msw';
+import { users } from './data/users';
+
 let locations: LocationType[] = [
   { id: 1, name: '안양99동', isMainLocation: true },
   { id: 2, name: '안양100동', isMainLocation: false },
@@ -53,6 +55,30 @@ export const handlers = [
       data: {
         mainLocationId: id,
       },
+    };
+
+    return res(ctx.status(200), ctx.json(data));
+  }),
+  rest.get('/api/users', (req, res, ctx) => {
+    const query = req.url.searchParams;
+    const nickname = query.get('nickname');
+
+    const isUser = users.some((user) => user.nickname === nickname);
+
+    if (isUser) {
+      const data = {
+        success: false,
+        errorCode: {
+          status: 404,
+          message: '같은 닉네임이 존재합니다.',
+        },
+      };
+
+      return res(ctx.status(400), ctx.json(data));
+    }
+
+    const data = {
+      success: true,
     };
 
     return res(ctx.status(200), ctx.json(data));

@@ -44,4 +44,11 @@ export const patchMainLocation = async (id: number) => {
   });
 };
 
-// export const postLocation = async (name: string) => {
+export const checkNickname = async (nickname: string) => {
+  // TODO 액세스 토큰을 헤더에 담아서 보내야 함
+  // TODO const accesToken =
+
+  return await fetchData(`/api/users?nickname=${nickname}`, {
+    method: 'GET',
+  });
+}

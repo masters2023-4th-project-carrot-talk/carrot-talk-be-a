@@ -1,5 +1,5 @@
-import { deleteLocation, getMyLocations, patchMainLocation } from '@/api/api';
-import { QUERY_KEY } from '@/constants/queryKey';
+import { deleteLocation, getMyLocations, patchMainLocation, checkNickname } from '@/api/api';
+import { QUERY_KEY } from '@/constants/querykey';
 import { useQueryClient, useMutation, useQuery } from 'react-query';
 
 export const useMyLocations = () => {
@@ -45,3 +45,17 @@ export const usePatchMainLocation = () => {
 
   return patchMainLocationById;
 };
+
+export const useCheckNickname = (nickname: string) => {
+  const {
+    data: nicknameCheck,
+    status,
+    error,
+    refetch: refetchNicknameCheck,
+  } = useQuery(QUERY_KEY.nicknameCheck, () => checkNickname(nickname), {
+    enabled: false,
+    retry: false
+  });
+
+  return { nicknameCheck, status, error, refetchNicknameCheck };
+}

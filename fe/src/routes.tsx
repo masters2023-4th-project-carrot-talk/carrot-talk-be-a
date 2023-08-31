@@ -5,7 +5,6 @@ import { Layout } from './layout/Layout';
 import { Auth } from './pages/Auth';
 import { Chat } from './pages/Chat';
 import { Home } from './pages/Home';
-import { InputTestPage } from './pages/InputTestPage';
 import { Interests } from './pages/Interests';
 import { NotFound } from './pages/NotFound';
 import { OauthLoading } from './pages/OauthLoading';

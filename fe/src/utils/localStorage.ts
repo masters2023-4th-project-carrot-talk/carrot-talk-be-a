@@ -28,3 +28,11 @@ export const getTokens = () => {
 
   return JSON.parse(tokens);
 };
+
+export const clearUserInfo = () => {
+  localStorage.removeItem('userInfo');
+};
+
+export const clearTokens = () => {
+  localStorage.removeItem('token');
+}

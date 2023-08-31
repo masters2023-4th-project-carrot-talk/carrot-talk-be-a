@@ -3,23 +3,32 @@ import { Button } from '@/components/common/button/Button';
 import { Title } from '@/components/common/topBar/Title';
 import { TopBar } from '@/components/common/topBar/TopBar';
 import { PATH } from '@/constants/path';
+import {
+  clearTokens,
+  clearUserInfo,
+  getTokens,
+  getUserInfo,
+} from '@/utils/localStorage';
 import kakaoLogin from '@assets/kakao_login.png';
 import { Theme, css } from '@emotion/react';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const Auth: React.FC = () => {
   const navigate = useNavigate();
+  const userInfo = getUserInfo();
+  const tokens = getTokens();
 
-  const [isLogin, setIsLogin] = useState(false);
+  const isLogin = userInfo !== null && tokens !== null;
 
   const onClickLogin = () => {
     navigate(PATH.redirect);
-    // setIsLogin(true);
   };
 
   const onClickLogout = () => {
-    setIsLogin(false);
+    // TODO: 로그아웃 API 호출
+    clearUserInfo();
+    clearTokens();
+    navigate(PATH.auth, { replace: true });
   };
 
   return (
@@ -32,9 +41,13 @@ export const Auth: React.FC = () => {
           <>
             <div className="auth__info">
               <div className="user__profile">
-                <UserCircle />
+                {userInfo.imageUrl ? (
+                  <img src={userInfo.imageUrl} alt="프로필 사진" />
+                ) : (
+                  <UserCircle />
+                )}
               </div>
-              <div className="user__name">사용자 이름</div>
+              <div className="user__name">{userInfo.nickname}</div>
             </div>
             <div className="button__wrapper">
               <Button

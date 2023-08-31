@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.PatternMatchUtils;
+import org.springframework.web.cors.CorsUtils;
 
 import com.example.carrot.global.common.ApiResponse;
 import com.example.carrot.global.exception.ErrorCode;
@@ -43,6 +44,11 @@ public class AuthFilter implements Filter {
 
 		HttpServletRequest httpServletRequest = (HttpServletRequest)request;
 		HttpServletResponse httpServletResponse = (HttpServletResponse)response;
+
+		if (CorsUtils.isPreFlightRequest(httpServletRequest)) {
+			chain.doFilter(request, response);
+			return;
+		}
 
 		if (whiteListCheck(httpServletRequest.getRequestURI())) {
 			log.info("whileListCheck 진입");

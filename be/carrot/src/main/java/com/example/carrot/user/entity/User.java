@@ -3,6 +3,7 @@ package com.example.carrot.user.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -10,8 +11,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.carrot.global.common.BaseAllTimeEntity;
+import com.example.carrot.global.jwt.Jwt;
 import com.example.carrot.like.entity.Like;
-import com.example.carrot.sales_history.entity.SalesHistory;
+import com.example.carrot.product.entity.Product;
 import com.example.carrot.user_location.entity.UserLocation;
 
 import lombok.Builder;
@@ -26,9 +28,17 @@ public class User extends BaseAllTimeEntity {
 	@Id
 	@GeneratedValue
 	private Long userId;
+
+	@Column(unique = true, nullable = false)
 	private String nickName;
+
+	@Column(length = 500)
 	private String imageUrl;
+
+	@Column(length = 500)
 	private String refreshToken;
+
+	@Column(nullable = false)
 	private String socialId;
 
 	@OneToMany(mappedBy = "user")
@@ -38,7 +48,7 @@ public class User extends BaseAllTimeEntity {
 	private List<Like> likes = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user")
-	private List<SalesHistory> salesHistories = new ArrayList<>();
+	private List<Product> products = new ArrayList<>();
 
 	@Builder
 	public User(Long userId, String nickName, String imageUrl, String refreshToken, String socialId) {
@@ -49,11 +59,7 @@ public class User extends BaseAllTimeEntity {
 		this.socialId = socialId;
 	}
 
-	public static User of(Long userId, String nickName, String imageUrl) {
-		return User.builder()
-			.userId(userId)
-			.nickName(nickName)
-			.imageUrl(imageUrl)
-			.build();
+	public void updateRefreshToken(Jwt jwt) {
+		this.refreshToken = jwt.getRefreshToken();
 	}
 }

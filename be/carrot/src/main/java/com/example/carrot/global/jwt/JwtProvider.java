@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtProvider {
 
 	private final Long ACCESS_TOKEN_EXP_TIME = 1000L * 60 * 60; // 1시간
-	private final Long REFRESH_TOKEN_EXP_TIME = 7L * 24 * 60 * 60; // 1주일
+	private final Long REFRESH_TOKEN_EXP_TIME = 1000L * 7L * 24 * 60 * 60; // 1주일
 
 	@Value("${jwt.secret_key}")
 	private String secretKey;
@@ -40,7 +40,6 @@ public class JwtProvider {
 	}
 
 	public String createToken(Map<String, Object> claims, Date expiration) {
-
 		return Jwts.builder()
 			.setClaims(claims)
 			.setExpiration(expiration)
@@ -55,11 +54,6 @@ public class JwtProvider {
 
 	public Date getExpireDateRefreshToken() {
 		return new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXP_TIME);
-	}
-
-	public Long getUserId(String token) {
-		Claims claims = getClaims(token);
-		return claims.get("userId", Long.class);
 	}
 
 	public Claims getClaims(String token) {

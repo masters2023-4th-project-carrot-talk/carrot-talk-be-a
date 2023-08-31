@@ -3,6 +3,7 @@ package com.example.carrot.image.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -24,6 +25,7 @@ public class Image extends BaseCreatedTimeEntity {
 	@GeneratedValue
 	private Long imageId;
 
+	@Column(nullable = false, length = 500)
 	private String imageUrl;
 
 	@OneToMany(mappedBy = "image")

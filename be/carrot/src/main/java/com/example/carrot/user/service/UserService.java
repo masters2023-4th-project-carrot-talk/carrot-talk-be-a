@@ -17,9 +17,12 @@ import com.example.carrot.global.jwt.Jwt;
 import com.example.carrot.global.jwt.JwtProvider;
 import com.example.carrot.location.entity.Location;
 import com.example.carrot.location.service.LocationService;
+import com.example.carrot.user.dto.request.LogoutRequestDto;
+import com.example.carrot.user.dto.request.ReissueRequestDto;
 import com.example.carrot.user.dto.request.SignUpRequestDto;
 import com.example.carrot.user.dto.response.LoginUserResponseDto;
 import com.example.carrot.user.dto.response.OauthTokenResponseDto;
+import com.example.carrot.user.dto.response.ReissueResponseDto;
 import com.example.carrot.user.dto.response.UserResponseDto;
 import com.example.carrot.user.entity.User;
 import com.example.carrot.user.repository.UserRepository;
@@ -52,15 +55,11 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final JwtProvider jwtProvider;
 
+	@Transactional
 	public UserResponseDto kakaoLogin(String code) {
 		OauthTokenResponseDto tokenResponse = getToken(code);
-		log.info("access token : " + tokenResponse.getAccessToken());
-		log.info("scope : " + tokenResponse.getScope());
 
 		Map<String, Object> userInfo = findUserInfo(tokenResponse.getAccessToken());
-		log.info("social id : " + userInfo.get("id"));
-		log.info(
-			"profile img : " + ((Map)((Map)userInfo.get("kakao_account")).get("profile")).get("thumbnail_image_url"));
 
 		String socialId = String.valueOf(userInfo.get("id"));
 		String imgUrl = String.valueOf(
@@ -77,6 +76,7 @@ public class UserService {
 		log.info("로그인 유저");
 		User findUser = user.get();
 		Jwt jwt = jwtProvider.createJwt(Map.of("userId", findUser.getUserId()));
+		findUser.updateRefreshToken(jwt);
 
 		return UserResponseDto.of(
 			jwt,
@@ -117,7 +117,7 @@ public class UserService {
 	@Transactional
 	public UserResponseDto kakaoSignUp(SignUpRequestDto signUpRequestDto, String socialId, String imgUrl) {
 		User user = userRepository.save(SignUpRequestDto.toEntity(signUpRequestDto.getNickname(), socialId, imgUrl));
-		log.info("user id : {}", user.getUserId());
+
 		Location mainLocation = locationService.findLocation(signUpRequestDto.getMainLocationId());
 		userLocationService.saveUserLocation(UserLocation.of(user, mainLocation, true));
 
@@ -127,6 +127,7 @@ public class UserService {
 		}
 
 		Jwt jwt = jwtProvider.createJwt(Map.of("userId", user.getUserId()));
+		user.updateRefreshToken(jwt);
 
 		return UserResponseDto.of(
 			jwt,
@@ -139,5 +140,17 @@ public class UserService {
 		if (userRepository.existsByNickName(nickname)) {
 			throw new CustomException(StatusCode.ALREADY_EXIST_USER);
 		}
+	}
+
+	public ReissueResponseDto reissueToken(ReissueRequestDto reissueRequestDto) {
+		User user = userRepository.findByRefreshToken(reissueRequestDto.getRefreshToken())
+			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_REFRESH_TOKEN));
+		String accessToken = jwtProvider.reissueAccessToken(Map.of("userId", user.getUserId()));
+		return ReissueResponseDto.from(accessToken);
+	}
+
+	@Transactional
+	public void kakaoLogout(LogoutRequestDto logoutRequestDto, Long userId) {
+		 userRepository.updateRefreshTokenByUserIdAndRefreshToken(userId, logoutRequestDto.getRefreshToken());
 	}
 }

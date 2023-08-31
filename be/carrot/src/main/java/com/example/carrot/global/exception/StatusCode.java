@@ -21,6 +21,7 @@ public enum StatusCode {
 
 	// -- [USER] -- //
 	ALREADY_EXIST_USER(HttpStatus.BAD_REQUEST, "같은 아이디가 존재합니다."),
+	NOT_FOUND_USER(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
 
 	// -- [LOCATION] -- //
 	NOT_FOUND_LOCATION(HttpStatus.BAD_REQUEST, "존재하지 않는 Location입니다.");

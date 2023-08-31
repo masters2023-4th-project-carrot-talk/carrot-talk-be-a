@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.PatternMatchUtils;
+import org.springframework.web.cors.CorsUtils;
 
 import com.example.carrot.global.common.ApiResponse;
 import com.example.carrot.global.exception.ErrorCode;
@@ -30,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthFilter implements Filter {
 
 	private final String[] whiteListUris = new String[] {"/", "/api/users/login", "/api/users/signup",
-		"/oauth/redirect", "/api/users"};
+		"/oauth/redirect", "/api/users", "/api/users/reissue-access-token"};
 
 	private final ObjectMapper objectMapper;
 
@@ -40,17 +41,28 @@ public class AuthFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws
 		IOException,
 		ServletException {
-		log.info("doFilter 진입");
+
 		HttpServletRequest httpServletRequest = (HttpServletRequest)request;
 		HttpServletResponse httpServletResponse = (HttpServletResponse)response;
 
+		if (CorsUtils.isPreFlightRequest(httpServletRequest)) {
+			chain.doFilter(request, response);
+			return;
+		}
+
 		if (whiteListCheck(httpServletRequest.getRequestURI())) {
 			log.info("whileListCheck 진입");
-			log.info("request uri : {}", httpServletRequest.getRequestURI());
 			if (httpServletRequest.getRequestURI().equals("/api/users/signup")) {
-				Claims claims = jwtProvider.getClaims(getToken(httpServletRequest));
-				request.setAttribute("socialId", claims.get("socialId"));
-				request.setAttribute("imgUrl", claims.get("imgUrl"));
+				try {
+					Claims claims = jwtProvider.getClaims(getToken(httpServletRequest));
+
+					request.setAttribute("socialId", claims.get("socialId"));
+					request.setAttribute("imgUrl", claims.get("imgUrl"));
+
+				} catch (RuntimeException e) {
+					log.debug(e.getClass().getName());
+					sendErrorApiResponse(httpServletResponse, e);
+				}
 			}
 			chain.doFilter(request, response);
 			return;
@@ -63,9 +75,7 @@ public class AuthFilter implements Filter {
 		}
 
 		try {
-			log.info("로그인 인증");
-			String token = getToken(httpServletRequest);
-			Claims claims = jwtProvider.getClaims(token);
+			Claims claims = jwtProvider.getClaims(getToken(httpServletRequest));
 			request.setAttribute("userId", claims.get("userId"));
 			chain.doFilter(request, response);
 		} catch (RuntimeException e) {

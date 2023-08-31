@@ -11,7 +11,7 @@ import { useCheckNickname } from '@/hooks/hook';
 import { usePopupStore } from '@/store/PopupStore';
 import { ReactComponent as Plus } from '@assets/plus.svg';
 import { Theme, css } from '@emotion/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const Signup: React.FC = () => {
@@ -24,8 +24,13 @@ export const Signup: React.FC = () => {
   const [nickname, setNickname] = useState('');
   const [locations, setLocations] = useState<number[]>([]);
   const { togglePopup, setCurrentDim } = usePopupStore();
-  const { nicknameCheck, refetchNicknameCheck } =
-    useCheckNickname(nickname);
+  const { nicknameCheck, refetchNicknameCheck } = useCheckNickname(nickname);
+
+  useEffect(() => {
+    if (nicknameCheck?.success) {
+      nicknameCheck.success = false;
+    }
+  }, [nickname, nicknameCheck]);
 
   const invalidNickName = nickname.length < 2 || nickname.length > 10;
   const submitDisabled = invalidNickName || locations.length === 0;
@@ -46,6 +51,7 @@ export const Signup: React.FC = () => {
   };
 
   const openLocationModal = () => {
+    // TODO : 위치 데이터 변경
     togglePopup('modal', true);
     setCurrentDim('modal');
     setLocations([3, 4]);

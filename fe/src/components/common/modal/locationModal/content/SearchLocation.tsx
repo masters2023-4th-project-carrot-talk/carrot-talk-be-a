@@ -5,7 +5,6 @@ import { ModalListItem } from '../../ModalListItem';
 import { ModalHeader } from '../../ModalHeader';
 import { usePopupStore } from '@/store/popupStore';
 import { useLocationWithQuery, usePatchMainLocation } from '@/hooks/location';
-import { debounce } from '@/utils/debounce';
 
 type Props = {
   // TODO : locationList의 타입 변경

@@ -1,5 +1,6 @@
 package com.example.carrot.product_image.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -24,6 +25,7 @@ public class ProductImage extends BaseCreatedTimeEntity {
 	@GeneratedValue
 	private Long productImageId;
 
+	@Column(nullable = false)
 	private boolean isMain;
 
 	@ManyToOne(fetch = FetchType.LAZY)

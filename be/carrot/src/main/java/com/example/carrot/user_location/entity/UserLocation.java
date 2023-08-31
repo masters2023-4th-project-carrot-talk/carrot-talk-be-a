@@ -1,5 +1,6 @@
 package com.example.carrot.user_location.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,6 +24,7 @@ public class UserLocation extends BaseCreatedTimeEntity {
 	@GeneratedValue
 	private Long userLocationId;
 
+	@Column(nullable = false)
 	private boolean isMain;
 
 	@ManyToOne(fetch = FetchType.LAZY)

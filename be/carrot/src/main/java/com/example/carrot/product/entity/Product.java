@@ -3,6 +3,7 @@ package com.example.carrot.product.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -19,7 +20,7 @@ import com.example.carrot.global.common.BaseAllTimeEntity;
 import com.example.carrot.like.entity.Like;
 import com.example.carrot.location.entity.Location;
 import com.example.carrot.product_image.entity.ProductImage;
-import com.example.carrot.sales_history.entity.SalesHistory;
+import com.example.carrot.user.entity.User;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -33,19 +34,23 @@ public class Product extends BaseAllTimeEntity {
 	@GeneratedValue
 	private Long productId;
 
+	@Column(nullable = false)
 	private String name;
 	private Long price;
+
+	@Column(length = 500)
 	private String content;
+
+	@Column(nullable = false, columnDefinition = "bigint default 0")
 	private Long hits;
 
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private ProductStatus status;
 
-	@OneToMany(mappedBy = "product")
-	private List<Like> likes = new ArrayList<>();
-
-	@OneToMany(mappedBy = "product")
-	private List<SalesHistory> salesHistories = new ArrayList<>();
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_id")
@@ -56,22 +61,22 @@ public class Product extends BaseAllTimeEntity {
 	private Location location;
 
 	@OneToMany(mappedBy = "product")
+	private List<Like> likes = new ArrayList<>();
+
+	@OneToMany(mappedBy = "product")
 	private List<ProductImage> productImages = new ArrayList<>();
 
 	@Builder
-	public Product(Long productId, String name, Long price, String content, Long hits, ProductStatus status,
-		List<Like> likes, List<SalesHistory> salesHistories, Category category, Location location,
-		List<ProductImage> productImages) {
+	public Product(Long productId, String name, Long price, String content, Long hits, ProductStatus status, User user,
+		 Category category, Location location) {
 		this.productId = productId;
 		this.name = name;
 		this.price = price;
 		this.content = content;
 		this.hits = hits;
 		this.status = status;
-		this.likes = likes;
-		this.salesHistories = salesHistories;
+		this.user = user;
 		this.category = category;
 		this.location = location;
-		this.productImages = productImages;
 	}
 }

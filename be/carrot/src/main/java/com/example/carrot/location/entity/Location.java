@@ -3,6 +3,7 @@ package com.example.carrot.location.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -24,6 +25,8 @@ public class Location extends BaseCreatedTimeEntity {
 	@Id
 	@GeneratedValue
 	private Long locationId;
+	
+	@Column(nullable = false)
 	private String name;
 
 	@OneToMany(mappedBy = "location")

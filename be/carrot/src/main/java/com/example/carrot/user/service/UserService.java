@@ -20,7 +20,6 @@ import com.example.carrot.location.service.LocationService;
 import com.example.carrot.user.dto.request.SignUpRequestDto;
 import com.example.carrot.user.dto.response.LoginUserResponseDto;
 import com.example.carrot.user.dto.response.OauthTokenResponseDto;
-import com.example.carrot.user.dto.response.UserNicknameResponseDto;
 import com.example.carrot.user.dto.response.UserResponseDto;
 import com.example.carrot.user.entity.User;
 import com.example.carrot.user.repository.UserRepository;
@@ -136,13 +135,9 @@ public class UserService {
 	}
 
 	@Transactional
-	public UserNicknameResponseDto checkNickNameDuplicate(String nickname, Long userId) {
-		Jwt jwt = jwtProvider.createJwt(Map.of("userId", userId));
-
+	public void checkNickNameDuplicate(String nickname) {
 		if (userRepository.existsByNickName(nickname)) {
-			return UserNicknameResponseDto.of(jwt.getAccessToken());
+			throw new CustomException(StatusCode.ALREADY_EXIST_USER);
 		}
-
-		throw new CustomException(StatusCode.ALREADY_EXIST_USER);
 	}
 }

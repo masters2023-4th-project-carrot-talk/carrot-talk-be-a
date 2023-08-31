@@ -56,11 +56,6 @@ public class JwtProvider {
 		return new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXP_TIME);
 	}
 
-	public Long getUserId(String token) {
-		Claims claims = getClaims(token);
-		return claims.get("userId", Long.class);
-	}
-
 	public Claims getClaims(String token) {
 		return Jwts.parser()
 			.setSigningKey(Base64.getEncoder().encodeToString(secretKey.getBytes()))

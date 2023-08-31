@@ -35,7 +35,7 @@ export const Signup: React.FC = () => {
     }
   }, [nicknameCheck]);
 
-  const invalidNickName = nickname.length < 2 || nickname.length > 10;
+  const invalidNickName = !(/^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]{2,10}$/.test(nickname));
   const submitDisabled =
     invalidNickName || !nicknameCheck?.success || locations.length === 0;
 

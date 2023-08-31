@@ -8,7 +8,7 @@ import {
   useDeleteLocation,
   useMyLocations,
   usePatchMainLocation,
-} from '@/hooks/hook';
+} from '@/hooks/location';
 import { Alert } from '@/components/common/alert/Alert';
 import { AlertContent } from '@/components/common/alert/AlertContent';
 import { AlertButtons } from '@/components/common/alert/AlertButtons';

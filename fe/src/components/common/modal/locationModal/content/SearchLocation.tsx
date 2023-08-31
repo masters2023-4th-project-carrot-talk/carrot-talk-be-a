@@ -4,18 +4,31 @@ import { ModalListItem } from '../../ModalListItem';
 import { css } from '@emotion/react';
 import { ModalHeader } from '../../ModalHeader';
 import { usePopupStore } from '@/store/popupStore';
+import { usePatchMainLocation } from '@/hooks/location';
 type Props = {
   // TODO : locationList의 타입 변경
   onToggleContent: (content: 'control' | 'search') => void;
 };
 
 export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
+  const patchMainLocationById = usePatchMainLocation();
+
   const { togglePopup, setCurrentDim } = usePopupStore();
   // TODO : 검색어 단위마다 localist를 받아와야함
-  // TODO: 검색후 클릭시 대표 동네로 설정하면서 모달을 닫아버려야함
+  // TODO: 검색후 클릭시 대표 동네로 설정하면서 모달을 닫아버려야함, input도 비워야한다
   // TODO: localist는 없어져야함
 
+  const [inputValue, setInputValue] = useState<string>('');
   const [locationList, setLocationList] = useState<LocationType[]>([]);
+  const [selectLocation, setSelectLocation] = useState<LocationType | null>(
+    null,
+  );
+  const onChangeMainLocation = (id: number) => {
+    // 모달을 닫을 때만 변경 요청을 보낸다
+    selectLocation && patchMainLocationById(selectLocation.id);
+    // setSelectLocation(null);
+    setLocationList([]);
+  };
 
   const onCloseModal = () => {
     togglePopup('modal', false);
@@ -46,7 +59,10 @@ export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
               <ModalListItem
                 key={location.id}
                 name={location.name}
-                onClick={() => {}}
+                onClick={() => {
+                  onChangeMainLocation(location.id);
+                  onCloseModal();
+                }}
               />
             ))}
           </ul>

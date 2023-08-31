@@ -18,7 +18,7 @@ export const useDeleteLocation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(QUERY_KEY.locations);
       // 재조회함
-      // 기존에 useQuery로 조회해온 데이터가 key를 통해 다시 조회가 되면서 기존 데이터가 변경된다.
+      // 기존에 useQuery로 조회해온 데이터가 key를 통해 다시 조회가 되면서 데이터 변경
       // 드롭다운에도 변경이 반영돼야 하기 때문에 재조회로
     },
   });
@@ -30,7 +30,7 @@ export const useDeleteLocation = () => {
 
   return deleteLocationById;
 };
-
+// TODO mutation들을 합칠수가 있나?
 export const usePatchMainLocation = () => {
   const queryClient = useQueryClient();
   const patchMainLocationMutation = useMutation(patchMainLocation, {

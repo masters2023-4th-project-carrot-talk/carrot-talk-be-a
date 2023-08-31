@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.carrot.global.common.ApiResponse;
+import com.example.carrot.user.dto.request.LogoutRequestDto;
 import com.example.carrot.user.dto.request.ReissueRequestDto;
 import com.example.carrot.user.dto.request.SignUpRequestDto;
 import com.example.carrot.user.dto.response.ReissueResponseDto;
@@ -42,6 +43,9 @@ public class UserController {
 		return ApiResponse.success();
 	}
 
+	/**
+	 * OAuth 최초 로그인 유저 회원가입 API
+	 */
 	@PostMapping("/users/signup")
 	public ApiResponse<UserResponseDto> kakaoSignUp(@RequestBody SignUpRequestDto signUpRequestDto,
 		HttpServletRequest request) {
@@ -54,10 +58,25 @@ public class UserController {
 		return ApiResponse.success(userResponseDto);
 	}
 
+	/**
+	 * Access Token 재발급 API
+	 */
 	@PostMapping("/users/reissue-access-token")
 	public ApiResponse<ReissueResponseDto> reissueAccessToken(@RequestBody ReissueRequestDto reissueRequestDto) {
 		ReissueResponseDto reissueResponseDto = userService.reissueToken(reissueRequestDto);
 		return ApiResponse.success(reissueResponseDto);
 	}
 
+	/**
+	 * 로그아웃 API
+	 */
+	@PostMapping("/users/logout")
+	public ApiResponse<?> kakaoLogout(@RequestBody LogoutRequestDto logoutRequestDto,
+		HttpServletRequest request) {
+		Long userId = Long.parseLong(String.valueOf(request.getAttribute("userId")));
+
+		userService.kakaoLogout(logoutRequestDto, userId);
+
+		return ApiResponse.success();
+	}
 }

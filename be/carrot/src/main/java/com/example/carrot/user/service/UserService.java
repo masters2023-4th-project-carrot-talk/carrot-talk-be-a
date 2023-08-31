@@ -17,6 +17,7 @@ import com.example.carrot.global.jwt.Jwt;
 import com.example.carrot.global.jwt.JwtProvider;
 import com.example.carrot.location.entity.Location;
 import com.example.carrot.location.service.LocationService;
+import com.example.carrot.user.dto.request.LogoutRequestDto;
 import com.example.carrot.user.dto.request.ReissueRequestDto;
 import com.example.carrot.user.dto.request.SignUpRequestDto;
 import com.example.carrot.user.dto.response.LoginUserResponseDto;
@@ -54,6 +55,7 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final JwtProvider jwtProvider;
 
+	@Transactional
 	public UserResponseDto kakaoLogin(String code) {
 		OauthTokenResponseDto tokenResponse = getToken(code);
 		log.info("access token : " + tokenResponse.getAccessToken());
@@ -150,5 +152,10 @@ public class UserService {
 			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_REFRESH_TOKEN));
 		String accessToken = jwtProvider.reissueAccessToken(Map.of("userId", user.getUserId()));
 		return ReissueResponseDto.from(accessToken);
+	}
+
+	@Transactional
+	public void kakaoLogout(LogoutRequestDto logoutRequestDto, Long userId) {
+		 userRepository.updateRefreshTokenByUserIdAndRefreshToken(userId, logoutRequestDto.getRefreshToken());
 	}
 }

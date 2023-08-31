@@ -39,8 +39,11 @@ export const LocationModal: React.FC = () => {
     <Modal isOpen={isOpen.modal} currentDim={currentDim}>
       {toggleContent === 'control' ? (
         <>
-          <ModalHeader title="동네 설정" onCloseModal={onCloseModal} />
-          <ControlLocation onToggleContent={onToggleContent} />
+          {/* <ModalHeader title="동네 설정" onCloseModal={() => onCloseModal()} /> */}
+          <ControlLocation
+            onToggleContent={onToggleContent}
+            onCloseModal={() => onCloseModal()}
+          />
         </>
       ) : (
         <>

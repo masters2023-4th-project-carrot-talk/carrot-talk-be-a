@@ -40,6 +40,9 @@ export const patchMainLocation = async (id: number) => {
 
   return await fetchData(`/users/locations`, {
     method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify({ id }),
   });
 };

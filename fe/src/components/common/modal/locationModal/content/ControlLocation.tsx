@@ -1,60 +1,199 @@
+import React, { useState, useEffect } from 'react';
 import { Button } from '@components/common/button/Button';
 import { Theme, css } from '@emotion/react';
 import { ReactComponent as Plus } from '@assets/plus.svg';
 import { ReactComponent as CircleXFilled } from '@assets/circle-x-filled.svg';
-import { usePopupStore } from '@store/PopupStore';
+import { usePopupStore } from '@store/popupStore';
+
+import {
+  useDeleteLocation,
+  useMyLocations,
+  usePatchMainLocation,
+} from '@/hooks/hook';
+import { Alert } from '@/components/common/alert/Alert';
+import { AlertContent } from '@/components/common/alert/AlertContent';
+import { AlertButtons } from '@/components/common/alert/AlertButtons';
+import { ModalHeader } from '../../ModalHeader';
 
 type Props = {
   onToggleContent: (content: 'control' | 'search') => void;
+  onCloseModal: () => void;
 };
 
-export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
-  const { togglePopup, setCurrentDim } = usePopupStore();
+export const ControlLocation: React.FC<Props> = ({
+  onToggleContent,
+  onCloseModal,
+}) => {
+  const { locations } = useMyLocations();
+  const deleteLocationById = useDeleteLocation(); // TODO delete, patch 에러 핸들링
+  const patchMainLocationById = usePatchMainLocation();
+  const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
 
-  const alertOpenHandler = () => {
+  const [locationsList, setLocationsList] = useState<LocationType[]>([]);
+  const [selectLocation, setSelectLocation] = useState<LocationType | null>(
+    null,
+  );
+
+  // useEffect(() => {
+  //   console.log('locations 한번만이니?', locations);
+
+  //   if (locations) {
+  //     setLocationsList(locations);
+  //   }
+  // }, []);
+
+  const onAlertOpen = (location: LocationType) => {
     togglePopup('alert', true);
     setCurrentDim('alert');
+    setSelectLocation(location);
   };
 
-  // TODO mock data 교체 필요
-  const modalList = [
-    { id: 0, text: '역삼1동' },
-    { id: 1, text: '안양99동' },
-  ];
+  const onAlertClose = () => {
+    togglePopup('alert', false);
+    setCurrentDim('modal');
+  };
 
-  const isUser = true; // TODO 유저인지 아닌지 확인 필요
+  const onDeleteLocation = (id?: number) => {
+    if (id == null) return;
+    deleteLocationById(id);
+    onAlertClose();
+  };
+
+  const onChangeMainLocation = () => {
+    // 모달을 닫을 때 변경 요청을 보낸다
+    selectLocation && patchMainLocationById(selectLocation.id);
+  };
+
+  const onSelectLocation = (selectedLocation: LocationType) => {
+    // 화면에 표시되는 ui만 바꿈(색상 변경)
+    setLocationsList((prevLocations) =>
+      prevLocations.map((location) => ({
+        ...location,
+        isMainLocation: location.id === selectedLocation.id,
+      })),
+    );
+
+    // 선택된 동네로 요청을 보내기 위해 상태에 저장
+    setSelectLocation(selectedLocation);
+  };
+
+  const isUser = true; // TODO 로그인한 유저인지 아닌지 확인 필요
+  const shouldBlockDelete = locations?.length === 1;
+  const shouldBlockAdd = locations?.length === 2;
 
   return (
-    <div css={controlLocationStyle}>
-      <div className="noticeText">
-        <p>지역은 최소 1개,</p>
-        <p>최대 2개까지 설정 가능해요.</p>
-      </div>
-      <div className="buttons">
-        {modalList.map((item) => (
-          <div className="buttons__location" key={item.id}>
-            {item.text}
-            <CircleXFilled
-              className="buttons__location__x-icon"
-              onClick={alertOpenHandler}
-            />
-          </div>
-        ))}
+    <>
+      <ModalHeader
+        title="동네 설정"
+        onCloseModal={() => {
+          onCloseModal();
+          onChangeMainLocation();
+        }}
+      />
+      <div css={controlLocationStyle}>
+        <div className="noticeText">
+          <p>지역은 최소 1개,</p>
+          <p>최대 2개까지 설정 가능해요.</p>
+        </div>
+        <div className="buttons">
+          {locationsList &&
+            locationsList.map((location) => (
+              <LocationButton
+                key={location.id}
+                isMainLocation={location.isMainLocation}
+                onClick={() => {
+                  onSelectLocation(location);
+                }}
+              >
+                {location.name}
+                <CircleXFilled
+                  className="buttons__location__x-icon"
+                  onClick={() => onAlertOpen(location)}
+                />
+              </LocationButton>
+            ))}
 
-        <Button
-          className="buttons__add"
-          variant="rectangle"
-          size="l"
-          state="default"
-          onClick={() => onToggleContent('search')}
-          disabled={isUser ? false : true} // TODO disabled조건으로 교체 필요
-        >
-          <Plus className="buttons__plus-icon" />
-          추가
-        </Button>
+          <Button
+            className="buttons__add"
+            variant="rectangle"
+            size="l"
+            state="default"
+            onClick={() => {
+              if (!shouldBlockAdd) {
+                onToggleContent('search');
+              }
+            }}
+            disabled={isUser || shouldBlockAdd}
+          >
+            <Plus className="buttons__plus-icon" />
+            추가
+          </Button>
+        </div>
+
+        <Alert isOpen={isOpen.alert} currentDim={currentDim}>
+          {shouldBlockDelete ? (
+            <>
+              <AlertContent>
+                동네는 최소 1개 이상 선택해야해요.
+                <br />
+                새로운 동네를 등록한 후, 삭제해주세요
+              </AlertContent>
+              <AlertButtons buttonText="닫기" />
+            </>
+          ) : (
+            <>
+              <AlertContent>
+                '{selectLocation?.name}'을 삭제하시겠어요?
+              </AlertContent>
+              <AlertButtons
+                buttonText="취소"
+                onDelete={() => onDeleteLocation(selectLocation?.id)}
+              />
+            </>
+          )}
+        </Alert>
       </div>
+    </>
+  );
+};
+
+type LocationButtonProps = {
+  isMainLocation: boolean;
+  children: React.ReactNode;
+  onClick: () => void;
+};
+
+const LocationButton: React.FC<LocationButtonProps> = ({
+  isMainLocation,
+  children,
+  onClick,
+}) => {
+  return (
+    <div
+      css={(theme) => locationButtonStyle(theme, isMainLocation)}
+      onClick={onClick}
+    >
+      {children}
     </div>
   );
+};
+
+const locationButtonStyle = (theme: Theme, isMainLocation: boolean) => {
+  return css`
+    cursor: pointer;
+    display: flex;
+    padding: 16px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px;
+    align-self: stretch;
+    border-radius: 8px;
+    font: ${theme.font.availableStrong16};
+    color: ${theme.color.accent.text};
+    background-color: ${isMainLocation
+      ? theme.color.accent.backgroundPrimary
+      : theme.color.neutral.borderStrong};
+  `;
 };
 
 const controlLocationStyle = (theme: Theme) => {

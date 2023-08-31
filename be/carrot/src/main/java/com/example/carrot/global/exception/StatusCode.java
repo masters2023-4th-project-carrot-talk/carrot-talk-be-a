@@ -20,7 +20,7 @@ public enum StatusCode {
 	ILLEGAL_ARGUMENT_EXCEPTION(HttpStatus.UNAUTHORIZED, "잘못된 인자입니다."),
 
 	// -- [USER] -- //
-	ALREADY_EXIST_USER(HttpStatus.BAD_REQUEST, "같은 아이디가 존재합니다."),
+	ALREADY_EXIST_USER(HttpStatus.BAD_REQUEST, "같은 닉네임이 존재합니다."),
 	NOT_FOUND_USER(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
 
 	// -- [LOCATION] -- //

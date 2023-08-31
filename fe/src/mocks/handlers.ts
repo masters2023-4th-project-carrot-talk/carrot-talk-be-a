@@ -59,6 +59,7 @@ export const handlers = [
 
     return res(ctx.status(200), ctx.json(data));
   }),
+
   rest.get('/api/users', (req, res, ctx) => {
     const query = req.url.searchParams;
     const nickname = query.get('nickname');
@@ -69,16 +70,48 @@ export const handlers = [
       const data = {
         success: false,
         errorCode: {
-          status: 404,
+          status: 409,
           message: '같은 닉네임이 존재합니다.',
         },
       };
 
-      return res(ctx.status(400), ctx.json(data));
+      return res(ctx.status(409), ctx.json(data));
     }
 
     const data = {
       success: true,
+    };
+
+    return res(ctx.status(200), ctx.json(data));
+  }),
+
+  rest.post('/api/users', async (req, res, ctx) => {
+    const { nickname, mainLocationId, subLocationId } = await req.json();
+
+    const newUser = {
+      id: users.length + 1,
+      nickname,
+      mainLocationId,
+      subLocationId,
+      imageUrl: '',
+    };
+
+    users.push(newUser);
+
+    const data = {
+      success: true,
+      data: {
+        isUser: true,
+        accessToken:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+        refreshToken:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+        user: {
+          id: newUser.id,
+          nickname: newUser.nickname,
+          imageUrl: newUser.imageUrl,
+        },
+      },
     };
 
     return res(ctx.status(200), ctx.json(data));

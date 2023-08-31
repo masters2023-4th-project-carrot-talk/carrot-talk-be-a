@@ -1,6 +1,13 @@
-import { deleteLocation, getMyLocations, patchMainLocation, checkNickname } from '@/api/api';
+import {
+  checkNickname,
+  deleteLocation,
+  getMyLocations,
+  patchMainLocation,
+  signup,
+} from '@/api/api';
 import { QUERY_KEY } from '@/constants/querykey';
-import { useQueryClient, useMutation, useQuery } from 'react-query';
+import { setTokens, setUserInfo } from '@/utils/localStorage';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export const useMyLocations = () => {
   const {
@@ -52,10 +59,33 @@ export const useCheckNickname = (nickname: string) => {
     status,
     error,
     refetch: refetchNicknameCheck,
-  } = useQuery(QUERY_KEY.nicknameCheck, () => checkNickname(nickname), {
+  } = useQuery([QUERY_KEY.nicknameCheck, nickname], () => checkNickname(nickname), {
     enabled: false,
-    retry: false
+    retry: false,
   });
 
   return { nicknameCheck, status, error, refetchNicknameCheck };
-}
+};
+
+export const useSignup = () => {
+  const {
+    mutate: signupWithInfo,
+    status,
+    error,
+  } = useMutation(signup, {
+    onSuccess: ({ data }) => {
+      setUserInfo(data.user);
+      setTokens({
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+      });
+    },
+    onError: (error) => {
+      if (error instanceof Error) {
+        throw error;
+      }
+    }
+  });
+
+  return { signupWithInfo, status, error };
+};

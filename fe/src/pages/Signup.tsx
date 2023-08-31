@@ -7,7 +7,7 @@ import { RightButton } from '@/components/common/topBar/RightButton';
 import { Title } from '@/components/common/topBar/Title';
 import { TopBar } from '@/components/common/topBar/TopBar';
 import { PATH } from '@/constants/path';
-import { useCheckNickname } from '@/hooks/hook';
+import { useCheckNickname, useSignup } from '@/hooks/hook';
 import { usePopupStore } from '@/store/PopupStore';
 import { ReactComponent as Plus } from '@assets/plus.svg';
 import { Theme, css } from '@emotion/react';
@@ -25,15 +25,19 @@ export const Signup: React.FC = () => {
   const [locations, setLocations] = useState<number[]>([]);
   const { togglePopup, setCurrentDim } = usePopupStore();
   const { nicknameCheck, refetchNicknameCheck } = useCheckNickname(nickname);
+  const { signupWithInfo } = useSignup();
 
+  // 닉네임 중복 체크 성공 상태에서 닉네임 변경 시 중복 체크 상태 초기화
+  // BUG 위치 추가 버튼을 누르면 닉네임 중복 체크 상태가 초기화됨
   useEffect(() => {
     if (nicknameCheck?.success) {
       nicknameCheck.success = false;
     }
-  }, [nickname, nicknameCheck]);
+  }, [nicknameCheck]);
 
   const invalidNickName = nickname.length < 2 || nickname.length > 10;
-  const submitDisabled = invalidNickName || locations.length === 0;
+  const submitDisabled =
+    invalidNickName || !nicknameCheck?.success || locations.length === 0;
 
   const goToAuth = () => {
     navigate(PATH.auth, { replace: true });
@@ -58,10 +62,12 @@ export const Signup: React.FC = () => {
   };
 
   const requestSignup = () => {
-    // TODO : 회원가입 api 호출
-    console.log('닉네임', nickname);
-    console.log('동네', locations);
-    // navigate(PATH.home, { replace: true });
+    signupWithInfo({
+      nickname,
+      mainLocationId: locations[0],
+      subLocationId: locations[1],
+    });
+    navigate(PATH.home, { replace: true });
   };
 
   return (
@@ -97,19 +103,19 @@ export const Signup: React.FC = () => {
                 value={nickname}
                 onChange={changeNickname}
               />
-              <Button
-                variant="rectangle"
-                state="active"
-                size="s"
-                disabled={invalidNickName}
-                onClick={requestNicknameCheck}
-              >
-                {nicknameCheck?.success ? (
-                  <Check className="nickname-form__input--check" />
-                ) : (
-                  '중복 체크'
-                )}
-              </Button>
+              {nicknameCheck?.success ? (
+                <Check className="nickname-form__input--check" />
+              ) : (
+                <Button
+                  variant="rectangle"
+                  state="active"
+                  size="s"
+                  disabled={invalidNickName}
+                  onClick={requestNicknameCheck}
+                >
+                  중복 체크
+                </Button>
+              )}
             </div>
           </div>
           <div className="location__form">
@@ -159,7 +165,10 @@ const pageStyle = (theme: Theme) => {
         gap: 4px;
 
         &--check {
+          align-self: center;
           stroke: ${theme.color.accent.text};
+          background-color: ${theme.color.accent.backgroundSecondary};
+          border-radius: 50%;
         }
       }
     }

@@ -59,6 +59,7 @@ const navStyle = (theme: Theme) => {
   return css`
     position: sticky;
     bottom: 0;
+
     box-sizing: border-box;
     display: flex;
     width: 393px;

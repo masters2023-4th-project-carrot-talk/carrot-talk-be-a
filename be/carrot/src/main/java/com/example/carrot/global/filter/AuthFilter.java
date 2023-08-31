@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthFilter implements Filter {
 
 	private final String[] whiteListUris = new String[] {"/", "/api/users/login", "/api/users/signup",
-		"/oauth/redirect", "/api/users"};
+		"/oauth/redirect", "/api/users", "/api/users/reissue-access-token"};
 
 	private final ObjectMapper objectMapper;
 
@@ -48,9 +48,16 @@ public class AuthFilter implements Filter {
 			log.info("whileListCheck 진입");
 			log.info("request uri : {}", httpServletRequest.getRequestURI());
 			if (httpServletRequest.getRequestURI().equals("/api/users/signup")) {
-				Claims claims = jwtProvider.getClaims(getToken(httpServletRequest));
-				request.setAttribute("socialId", claims.get("socialId"));
-				request.setAttribute("imgUrl", claims.get("imgUrl"));
+				try {
+					Claims claims = jwtProvider.getClaims(getToken(httpServletRequest));
+
+					request.setAttribute("socialId", claims.get("socialId"));
+					request.setAttribute("imgUrl", claims.get("imgUrl"));
+
+				} catch (RuntimeException e) {
+					log.debug(e.getClass().getName());
+					sendErrorApiResponse(httpServletResponse, e);
+				}
 			}
 			chain.doFilter(request, response);
 			return;
@@ -63,9 +70,7 @@ public class AuthFilter implements Filter {
 		}
 
 		try {
-			log.info("로그인 인증");
-			String token = getToken(httpServletRequest);
-			Claims claims = jwtProvider.getClaims(token);
+			Claims claims = jwtProvider.getClaims(getToken(httpServletRequest));
 			request.setAttribute("userId", claims.get("userId"));
 			chain.doFilter(request, response);
 		} catch (RuntimeException e) {

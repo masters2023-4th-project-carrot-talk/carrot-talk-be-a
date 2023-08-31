@@ -10,6 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.carrot.global.common.BaseAllTimeEntity;
+import com.example.carrot.global.jwt.Jwt;
 import com.example.carrot.like.entity.Like;
 import com.example.carrot.sales_history.entity.SalesHistory;
 import com.example.carrot.user_location.entity.UserLocation;
@@ -55,5 +56,9 @@ public class User extends BaseAllTimeEntity {
 			.nickName(nickName)
 			.imageUrl(imageUrl)
 			.build();
+	}
+
+	public void updateRefreshToken(Jwt jwt) {
+		this.refreshToken = jwt.getRefreshToken();
 	}
 }

@@ -18,4 +18,8 @@ public class TempController {
 		return "redirect:/api/users/login?code=" + code;
 	}
 
+	@GetMapping("/test")
+	public String test() {
+		return "test";
+	}
 }

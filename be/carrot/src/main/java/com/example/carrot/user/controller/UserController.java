@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.carrot.global.common.ApiResponse;
+import com.example.carrot.user.dto.request.ReissueRequestDto;
 import com.example.carrot.user.dto.request.SignUpRequestDto;
+import com.example.carrot.user.dto.response.ReissueResponseDto;
 import com.example.carrot.user.dto.response.UserResponseDto;
 import com.example.carrot.user.service.UserService;
 
@@ -50,6 +52,12 @@ public class UserController {
 		log.info("imgUrl : " + imgUrl);
 		UserResponseDto userResponseDto = userService.kakaoSignUp(signUpRequestDto, socialId, imgUrl);
 		return ApiResponse.success(userResponseDto);
+	}
+
+	@PostMapping("/users/reissue-access-token")
+	public ApiResponse<ReissueResponseDto> reissueAccessToken(@RequestBody ReissueRequestDto reissueRequestDto) {
+		ReissueResponseDto reissueResponseDto = userService.reissueToken(reissueRequestDto);
+		return ApiResponse.success(reissueResponseDto);
 	}
 
 }

@@ -17,7 +17,7 @@ import { LocationModal } from '@/components/common/modal/locationModal/LocationM
 
 import { ErrorPage } from './ErrorPage';
 import { LoadingPage } from './LoadingPage';
-import { useMyLocations } from '@/hooks/hook';
+import { useMyLocations } from '@/hooks/location';
 import { usePopupStore } from '@/store/popupStore';
 
 // TODO 페이지가 로드됐을때, 내동네 api 호출

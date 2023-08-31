@@ -34,13 +34,11 @@ export const ControlLocation: React.FC<Props> = ({
     null,
   );
 
-  // useEffect(() => {
-  //   console.log('locations 한번만이니?', locations);
-
-  //   if (locations) {
-  //     setLocationsList(locations);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (locations) {
+      setLocationsList(locations);
+    }
+  }, []);
 
   const onAlertOpen = (location: LocationType) => {
     togglePopup('alert', true);

@@ -1,4 +1,4 @@
-import { ReactComponent as ChevronLeft } from '@assets/chevron-left.svg';
+import { ChevronLeft } from '@components/common/icons';
 import { Meta, StoryObj } from '@storybook/react';
 import { Button } from '../button/Button';
 import { LeftButton } from './LeftButton';

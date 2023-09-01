@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
 import { Theme, css } from '@emotion/react';
+import React, { useEffect, useState } from 'react';
 
-import { EditBar } from '@/components/common/actionBar/EditBar';
-import { Button } from '@/components/common/button/Button';
-import { PostBar } from '@/components/common/actionBar/PostBar';
 import { ChatBar } from '@/components/common/actionBar/ChatBar';
+import { EditBar } from '@/components/common/actionBar/EditBar';
+import { PostBar } from '@/components/common/actionBar/PostBar';
+import { Button } from '@/components/common/button/Button';
 import { Input } from '@/components/common/input/Input';
-
-import { ReactComponent as Heart } from '@assets/heart.svg';
-import { ReactComponent as Send } from '@assets/send.svg';
 import { formatPrice } from '@/utils/formatPrice';
+import { Heart, Send } from '@components/common/icons';
 
 const mock = [
   {

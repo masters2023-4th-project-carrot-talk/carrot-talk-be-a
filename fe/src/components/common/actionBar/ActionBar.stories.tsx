@@ -6,8 +6,7 @@ import { PostBar } from '@/components/common/actionBar/PostBar';
 import { ChatBar } from '@/components/common/actionBar/ChatBar';
 import { Input } from '@/components/common/input/Input';
 import { formatPrice } from '@/utils/formatPrice';
-import { ReactComponent as Heart } from '@assets/heart.svg';
-import { ReactComponent as Send } from '@assets/send.svg';
+import { Heart, Send } from '../icons';
 
 const meta: Meta<typeof ActionBar> = {
   title: 'ActionBar',

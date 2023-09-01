@@ -1,4 +1,3 @@
-import { Theme, css } from '@emotion/react';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/common/button/Button';
 import { Dropdown } from '@/components/common/dropdown/Dropdown';
@@ -8,9 +7,9 @@ import { MenuItem } from '@/components/common/menu/MenuItem';
 import { LeftButton } from '@/components/common/topBar/LeftButton';
 import { RightButton } from '@/components/common/topBar/RightButton';
 import { TopBar } from '@/components/common/topBar/TopBar';
+import { ChevronDown, LayoutGrid } from '@components/common/icons';
+import { Theme, css } from '@emotion/react';
 
-import { ReactComponent as ChevronDown } from '@/assets/chevron-down.svg';
-import { ReactComponent as LayoutGrid } from '@/assets/layout-grid.svg';
 import { ReactComponent as Plus } from '@/assets/plus.svg';
 import { ListBox } from '@/components/common/list/ListBox';
 import { LocationModal } from '@/components/common/modal/locationModal/LocationModal';

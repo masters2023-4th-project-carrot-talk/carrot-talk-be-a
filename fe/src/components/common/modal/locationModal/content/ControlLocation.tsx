@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@components/common/button/Button';
 import { Theme, css } from '@emotion/react';
-import { ReactComponent as Plus } from '@assets/plus.svg';
-import { ReactComponent as CircleXFilled } from '@assets/circle-x-filled.svg';
+import { Plus, CircleXFilled } from '@components/common/icons';
 import { usePopupStore } from '@store/popupStore';
 import {
   useDeleteLocation,

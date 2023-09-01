@@ -42,4 +42,6 @@ public class Location extends BaseCreatedTimeEntity {
 		this.userLocations = userLocations;
 		this.product = product;
 	}
+
+
 }

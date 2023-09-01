@@ -117,7 +117,6 @@ const pageStyle = (theme: Theme) => {
     .button__topbar {
       stroke: ${theme.color.neutral.textStrong};
     }
-
     .button__add {
       position: absolute;
       bottom: 88px;

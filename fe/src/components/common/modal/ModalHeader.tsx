@@ -1,8 +1,7 @@
 import { css } from '@emotion/react';
 import { Theme } from '@emotion/react/macro';
 import { Button } from '../button/Button';
-import { ReactComponent as XIcon } from '@assets/x.svg';
-import { ReactComponent as ChevronLeft } from '@assets/chevron-left.svg';
+import { X, ChevronLeft } from '../icons';
 
 type Props = {
   title?: string;
@@ -24,7 +23,7 @@ export const ModalHeader: React.FC<Props> = ({
       )}
       {title}
       <Button variant="text" onClick={onCloseModal}>
-        <XIcon className="x-icon" />
+        <X className="x-icon" />
       </Button>
     </div>
   );

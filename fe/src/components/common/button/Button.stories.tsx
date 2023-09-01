@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ReactComponent as ChevronLeft } from '@assets/chevron-left.svg';
-import { ReactComponent as Plus } from '@assets/plus.svg';
-import { ReactComponent as Send } from '@assets/send.svg';
+import { ChevronLeft, Plus, Send } from '../icons';
 import { Button } from './Button';
 
 const meta: Meta = {

@@ -14,7 +14,7 @@ import { ReactComponent as LayoutGrid } from '@assets/layout-grid.svg';
 import { ReactComponent as MapPinFilled } from '@assets/map-pin-filled.svg';
 import { ReactComponent as MessageNoti } from '@assets/message-noti.svg';
 import { ReactComponent as Message } from '@assets/message.svg';
-import { ReactComponent as New } from '@assets/news.svg';
+import { ReactComponent as News } from '@assets/news.svg';
 import { ReactComponent as PaperClip } from '@assets/paperclip.svg';
 import { ReactComponent as Pencil } from '@assets/pencil.svg';
 import { ReactComponent as Photo } from '@assets/photo.svg';
@@ -41,7 +41,7 @@ export {
   MapPinFilled,
   Message,
   MessageNoti,
-  New,
+  News,
   PaperClip,
   Pencil,
   Photo,

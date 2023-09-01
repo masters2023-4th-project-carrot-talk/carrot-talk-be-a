@@ -1,5 +1,3 @@
-import { ReactComponent as ChevronDown } from '@/assets/chevron-down.svg';
-import { ReactComponent as LayoutGrid } from '@/assets/layout-grid.svg';
 import { Button } from '@/components/common/button/Button';
 import { Dropdown } from '@/components/common/dropdown/Dropdown';
 import { ListItem } from '@/components/common/list/ListItem';
@@ -8,6 +6,7 @@ import { MenuItem } from '@/components/common/menu/MenuItem';
 import { LeftButton } from '@/components/common/topBar/LeftButton';
 import { RightButton } from '@/components/common/topBar/RightButton';
 import { TopBar } from '@/components/common/topBar/TopBar';
+import { ChevronDown, LayoutGrid } from '@components/common/icons';
 import { Theme, css } from '@emotion/react';
 
 const mock = {

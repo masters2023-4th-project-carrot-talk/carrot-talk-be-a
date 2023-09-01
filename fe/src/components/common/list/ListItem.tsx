@@ -1,9 +1,7 @@
 import { FC } from 'react';
 import { Theme, css } from '@emotion/react';
 import { ImageBox } from '../imageBox/ImageBox';
-import { ReactComponent as Message } from '@assets/message.svg';
-import { ReactComponent as Heart } from '@assets/heart.svg';
-import { ReactComponent as Dots } from '@assets/dots.svg';
+import { Message, Heart, Dots } from '../icons';
 import { Button } from '../button/Button';
 import { StatusBadge } from '../statusBadge/StatusBadge';
 import { formatTimeStamp } from '@/utils/formatTimeStamp';

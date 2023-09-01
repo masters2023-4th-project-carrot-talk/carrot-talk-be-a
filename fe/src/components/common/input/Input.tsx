@@ -1,4 +1,4 @@
-import { ReactComponent as CircleXFilled } from '@assets/circle-x-filled.svg';
+import { CircleXFilled } from '../icons';
 import { Theme, css } from '@emotion/react';
 import { InputHTMLAttributes } from 'react';
 import { Button } from '../button/Button';

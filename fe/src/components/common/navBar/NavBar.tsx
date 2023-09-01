@@ -1,10 +1,5 @@
 import { PATH } from '@/constants/path';
-import { ReactComponent as Heart } from '@assets/heart.svg';
-import { ReactComponent as Home } from '@assets/home.svg';
-import { ReactComponent as MessageNoti } from '@assets/message-noti.svg';
-import { ReactComponent as Message } from '@assets/message.svg';
-import { ReactComponent as News } from '@assets/news.svg';
-import { ReactComponent as UserCircle } from '@assets/user-circle.svg';
+import { Heart, Home, MessageNoti, Message, News, UserCircle } from '@components/common/icons';
 import { Theme, css } from '@emotion/react';
 import { NavLink } from 'react-router-dom';
 

@@ -24,7 +24,11 @@ public enum StatusCode {
 	NOT_FOUND_USER(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
 
 	// -- [LOCATION] -- //
-	NOT_FOUND_LOCATION(HttpStatus.BAD_REQUEST, "존재하지 않는 Location입니다.");
+	NOT_FOUND_LOCATION(HttpStatus.BAD_REQUEST, "존재하지 않는 Location입니다."),
+
+	// -- [CATEGORY] -- //
+	NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "카테고리를 조회할 수 없습니다."),
+	NOT_FOUND_CATEGORIES(HttpStatus.NOT_FOUND, "카테고리 목록을 조회할 수 없습니다.");
 
 	private HttpStatus status;
 	private String message;

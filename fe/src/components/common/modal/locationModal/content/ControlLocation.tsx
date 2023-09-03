@@ -71,7 +71,6 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
   };
 
   const onSelectLocation = (selectedLocation: LocationType) => {
-    // 화면에 표시되는 ui만 바꿈(색상 변경)
     setLocationsList((prevLocations) =>
       prevLocations.map((location) => ({
         ...location,
@@ -102,11 +101,11 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
           <p>최대 2개까지 설정 가능해요.</p>
         </div>
         <div className="buttons">
-          {locationsList &&
+          {locationsList && //TODO 배열 길이 2로 제한
             locationsList.map((location) => (
               <LocationButton
                 key={location.id}
-                isMainLocation={location.isMainLocation}
+                isMainLocation={location.isMainLocation} //TODO mainID를 zustand로 관리해야하는지?
                 onClick={() => {
                   onSelectLocation(location);
                 }}

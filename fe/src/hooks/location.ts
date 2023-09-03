@@ -5,6 +5,7 @@ import {
   patchMainLocation,
 } from '@/api/api';
 import { QUERY_KEY } from '@/constants/queryKey';
+import { useLocationStore } from '@/store/locationStore';
 import { useQueryClient, useMutation, useQuery } from 'react-query';
 
 export const useMyLocations = () => {

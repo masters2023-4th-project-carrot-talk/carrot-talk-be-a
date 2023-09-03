@@ -80,7 +80,8 @@ export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
                 onClick={() => {
                   console.log('되니?');
                   onChangeMainLocation(location.id);
-                  onCloseModal();
+                  // onCloseModal();
+                  onToggleContent('control');
                 }}
               />
             ))}

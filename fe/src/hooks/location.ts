@@ -24,15 +24,15 @@ export const useLocationWithQuery = (query: string) => {
     status,
     error,
     refetch,
-    remove,
-  } = useQuery<LocationType[]>(
-    [QUERY_KEY.locations, query],
-    () => getLocationWithQuery(query),
-    {
-      enabled: false,
-    },
-  );
-  return { locations, status, error, refetch, remove };
+  } = useQuery<
+    LocationWithQueryDataFromServer,
+    unknown,
+    LocationWithQueryType[]
+  >([QUERY_KEY.locations, query], () => getLocationWithQuery(query), {
+    enabled: false,
+    select: (data) => data.data,
+  });
+  return { locations, status, error, refetch };
 };
 
 export const useDeleteLocation = () => {

@@ -1,22 +1,24 @@
 import { rest } from 'msw';
+import { categoryList } from './data/categories';
+import { locationsWithQuery } from './data/locations';
 
 let locations: LocationType[] = [
   { id: 1, name: '안양99동', isMainLocation: true },
   { id: 2, name: '안양100동', isMainLocation: false },
+  { id: 3, name: '개포 1동', isMainLocation: false },
 ];
 
 export const handlers = [
-  rest.get(`/users/locations`, (_, res, ctx) => {
+  //내동네
+  rest.get(`/api/users/locations`, (_, res, ctx) => {
     console.log('get', locations);
 
-    // 딜레이 주기
     return res(ctx.delay(300), ctx.status(200), ctx.json(locations));
   }),
-
-  rest.delete(`/users/locations/:id`, (req, res, ctx) => {
+  // 내동네 삭제
+  rest.delete(`/api/users/locations/:id`, (req, res, ctx) => {
     const { id } = req.params;
 
-    // 삭제 처리
     locations = locations.filter((location) => location.id !== Number(id));
 
     // 남아있는 위치가 있다면 첫 번째 위치를 주요 위치로 설정
@@ -36,26 +38,45 @@ export const handlers = [
 
     return res(ctx.status(200), ctx.json(data));
   }),
-
-  rest.patch(`/users/locations`, (req, res, ctx) => {
+  // 내동네 변경
+  rest.patch(`/api/users/locations`, (req, res, ctx) => {
     if (locations.length === 1) return;
 
-    const { id } = req.body as { id: number };
+    const { locationId } = req.body as { locationId: number };
+    console.log('patch', locationId);
 
     locations = locations.map((location) => ({
       ...location,
-      isMainLocation: location.id === id,
+      isMainLocation: location.id === locationId,
     }));
 
     const data = {
       success: true,
       data: {
-        mainLocationId: id,
+        mainLocationId: locationId,
       },
     };
 
     return res(ctx.status(200), ctx.json(data));
   }),
+  //동네 검색
+  // 핸들러 설정
+  rest.get(`/api/locations`, (req, res, ctx) => {
+    const query = req.url.searchParams.get('keyword');
 
+    // 쿼리에 맞는 위치를 필터링
+    const filteredLocations = locationsWithQuery.data.filter((location) =>
+      location.name.includes(query!),
+    );
+
+    return res(ctx.status(200), ctx.json({ data: filteredLocations }));
+  }),
+
+  //카테고리
+  rest.get(`/api/categories`, (_, res, ctx) => {
+    console.log('get', categoryList);
+
+    return res(ctx.delay(200), ctx.status(200), ctx.json(categoryList));
+  }),
   //
 ];

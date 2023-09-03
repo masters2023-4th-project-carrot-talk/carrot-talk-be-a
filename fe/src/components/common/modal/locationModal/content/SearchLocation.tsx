@@ -12,9 +12,9 @@ type Props = {
 };
 
 export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
-  const [inputValue, setInputValue] = useState<string>('');
-  const { locations, refetch, remove } = useLocationWithQuery(inputValue);
-  const [locationList, setLocationList] = useState<LocationType[]>([]);
+  const [inputValue, setInputValue] = useState<string>(''); //훅으로 빼기 input은 디바운스 걸기
+  const { locations, refetch } = useLocationWithQuery(inputValue);
+  const [locationList, setLocationList] = useState<LocationWithQueryType[]>([]);
   // const [selectLocation, setSelectLocation] = useState<LocationType | null>(
   //   null,
   // );
@@ -31,19 +31,21 @@ export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
     setInputValue(value);
   };
 
-  const onSearchLocation = async () => {
-    await refetch();
+  const onSearchLocation = () => {
+    refetch();
     if (locations) {
       setLocationList(locations);
     }
   };
 
   const onChangeMainLocation = (id: number) => {
+    console.log('예?');
+    console.log(id);
     patchMainLocationById(id);
+
     // setSelectLocation(null);
     setLocationList([]);
     setInputValue('');
-    remove();
   };
 
   const onCloseModal = () => {
@@ -76,6 +78,7 @@ export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
                 key={location.id}
                 name={location.name}
                 onClick={() => {
+                  console.log('되니?');
                   onChangeMainLocation(location.id);
                   onCloseModal();
                 }}
@@ -95,5 +98,9 @@ const searchLocationStyle = css`
 
   .input__search {
     padding: 0 16px;
+  }
+
+  ul {
+    height: 570px;
   }
 `;

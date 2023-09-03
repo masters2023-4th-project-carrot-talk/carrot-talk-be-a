@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/common/button/Button';
 import { Dropdown } from '@/components/common/dropdown/Dropdown';
 import { ListItem } from '@/components/common/list/ListItem';
@@ -18,13 +18,17 @@ import { ErrorPage } from './ErrorPage';
 import { LoadingPage } from './LoadingPage';
 import { useMyLocations } from '@/hooks/location';
 import { usePopupStore } from '@/store/popupStore';
+import { Category } from '@/components/home/Category';
+import { useCategories } from '@/hooks/category';
 
 // TODO 페이지가 로드됐을때, 내동네 api 호출
 // TODO 모달에서 동네를 추가하거나 삭제하면, 영향을 받아 locations가 수정돼야함
 export const Home: React.FC = () => {
   const { locations, status, error } = useMyLocations();
+  const { categories } = useCategories();
   const { togglePopup, setCurrentDim } = usePopupStore();
   const [selected, setSelected] = useState<number | null>(null);
+  const [showCategory, setShowCategory] = useState(false);
   // TODO 필터링과 대표동네 설정은 별개로 처리함에 따라, 초기에는 모든 동네의 물품을 보여줌(초안)
   // TODO useQueries이용해서 로딩, 에러처리 한꺼번에?
 
@@ -52,6 +56,12 @@ export const Home: React.FC = () => {
 
   const onOpenCategory = () => {
     //TODO : 카테고리 페이지 보여주기
+    setShowCategory(true);
+  };
+
+  const onCloseCategory = () => {
+    //TODO : 카테고리 페이지 닫기
+    setShowCategory(false);
   };
 
   const onFilterProducts = (id: number) => {
@@ -60,53 +70,67 @@ export const Home: React.FC = () => {
   };
 
   return (
-    <div css={pageStyle}>
-      <TopBar>
-        <LeftButton>
-          <Dropdown autoClose>
-            <Button variant="text" className="button__topbar">
-              역삼1동
-              <ChevronDown />
+    <>
+      <div css={pageStyle}>
+        {!showCategory && (
+          <>
+            <TopBar>
+              <LeftButton>
+                <Dropdown autoClose>
+                  <Button variant="text" className="button__topbar">
+                    역삼1동
+                    <ChevronDown />
+                  </Button>
+                  <MenuBox>
+                    {locations &&
+                      locations.map((location) => (
+                        <MenuItem
+                          key={location.id}
+                          state={
+                            selected === location.id ? 'selected' : 'default'
+                          }
+                          onClick={() => onFilterProducts(location.id)}
+                        >
+                          {location.name}
+                        </MenuItem>
+                      ))}
+                    <MenuItem onClick={onOpenModal}>내 동네 설정하기</MenuItem>
+                  </MenuBox>
+                </Dropdown>
+              </LeftButton>
+              <RightButton>
+                <Button
+                  variant="text"
+                  className="button__topbar"
+                  onClick={onOpenCategory}
+                >
+                  <LayoutGrid />
+                </Button>
+              </RightButton>
+            </TopBar>
+            <Button variant="fab" size="l" className="button__add">
+              <Plus />
             </Button>
-            <MenuBox>
-              {locations &&
-                locations.map((location) => (
-                  <MenuItem
-                    key={location.id}
-                    state={selected === location.id ? 'selected' : 'default'}
-                    onClick={() => onFilterProducts(location.id)}
-                  >
-                    {location.name}
-                  </MenuItem>
-                ))}
-              <MenuItem onClick={onOpenModal}>내 동네 설정하기</MenuItem>
-            </MenuBox>
-          </Dropdown>
-        </LeftButton>
-        <RightButton>
-          <Button
-            variant="text"
-            className="button__topbar"
-            onClick={onOpenCategory}
-          >
-            <LayoutGrid />
-          </Button>
-        </RightButton>
-      </TopBar>
-      <Button variant="fab" size="l" className="button__add">
-        <Plus />
-      </Button>
-      <ListBox>
-        {mock.products.map((product) => (
-          <ListItem
-            key={product.id}
-            product={product}
-            onOpenDetail={() => onOpenDetail(product.id)}
-          />
-        ))}
-      </ListBox>
-      <LocationModal />
-    </div>
+            <ListBox>
+              {mock.products.map((product) => (
+                <ListItem
+                  key={product.id}
+                  product={product}
+                  onOpenDetail={() => onOpenDetail(product.id)}
+                />
+              ))}
+            </ListBox>
+            <LocationModal />
+          </>
+        )}
+      </div>
+
+      <Category
+        categories={categories}
+        showCategory={showCategory}
+        onCloseCategory={onCloseCategory}
+      />
+    </>
   );
 };
 

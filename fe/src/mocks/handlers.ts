@@ -11,6 +11,7 @@ export const handlers = [
   //내동네
   rest.get(`/api/users/locations`, (_, res, ctx) => {
     console.log('get', locations);
+    console.log('재조회가 되니');
 
     return res(ctx.delay(300), ctx.status(200), ctx.json(locations));
   }),
@@ -39,8 +40,6 @@ export const handlers = [
   }),
   // 내동네 변경
   rest.patch(`/api/users/locations`, (req, res, ctx) => {
-    console.log(' 확인중');
-
     const { locationId } = req.body as { locationId: number };
 
     // locationId에 해당하는 location이 있는지 확인
@@ -54,12 +53,14 @@ export const handlers = [
         isMainLocation: false,
       });
     }
-    console.log(locations, ' 확인중');
 
+    console.log(locations, ' 여기도1');
     locations = locations.map((location) => ({
       ...location,
       isMainLocation: location.id === locationId,
     }));
+
+    console.log(locations, ' 여기도2');
 
     const data = {
       success: true,

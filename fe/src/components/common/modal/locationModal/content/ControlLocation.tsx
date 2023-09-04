@@ -23,16 +23,17 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
   const patchMainLocationById = usePatchMainLocation();
   const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
 
-  const [locationsList, setLocationsList] = useState<LocationType[]>([]);
+  // const [locationsList, setLocationsList] = useState<LocationType[]>([]);
   const [selectLocation, setSelectLocation] = useState<LocationType | null>(
     null,
   );
+  console.log('재조회 됨?', locations);
 
-  useEffect(() => {
-    if (locations) {
-      setLocationsList(locations);
-    }
-  }, [locations]);
+  // useEffect(() => {
+  //   if (locations) {
+  //     setLocationsList(locations);
+  //   }
+  // }, [locations]);
 
   const onAlertOpen = (location: LocationType) => {
     togglePopup('alert', true);
@@ -54,31 +55,26 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
     if (id == null) return;
     onAlertClose();
     deleteLocationById(id);
-    setLocationsList((prevLocations) =>
-      prevLocations
-        .filter((location) => location.id !== id)
-        .map((location) => ({
-          ...location,
-          isMainLocation: true,
-        })),
-    );
+    setSelectLocation(null);
   };
 
   const onChangeMainLocation = () => {
     // 모달을 닫을 때만 변경 요청을 보낸다
+    console.log(selectLocation, '있음?');
+
     selectLocation && patchMainLocationById(selectLocation.id);
     setSelectLocation(null);
   };
 
   const onSelectLocation = (selectedLocation: LocationType) => {
-    setLocationsList((prevLocations) =>
-      prevLocations.map((location) => ({
-        ...location,
-        isMainLocation: location.id === selectedLocation.id,
-      })),
-    );
+    locations?.map((location) => {
+      if (location.id === selectedLocation.id) {
+        location.isMainLocation = true;
+      } else {
+        location.isMainLocation = false;
+      }
+    });
 
-    // 선택된 동네로 요청을 보내기 위해 상태에 저장
     setSelectLocation(selectedLocation);
   };
 
@@ -101,8 +97,8 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
           <p>최대 2개까지 설정 가능해요.</p>
         </div>
         <div className="buttons">
-          {locationsList && //TODO 배열 길이 2로 제한
-            locationsList.map((location) => (
+          {locations && //TODO 배열 길이 2로 제한
+            locations.map((location) => (
               <LocationButton
                 key={location.id}
                 isMainLocation={location.isMainLocation} //TODO mainID를 zustand로 관리해야하는지?

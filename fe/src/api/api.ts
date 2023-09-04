@@ -41,7 +41,6 @@ export const deleteLocation = (id: number) => {
 export const patchMainLocation = (id: number) => {
   // TODO 액세스 토큰을 헤더에 담아서 보내야 함
   // TODO const accesToken =
-  console.log(id, '아이디 멈니까');
 
   return fetchData(`/api/users/locations`, {
     method: 'PATCH',

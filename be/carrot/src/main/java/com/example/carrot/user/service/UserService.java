@@ -151,6 +151,6 @@ public class UserService {
 
 	@Transactional
 	public void kakaoLogout(LogoutRequestDto logoutRequestDto, Long userId) {
-		 userRepository.updateRefreshTokenByUserIdAndRefreshToken(userId, logoutRequestDto.getRefreshToken());
+		userRepository.updateRefreshTokenByUserIdAndRefreshToken(userId, logoutRequestDto.getRefreshToken());
 	}
 }

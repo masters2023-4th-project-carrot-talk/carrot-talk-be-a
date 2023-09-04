@@ -25,7 +25,7 @@ public class Location extends BaseCreatedTimeEntity {
 	@Id
 	@GeneratedValue
 	private Long locationId;
-	
+
 	@Column(nullable = false)
 	private String name;
 

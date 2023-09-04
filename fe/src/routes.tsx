@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { PATH } from './constants/path';
 import { Layout } from './layout/Layout';
 import { Auth } from './pages/Auth';
@@ -10,9 +10,10 @@ import { NotFound } from './pages/NotFound';
 import { OauthLoading } from './pages/OauthLoading';
 import { Sales } from './pages/Sales';
 import { Signup } from './pages/Signup';
+import { getTokens, getUserInfo } from './utils/localStorage';
 
-// TODO Private routes 구현
 export const AppRoutes: React.FC = () => {
+
   return (
     <div css={globalStyle} id="app-layout">
       <Routes>
@@ -22,22 +23,41 @@ export const AppRoutes: React.FC = () => {
         {/* TODO: 하단바 O - 상세페이지 / 인증 필요*/}
         {/* TODO: 하단바 O - 채팅페이지 / 인증 필요 */}
         <Route element={<Layout />}>
+          <Route element={<PrivateRoute />}>
+            <Route path={PATH.sales} element={<Sales />} />
+            <Route path={PATH.interests} element={<Interests />} />
+            <Route path={PATH.chat} element={<Chat />} />
+          </Route>
+
           <Route path={PATH.notFound} element={<NotFound />} />
           <Route>
             <Route path={PATH.home} element={<Home />} />
-            <Route path={PATH.sales} element={<Sales />} />
-            {/* 인증필요 */}
-            <Route path={PATH.interests} element={<Interests />} />
-            {/* 인증필요 */}
-            <Route path={PATH.chat} element={<Chat />} />
             <Route path={PATH.auth} element={<Auth />} />
           </Route>
         </Route>
-        <Route path={PATH.redirect} element={<OauthLoading />} />
-        <Route path={PATH.signup} element={<Signup />} />
+        <Route element={<PublicRoute />}>
+          <Route path={PATH.redirect} element={<OauthLoading />} />
+          <Route path={PATH.signup} element={<Signup />} />
+        </Route>
       </Routes>
     </div>
   );
+};
+
+const PrivateRoute: React.FC = () => {
+  const userInfo = getUserInfo();
+  const tokens = getTokens();
+  const isLogin = userInfo !== null && tokens !== null;
+
+  return isLogin ? <Outlet /> : <Navigate to={PATH.auth} />;
+};
+
+const PublicRoute: React.FC = () => {
+  const userInfo = getUserInfo();
+  const tokens = getTokens();
+  const isLogin = userInfo !== null && tokens !== null;
+
+  return isLogin ? <Navigate to={PATH.home} /> : <Outlet />;
 };
 
 const globalStyle = css`

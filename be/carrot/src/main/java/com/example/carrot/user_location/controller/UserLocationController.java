@@ -1,5 +1,7 @@
 package com.example.carrot.user_location.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +23,7 @@ public class UserLocationController {
 	private final UserLocationService userLocationService;
 
 	@PatchMapping("/users/locations")
-	public ApiResponse<MainLocationResponseDto> registerMainLocation(@RequestBody MainLocationRequestDto mainLocationRequestDto, @RequestAttribute Long userId) {
+	public ApiResponse<MainLocationResponseDto> registerMainLocation(@Valid @RequestBody MainLocationRequestDto mainLocationRequestDto, @RequestAttribute Long userId) {
 		MainLocationResponseDto mainLocationResponseDto = userLocationService.registerMainLocation(mainLocationRequestDto, userId);
 		return ApiResponse.success(mainLocationResponseDto);
 	}

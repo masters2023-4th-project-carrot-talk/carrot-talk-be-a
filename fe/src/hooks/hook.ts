@@ -2,11 +2,12 @@ import {
   checkNickname,
   deleteLocation,
   getMyLocations,
+  login,
   patchMainLocation,
   signup,
 } from '@/api/api';
-import { QUERY_KEY } from '@/constants/querykey';
-import { setTokens, setUserInfo } from '@/utils/localStorage';
+import { QUERY_KEY } from '@/constants/queryKey';
+import { setLoginInfo } from '@/utils/localStorage';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export const useMyLocations = () => {
@@ -54,38 +55,48 @@ export const usePatchMainLocation = () => {
 };
 
 export const useCheckNickname = (nickname: string) => {
-  const {
-    data: nicknameCheck,
-    status,
-    error,
-    refetch: refetchNicknameCheck,
-  } = useQuery([QUERY_KEY.nicknameCheck, nickname], () => checkNickname(nickname), {
-    enabled: false,
-    retry: false,
-  });
+  const { data, status, error, refetch } = useQuery(
+    [QUERY_KEY.nicknameCheck, nickname],
+    () => checkNickname(nickname),
+    {
+      enabled: false,
+      retry: false,
+    },
+  );
 
-  return { nicknameCheck, status, error, refetchNicknameCheck };
+  return { data, status, error, refetch };
 };
 
 export const useSignup = () => {
-  const {
-    mutate: signupWithInfo,
-    status,
-    error,
-  } = useMutation(signup, {
-    onSuccess: ({ data }) => {
-      setUserInfo(data.user);
-      setTokens({
-        accessToken: data.accessToken,
-        refreshToken: data.refreshToken,
-      });
+  const { mutate, status, error } = useMutation(
+    (userInfo: {
+      nickname: string;
+      mainLocationId: number;
+      subLocationId?: number;
+    }) => signup(userInfo),
+    {
+      onSuccess: ({ data }) => {
+        setLoginInfo(data);
+      },
+      onError: (error) => {
+        if (error instanceof Error) {
+          throw error;
+        }
+      },
     },
-    onError: (error) => {
-      if (error instanceof Error) {
-        throw error;
-      }
-    }
-  });
+  );
 
-  return { signupWithInfo, status, error };
+  return { mutate, status, error };
+};
+
+export const useLogin = (code: string) => {
+  const { data, status, error } = useQuery(
+    [QUERY_KEY.login, code],
+    () => login(code),
+    {
+      retry: false,
+    },
+  );
+
+  return { data, status, error };
 };

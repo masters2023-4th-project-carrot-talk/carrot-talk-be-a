@@ -23,21 +23,20 @@ export const Signup: React.FC = () => {
 
   const [nickname, setNickname] = useState('');
   const [locations, setLocations] = useState<number[]>([]);
+  const [nicknameCheckPassed, setNicknameCheckPassed] = useState(false);
+  const [nicknameCheckWarning, setNicknameCheckWarning] = useState('');
   const { togglePopup, setCurrentDim } = usePopupStore();
-  const { nicknameCheck, refetchNicknameCheck } = useCheckNickname(nickname);
-  const { signupWithInfo } = useSignup();
+  const { refetch: refetchNicknameCheck } = useCheckNickname(nickname);
+  const { mutate: signupWithInfo } = useSignup();
 
-  // 닉네임 중복 체크 성공 상태에서 닉네임 변경 시 중복 체크 상태 초기화
-  // BUG 위치 추가 버튼을 누르면 닉네임 중복 체크 상태가 초기화됨
   useEffect(() => {
-    if (nicknameCheck?.success) {
-      nicknameCheck.success = false;
-    }
-  }, [nicknameCheck]);
+    setNicknameCheckWarning('');
+    setNicknameCheckPassed(false);
+  }, [nickname]);
 
-  const invalidNickName = !(/^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]{2,10}$/.test(nickname));
+  const invalidNickName = !/^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]{2,10}$/.test(nickname);
   const submitDisabled =
-    invalidNickName || !nicknameCheck?.success || locations.length === 0;
+    invalidNickName || !nicknameCheckPassed || locations.length === 0;
 
   const goToAuth = () => {
     navigate(PATH.auth, { replace: true });
@@ -47,18 +46,21 @@ export const Signup: React.FC = () => {
     setNickname(value);
   };
 
-  const requestNicknameCheck = () => {
-    if (invalidNickName || nicknameCheck?.success) {
+  const requestNicknameCheck = async () => {
+    if (invalidNickName || nicknameCheckPassed) {
       return;
     }
-    refetchNicknameCheck();
+    const { data } = await refetchNicknameCheck();
+
+    setNicknameCheckWarning(data?.errorCode?.message);
+    setNicknameCheckPassed(data?.success ?? false);
   };
 
   const openLocationModal = () => {
     // TODO : 위치 데이터 변경
     togglePopup('modal', true);
     setCurrentDim('modal');
-    setLocations([3, 4]);
+    setLocations([1, 2]);
   };
 
   const requestSignup = () => {
@@ -102,8 +104,9 @@ export const Signup: React.FC = () => {
                 maxLength={10}
                 value={nickname}
                 onChange={changeNickname}
+                warningMessage={nicknameCheckWarning}
               />
-              {nicknameCheck?.success ? (
+              {nicknameCheckPassed ? (
                 <Check className="nickname-form__input--check" />
               ) : (
                 <Button

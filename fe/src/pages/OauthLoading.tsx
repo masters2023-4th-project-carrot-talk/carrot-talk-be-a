@@ -1,21 +1,29 @@
 import { PATH } from '@/constants/path';
+import { useLogin } from '@/hooks/hook';
+import { setAccessToken, setLoginInfo } from '@/utils/localStorage';
 import kakao from '@assets/kakao.png';
 import { Theme, css } from '@emotion/react';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export const OauthLoading: React.FC = () => {
-  // 동작 흐름
-  // 카카오 인가 코드로 로그인 api 호출
-  // 사용자 정보가 오면 로그인 -> 홈으로 이동
-  // 사용자 정보가 없으면 -> 회원가입 페이지로 이동
   const navigate = useNavigate();
 
+  const [searchParams] = useSearchParams();
+  const { data: loginResult } = useLogin(searchParams.get('code') || '');
+
   useEffect(() => {
-    setTimeout(() => {
-      navigate(PATH.signup, { replace: true });
-    }, 2000);
-  }, [navigate]);
+    if (!loginResult) {
+      return;
+    }
+
+    if (loginResult.data.isUser) {
+      setLoginInfo(loginResult.data);
+    } else {
+      setAccessToken(loginResult.data.accessToken);
+    }
+    navigate(loginResult.data.isUser ? PATH.home : PATH.signup);
+  }, [loginResult, navigate]);
 
   return (
     <>

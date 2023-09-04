@@ -2,32 +2,26 @@ import { ReactComponent as UserCircle } from '@/assets/user-circle.svg';
 import { Button } from '@/components/common/button/Button';
 import { Title } from '@/components/common/topBar/Title';
 import { TopBar } from '@/components/common/topBar/TopBar';
-import { PATH } from '@/constants/path';
-import {
-  clearTokens,
-  clearUserInfo,
-  getTokens,
-  getUserInfo,
-} from '@/utils/localStorage';
+import { KAKAO_AUTH_URL, PATH } from '@/constants/path';
+import { clearLoginInfo, getTokens, getUserInfo } from '@/utils/localStorage';
 import kakaoLogin from '@assets/kakao_login.png';
 import { Theme, css } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 
 export const Auth: React.FC = () => {
   const navigate = useNavigate();
+
   const userInfo = getUserInfo();
   const tokens = getTokens();
-
   const isLogin = userInfo !== null && tokens !== null;
 
   const onClickLogin = () => {
-    navigate(PATH.redirect);
+    location.assign(KAKAO_AUTH_URL);
   };
 
   const onClickLogout = () => {
     // TODO: 로그아웃 API 호출
-    clearUserInfo();
-    clearTokens();
+    clearLoginInfo();
     navigate(PATH.auth, { replace: true });
   };
 
@@ -98,9 +92,18 @@ const pageStyle = (theme: Theme) => {
       display: flex;
       justify-content: center;
 
-      & svg {
-        width: 100px;
-        height: 100px;
+      & > img,
+      & > svg {
+        height: 80px;
+        width: 80px;
+      }
+
+      & > img {
+        object-fit: cover;
+        border-radius: 50%;
+      }
+
+      & > svg {
         stroke: ${theme.color.neutral.text};
       }
     }

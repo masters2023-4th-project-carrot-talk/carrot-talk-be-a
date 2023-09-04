@@ -75,7 +75,7 @@ export const handlers = [
         },
       };
 
-      return res(ctx.status(409), ctx.json(data));
+      return res(ctx.status(200), ctx.json(data));
     }
 
     const data = {
@@ -85,7 +85,7 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(data));
   }),
 
-  rest.post('/api/users', async (req, res, ctx) => {
+  rest.post('/api/users/signup', async (req, res, ctx) => {
     const { nickname, mainLocationId, subLocationId } = await req.json();
 
     const newUser = {
@@ -93,7 +93,7 @@ export const handlers = [
       nickname,
       mainLocationId,
       subLocationId,
-      imageUrl: '',
+      imageUrl: 'https://i.pinimg.com/originals/3a/22/bd/3a22bdb8957e81ed560635383d483e97.png',
     };
 
     users.push(newUser);
@@ -116,4 +116,16 @@ export const handlers = [
 
     return res(ctx.status(200), ctx.json(data));
   }),
+
+  rest.get('/api/users/login', (_, res, ctx) => {
+    const data = {
+      success: true,
+      data: {
+        isUser: false,
+        accessToken: "accessTokenForSignup"
+      }
+    }
+
+    return res(ctx.status(200), ctx.json(data));
+  })
 ];

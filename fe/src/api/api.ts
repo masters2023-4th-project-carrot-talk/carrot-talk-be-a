@@ -1,6 +1,5 @@
-export const BASE_URL = 'http://localhost:5173';
-// export const BASE_URL =
-//   'http://ec2-52-78-56-188.ap-northeast-2.compute.amazonaws.com:8080';
+import { BASE_URL } from "@/constants/path";
+import { getAccessToken } from "@/utils/localStorage";
 
 const fetchData = async (path: string, options?: RequestInit) => {
   const response = await fetch(BASE_URL + path, options);
@@ -52,14 +51,13 @@ export const checkNickname = async (nickname: string) => {
 
   return await fetchData(`/api/users?nickname=${nickname}`, {
     method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    }
   });
 };
 
-export const signup = async ({
-  nickname,
-  mainLocationId,
-  subLocationId,
-}: {
+export const signup = async (signupInfo: {
   nickname: string;
   mainLocationId: number;
   subLocationId?: number;
@@ -67,8 +65,21 @@ export const signup = async ({
   // TODO 액세스 토큰을 헤더에 담아서 보내야 함
   // TODO const accesToken =
 
-  return await fetchData(`/api/users`, {
+  return await fetchData("/api/users/signup", {
     method: 'POST',
-    body: JSON.stringify({ nickname, mainLocationId, subLocationId }),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${getAccessToken()}`
+    },
+    body: JSON.stringify(signupInfo),
+  });
+};
+
+export const login = async (code: string) => {
+  // TODO 액세스 토큰을 헤더에 담아서 보내야 함
+  // TODO const accesToken =
+
+  return await fetchData(`/api/users/login?code=${code}`, {
+    method: 'GET',
   });
 };

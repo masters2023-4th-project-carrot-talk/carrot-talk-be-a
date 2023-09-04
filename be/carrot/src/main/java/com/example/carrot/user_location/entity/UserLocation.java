@@ -57,4 +57,9 @@ public class UserLocation extends BaseCreatedTimeEntity {
 		userLocation.addUser(user);
 		return userLocation;
 	}
+
+	public UserLocation updateMainLocation() {
+		this.isMain = !this.isMain;
+		return this;
+	}
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@components/common/button/Button';
 import { Theme, css } from '@emotion/react';
 import { Plus, CircleXFilled } from '@components/common/icons';
-import { usePopupStore } from '@store/popupStore';
+import { usePopupStore } from '@/store/popupStore';
 import {
   useDeleteLocation,
   useMyLocations,
@@ -32,7 +32,7 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
     if (locations) {
       setLocationsList(locations);
     }
-  }, []);
+  }, [locations]);
 
   const onAlertOpen = (location: LocationType) => {
     togglePopup('alert', true);

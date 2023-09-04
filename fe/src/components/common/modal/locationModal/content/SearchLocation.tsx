@@ -13,14 +13,10 @@ type Props = {
 
 export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
   const [inputValue, setInputValue] = useState<string>(''); //훅으로 빼기 input은 디바운스 걸기
-  const { locations, refetch } = useLocationWithQuery(inputValue);
-  const [locationList, setLocationList] = useState<LocationWithQueryType[]>([]);
-  // const [selectLocation, setSelectLocation] = useState<LocationType | null>(
-  //   null,
-  // );
-
+  const trimedInputValue = inputValue.trim();
+  const { locations, refetch } = useLocationWithQuery(trimedInputValue);
+  const [hasPressedEnter, setHasPressedEnter] = useState<boolean>(false); // 엔터를 눌렀는지 확인하는 상태
   const patchMainLocationById = usePatchMainLocation();
-
   const { togglePopup, setCurrentDim } = usePopupStore();
   // TODO: 엔터를 입력하면 서버에서 검색된 동네 목록을 받아온다.
   // TODO: 동네는 시/도, 구/군, 동/읍/면 단위
@@ -29,22 +25,16 @@ export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
 
   const onChangeInput = (value: string) => {
     setInputValue(value);
+    setHasPressedEnter(false);
   };
 
   const onSearchLocation = () => {
     refetch();
-    if (locations) {
-      setLocationList(locations);
-    }
+    setHasPressedEnter(true);
   };
 
   const onChangeMainLocation = (id: number) => {
-    console.log('예?');
-    console.log(id);
     patchMainLocationById(id);
-
-    // setSelectLocation(null);
-    setLocationList([]);
     setInputValue('');
   };
 
@@ -71,16 +61,15 @@ export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
           />
         </div>
 
-        {locationList && (
+        {hasPressedEnter && locations && (
           <ul>
-            {locationList.map((location) => (
+            {locations.map((location) => (
               <ModalListItem
                 key={location.id}
                 name={location.name}
                 onClick={() => {
                   console.log('되니?');
                   onChangeMainLocation(location.id);
-                  // onCloseModal();
                   onToggleContent('control');
                 }}
               />

@@ -5,7 +5,6 @@ import { locationsWithQuery } from './data/locations';
 let locations: LocationType[] = [
   { id: 1, name: '안양99동', isMainLocation: true },
   { id: 2, name: '안양100동', isMainLocation: false },
-  { id: 3, name: '개포 1동', isMainLocation: false },
 ];
 
 export const handlers = [
@@ -40,10 +39,22 @@ export const handlers = [
   }),
   // 내동네 변경
   rest.patch(`/api/users/locations`, (req, res, ctx) => {
-    if (locations.length === 1) return;
+    console.log(' 확인중');
 
     const { locationId } = req.body as { locationId: number };
-    console.log('patch', locationId);
+
+    // locationId에 해당하는 location이 있는지 확인
+    const exists = locations.some((location) => location.id === locationId);
+
+    // 없다면 새로운 location을 추가
+    if (!exists) {
+      locations.push({
+        id: locationId,
+        name: `개포${locationId}동`,
+        isMainLocation: false,
+      });
+    }
+    console.log(locations, ' 확인중');
 
     locations = locations.map((location) => ({
       ...location,

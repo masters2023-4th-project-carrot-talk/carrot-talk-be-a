@@ -62,7 +62,7 @@ export const getLocationWithQuery = (query: string) => {
   return fetchData(`/api/locations?keyword=${encodeURIComponent(query)}`);
 };
 
-export const getCategories = async () => {
+export const getCategories = () => {
   // TODO 액세스 토큰을 헤더에 담아서 보내야 함
   // TODO const accesToken = null;
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@components/common/button/Button';
 import { Theme, css } from '@emotion/react';
 import { Plus, CircleXFilled } from '@components/common/icons';
-import { usePopupStore } from '@/store/popupStore';
 import {
   useDeleteLocation,
   useMyLocations,
@@ -12,6 +11,7 @@ import { Alert } from '@/components/common/alert/Alert';
 import { AlertContent } from '@/components/common/alert/AlertContent';
 import { AlertButtons } from '@/components/common/alert/AlertButtons';
 import { ModalHeader } from '../../ModalHeader';
+import { usePopupStore } from '@/store/popupStore';
 
 type Props = {
   onToggleContent: (content: 'control' | 'search') => void;
@@ -23,17 +23,9 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
   const patchMainLocationById = usePatchMainLocation();
   const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
 
-  // const [locationsList, setLocationsList] = useState<LocationType[]>([]);
   const [selectLocation, setSelectLocation] = useState<LocationType | null>(
     null,
   );
-  console.log('재조회 됨?', locations);
-
-  // useEffect(() => {
-  //   if (locations) {
-  //     setLocationsList(locations);
-  //   }
-  // }, [locations]);
 
   const onAlertOpen = (location: LocationType) => {
     togglePopup('alert', true);
@@ -59,9 +51,6 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
   };
 
   const onChangeMainLocation = () => {
-    // 모달을 닫을 때만 변경 요청을 보낸다
-    console.log(selectLocation, '있음?');
-
     selectLocation && patchMainLocationById(selectLocation.id);
     setSelectLocation(null);
   };
@@ -101,7 +90,7 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
             locations.map((location) => (
               <LocationButton
                 key={location.id}
-                isMainLocation={location.isMainLocation} //TODO mainID를 zustand로 관리해야하는지?
+                isMainLocation={location.isMainLocation}
                 onClick={() => {
                   onSelectLocation(location);
                 }}

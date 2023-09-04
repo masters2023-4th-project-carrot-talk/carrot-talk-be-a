@@ -16,11 +16,10 @@ export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
   const trimedInputValue = inputValue.trim();
   const { locations, refetch } = useLocationWithQuery(trimedInputValue);
   const [hasPressedEnter, setHasPressedEnter] = useState<boolean>(false); // 엔터를 눌렀는지 확인하는 상태
-  const patchMainLocationById = usePatchMainLocation();
   const { togglePopup, setCurrentDim } = usePopupStore();
   // TODO: 엔터를 입력하면 서버에서 검색된 동네 목록을 받아온다.
   // TODO: 동네는 시/도, 구/군, 동/읍/면 단위
-  // TODO: 검색후 클릭시 대표 동네로 설정하면서 모달을 닫아버려야함, input도 비워야한다
+  // TODO: 검색후 클릭시 대표 동네로 설정하면서 controlLocation으로 이동, input도 비워야한다
   // TODO: localist는 없어져야함
 
   const onChangeInput = (value: string) => {
@@ -33,9 +32,13 @@ export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
     setHasPressedEnter(true);
   };
 
+  const patchMainLocationById = usePatchMainLocation(() => {
+    onToggleContent('control');
+  });
+
   const onChangeMainLocation = (id: number) => {
-    patchMainLocationById(id);
     setInputValue('');
+    patchMainLocationById(id);
   };
 
   const onCloseModal = () => {
@@ -68,9 +71,8 @@ export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
                 key={location.id}
                 name={location.name}
                 onClick={() => {
-                  console.log('되니?');
                   onChangeMainLocation(location.id);
-                  onToggleContent('control');
+                  // onToggleContent('control');
                 }}
               />
             ))}

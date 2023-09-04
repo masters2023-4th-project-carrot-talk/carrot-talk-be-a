@@ -54,12 +54,14 @@ export const useDeleteLocation = () => {
 
   return deleteLocationById;
 };
-// TODO mutation들을 합칠수가 있나?
-export const usePatchMainLocation = () => {
+
+export const usePatchMainLocation = (onSuccessCallback?: () => void) => {
   const queryClient = useQueryClient();
   const patchMainLocationMutation = useMutation(patchMainLocation, {
     onSuccess: () => {
       queryClient.invalidateQueries(QUERY_KEY.locations);
+      //재조회를 일으킨 후 콜백함수 실행
+      onSuccessCallback?.();
     },
   });
 
@@ -68,4 +70,4 @@ export const usePatchMainLocation = () => {
   };
 
   return patchMainLocationById;
-};
+}; //

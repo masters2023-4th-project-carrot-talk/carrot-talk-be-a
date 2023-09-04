@@ -54,7 +54,6 @@ export const handlers = [
       });
     }
 
-    console.log(locations, ' 여기도1');
     locations = locations.map((location) => ({
       ...location,
       isMainLocation: location.id === locationId,

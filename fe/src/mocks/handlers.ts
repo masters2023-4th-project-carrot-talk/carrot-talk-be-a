@@ -10,9 +10,6 @@ let locations: LocationType[] = [
 export const handlers = [
   //내동네
   rest.get(`/api/users/locations`, (_, res, ctx) => {
-    console.log('get', locations);
-    console.log('재조회가 되니');
-
     return res(ctx.delay(300), ctx.status(200), ctx.json(locations));
   }),
   // 내동네 삭제
@@ -25,7 +22,6 @@ export const handlers = [
     if (locations.length > 0) {
       locations[0].isMainLocation = true;
     }
-    console.log('delete', locations);
 
     // 반환 데이터
     const data = {
@@ -59,8 +55,6 @@ export const handlers = [
       isMainLocation: location.id === locationId,
     }));
 
-    console.log(locations, ' 여기도2');
-
     const data = {
       success: true,
       data: {
@@ -85,8 +79,6 @@ export const handlers = [
 
   //카테고리
   rest.get(`/api/categories`, (_, res, ctx) => {
-    console.log('get', categoryList);
-
     return res(ctx.delay(200), ctx.status(200), ctx.json(categoryList));
   }),
   //

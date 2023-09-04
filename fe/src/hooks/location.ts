@@ -19,7 +19,6 @@ export const useMyLocations = () => {
 };
 
 export const useLocationWithQuery = (query: string) => {
-  // 엔터 칠때만 요청함
   const {
     data: locations,
     status,
@@ -57,11 +56,14 @@ export const useDeleteLocation = () => {
 
 export const usePatchMainLocation = (onSuccessCallback?: () => void) => {
   const queryClient = useQueryClient();
+  const { setIsMainLocationSet } = useLocationStore();
+
   const patchMainLocationMutation = useMutation(patchMainLocation, {
     onSuccess: () => {
       queryClient.invalidateQueries(QUERY_KEY.locations);
       //재조회를 일으킨 후 콜백함수 실행
       onSuccessCallback?.();
+      setIsMainLocationSet();
     },
   });
 
@@ -70,4 +72,4 @@ export const usePatchMainLocation = (onSuccessCallback?: () => void) => {
   };
 
   return patchMainLocationById;
-}; //
+};

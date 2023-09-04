@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@components/common/button/Button';
 import { Theme, css } from '@emotion/react';
 import { Plus, CircleXFilled } from '@components/common/icons';

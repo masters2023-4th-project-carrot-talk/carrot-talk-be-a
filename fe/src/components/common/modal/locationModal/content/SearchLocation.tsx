@@ -20,7 +20,6 @@ export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
   // TODO: 엔터를 입력하면 서버에서 검색된 동네 목록을 받아온다.
   // TODO: 동네는 시/도, 구/군, 동/읍/면 단위
   // TODO: 검색후 클릭시 대표 동네로 설정하면서 controlLocation으로 이동, input도 비워야한다
-  // TODO: localist는 없어져야함
 
   const onChangeInput = (value: string) => {
     setInputValue(value);
@@ -72,7 +71,6 @@ export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
                 name={location.name}
                 onClick={() => {
                   onChangeMainLocation(location.id);
-                  // onToggleContent('control');
                 }}
               />
             ))}

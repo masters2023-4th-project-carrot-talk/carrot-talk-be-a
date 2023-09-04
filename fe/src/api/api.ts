@@ -3,8 +3,6 @@ export const BASE_URL = 'http://localhost:5173';
 //   'http://ec2-52-78-56-188.ap-northeast-2.compute.amazonaws.com:8080';
 
 const fetchData = async (path: string, options?: RequestInit) => {
-  console.log('fetchData', path, options);
-
   const response = await fetch(BASE_URL + path, options);
 
   if (!response.ok) {

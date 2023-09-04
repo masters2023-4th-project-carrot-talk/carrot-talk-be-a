@@ -25,6 +25,7 @@ public enum StatusCode {
 
 	// -- [LOCATION] -- //
 	NOT_FOUND_LOCATION(HttpStatus.BAD_REQUEST, "존재하지 않는 Location입니다."),
+	DELETE_LOCATION_EXCEPTION(HttpStatus.BAD_REQUEST, "동네가 하나이므로 삭제할 수 없습니다."),
 
 	// -- [CATEGORY] -- //
 	NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "카테고리를 조회할 수 없습니다."),

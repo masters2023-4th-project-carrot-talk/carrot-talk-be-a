@@ -3,6 +3,7 @@ import { Button } from '@/components/common/button/Button';
 import { Title } from '@/components/common/topBar/Title';
 import { TopBar } from '@/components/common/topBar/TopBar';
 import { KAKAO_AUTH_URL, PATH } from '@/constants/path';
+import { useLogout } from '@/hooks/hook';
 import { clearLoginInfo, getTokens, getUserInfo } from '@/utils/localStorage';
 import kakaoLogin from '@assets/kakao_login.png';
 import { Theme, css } from '@emotion/react';
@@ -10,6 +11,11 @@ import { useNavigate } from 'react-router-dom';
 
 export const Auth: React.FC = () => {
   const navigate = useNavigate();
+
+  const logout = useLogout(() => {
+    clearLoginInfo();
+    navigate(PATH.auth, { replace: true });
+  });
 
   const userInfo = getUserInfo();
   const tokens = getTokens();
@@ -20,9 +26,7 @@ export const Auth: React.FC = () => {
   };
 
   const onClickLogout = () => {
-    // TODO: 로그아웃 API 호출
-    clearLoginInfo();
-    navigate(PATH.auth, { replace: true });
+    logout();
   };
 
   return (

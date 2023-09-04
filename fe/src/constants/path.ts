@@ -15,6 +15,6 @@ export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id
   import.meta.env.VITE_BASE_URL + PATH.redirect
 }&response_type=code&scope=profile_image`;
 
-// export const BASE_URL = import.meta.env.VITE_BASE_URL;
-export const BASE_URL =
-  'http://ec2-52-78-56-188.ap-northeast-2.compute.amazonaws.com:8080';
+export const BASE_URL = import.meta.env.VITE_BASE_URL;
+// export const BASE_URL =
+//   'http://ec2-52-78-56-188.ap-northeast-2.compute.amazonaws.com:8080';

@@ -1,5 +1,5 @@
 import { BASE_URL } from "@/constants/path";
-import { getAccessToken } from "@/utils/localStorage";
+import { getAccessToken, getRefreshToken } from "@/utils/localStorage";
 
 const fetchData = async (path: string, options?: RequestInit) => {
   const response = await fetch(BASE_URL + path, options);
@@ -46,9 +46,6 @@ export const patchMainLocation = async (id: number) => {
 };
 
 export const checkNickname = async (nickname: string) => {
-  // TODO 액세스 토큰을 헤더에 담아서 보내야 함
-  // TODO const accesToken =
-
   return await fetchData(`/api/users?nickname=${nickname}`, {
     method: 'GET',
     headers: {
@@ -62,8 +59,6 @@ export const signup = async (signupInfo: {
   mainLocationId: number;
   subLocationId?: number;
 }) => {
-  // TODO 액세스 토큰을 헤더에 담아서 보내야 함
-  // TODO const accesToken =
 
   return await fetchData("/api/users/signup", {
     method: 'POST',
@@ -76,10 +71,20 @@ export const signup = async (signupInfo: {
 };
 
 export const login = async (code: string) => {
-  // TODO 액세스 토큰을 헤더에 담아서 보내야 함
-  // TODO const accesToken =
-
   return await fetchData(`/api/users/login?code=${code}`, {
     method: 'GET',
   });
 };
+
+export const logout = async () => {
+  return await fetchData(`/api/users/logout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${getAccessToken()}`
+    },
+    body: JSON.stringify({
+      "refreshToken": getRefreshToken()
+    }),
+  });
+}

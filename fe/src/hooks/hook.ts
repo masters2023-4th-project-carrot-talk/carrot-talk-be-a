@@ -3,6 +3,7 @@ import {
   deleteLocation,
   getMyLocations,
   login,
+  logout,
   patchMainLocation,
   signup,
 } from '@/api/api';
@@ -99,4 +100,18 @@ export const useLogin = (code: string) => {
   );
 
   return { data, status, error };
+};
+
+export const useLogout = (onLogout: () => void) => {
+  const logoutMutation = useMutation(() => logout(), {
+    onSuccess: () => {
+      onLogout();
+    }
+  });
+
+  const logoutUser = () => {
+    logoutMutation.mutate();
+  };
+
+  return logoutUser;
 };

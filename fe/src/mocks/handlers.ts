@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { users } from './data/users';
+import { token, users } from './data/users';
 
 let locations: LocationType[] = [
   { id: 1, name: '안양99동', isMainLocation: true },
@@ -93,7 +93,8 @@ export const handlers = [
       nickname,
       mainLocationId,
       subLocationId,
-      imageUrl: 'https://i.pinimg.com/originals/3a/22/bd/3a22bdb8957e81ed560635383d483e97.png',
+      imageUrl:
+        'https://i.pinimg.com/originals/3a/22/bd/3a22bdb8957e81ed560635383d483e97.png',
     };
 
     users.push(newUser);
@@ -102,10 +103,8 @@ export const handlers = [
       success: true,
       data: {
         isUser: true,
-        accessToken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
-        refreshToken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+        accessToken: token,
+        refreshToken: token,
         user: {
           id: newUser.id,
           nickname: newUser.nickname,
@@ -122,10 +121,21 @@ export const handlers = [
       success: true,
       data: {
         isUser: false,
-        accessToken: "accessTokenForSignup"
-      }
-    }
+        accessToken: 'accessTokenForSignup',
+      },
+    };
 
     return res(ctx.status(200), ctx.json(data));
-  })
+  }),
+
+  rest.post('/api/users/logout', async (req, res, ctx) => {
+    const authorization = req.headers.get('Authorization');
+    const body = await req.json();
+
+    if (authorization !== `Bearer ${token}` || body?.refreshToken !== token) {
+      return res(ctx.status(200), ctx.json({ success: false }));
+    }
+
+    return res(ctx.status(200), ctx.json({ success: true }));
+  }),
 ];

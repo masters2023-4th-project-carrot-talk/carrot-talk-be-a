@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 @Service
 public class UserLocationService {
+	private static final int SINGLE_LOCATION_LIMIT = 1;
 
 	private final UserLocationRepository userLocationRepository;
 	private final LocationService locationService;
@@ -40,7 +41,7 @@ public class UserLocationService {
 
 		List<UserLocation> findUserLocations = userLocationRepository.findAllByUser(user);
 
-		if (findUserLocations.size() == 1) {
+		if (findUserLocations.size() == SINGLE_LOCATION_LIMIT) {
 			Location location = locationService.findLocation(mainLocationRequestDto.getLocationId());
 			userLocationRepository.save(UserLocation.of(user, location, false));
 			return MainLocationResponseDto.from(checkMainLocation(findUserLocations.get(0)));

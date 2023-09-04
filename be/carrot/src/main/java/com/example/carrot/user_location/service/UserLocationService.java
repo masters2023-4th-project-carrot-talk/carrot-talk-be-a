@@ -53,7 +53,8 @@ public class UserLocationService {
 		return MainLocationResponseDto.from(updatedMainLocation);
 	}
 
-	private Optional<Location> getUpdatedMainLocation(List<UserLocation> findUserLocations, MainLocationRequestDto mainLocationRequestDto) {
+	private Optional<Location> getUpdatedMainLocation(List<UserLocation> findUserLocations,
+		MainLocationRequestDto mainLocationRequestDto) {
 		UserLocation updatedMainLocation = null;
 		for (UserLocation findUserLocation : findUserLocations) {
 			if (findUserLocation.getLocation().getLocationId() == mainLocationRequestDto.getLocationId()) {

@@ -23,8 +23,10 @@ public class UserLocationController {
 	private final UserLocationService userLocationService;
 
 	@PatchMapping("/users/locations")
-	public ApiResponse<MainLocationResponseDto> registerMainLocation(@Valid @RequestBody MainLocationRequestDto mainLocationRequestDto, @RequestAttribute Long userId) {
-		MainLocationResponseDto mainLocationResponseDto = userLocationService.registerMainLocation(mainLocationRequestDto, userId);
+	public ApiResponse<MainLocationResponseDto> registerMainLocation(
+		@Valid @RequestBody MainLocationRequestDto mainLocationRequestDto, @RequestAttribute Long userId) {
+		MainLocationResponseDto mainLocationResponseDto = userLocationService.registerMainLocation(
+			mainLocationRequestDto, userId);
 		return ApiResponse.success(mainLocationResponseDto);
 	}
 }

@@ -31,7 +31,7 @@ public class UserController {
 	/**
 	 * OAuth 로그인 API
 	 */
-	@GetMapping("/users/login")
+	@PostMapping("/users/login")
 	public ApiResponse<UserResponseDto> kakaoLogin(@RequestParam String code) {
 		UserResponseDto loginResponseDto = userService.kakaoLogin(code);
 		return ApiResponse.success(loginResponseDto);

@@ -55,8 +55,6 @@ public class UserController {
 		String socialId = String.valueOf(request.getAttribute("socialId"));
 		String imgUrl = String.valueOf(request.getAttribute("imgUrl"));
 
-		log.info("socialId : " + socialId);
-		log.info("imgUrl : " + imgUrl);
 		UserResponseDto userResponseDto = userService.kakaoSignUp(signUpRequestDto, socialId, imgUrl);
 		return ApiResponse.success(userResponseDto);
 	}

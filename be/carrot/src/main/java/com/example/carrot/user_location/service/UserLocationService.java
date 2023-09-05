@@ -58,11 +58,9 @@ public class UserLocationService {
 		UserLocation updatedMainLocation = null;
 		for (UserLocation findUserLocation : findUserLocations) {
 			if (findUserLocation.getLocation().getLocationId() == mainLocationRequestDto.getLocationId()) {
-				if (!findUserLocation.isMain()) {
-					updatedMainLocation = findUserLocation.updateMainLocation();
-				}
+				updatedMainLocation = findUserLocation.updateMainLocation(true);
 			} else {
-				findUserLocation.updateMainLocation();
+				findUserLocation.updateMainLocation(false);
 			}
 		}
 		return updatedMainLocation == null ? Optional.empty() : Optional.of(updatedMainLocation.getLocation());

@@ -37,7 +37,10 @@ public class UserController {
 		return ApiResponse.success(loginResponseDto);
 	}
 
-	@GetMapping("/users")
+	/**
+	 * 닉네임 중복 확인 API
+	 */
+	@GetMapping("/users/nickname")
 	public ApiResponse<?> checkNickname(@RequestParam String nickname) {
 		userService.checkNickNameDuplicate(nickname);
 		return ApiResponse.success();

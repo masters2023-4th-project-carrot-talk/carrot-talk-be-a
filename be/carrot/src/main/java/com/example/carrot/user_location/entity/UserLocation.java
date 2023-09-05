@@ -65,4 +65,8 @@ public class UserLocation extends BaseCreatedTimeEntity {
 	public void changeMain(boolean isMain) {
 		this.isMain = isMain;
 	}
+
+	public Long findLocationId() {
+		return this.location.getLocationId();
+	}
 }

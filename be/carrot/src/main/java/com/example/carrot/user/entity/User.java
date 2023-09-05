@@ -11,6 +11,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.carrot.global.common.BaseAllTimeEntity;
+import com.example.carrot.global.exception.CustomException;
+import com.example.carrot.global.exception.StatusCode;
 import com.example.carrot.global.jwt.Jwt;
 import com.example.carrot.like.entity.Like;
 import com.example.carrot.location.entity.Location;
@@ -70,7 +72,7 @@ public class User extends BaseAllTimeEntity {
 		UserLocation deletedUserLocation = userLocations.stream()
 			.filter(userLocation -> userLocation.isSame(location))
 			.findFirst()
-			.orElseThrow();
+			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_LOCATION));
 
 		userLocations.remove(deletedUserLocation);
 
@@ -85,6 +87,6 @@ public class User extends BaseAllTimeEntity {
 		return userLocations.stream()
 			.filter(UserLocation::isMain)
 			.findFirst()
-			.orElseThrow();
+			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_MAIN_LOCATION));
 	}
 }

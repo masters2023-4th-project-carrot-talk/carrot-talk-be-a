@@ -1,6 +1,5 @@
 package com.example.carrot.user.dto.response;
 
-import com.example.carrot.location.entity.Location;
 import com.example.carrot.user_location.entity.UserLocation;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -17,7 +16,7 @@ public class UserLocationDeleteResponseDto {
 	private Long mainLocationId;
 
 	public static UserLocationDeleteResponseDto of(UserLocation userLocation) {
-		return new UserLocationDeleteResponseDto(userLocation.getUserLocationId());
+		return new UserLocationDeleteResponseDto(userLocation.findLocationId());
 	}
 
 }

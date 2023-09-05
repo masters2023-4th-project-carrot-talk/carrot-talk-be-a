@@ -76,17 +76,17 @@ export const Home: React.FC = () => {
     };
   }, [observeTarget]);
 
-  if (status === 'loading') {
-    // TODO 상품목록 loading이 메인이 돼야함
-    // TODO 메인페이지에 들어와있을때 locations의 loading은 무의미함
-    return <LoadingPage />;
-  }
+  // if (status === 'loading') {
+  //   // TODO 상품목록 loading이 메인이 돼야함
+  //   // TODO 메인페이지에 들어와있을때 locations의 loading은 무의미함
+  //   return <LoadingPage />;
+  // }
 
-  if (status === 'error') {
-    // TODO 오류 처리도 생각하기
-    // TODO 페이지 내부의 오류를 전부 통합하여 처리하는지? 아니면 각각의 컴포넌트에서 처리하는지?
-    return;
-  }
+  // if (status === 'error') {
+  //   // TODO 오류 처리도 생각하기
+  //   // TODO 페이지 내부의 오류를 전부 통합하여 처리하는지? 아니면 각각의 컴포넌트에서 처리하는지?
+  //   return;
+  // }
 
   const onOpenModal = () => {
     togglePopup('modal', true);

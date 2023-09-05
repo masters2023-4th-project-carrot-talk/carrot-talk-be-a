@@ -3,7 +3,13 @@ export const BASE_URL = 'http://3.35.3.250:8080';
 // export const BASE_URL =
 //   'http://ec2-52-78-56-188.ap-northeast-2.compute.amazonaws.com:8080';
 
-const fetchData = async (path: string, options?: RequestInit) => {
+const fetchData = async (
+  path: string,
+  isReady?: boolean,
+  options?: RequestInit,
+) => {
+  const BASE_URL = isReady ? 'http://3.35.3.250:8080' : 'http://localhost:5173';
+
   const response = await fetch(BASE_URL + path, options);
 
   if (!response.ok) {
@@ -27,14 +33,14 @@ export const getMyLocations = () => {
 
   // TODO  if (!accesToken) return {id: 0, name: '역삼 1동', isMainLocation: true};
 
-  return fetchData('/api/users/locations');
+  return fetchData('/api/users/locations', false);
 };
 
 export const deleteLocation = (id: number) => {
   // TODO 액세스 토큰을 헤더에 담아서 보내야 함
   // TODO const accesToken =
 
-  return fetchData(`/api/users/locations/${id}`, {
+  return fetchData(`/api/users/locations/${id}`, false, {
     method: 'DELETE',
   });
 };
@@ -43,7 +49,7 @@ export const patchMainLocation = (id: number) => {
   // TODO 액세스 토큰을 헤더에 담아서 보내야 함
   // TODO const accesToken =
 
-  return fetchData(`/api/users/locations`, {
+  return fetchData(`/api/users/locations`, false, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -59,14 +65,18 @@ export const getLocationWithQuery = (query: string) => {
 
   // TODO 액세스 토큰을 헤더에 담아서 보내야 함
   // TODO const accesToken =
-  return fetchData(`/api/locations?keyword=${encodeURIComponent(query)}`);
+
+  return fetchData(
+    `/api/locations?keyword=${encodeURIComponent(query)}`,
+    false,
+  );
 };
 
 export const getCategories = () => {
   // TODO 액세스 토큰을 헤더에 담아서 보내야 함
   // TODO const accesToken = null;
 
-  return fetchData('/api/categories');
+  return fetchData('/api/categories', false);
 };
 
 // export const getProducts = ({ locationId, categoryId, next, size }) => {
@@ -102,5 +112,6 @@ export const getProducts = ({
     query.append('next', String(next));
   }
   console.log(query, '쿼리확인중');
-  return fetchData(`/api/products?${query.toString()}`);
+
+  return fetchData(`/api/products?${query.toString()}`, true);
 };

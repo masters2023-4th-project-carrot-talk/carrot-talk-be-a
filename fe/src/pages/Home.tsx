@@ -20,6 +20,7 @@ import { useMyLocations } from '@/hooks/location';
 import { usePopupStore } from '@/store/popupStore';
 import { Category } from '@/components/home/Category';
 import { useCategories } from '@/hooks/category';
+import { useLayoutStore } from '@/store/layoutStore';
 
 // TODO 페이지가 로드됐을때, 내동네 api 호출
 // TODO 모달에서 동네를 추가하거나 삭제하면, 영향을 받아 locations가 수정돼야함
@@ -28,7 +29,11 @@ export const Home: React.FC = () => {
   const { categories } = useCategories();
   const { togglePopup, setCurrentDim } = usePopupStore();
   const [selected, setSelected] = useState<number | null>(null);
-  const [showCategory, setShowCategory] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+    null,
+  );
+
+  const { setshouldMove } = useLayoutStore();
   // TODO 필터링과 대표동네 설정은 별개로 처리함에 따라, 초기에는 모든 동네의 물품을 보여줌(초안)
   // TODO useQueries이용해서 로딩, 에러처리 한꺼번에?
 
@@ -56,12 +61,12 @@ export const Home: React.FC = () => {
 
   const onOpenCategory = () => {
     //TODO : 카테고리 페이지 보여주기
-    setShowCategory(true);
+    setshouldMove();
   };
 
   const onCloseCategory = () => {
     //TODO : 카테고리 페이지 닫기
-    setShowCategory(false);
+    setshouldMove();
   };
 
   const onFilterProducts = (id: number) => {
@@ -69,66 +74,69 @@ export const Home: React.FC = () => {
     setSelected(id);
   };
 
+  const onSelectCategory = (id: number) => {
+    //TODO 카테고리 선택
+    setSelectedCategoryId(id);
+  };
+
   return (
     <>
       <div css={pageStyle}>
-        {!showCategory && (
-          <>
-            <TopBar>
-              <LeftButton>
-                <Dropdown autoClose>
-                  <Button variant="text" className="button__topbar">
-                    역삼1동
-                    <ChevronDown />
-                  </Button>
-                  <MenuBox>
-                    {locations &&
-                      locations.map((location) => (
-                        <MenuItem
-                          key={location.id}
-                          state={
-                            selected === location.id ? 'selected' : 'default'
-                          }
-                          onClick={() => onFilterProducts(location.id)}
-                        >
-                          {location.name}
-                        </MenuItem>
-                      ))}
-                    <MenuItem onClick={onOpenModal}>내 동네 설정하기</MenuItem>
-                  </MenuBox>
-                </Dropdown>
-              </LeftButton>
-              <RightButton>
-                <Button
-                  variant="text"
-                  className="button__topbar"
-                  onClick={onOpenCategory}
-                >
-                  <LayoutGrid />
+        <>
+          <TopBar>
+            <LeftButton>
+              <Dropdown autoClose>
+                <Button variant="text" className="button__topbar">
+                  역삼1동
+                  <ChevronDown />
                 </Button>
-              </RightButton>
-            </TopBar>
-            <Button variant="fab" size="l" className="button__add">
-              <Plus />
-            </Button>
-            <ListBox>
-              {mock.products.map((product) => (
-                <ListItem
-                  key={product.id}
-                  product={product}
-                  onOpenDetail={() => onOpenDetail(product.id)}
-                />
-              ))}
-            </ListBox>
-            <LocationModal />
-          </>
-        )}
+                <MenuBox>
+                  {locations &&
+                    locations.map((location) => (
+                      <MenuItem
+                        key={location.id}
+                        state={
+                          selected === location.id ? 'selected' : 'default'
+                        }
+                        onClick={() => onFilterProducts(location.id)}
+                      >
+                        {location.name}
+                      </MenuItem>
+                    ))}
+                  <MenuItem onClick={onOpenModal}>내 동네 설정하기</MenuItem>
+                </MenuBox>
+              </Dropdown>
+            </LeftButton>
+            <RightButton>
+              <Button
+                variant="text"
+                className="button__topbar"
+                onClick={onOpenCategory}
+              >
+                <LayoutGrid />
+              </Button>
+            </RightButton>
+          </TopBar>
+          <Button variant="fab" size="l" className="button__add">
+            <Plus />
+          </Button>
+          <ListBox>
+            {mock.products.map((product) => (
+              <ListItem
+                key={product.id}
+                product={product}
+                onOpenDetail={() => onOpenDetail(product.id)}
+              />
+            ))}
+          </ListBox>
+          <LocationModal />
+        </>
       </div>
 
       <Category
         categories={categories}
-        showCategory={showCategory}
         onCloseCategory={onCloseCategory}
+        onSelectCategory={onSelectCategory}
       />
     </>
   );
@@ -136,7 +144,12 @@ export const Home: React.FC = () => {
 
 const pageStyle = (theme: Theme) => {
   return css`
-    flex: 1;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    height: 100vh;
 
     .button__topbar {
       stroke: ${theme.color.neutral.textStrong};

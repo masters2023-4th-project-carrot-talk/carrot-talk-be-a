@@ -17,7 +17,9 @@ const dimStyle = (theme: Theme) => {
     inset: 0;
     z-index: 105;
     width: 393px;
-    height: 852px;
+    height: 100vh;
     background-color: ${theme.color.neutral.overlay};
   `;
 };
+// position: absolute;
+// height: 852px;

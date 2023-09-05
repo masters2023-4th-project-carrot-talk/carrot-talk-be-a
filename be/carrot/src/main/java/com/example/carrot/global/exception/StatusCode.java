@@ -24,6 +24,10 @@ public enum StatusCode {
 	NOT_FOUND_USER(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
 
 	// -- [LOCATION] -- //
+	NOT_FOUND_LOCATION(HttpStatus.BAD_REQUEST, "존재하지 않는 Location입니다."),
+	NOT_FOUND_SAME_LOCATION(HttpStatus.BAD_REQUEST, "같은 Location을 찾을 수 없습니다."),
+	NOT_FOUND_MAIN_LOCATION(HttpStatus.BAD_REQUEST, "Main Location을 찾을 수 없습니다."),
+	DELETE_LOCATION_EXCEPTION(HttpStatus.BAD_REQUEST, "동네가 하나이므로 삭제할 수 없습니다."),
 	NOT_FOUND_LOCATION(HttpStatus.BAD_REQUEST, "해당하는 동네를 찾을 수 없습니다."),
 	NOT_MAIN_LOCATION(HttpStatus.NOT_FOUND, "대표 동네가 아닙니다."),
 

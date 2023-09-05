@@ -12,8 +12,10 @@ import com.example.carrot.location.entity.Location;
 
 @Repository
 public interface LocationRepository extends JpaRepository<Location, Long> {
+
 	Optional<Location> findByLocationId(Long locationId);
 
 	@Query("SELECT l FROM Location l WHERE l.name LIKE %:keyword%")
 	List<Location> findLocationsByKeyword(@Param("keyword") String keyword);
+
 }

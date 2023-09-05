@@ -1,9 +1,9 @@
 package com.example.carrot.user.controller;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,9 +51,8 @@ public class UserController {
 	 */
 	@PostMapping("/users/signup")
 	public ApiResponse<UserResponseDto> kakaoSignUp(@RequestBody SignUpRequestDto signUpRequestDto,
-		HttpServletRequest request) {
-		String socialId = String.valueOf(request.getAttribute("socialId"));
-		String imgUrl = String.valueOf(request.getAttribute("imgUrl"));
+		@RequestAttribute String socialId,
+		@RequestAttribute String imgUrl) {
 
 		UserResponseDto userResponseDto = userService.kakaoSignUp(signUpRequestDto, socialId, imgUrl);
 		return ApiResponse.success(userResponseDto);
@@ -72,10 +71,7 @@ public class UserController {
 	 * 로그아웃 API
 	 */
 	@PostMapping("/users/logout")
-	public ApiResponse<?> kakaoLogout(@RequestBody LogoutRequestDto logoutRequestDto,
-		HttpServletRequest request) {
-		Long userId = Long.parseLong(String.valueOf(request.getAttribute("userId")));
-
+	public ApiResponse<?> kakaoLogout(@RequestBody LogoutRequestDto logoutRequestDto, @RequestAttribute Long userId) {
 		userService.kakaoLogout(logoutRequestDto, userId);
 
 		return ApiResponse.success();

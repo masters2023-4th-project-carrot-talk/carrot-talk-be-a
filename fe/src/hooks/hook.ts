@@ -90,28 +90,37 @@ export const useSignup = () => {
   return { mutate, status, error };
 };
 
-export const useLogin = (code: string) => {
-  const { data, status, error } = useQuery(
-    [QUERY_KEY.login, code],
-    () => login(code),
-    {
-      retry: false,
+export const useLogin = (
+  code: string,
+  onLogin: (
+    data:
+      | {
+          isUser: false;
+          accessToken: string;
+        }
+      | {
+          isUser: true;
+          accessToken: string;
+          refreshToken: string;
+          user: UserType;
+        },
+  ) => void,
+) => {
+  const { mutate, status, error } = useMutation(() => login(code), {
+    onSuccess: ({ data }) => {
+      onLogin(data);
     },
-  );
+  });
 
-  return { data, status, error };
+  return { mutate, status, error };
 };
 
 export const useLogout = (onLogout: () => void) => {
-  const logoutMutation = useMutation(() => logout(), {
+  const { mutate, status, error } = useMutation(() => logout(), {
     onSuccess: () => {
       onLogout();
-    }
+    },
   });
 
-  const logoutUser = () => {
-    logoutMutation.mutate();
-  };
-
-  return logoutUser;
+  return { mutate, status, error };
 };

@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 export const Auth: React.FC = () => {
   const navigate = useNavigate();
 
-  const logout = useLogout(() => {
+  const { mutate: logoutMutation } = useLogout(() => {
     clearLoginInfo();
     navigate(PATH.auth, { replace: true });
   });
@@ -26,7 +26,7 @@ export const Auth: React.FC = () => {
   };
 
   const onClickLogout = () => {
-    logout();
+    logoutMutation();
   };
 
   return (

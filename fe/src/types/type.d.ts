@@ -5,3 +5,9 @@ type LocationType = {
   name: string;
   isMainLocation: boolean;
 }
+
+type UserType = {
+  id: number;
+  nickname: string;
+  imageUrl: string;
+}

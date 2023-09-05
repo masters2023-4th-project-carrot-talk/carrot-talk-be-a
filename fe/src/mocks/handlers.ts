@@ -60,7 +60,7 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(data));
   }),
 
-  rest.get('/api/users', (req, res, ctx) => {
+  rest.get('/api/users/nickname', (req, res, ctx) => {
     const query = req.url.searchParams;
     const nickname = query.get('nickname');
 
@@ -116,7 +116,7 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(data));
   }),
 
-  rest.get('/api/users/login', (_, res, ctx) => {
+  rest.post('/api/users/login', (_, res, ctx) => {
     const data = {
       success: true,
       data: {

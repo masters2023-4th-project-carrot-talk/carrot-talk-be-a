@@ -8,22 +8,37 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export const OauthLoading: React.FC = () => {
   const navigate = useNavigate();
-
   const [searchParams] = useSearchParams();
-  const { data: loginResult } = useLogin(searchParams.get('code') || '');
+
+  const onLogin = (
+    data:
+      | {
+          isUser: false;
+          accessToken: string;
+        }
+      | {
+          isUser: true;
+          accessToken: string;
+          refreshToken: string;
+          user: UserType;
+        },
+  ) => {
+    if (data.isUser) {
+      setLoginInfo(data);
+    } else {
+      setAccessToken(data.accessToken);
+    }
+    navigate(data.isUser ? PATH.home : PATH.signup, { replace: true });
+  };
+
+  const { mutate: loginMutation } = useLogin(
+    searchParams.get('code') || '',
+    onLogin,
+  );
 
   useEffect(() => {
-    if (!loginResult) {
-      return;
-    }
-
-    if (loginResult.data.isUser) {
-      setLoginInfo(loginResult.data);
-    } else {
-      setAccessToken(loginResult.data.accessToken);
-    }
-    navigate(loginResult.data.isUser ? PATH.home : PATH.signup);
-  }, [loginResult, navigate]);
+    loginMutation();
+  }, [loginMutation]);
 
   return (
     <>

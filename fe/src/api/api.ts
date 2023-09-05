@@ -1,5 +1,5 @@
-import { BASE_URL } from "@/constants/path";
-import { getAccessToken, getRefreshToken } from "@/utils/localStorage";
+import { BASE_URL } from '@/constants/path';
+import { getAccessToken, getRefreshToken } from '@/utils/localStorage';
 
 const fetchData = async (path: string, options?: RequestInit) => {
   const response = await fetch(BASE_URL + path, options);
@@ -46,11 +46,11 @@ export const patchMainLocation = async (id: number) => {
 };
 
 export const checkNickname = async (nickname: string) => {
-  return await fetchData(`/api/users?nickname=${nickname}`, {
+  return await fetchData(`/api/users/nickname?nickname=${nickname}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-    }
+    },
   });
 };
 
@@ -59,20 +59,25 @@ export const signup = async (signupInfo: {
   mainLocationId: number;
   subLocationId?: number;
 }) => {
-
-  return await fetchData("/api/users/signup", {
+  return await fetchData('/api/users/signup', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${getAccessToken()}`
+      Authorization: `Bearer ${getAccessToken()}`,
     },
     body: JSON.stringify(signupInfo),
   });
 };
 
 export const login = async (code: string) => {
-  return await fetchData(`/api/users/login?code=${code}`, {
-    method: 'GET',
+  return await fetchData(`/api/users/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      code: code,
+    }),
   });
 };
 
@@ -81,10 +86,10 @@ export const logout = async () => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${getAccessToken()}`
+      Authorization: `Bearer ${getAccessToken()}`,
     },
     body: JSON.stringify({
-      "refreshToken": getRefreshToken()
+      refreshToken: getRefreshToken(),
     }),
   });
-}
+};

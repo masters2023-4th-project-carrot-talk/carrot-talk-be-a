@@ -1,5 +1,12 @@
 import { PATH } from '@/constants/path';
-import { Heart, Home, MessageNoti, Message, News, UserCircle } from '@components/common/icons';
+import {
+  Heart,
+  Home,
+  MessageNoti,
+  Message,
+  News,
+  UserCircle,
+} from '@components/common/icons';
 import { Theme, css } from '@emotion/react';
 import { NavLink } from 'react-router-dom';
 

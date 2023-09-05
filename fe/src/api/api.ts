@@ -1,4 +1,5 @@
-export const BASE_URL = 'http://localhost:5173';
+// export const BASE_URL = 'http://localhost:5173';
+export const BASE_URL = 'http://3.35.3.250:8080';
 // export const BASE_URL =
 //   'http://ec2-52-78-56-188.ap-northeast-2.compute.amazonaws.com:8080';
 
@@ -6,16 +7,18 @@ const fetchData = async (path: string, options?: RequestInit) => {
   const response = await fetch(BASE_URL + path, options);
 
   if (!response.ok) {
-    throw new Error('Network response was not ok');
+    const errorMessage = await response.text();
+
+    throw new Error(errorMessage);
   }
 
   if (response.headers.get('content-type') === 'application/json') {
-    const data = response.json();
+    const data = await response.json();
 
     return data;
   }
 
-  throw new Error('Content type is not json');
+  // throw new Error('Content type is not json');
 };
 
 export const getMyLocations = () => {
@@ -64,4 +67,40 @@ export const getCategories = () => {
   // TODO const accesToken = null;
 
   return fetchData('/api/categories');
+};
+
+// export const getProducts = ({ locationId, categoryId, next, size }) => {
+//   // /api/products?locationId=1&categoryId=3&next=11&size=10
+
+//   // TODO 액세스 토큰을 헤더에 담아서 보내야 함
+//   // TODO const accesToken = null;
+
+//   // TODO  if (!accesToken) return 역삼1동의 상품들을 가져옴
+//   const queryParams = new URLSearchParams({
+//     locationId,
+//     categoryId,
+//     next,
+//     size,
+//   }).toString();
+//   return fetchData(`/api/products?nextId=${queryParams}`);
+// };
+
+export const getProducts = ({
+  locationId,
+  categoryId,
+  size,
+  next,
+}: FetchProductsParams) => {
+  // /api/products?locationId=1&categoryId=3&next=11&size=10
+  const query = new URLSearchParams({
+    locationId: String(locationId),
+    categoryId: String(categoryId),
+    size: String(size),
+  });
+  console.log(query, '쿼리확인중');
+  if (next !== undefined) {
+    query.append('next', String(next));
+  }
+  console.log(query, '쿼리확인중');
+  return fetchData(`/api/products?${query.toString()}`);
 };

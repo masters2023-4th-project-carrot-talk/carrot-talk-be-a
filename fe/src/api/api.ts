@@ -1,5 +1,5 @@
 // export const BASE_URL = 'http://localhost:5173';
-export const BASE_URL = 'http://3.35.3.250:8080';
+export const BASE_URL = 'http://43.201.101.2:8080';
 // export const BASE_URL =
 //   'http://ec2-52-78-56-188.ap-northeast-2.compute.amazonaws.com:8080';
 
@@ -8,7 +8,9 @@ const fetchData = async (
   isReady?: boolean,
   options?: RequestInit,
 ) => {
-  const BASE_URL = isReady ? 'http://3.35.3.250:8080' : 'http://localhost:5173';
+  const BASE_URL = isReady
+    ? 'http://43.201.101.2:8080'
+    : 'http://localhost:5173';
 
   const response = await fetch(BASE_URL + path, options);
 
@@ -102,16 +104,22 @@ export const getProducts = ({
   next,
 }: FetchProductsParams) => {
   // /api/products?locationId=1&categoryId=3&next=11&size=10
-  const query = new URLSearchParams({
-    locationId: String(locationId),
-    categoryId: String(categoryId),
-    size: String(size),
-  });
-  console.log(query, '쿼리확인중');
-  if (next !== undefined) {
+  const query = new URLSearchParams();
+
+  if (locationId !== undefined && locationId !== null) {
+    query.append('locationId', String(locationId));
+  }
+  if (categoryId !== undefined && categoryId !== null) {
+    query.append('categoryId', String(categoryId));
+  }
+  if (size !== undefined && size !== null) {
+    query.append('size', String(size));
+  }
+  if (next !== undefined && next !== null) {
     query.append('next', String(next));
   }
-  console.log(query, '쿼리확인중');
 
-  return fetchData(`/api/products?${query.toString()}`, true);
+  console.log(query.toString(), '쿼리확인중');
+
+  return fetchData(`/api/products?${query.toString()}`, false);
 };

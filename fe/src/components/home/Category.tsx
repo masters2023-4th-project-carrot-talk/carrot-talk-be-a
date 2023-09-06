@@ -11,12 +11,14 @@ type Props = {
   categories?: CategoryType[];
   showCategory: boolean;
   onCloseCategory: () => void;
+  onSelectCategory: (id: number) => void;
 };
 
 export const Category: React.FC<Props> = ({
   categories,
   showCategory,
   onCloseCategory,
+  onSelectCategory,
 }) => {
   // TODO 메인에서 미리 데이터가 받아와져 있어야함
   const { shouldRender, handleTransitionEnd, animationTrigger } =
@@ -45,7 +47,10 @@ export const Category: React.FC<Props> = ({
                   key={category.id}
                   icon={category.imageUrl}
                   label={category.name}
-                  onSelectCategory={() => {}}
+                  onSelectCategory={() => {
+                    onSelectCategory(category.id);
+                    onCloseCategory();
+                  }}
                 />
               ))}
           </div>

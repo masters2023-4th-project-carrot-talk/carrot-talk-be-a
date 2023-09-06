@@ -21,6 +21,7 @@ import { usePopupStore } from '@/store/popupStore';
 import { Category } from '@/components/home/Category';
 import { useCategories } from '@/hooks/category';
 import { useProducts } from '@/hooks/products';
+import { SkeletonListItem } from '@/components/common/skeleton/listItem';
 
 // TODO 페이지가 로드됐을때, 내동네 api 호출
 // TODO 모달에서 동네를 추가하거나 삭제하면, 영향을 받아 locations가 수정돼야함
@@ -38,8 +39,9 @@ export const Home: React.FC = () => {
 
   // const { products, isFetchingNextPage, hasNextPage, fetchNextPage } =
   //   useProducts(selectedLocationId, 3);
-  const { products, fetchNextPage, hasNextPage, status, isFetchingNextPage } =
-    useProducts(1); // TODO locationId도 null가능이지만 무조건 역삼1동이 됨 locations로 받아온 것중  categoryId는 null 가능, 있을때 넣어줘야함
+  // const { products, fetchNextPage, hasNextPage, status, isFetchingNextPage } =
+  //   useProducts(selectedLocationId, selectedCategoryId);
+  // TODO locationId도 null가능이지만 무조건 역삼1동이 됨 locations로 받아온 것중  categoryId는 null 가능, 있을때 넣어줘야함
 
   const observeTarget = useRef<HTMLDivElement | null>(null);
 
@@ -108,6 +110,11 @@ export const Home: React.FC = () => {
     setShowCategory(false);
   };
 
+  const onSelectCategory = (id: number) => {
+    //TODO : 카테고리 선택
+    setSelectedCategoryId(id);
+  };
+
   const onFilterProducts = (id: number) => {
     //TODO 필터링만 수행
     setSelectedLocationId(id);
@@ -158,12 +165,13 @@ export const Home: React.FC = () => {
               <Plus />
             </Button>
             <ListBox>
-              {products?.map((product) => (
-                <ListItem
-                  key={product.id}
-                  product={product}
-                  onOpenDetail={() => onOpenDetail(product.id)}
-                />
+              {mock.products?.map((product) => (
+                // <ListItem
+                //   key={product.id}
+                //   product={product}
+                //   onOpenDetail={() => onOpenDetail(product.id)}
+                // />
+                <SkeletonListItem />
               ))}
             </ListBox>
             <LocationModal />
@@ -177,6 +185,7 @@ export const Home: React.FC = () => {
         categories={categories}
         showCategory={showCategory}
         onCloseCategory={onCloseCategory}
+        onSelectCategory={onSelectCategory}
       />
     </>
   );
@@ -194,6 +203,7 @@ const pageStyle = (theme: Theme) => {
       position: absolute;
       bottom: 88px;
       right: 24px;
+      z-index: 1;
       stroke: ${theme.color.accent.text};
     }
   `;
@@ -204,6 +214,7 @@ const obseverStyle = css`
   height: 1px;
   border: 200px solid green;
 `;
+
 const mock = {
   products: [
     {

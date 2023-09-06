@@ -49,8 +49,8 @@ type ProductsDataFromServer = {
 };
 
 type FetchProductsParams = {
-  locationId?: number;
-  categoryId?: number;
-  next?: number;
-  size?: number;
+  locationId?: number | null;
+  categoryId?: number | null;
+  next?: number | null;
+  size?: number | null;
 };

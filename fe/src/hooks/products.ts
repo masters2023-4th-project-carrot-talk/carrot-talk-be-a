@@ -4,10 +4,12 @@ import { useMemo } from 'react';
 import { useInfiniteQuery } from 'react-query';
 
 export const useProducts = (
-  locationId?: number,
-  categoryId?: number,
+  locationId: number | null,
+  categoryId: number | null,
   size = 10,
 ) => {
+  console.log(locationId, categoryId, size, 'useProducts');
+
   const fetchProducts = ({ pageParam = 11 }: { pageParam?: number }) => {
     return getProducts({ locationId, categoryId, next: pageParam, size });
   };

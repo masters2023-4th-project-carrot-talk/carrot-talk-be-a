@@ -1,5 +1,6 @@
 package com.example.carrot.user_location.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,9 +12,11 @@ import com.example.carrot.global.exception.StatusCode;
 import com.example.carrot.location.dto.request.MainLocationRequestDto;
 import com.example.carrot.location.dto.response.MainLocationResponseDto;
 import com.example.carrot.location.entity.Location;
+import com.example.carrot.location.repository.LocationRepository;
 import com.example.carrot.location.service.LocationService;
 import com.example.carrot.user.entity.User;
 import com.example.carrot.user.repository.UserRepository;
+import com.example.carrot.user_location.dto.response.ReadUserLocationResponseDto;
 import com.example.carrot.user_location.entity.UserLocation;
 import com.example.carrot.user_location.repository.UserLocationRepository;
 
@@ -27,6 +30,7 @@ public class UserLocationService {
 
 	private final UserLocationRepository userLocationRepository;
 	private final LocationService locationService;
+	private final LocationRepository locationRepository;
 	private final UserRepository userRepository;
 
 	@Transactional
@@ -71,6 +75,27 @@ public class UserLocationService {
 			throw new CustomException(StatusCode.NOT_MAIN_LOCATION);
 		}
 		return userLocation.getLocation();
+	}
+
+	public List<ReadUserLocationResponseDto> getUserLocation(Long userId) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_USER));
+		List<UserLocation> findUserLocations = userLocationRepository.findAllByUser(user);
+
+		List<ReadUserLocationResponseDto> readUserLocationResponseDtos = new ArrayList<>();
+		for (UserLocation userLocation : findUserLocations) {
+			Location location = locationRepository.findByLocationId(userLocation.findLocationId())
+				.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_LOCATION));
+
+			readUserLocationResponseDtos.add(
+				ReadUserLocationResponseDto.of(
+					location.getLocationId(),
+					location.getName(),
+					userLocation.isMain())
+			);
+		}
+
+		return readUserLocationResponseDtos;
 	}
 
 }

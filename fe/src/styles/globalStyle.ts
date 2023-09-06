@@ -3,7 +3,6 @@ import { css, Theme } from '@emotion/react';
 export const globalStyle = (theme: Theme) => css`
   #root {
     position: relative;
-    overflow: hidden;
   }
 
   body {

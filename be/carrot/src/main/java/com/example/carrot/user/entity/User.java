@@ -11,8 +11,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.carrot.global.common.BaseAllTimeEntity;
+import com.example.carrot.global.exception.CustomException;
+import com.example.carrot.global.exception.StatusCode;
 import com.example.carrot.global.jwt.Jwt;
 import com.example.carrot.like.entity.Like;
+import com.example.carrot.location.entity.Location;
 import com.example.carrot.product.entity.Product;
 import com.example.carrot.user_location.entity.UserLocation;
 
@@ -61,5 +64,29 @@ public class User extends BaseAllTimeEntity {
 
 	public void updateRefreshToken(Jwt jwt) {
 		this.refreshToken = jwt.getRefreshToken();
+	}
+
+	public UserLocation deleteUserLocation(Location location) {
+		final int ONE = 1;
+
+		UserLocation deletedUserLocation = userLocations.stream()
+			.filter(userLocation -> userLocation.isSame(location))
+			.findFirst()
+			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_LOCATION));
+
+		userLocations.remove(deletedUserLocation);
+
+		if (userLocations.size() == ONE) {
+			userLocations.get(0).changeMain(true);
+		}
+
+		return deletedUserLocation;
+	}
+
+	public UserLocation findMainLocation() {
+		return userLocations.stream()
+			.filter(UserLocation::isMain)
+			.findFirst()
+			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_MAIN_LOCATION));
 	}
 }

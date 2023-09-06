@@ -16,6 +16,7 @@ import com.example.carrot.global.exception.StatusCode;
 import com.example.carrot.global.jwt.Jwt;
 import com.example.carrot.global.jwt.JwtProvider;
 import com.example.carrot.location.entity.Location;
+import com.example.carrot.location.repository.LocationRepository;
 import com.example.carrot.location.service.LocationService;
 import com.example.carrot.user.dto.request.LogoutRequestDto;
 import com.example.carrot.user.dto.request.ReissueRequestDto;
@@ -23,10 +24,12 @@ import com.example.carrot.user.dto.request.SignUpRequestDto;
 import com.example.carrot.user.dto.response.LoginUserResponseDto;
 import com.example.carrot.user.dto.response.OauthTokenResponseDto;
 import com.example.carrot.user.dto.response.ReissueResponseDto;
+import com.example.carrot.user.dto.response.UserLocationDeleteResponseDto;
 import com.example.carrot.user.dto.response.UserResponseDto;
 import com.example.carrot.user.entity.User;
 import com.example.carrot.user.repository.UserRepository;
 import com.example.carrot.user_location.entity.UserLocation;
+import com.example.carrot.user_location.repository.UserLocationRepository;
 import com.example.carrot.user_location.service.UserLocationService;
 
 import lombok.RequiredArgsConstructor;
@@ -52,6 +55,8 @@ public class UserService {
 
 	private final LocationService locationService;
 	private final UserLocationService userLocationService;
+	private final LocationRepository locationRepository;
+	private final UserLocationRepository userLocationRepository;
 	private final UserRepository userRepository;
 	private final JwtProvider jwtProvider;
 
@@ -152,5 +157,29 @@ public class UserService {
 	@Transactional
 	public void kakaoLogout(LogoutRequestDto logoutRequestDto, Long userId) {
 		userRepository.updateRefreshTokenByUserIdAndRefreshToken(userId, logoutRequestDto.getRefreshToken());
+	}
+
+	@Transactional
+	public UserLocationDeleteResponseDto deleteUserLocation(Long locationId, Long userId) {
+		User user = userRepository.findByUserId(userId)
+			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_USER));
+		Location location = locationRepository.findByLocationId(locationId)
+			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_LOCATION));
+
+		// 등록된 동네가 하나라면 제거 불가능 -> 예외 처리
+		if (isOneLocation(user)) {
+			throw new CustomException(StatusCode.DELETE_LOCATION_EXCEPTION);
+		}
+
+		// 등록된 동네가 두개라면 제거 가능 -> 제거 후 남은 동네를 mainLocation으로 변경
+		UserLocation deletedUserLocation = user.deleteUserLocation(location);
+		userLocationRepository.delete(deletedUserLocation);
+
+		return UserLocationDeleteResponseDto.of(user.findMainLocation());
+	}
+
+	private boolean isOneLocation(User user) {
+		final int ONE = 1;
+		return user.getUserLocations().size() == ONE;
 	}
 }

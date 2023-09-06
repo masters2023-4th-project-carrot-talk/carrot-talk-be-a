@@ -26,4 +26,4 @@ const layoutStyle = (animationTrigger: boolean) => {
     transform: translateX(${animationTrigger ? '-392px' : '0px'});
   `;
 };
-//min-height: 100vh;
+

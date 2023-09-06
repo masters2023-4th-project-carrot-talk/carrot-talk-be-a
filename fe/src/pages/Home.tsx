@@ -84,6 +84,15 @@ export const Home: React.FC = () => {
       <div css={pageStyle}>
         <>
           <TopBar>
+            <RightButton>
+              <Button
+                variant="text"
+                className="button__topbar"
+                onClick={onOpenCategory}
+              >
+                <LayoutGrid />
+              </Button>
+            </RightButton>
             <LeftButton>
               <Dropdown autoClose>
                 <Button variant="text" className="button__topbar">
@@ -107,15 +116,6 @@ export const Home: React.FC = () => {
                 </MenuBox>
               </Dropdown>
             </LeftButton>
-            <RightButton>
-              <Button
-                variant="text"
-                className="button__topbar"
-                onClick={onOpenCategory}
-              >
-                <LayoutGrid />
-              </Button>
-            </RightButton>
           </TopBar>
           <Button variant="fab" size="l" className="button__add">
             <Plus />
@@ -154,6 +154,7 @@ const pageStyle = (theme: Theme) => {
     .button__topbar {
       stroke: ${theme.color.neutral.textStrong};
     }
+
     .button__add {
       position: absolute;
       bottom: 88px;

@@ -10,14 +10,12 @@ type Props = {
   categories?: CategoryType[];
   onSelectCategory: (id: number) => void;
   onCloseCategory: () => void;
-  onSelectCategory: (id: number) => void;
 };
 
 export const Category: React.FC<Props> = ({
   categories,
   onSelectCategory,
   onCloseCategory,
-  onSelectCategory,
 }) => {
   return (
     <>

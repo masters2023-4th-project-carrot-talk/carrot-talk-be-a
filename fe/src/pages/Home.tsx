@@ -39,7 +39,7 @@ export const Home: React.FC = () => {
 
   const { setShouldSlideLeft } = useLayoutStore();
 
-   // const { products, isFetchingNextPage, hasNextPage, fetchNextPage } =
+  // const { products, isFetchingNextPage, hasNextPage, fetchNextPage } =
   //   useProducts(selectedLocationId, 3);
   const { products, fetchNextPage, hasNextPage, status, isFetchingNextPage } =
     useProducts(selectedLocationId, selectedCategoryId);
@@ -112,16 +112,6 @@ export const Home: React.FC = () => {
     setShouldSlideLeft();
   };
 
-  const onSelectCategory = (id: number) => {
-    //TODO : 카테고리 선택
-    setSelectedCategoryId(id);
-  };
-
-  const onSelectCategory = (id: number) => {
-    //TODO : 카테고리 선택
-    setSelectedCategoryId(id);
-  };
-
   const onFilterProducts = (id: number) => {
     //TODO 필터링만 수행
     setSelectedLocationId(id);
@@ -135,8 +125,7 @@ export const Home: React.FC = () => {
   return (
     <>
       <div css={pageStyle}>
-      
-          <>
+        <>
           <TopBar>
             <RightButton>
               <Button
@@ -160,54 +149,53 @@ export const Home: React.FC = () => {
                         key={location.id}
                         state={
                           selectedLocationId === location.id
-                          ? 'selected'
-                          : 'default'
-                          }
-                          onClick={() => onFilterProducts(location.id)}
-                        >
-                          {location.name}
-                        </MenuItem>
-                      ))}
-                    <MenuItem onClick={onOpenModal}>내 동네 설정하기</MenuItem>
-                  </MenuBox>
-                </Dropdown>
-              </LeftButton>
-              <RightButton>
-                <Button
-                  variant="text"
-                  className="button__topbar"
-                  onClick={onOpenCategory}
-                >
-                  <LayoutGrid />
-                </Button>
-              </RightButton>
-            </TopBar>
-            <Button variant="fab" size="l" className="button__add">
-              <Plus />
-            </Button>
-            <ListBox>
-              {products?.map((product) => (
-                <ListItem
-                  key={product.id}
-                  product={product}
-                  onOpenDetail={() => onOpenDetail(product.id)}
-                />
-              ))}
-              {(status === 'loading' || isFetchingNextPage) && (
-                <SkeletonListItem />
-              )}
-            </ListBox>
-            <LocationModal />
-            <div ref={observeTarget} css={obseverStyle}></div>
-            {/* 관찰대상, entries 배열에는 이 엘리먼트에 대한 교차 정보가 포함됨  */}
-          </>
-        )}
+                            ? 'selected'
+                            : 'default'
+                        }
+                        onClick={() => onFilterProducts(location.id)}
+                      >
+                        {location.name}
+                      </MenuItem>
+                    ))}
+                  <MenuItem onClick={onOpenModal}>내 동네 설정하기</MenuItem>
+                </MenuBox>
+              </Dropdown>
+            </LeftButton>
+            <RightButton>
+              <Button
+                variant="text"
+                className="button__topbar"
+                onClick={onOpenCategory}
+              >
+                <LayoutGrid />
+              </Button>
+            </RightButton>
+          </TopBar>
+          <Button variant="fab" size="l" className="button__add">
+            <Plus />
+          </Button>
+          <ListBox>
+            {products?.map((product) => (
+              <ListItem
+                key={product.id}
+                product={product}
+                onOpenDetail={() => onOpenDetail(product.id)}
+              />
+            ))}
+            {(status === 'loading' || isFetchingNextPage) && (
+              <SkeletonListItem />
+            )}
+          </ListBox>
+          <LocationModal />
+          <div ref={observeTarget} css={obseverStyle}></div>
+          {/* 관찰대상, entries 배열에는 이 엘리먼트에 대한 교차 정보가 포함됨  */}
+        </>
       </div>
 
       <Category
-       categories={categories}
-       onCloseCategory={onCloseCategory}
-       onSelectCategory={onSelectCategory}
+        categories={categories}
+        onCloseCategory={onCloseCategory}
+        onSelectCategory={onSelectCategory}
       />
     </>
   );

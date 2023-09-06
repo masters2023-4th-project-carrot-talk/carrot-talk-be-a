@@ -1,6 +1,5 @@
 package com.example.carrot.user.controller;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,13 +34,16 @@ public class UserController {
 	/**
 	 * OAuth 로그인 API
 	 */
-	@GetMapping("/users/login")
+	@PostMapping("/users/login")
 	public ApiResponse<UserResponseDto> kakaoLogin(@RequestParam String code) {
 		UserResponseDto loginResponseDto = userService.kakaoLogin(code);
 		return ApiResponse.success(loginResponseDto);
 	}
 
-	@GetMapping("/users")
+	/**
+	 * 닉네임 중복 확인 API
+	 */
+	@GetMapping("/users/nickname")
 	public ApiResponse<?> checkNickname(@RequestParam String nickname) {
 		userService.checkNickNameDuplicate(nickname);
 		return ApiResponse.success();
@@ -52,12 +54,9 @@ public class UserController {
 	 */
 	@PostMapping("/users/signup")
 	public ApiResponse<UserResponseDto> kakaoSignUp(@RequestBody SignUpRequestDto signUpRequestDto,
-		HttpServletRequest request) {
-		String socialId = String.valueOf(request.getAttribute("socialId"));
-		String imgUrl = String.valueOf(request.getAttribute("imgUrl"));
+		@RequestAttribute String socialId,
+		@RequestAttribute String imgUrl) {
 
-		log.info("socialId : " + socialId);
-		log.info("imgUrl : " + imgUrl);
 		UserResponseDto userResponseDto = userService.kakaoSignUp(signUpRequestDto, socialId, imgUrl);
 		return ApiResponse.success(userResponseDto);
 	}
@@ -75,10 +74,7 @@ public class UserController {
 	 * 로그아웃 API
 	 */
 	@PostMapping("/users/logout")
-	public ApiResponse<?> kakaoLogout(@RequestBody LogoutRequestDto logoutRequestDto,
-		HttpServletRequest request) {
-		Long userId = Long.parseLong(String.valueOf(request.getAttribute("userId")));
-
+	public ApiResponse<?> kakaoLogout(@RequestBody LogoutRequestDto logoutRequestDto, @RequestAttribute Long userId) {
 		userService.kakaoLogout(logoutRequestDto, userId);
 
 		return ApiResponse.success();

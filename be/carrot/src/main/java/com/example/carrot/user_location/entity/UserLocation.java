@@ -58,6 +58,11 @@ public class UserLocation extends BaseCreatedTimeEntity {
 		return userLocation;
 	}
 
+	public UserLocation updateMainLocation(boolean isMain) {
+		this.isMain = isMain;
+    return this;
+  }
+
 	public boolean isSame(Location location) {
 		return this.location == location;
 	}

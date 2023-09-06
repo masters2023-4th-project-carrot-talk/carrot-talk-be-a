@@ -43,7 +43,7 @@ public class UserLocationService {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_USER));
 
-		List<UserLocation> findUserLocations = userLocationRepository.findAllByUser(user);
+		List<UserLocation> findUserLocations = user.getUserLocations();
 
 		if (findUserLocations.size() == SINGLE_LOCATION_LIMIT) {
 			Location location = locationService.findLocation(mainLocationRequestDto.getLocationId());
@@ -62,11 +62,9 @@ public class UserLocationService {
 		UserLocation updatedMainLocation = null;
 		for (UserLocation findUserLocation : findUserLocations) {
 			if (findUserLocation.getLocation().getLocationId() == mainLocationRequestDto.getLocationId()) {
-				if (!findUserLocation.isMain()) {
-					updatedMainLocation = findUserLocation.updateMainLocation();
-				}
+				updatedMainLocation = findUserLocation.updateMainLocation(true);
 			} else {
-				findUserLocation.updateMainLocation();
+				findUserLocation.updateMainLocation(false);
 			}
 		}
 		return updatedMainLocation == null ? Optional.empty() : Optional.of(updatedMainLocation.getLocation());

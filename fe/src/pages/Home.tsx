@@ -20,6 +20,7 @@ import { useMyLocations } from '@/hooks/location';
 import { usePopupStore } from '@/store/popupStore';
 import { Category } from '@/components/home/Category';
 import { useCategories } from '@/hooks/category';
+import { useLayoutStore } from '@/store/layoutStore';
 import { useProducts } from '@/hooks/products';
 import { SkeletonListItem } from '@/components/common/skeleton/listItem';
 
@@ -35,9 +36,10 @@ export const Home: React.FC = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     null,
   );
-  const [showCategory, setShowCategory] = useState(false);
 
-  // const { products, isFetchingNextPage, hasNextPage, fetchNextPage } =
+  const { setShouldSlideLeft } = useLayoutStore();
+
+   // const { products, isFetchingNextPage, hasNextPage, fetchNextPage } =
   //   useProducts(selectedLocationId, 3);
   const { products, fetchNextPage, hasNextPage, status, isFetchingNextPage } =
     useProducts(selectedLocationId, selectedCategoryId);
@@ -102,12 +104,17 @@ export const Home: React.FC = () => {
 
   const onOpenCategory = () => {
     //TODO : 카테고리 페이지 보여주기
-    setShowCategory(true);
+    setShouldSlideLeft();
   };
 
   const onCloseCategory = () => {
     //TODO : 카테고리 페이지 닫기
-    setShowCategory(false);
+    setShouldSlideLeft();
+  };
+
+  const onSelectCategory = (id: number) => {
+    //TODO : 카테고리 선택
+    setSelectedCategoryId(id);
   };
 
   const onSelectCategory = (id: number) => {
@@ -120,27 +127,41 @@ export const Home: React.FC = () => {
     setSelectedLocationId(id);
   };
 
+  const onSelectCategory = (id: number) => {
+    //TODO 카테고리 선택
+    setSelectedCategoryId(id);
+  };
+
   return (
     <>
       <div css={pageStyle}>
-        {!showCategory && (
+      
           <>
-            <TopBar>
-              <LeftButton>
-                <Dropdown autoClose>
-                  <Button variant="text" className="button__topbar">
-                    역삼1동
-                    <ChevronDown />
-                  </Button>
-                  <MenuBox>
-                    {locations &&
-                      locations.map((location) => (
-                        <MenuItem
-                          key={location.id}
-                          state={
-                            selectedLocationId === location.id
-                              ? 'selected'
-                              : 'default'
+          <TopBar>
+            <RightButton>
+              <Button
+                variant="text"
+                className="button__topbar"
+                onClick={onOpenCategory}
+              >
+                <LayoutGrid />
+              </Button>
+            </RightButton>
+            <LeftButton>
+              <Dropdown autoClose>
+                <Button variant="text" className="button__topbar">
+                  역삼1동
+                  <ChevronDown />
+                </Button>
+                <MenuBox>
+                  {locations &&
+                    locations.map((location) => (
+                      <MenuItem
+                        key={location.id}
+                        state={
+                          selectedLocationId === location.id
+                          ? 'selected'
+                          : 'default'
                           }
                           onClick={() => onFilterProducts(location.id)}
                         >
@@ -184,10 +205,9 @@ export const Home: React.FC = () => {
       </div>
 
       <Category
-        categories={categories}
-        showCategory={showCategory}
-        onCloseCategory={onCloseCategory}
-        onSelectCategory={onSelectCategory}
+       categories={categories}
+       onCloseCategory={onCloseCategory}
+       onSelectCategory={onSelectCategory}
       />
     </>
   );
@@ -195,8 +215,13 @@ export const Home: React.FC = () => {
 
 const pageStyle = (theme: Theme) => {
   return css`
-    flex: 1;
-    border: 1px solid red;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    height: 100vh;
+
     .button__topbar {
       stroke: ${theme.color.neutral.textStrong};
     }

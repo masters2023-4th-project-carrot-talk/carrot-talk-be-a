@@ -40,10 +40,9 @@ export const AppRoutes: React.FC = () => {
 
 const globalStyle = css`
   width: 393px;
-  height: 852px;
+  height: 100vh;
   margin: auto;
-  border: 1px solid black;
-
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
   overflow-x: hidden;
   overflow-y: auto;
 

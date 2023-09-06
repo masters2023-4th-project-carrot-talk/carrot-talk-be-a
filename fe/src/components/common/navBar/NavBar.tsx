@@ -59,7 +59,7 @@ export const NavBar: React.FC = () => {
 
 const navStyle = (theme: Theme) => {
   return css`
-    position: sticky;
+    position: fixed;
     bottom: 0;
 
     box-sizing: border-box;
@@ -102,3 +102,4 @@ const navStyle = (theme: Theme) => {
     }
   `;
 };
+// position: sticky;

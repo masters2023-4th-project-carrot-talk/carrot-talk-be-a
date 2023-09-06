@@ -39,7 +39,7 @@ public class UserLocationService {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_USER));
 
-		List<UserLocation> findUserLocations = userLocationRepository.findAllByUser(user);
+		List<UserLocation> findUserLocations = user.getUserLocations();
 
 		if (findUserLocations.size() == SINGLE_LOCATION_LIMIT) {
 			Location location = locationService.findLocation(mainLocationRequestDto.getLocationId());

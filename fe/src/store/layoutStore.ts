@@ -1,14 +1,14 @@
 import { create } from 'zustand';
 
 type LayoutState = {
-  shouldMove: boolean;
-  setshouldMove: () => void;
+  shouldSlideLeft: boolean;
+  setShouldSlideLeft: () => void;
 };
 
 export const useLayoutStore = create<LayoutState>((set, get) => ({
-  shouldMove: false,
-  setshouldMove: () => {
-    const currentShouldMove = get().shouldMove;
-    set({ shouldMove: !currentShouldMove });
+  shouldSlideLeft: false,
+  setShouldSlideLeft: () => {
+    const currentState = get().shouldSlideLeft;
+    set({ shouldSlideLeft: !currentState });
   },
 }));

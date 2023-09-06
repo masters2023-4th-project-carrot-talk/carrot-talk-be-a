@@ -5,8 +5,9 @@ import { useAnimation } from '@/hooks/animation';
 import { useLayoutStore } from '@/store/layoutStore';
 
 export const Layout: React.FC = () => {
-  const { shouldMove } = useLayoutStore();
-  const { handleTransitionEnd, animationTrigger } = useAnimation(shouldMove);
+  const { shouldSlideLeft } = useLayoutStore();
+  const { handleTransitionEnd, animationTrigger } =
+    useAnimation(shouldSlideLeft);
 
   return (
     <div
@@ -26,4 +27,3 @@ const layoutStyle = (animationTrigger: boolean) => {
     transform: translateX(${animationTrigger ? '-392px' : '0px'});
   `;
 };
-

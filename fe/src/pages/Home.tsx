@@ -33,7 +33,7 @@ export const Home: React.FC = () => {
     null,
   );
 
-  const { setshouldMove } = useLayoutStore();
+  const { setShouldSlideLeft } = useLayoutStore();
   // TODO 필터링과 대표동네 설정은 별개로 처리함에 따라, 초기에는 모든 동네의 물품을 보여줌(초안)
   // TODO useQueries이용해서 로딩, 에러처리 한꺼번에?
 
@@ -61,12 +61,12 @@ export const Home: React.FC = () => {
 
   const onOpenCategory = () => {
     //TODO : 카테고리 페이지 보여주기
-    setshouldMove();
+    setShouldSlideLeft();
   };
 
   const onCloseCategory = () => {
     //TODO : 카테고리 페이지 닫기
-    setshouldMove();
+    setShouldSlideLeft();
   };
 
   const onFilterProducts = (id: number) => {

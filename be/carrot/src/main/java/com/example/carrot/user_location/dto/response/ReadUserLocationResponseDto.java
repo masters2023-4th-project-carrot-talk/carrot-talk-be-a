@@ -11,15 +11,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReadUserLocationResponseDto {
 
+	private static final Long DEFAULT_ID = 1L;
+	private static final String DEFAULT_NAME = "역삼 1동";
+
 	@JsonProperty("id")
 	private Long id;
 	@JsonProperty("name")
 	private String name;
 	@JsonProperty("isMainLocation")
 	private boolean isMainLocation;
-
-	private static final Long DEFAULT_ID = 1L;
-	private static final String DEFAULT_NAME = "역삼 1동";
 
 	public static ReadUserLocationResponseDto of(Long id, String name, boolean isMainLocation) {
 		return new ReadUserLocationResponseDto(id, name, isMainLocation);

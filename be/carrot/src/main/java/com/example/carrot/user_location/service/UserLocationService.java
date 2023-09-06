@@ -86,13 +86,13 @@ public class UserLocationService {
 
 		List<ReadUserLocationResponseDto> readUserLocationResponseDtos = new ArrayList<>();
 		for (UserLocation userLocation : findUserLocations) {
-			String name = locationRepository.findByLocationId(userLocation.findLocationId())
-				.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_LOCATION)).getName();
+			Location location = locationRepository.findByLocationId(userLocation.findLocationId())
+				.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_LOCATION));
 
 			readUserLocationResponseDtos.add(
 				ReadUserLocationResponseDto.of(
-					userLocation.getUserLocationId(),
-					name,
+					location.getLocationId(),
+					location.getName(),
 					userLocation.isMain())
 			);
 		}

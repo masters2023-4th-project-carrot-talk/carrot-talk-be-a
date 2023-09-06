@@ -39,8 +39,8 @@ export const Home: React.FC = () => {
 
   // const { products, isFetchingNextPage, hasNextPage, fetchNextPage } =
   //   useProducts(selectedLocationId, 3);
-  // const { products, fetchNextPage, hasNextPage, status, isFetchingNextPage } =
-  //   useProducts(selectedLocationId, selectedCategoryId);
+  const { products, fetchNextPage, hasNextPage, status, isFetchingNextPage } =
+    useProducts(selectedLocationId, selectedCategoryId);
   // TODO locationId도 null가능이지만 무조건 역삼1동이 됨 locations로 받아온 것중  categoryId는 null 가능, 있을때 넣어줘야함
 
   const observeTarget = useRef<HTMLDivElement | null>(null);
@@ -165,14 +165,16 @@ export const Home: React.FC = () => {
               <Plus />
             </Button>
             <ListBox>
-              {mock.products?.map((product) => (
-                // <ListItem
-                //   key={product.id}
-                //   product={product}
-                //   onOpenDetail={() => onOpenDetail(product.id)}
-                // />
-                <SkeletonListItem />
+              {products?.map((product) => (
+                <ListItem
+                  key={product.id}
+                  product={product}
+                  onOpenDetail={() => onOpenDetail(product.id)}
+                />
               ))}
+              {(status === 'loading' || isFetchingNextPage) && (
+                <SkeletonListItem />
+              )}
             </ListBox>
             <LocationModal />
             <div ref={observeTarget} css={obseverStyle}></div>

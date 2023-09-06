@@ -121,5 +121,5 @@ export const getProducts = ({
 
   console.log(query.toString(), '쿼리확인중');
 
-  return fetchData(`/api/products?${query.toString()}`, false);
+  return fetchData(`/api/products?${query.toString()}`, true);
 };

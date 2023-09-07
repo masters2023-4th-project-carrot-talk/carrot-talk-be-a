@@ -79,12 +79,4 @@ public class UserController {
 		return ApiResponse.success();
 	}
 
-	/**
-	 * 동네 삭제 API
-	 */
-	@DeleteMapping("/users/locations/{locationId}")
-	public ApiResponse<UserLocationDeleteResponseDto> deleteUserLocation(@PathVariable Long locationId,
-		@RequestAttribute Long userId) {
-		return ApiResponse.success(userService.deleteUserLocation(locationId, userId));
-	}
 }

@@ -68,13 +68,13 @@ public class AuthFilter implements Filter {
 			return;
 		}
 
-		if (!isContainToken(httpServletRequest)) {
-			log.info("isContainToken 진입");
-			sendErrorApiResponse(httpServletResponse, new MalformedJwtException(""));
-			return;
-		}
-
 		try {
+			if (!isContainToken(httpServletRequest)) {
+				request.setAttribute("userId", null);
+				chain.doFilter(request, response);
+				return;
+			}
+
 			Claims claims = jwtProvider.getClaims(getToken(httpServletRequest));
 			request.setAttribute("userId", claims.get("userId"));
 			chain.doFilter(request, response);
@@ -112,6 +112,5 @@ public class AuthFilter implements Filter {
 	private String getToken(HttpServletRequest request) {
 		String authorization = request.getHeader("Authorization");
 		return authorization.substring(7);
-
 	}
 }

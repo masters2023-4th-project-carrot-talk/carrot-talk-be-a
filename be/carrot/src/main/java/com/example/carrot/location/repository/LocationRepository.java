@@ -18,4 +18,5 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 	@Query("SELECT l FROM Location l WHERE l.name LIKE %:keyword%")
 	List<Location> findLocationsByKeyword(@Param("keyword") String keyword);
 
+	Optional<Location> findLocationByName(String name);
 }

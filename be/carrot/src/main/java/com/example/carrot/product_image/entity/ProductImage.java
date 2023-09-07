@@ -37,10 +37,17 @@ public class ProductImage extends BaseCreatedTimeEntity {
 	private Image image;
 
 	@Builder
-	public ProductImage(Long productImageId, boolean isMain, Product product, Image image) {
-		this.productImageId = productImageId;
+	public ProductImage(boolean isMain, Product product, Image image) {
 		this.isMain = isMain;
 		this.product = product;
 		this.image = image;
+	}
+
+	public static ProductImage of(Product product, Image image, boolean isMain) {
+		return ProductImage.builder()
+			.product(product)
+			.image(image)
+			.isMain(isMain)
+			.build();
 	}
 }

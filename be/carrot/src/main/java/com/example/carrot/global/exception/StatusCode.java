@@ -32,7 +32,14 @@ public enum StatusCode {
 
 	// -- [CATEGORY] -- //
 	NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "카테고리를 조회할 수 없습니다."),
-	NOT_FOUND_CATEGORIES(HttpStatus.NOT_FOUND, "카테고리 목록을 조회할 수 없습니다.");
+	NOT_FOUND_CATEGORIES(HttpStatus.NOT_FOUND, "카테고리 목록을 조회할 수 없습니다."),
+
+	// -- [PRODUCT] -- //
+	NOT_FOUND_PRODUCT(HttpStatus.NOT_FOUND, "해당하는 상품을 찾을 수 없습니다."),
+	NO_EDIT_PERMISSION(HttpStatus.FORBIDDEN, "수정할 권한이 없습니다."),
+
+	// -- [IMAGE] -- //
+	NOT_FOUND_IMAGE(HttpStatus.NOT_FOUND, "해당하는 이미지가 없습니다.");
 
 	private HttpStatus status;
 	private String message;

@@ -67,9 +67,8 @@ public class Product extends BaseAllTimeEntity {
 	private List<ProductImage> productImages = new ArrayList<>();
 
 	@Builder
-	public Product(Long productId, String name, Long price, String content, Long hits, ProductStatus status, User user,
+	public Product(String name, Long price, String content, Long hits, ProductStatus status, User user,
 		Category category, Location location) {
-		this.productId = productId;
 		this.name = name;
 		this.price = price;
 		this.content = content;

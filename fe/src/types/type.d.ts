@@ -30,4 +30,34 @@ type CategoriesDataFromServer = {
 type CategoryType = {
   id: number;
   name: string;
+  imageUrl: string;
 };
+
+type ProductType = {
+  id: number;
+  sellerId: number;
+  name: string;
+  location: string;
+  imageUrl: string;
+  createdAt: string;
+  price: number;
+  status: string;
+  likeCount: number;
+  chatCount: number;
+};
+
+type ProductsDataFromServer = {
+  success: boolean;
+  data: {
+    products: ProductType[];
+    nextId: number;
+  };
+};
+
+type FetchProductsParams = {
+  locationId?: number | null;
+  categoryId?: number | null;
+  next?: number | null;
+  size?: number | null;
+};
+

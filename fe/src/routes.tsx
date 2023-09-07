@@ -76,3 +76,4 @@ const globalStyle = css`
     display: none;
   }
 `;
+// height: 852px;

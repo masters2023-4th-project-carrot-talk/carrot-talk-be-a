@@ -15,7 +15,7 @@ export const useMyLocations = () => {
     error,
   } = useQuery<LocationType[]>(QUERY_KEY.locations, getMyLocations);
 
-  return { locations, status, error };
+  return { locations, status, error }; // TOOD마찬가지로 data.data로 꺼내야함
 };
 
 export const useLocationWithQuery = (query: string) => {

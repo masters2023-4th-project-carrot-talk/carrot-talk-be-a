@@ -10,6 +10,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.PatternMatchUtils;
@@ -29,11 +30,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class AuthFilter implements Filter {
 
-	private final String[] whiteListUris = new String[] {"/", "/api/users/login", "/api/users/signup",
-		"/oauth/redirect", "/api/users/nickname", "/api/users/reissue-access-token", "/api/locations", "/api/products"};
+	@Value("${filter.allowed-uris}")
+	private String[] whiteListUris;
 
 	private final ObjectMapper objectMapper;
-
 	private final JwtProvider jwtProvider;
 
 	@Override
@@ -59,7 +59,7 @@ public class AuthFilter implements Filter {
 					request.setAttribute("imgUrl", claims.get("imgUrl"));
 
 				} catch (RuntimeException e) {
-					log.debug(e.getClass().getName());
+					log.info(e.getClass().getName());
 					sendErrorApiResponse(httpServletResponse, e);
 				}
 			}
@@ -75,6 +75,7 @@ public class AuthFilter implements Filter {
 			}
 
 			Claims claims = jwtProvider.getClaims(getToken(httpServletRequest));
+
 			request.setAttribute("userId", claims.get("userId"));
 			chain.doFilter(request, response);
 		} catch (RuntimeException e) {

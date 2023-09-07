@@ -25,7 +25,6 @@ type LocationWithQueryDataFromServer = {
 type LocationWithQueryType = {
   id: number;
   name: string;
-  isMainLocation?: boolean;
 };
 
 type CategoriesDataFromServer = {

@@ -1,12 +1,7 @@
 import { BASE_URL } from '@/constants/path';
 import { getAccessToken, getRefreshToken } from '@/utils/localStorage';
 
-const fetchData = async (
-  path: string,
-  options?: RequestInit,
-) => {
-
-
+const fetchData = async (path: string, options?: RequestInit) => {
   const response = await fetch(BASE_URL + path, options);
 
   if (!response.ok) {
@@ -17,7 +12,7 @@ const fetchData = async (
 
   if (response.headers.get('content-type') === 'application/json') {
     const data = await response.json();
-  
+
     return data;
   }
 };
@@ -32,7 +27,7 @@ export const getMyLocations = () => {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${getAccessToken()}`,
-    }
+    },
   });
 };
 
@@ -42,6 +37,9 @@ export const deleteLocation = (id: number) => {
 
   return fetchData(`/api/users/locations/${id}`, {
     method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
   });
 };
 
@@ -53,6 +51,7 @@ export const patchMainLocation = (id: number) => {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAccessToken()}`,
     },
     body: JSON.stringify({
       locationId: id,

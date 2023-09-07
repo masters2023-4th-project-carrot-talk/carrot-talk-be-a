@@ -1,4 +1,4 @@
-import { getProducts } from '@/api/api';
+import { getProducts } from '@api/api';
 import { QUERY_KEY } from '@/constants/queryKey';
 import { useMemo } from 'react';
 import { useInfiniteQuery } from 'react-query';

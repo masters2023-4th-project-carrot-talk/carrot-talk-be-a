@@ -36,15 +36,15 @@ export const Auth: React.FC = () => {
       <div css={(theme) => pageStyle(theme)}>
         {isLogin ? (
           <>
-            <div className="auth__info">
-              <div className="user__profile">
+            <div className="auth-info">
+              <div className="user-profile">
                 {userInfo.imageUrl ? (
                   <img src={userInfo.imageUrl} alt="프로필 사진" />
                 ) : (
                   <UserCircle />
                 )}
               </div>
-              <div className="user__name">{userInfo.nickname}</div>
+              <div className="user-name">{userInfo.nickname}</div>
             </div>
             <div className="button__wrapper">
               <Button
@@ -58,6 +58,15 @@ export const Auth: React.FC = () => {
           </>
         ) : (
           <>
+            <div className="service-info">
+              <div className="service-info__title">꿀 찾고 계신가요?</div>
+              <h2 className="service-info__name">BEE 마켓</h2>
+              <div className="service-info__description">
+                여기저기 숨어있는 꿀 같은 거래,<br />
+                BEE 마켓에서 찾아드릴게요!
+              </div>
+            </div>
+            <Beez />
             <div className="button__wrapper">
               <Button variant="text" onClick={onClickLogin}>
                 <img src={kakaoLogin} alt="카카오 소셜 로그인" />
@@ -76,21 +85,39 @@ const pageStyle = (theme: Theme) => {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     font: ${theme.font.displayStrong16};
     color: ${theme.color.neutral.textStrong};
     gap: 24px;
 
-    .auth__info {
+    .service-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+
+      &__name {
+        font: ${theme.font.displayStrong32};
+        color: #FFD43B;
+      }
+
+      &__description {
+        text-align: center;
+        font: ${theme.font.displayDefault12};
+        color: ${theme.color.neutral.text};
+      }
+    }
+
+    .auth-info {
       width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      margin-top: 180px;
       gap: 16px;
     }
 
-    .user__profile {
+    .user-profile {
       display: flex;
       justify-content: center;
 
@@ -110,7 +137,7 @@ const pageStyle = (theme: Theme) => {
       }
     }
 
-    .user__name {
+    .user-name {
       display: flex;
       justify-content: center;
       align-items: center;

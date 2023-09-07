@@ -1,6 +1,5 @@
-export const BASE_URL = 'http://localhost:5173';
-// export const BASE_URL =
-//   'http://ec2-52-78-56-188.ap-northeast-2.compute.amazonaws.com:8080';
+import { BASE_URL } from '@/constants/path';
+import { getAccessToken, getRefreshToken } from '@/utils/localStorage';
 
 const fetchData = async (path: string, options?: RequestInit) => {
   const response = await fetch(BASE_URL + path, options);
@@ -9,13 +8,13 @@ const fetchData = async (path: string, options?: RequestInit) => {
     throw new Error('Network response was not ok');
   }
 
-  if (response.headers.get('content-type') === 'application/json') {
-    const data = response.json();
-
-    return data;
+  if (response.headers.get('content-type') !== 'application/json') {
+    throw new Error('Content type is not json');
   }
 
-  throw new Error('Content type is not json');
+  const data = await response.json();
+
+  return data;
 };
 
 export const getMyLocations = () => {
@@ -47,6 +46,67 @@ export const patchMainLocation = (id: number) => {
     },
     body: JSON.stringify({
       locationId: id,
+    }),
+  });
+};
+
+export const checkNickname = async (nickname: string) => {
+  return fetchData(`/api/users/nickname?nickname=${nickname}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
+export const signup = async (signupInfo: {
+  nickname: string;
+  mainLocationId: number;
+  subLocationId?: number;
+}) => {
+  return fetchData('/api/users/signup', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+    body: JSON.stringify(signupInfo),
+  });
+};
+
+export const login = async (code: string) => {
+  return fetchData(`/api/users/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      code: code,
+    }),
+  });
+};
+
+export const logout = async () => {
+  return fetchData(`/api/users/logout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+    body: JSON.stringify({
+      refreshToken: getRefreshToken(),
+    }),
+  });
+};
+
+export const refreshToken = async () => {
+  return fetchData(`/api/users/reissue-access-token`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      refreshToken: getRefreshToken(),
     }),
   });
 };

@@ -6,7 +6,7 @@ import {
 } from '@/api/api';
 import { QUERY_KEY } from '@/constants/queryKey';
 import { useLocationStore } from '@/store/locationStore';
-import { useQueryClient, useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export const useMyLocations = () => {
   const {

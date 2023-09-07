@@ -35,6 +35,7 @@ declare module '@emotion/react' {
       blur: string;
     };
     font: {
+      displayStrong32: string;
       displayStrong20: string;
       displayStrong16: string;
       displayDefault16: string;

@@ -33,11 +33,6 @@ public class UserLocationController {
 
 	@GetMapping("/users/locations")
 	public ApiResponse<List<ReadUserLocationResponseDto>> getUserLocation(@RequestAttribute(required = false) Long userId) {
-		if (userId == null) {
-			return ApiResponse.success(ReadUserLocationResponseDto.defaultLocation());
-		}
-
-		// TODO: 로그인한 상태니 자신의 등록된 동네 불러오도록
 		return ApiResponse.success(userLocationService.getUserLocation(userId));
 	}
 

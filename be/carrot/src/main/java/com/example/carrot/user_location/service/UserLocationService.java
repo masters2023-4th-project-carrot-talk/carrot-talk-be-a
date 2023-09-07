@@ -79,6 +79,13 @@ public class UserLocationService {
 	}
 
 	public List<ReadUserLocationResponseDto> getUserLocation(Long userId) {
+		if (userId == null) {
+			Long id = locationRepository.findLocationByName(ReadUserLocationResponseDto.DEFAULT_NAME)
+				.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_LOCATION))
+				.getLocationId();
+			return ReadUserLocationResponseDto.defaultLocation(id);
+		}
+
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_USER));
 		List<UserLocation> findUserLocations = userLocationRepository.findAllByUser(user);

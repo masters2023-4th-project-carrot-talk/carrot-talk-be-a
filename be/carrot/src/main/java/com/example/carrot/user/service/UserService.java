@@ -16,8 +16,8 @@ import com.example.carrot.global.exception.StatusCode;
 import com.example.carrot.global.jwt.Jwt;
 import com.example.carrot.global.jwt.JwtProvider;
 import com.example.carrot.location.entity.Location;
-import com.example.carrot.location.repository.LocationRepository;
 import com.example.carrot.location.service.LocationService;
+import com.example.carrot.user.dto.request.LoginRequestDto;
 import com.example.carrot.user.dto.request.LogoutRequestDto;
 import com.example.carrot.user.dto.request.ReissueRequestDto;
 import com.example.carrot.user.dto.request.SignUpRequestDto;
@@ -28,7 +28,6 @@ import com.example.carrot.user.dto.response.UserResponseDto;
 import com.example.carrot.user.entity.User;
 import com.example.carrot.user.repository.UserRepository;
 import com.example.carrot.user_location.entity.UserLocation;
-import com.example.carrot.user_location.repository.UserLocationRepository;
 import com.example.carrot.user_location.service.UserLocationService;
 
 import lombok.RequiredArgsConstructor;
@@ -42,8 +41,6 @@ public class UserService {
 
 	private final LocationService locationService;
 	private final UserLocationService userLocationService;
-	private final LocationRepository locationRepository;
-	private final UserLocationRepository userLocationRepository;
 	private final UserRepository userRepository;
 	private final JwtProvider jwtProvider;
 	@Value("${oauth.kakao.client_id}")
@@ -56,8 +53,8 @@ public class UserService {
 	private String redirectUri;
 
 	@Transactional
-	public UserResponseDto kakaoLogin(String code) {
-		OauthTokenResponseDto tokenResponse = getToken(code);
+	public UserResponseDto kakaoLogin(LoginRequestDto loginRequestDto) {
+		OauthTokenResponseDto tokenResponse = getToken(loginRequestDto.getCode());
 
 		Map<String, Object> userInfo = findUserInfo(tokenResponse.getAccessToken());
 

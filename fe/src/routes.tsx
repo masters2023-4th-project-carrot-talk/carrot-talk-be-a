@@ -1,6 +1,8 @@
 import { css } from '@emotion/react';
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { PATH } from './constants/path';
+import { useTokenRefresh } from './hooks/hook';
+import { useAuth } from './hooks/useAuth';
 import { Layout } from './layout/Layout';
 import { Auth } from './pages/Auth';
 import { Chat } from './pages/Chat';
@@ -10,9 +12,14 @@ import { NotFound } from './pages/NotFound';
 import { OauthLoading } from './pages/OauthLoading';
 import { Sales } from './pages/Sales';
 import { Signup } from './pages/Signup';
-import { getTokens, getUserInfo } from './utils/localStorage';
+import { setAccessToken } from './utils/localStorage';
 
 export const AppRoutes: React.FC = () => {
+  const { data: tokenRefreshResult } = useTokenRefresh();
+
+  if (tokenRefreshResult) {
+    setAccessToken(tokenRefreshResult);
+  }
 
   return (
     <div css={globalStyle} id="app-layout">
@@ -28,7 +35,6 @@ export const AppRoutes: React.FC = () => {
             <Route path={PATH.interests} element={<Interests />} />
             <Route path={PATH.chat} element={<Chat />} />
           </Route>
-
           <Route path={PATH.notFound} element={<NotFound />} />
           <Route>
             <Route path={PATH.home} element={<Home />} />
@@ -45,17 +51,13 @@ export const AppRoutes: React.FC = () => {
 };
 
 const PrivateRoute: React.FC = () => {
-  const userInfo = getUserInfo();
-  const tokens = getTokens();
-  const isLogin = userInfo !== null && tokens !== null;
+  const { isLogin } = useAuth();
 
   return isLogin ? <Outlet /> : <Navigate to={PATH.auth} />;
 };
 
 const PublicRoute: React.FC = () => {
-  const userInfo = getUserInfo();
-  const tokens = getTokens();
-  const isLogin = userInfo !== null && tokens !== null;
+  const { isLogin } = useAuth();
 
   return isLogin ? <Navigate to={PATH.home} /> : <Outlet />;
 };

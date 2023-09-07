@@ -138,4 +138,14 @@ export const handlers = [
 
     return res(ctx.status(200), ctx.json({ success: true }));
   }),
+
+  rest.post('/api/users/reissue-access-token', async (req, res, ctx) => {
+    const body = await req.json();
+
+    if (body?.refreshToken !== token) {
+      return res(ctx.status(200), ctx.json({ success: false }));
+    }
+
+    return res(ctx.status(200), ctx.json({ success: true, accessToken: token }));
+  })
 ];

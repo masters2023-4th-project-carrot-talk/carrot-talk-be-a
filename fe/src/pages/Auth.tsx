@@ -1,10 +1,12 @@
 import { ReactComponent as UserCircle } from '@/assets/user-circle.svg';
 import { Button } from '@/components/common/button/Button';
+import { Beez } from '@/components/common/icons';
 import { Title } from '@/components/common/topBar/Title';
 import { TopBar } from '@/components/common/topBar/TopBar';
 import { KAKAO_AUTH_URL, PATH } from '@/constants/path';
 import { useLogout } from '@/hooks/hook';
-import { clearLoginInfo, getTokens, getUserInfo } from '@/utils/localStorage';
+import { useAuth } from '@/hooks/useAuth';
+import { clearLoginInfo } from '@/utils/localStorage';
 import kakaoLogin from '@assets/kakao_login.png';
 import { Theme, css } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
@@ -12,14 +14,11 @@ import { useNavigate } from 'react-router-dom';
 export const Auth: React.FC = () => {
   const navigate = useNavigate();
 
+  const { isLogin, userInfo } = useAuth();
   const { mutate: logoutMutation } = useLogout(() => {
     clearLoginInfo();
     navigate(PATH.auth, { replace: true });
   });
-
-  const userInfo = getUserInfo();
-  const tokens = getTokens();
-  const isLogin = userInfo !== null && tokens !== null;
 
   const onClickLogin = () => {
     location.assign(KAKAO_AUTH_URL);
@@ -59,7 +58,6 @@ export const Auth: React.FC = () => {
           </>
         ) : (
           <>
-            <div className="auth__info">로그인이 필요합니다.</div>
             <div className="button__wrapper">
               <Button variant="text" onClick={onClickLogin}>
                 <img src={kakaoLogin} alt="카카오 소셜 로그인" />

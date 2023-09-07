@@ -1,5 +1,9 @@
 import { BASE_URL } from '@/constants/path';
-import { getAccessToken, getRefreshToken } from '@/utils/localStorage';
+import {
+  getAccessToken,
+  getRefreshToken,
+  setAccessToken,
+} from '@/utils/localStorage';
 
 const fetchData = async (path: string, options?: RequestInit) => {
   const response = await fetch(BASE_URL + path, options);
@@ -8,13 +12,41 @@ const fetchData = async (path: string, options?: RequestInit) => {
     throw new Error('Network response was not ok');
   }
 
-  if (response.headers.get('content-type') === 'application/json') {
-    const data = await response.json();
-
-    return data;
+  if (response.headers.get('content-type') !== 'application/json') {
+    throw new Error('Content type is not json');
   }
 
-  throw new Error('Content type is not json');
+  const data = await response.json();
+
+  return data;
+};
+
+const fetchWithToken = async (path: string, options?: RequestInit) => {
+  const accessToken = getAccessToken();
+
+  if (!accessToken) {
+    throw new Error('Access token is not exist');
+  }
+
+  const response = await fetch(BASE_URL + path, {
+    ...options,
+    headers: {
+      ...options?.headers,
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+
+  if (response.headers.get('content-type') !== 'application/json') {
+    throw new Error('Content type is not json');
+  }
+
+  const data = await response.json();
+
+  return data;
 };
 
 export const getMyLocations = async () => {
@@ -87,6 +119,18 @@ export const logout = async () => {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${getAccessToken()}`,
+    },
+    body: JSON.stringify({
+      refreshToken: getRefreshToken(),
+    }),
+  });
+};
+
+export const refreshToken = async () => {
+  return await fetchData(`/api/users/reissue-access-token`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       refreshToken: getRefreshToken(),

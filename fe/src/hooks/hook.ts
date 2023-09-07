@@ -5,10 +5,11 @@ import {
   login,
   logout,
   patchMainLocation,
+  refreshToken,
   signup,
 } from '@/api/api';
 import { QUERY_KEY } from '@/constants/queryKey';
-import { setLoginInfo } from '@/utils/localStorage';
+import { getRefreshToken, setLoginInfo } from '@/utils/localStorage';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export const useMyLocations = () => {
@@ -123,4 +124,23 @@ export const useLogout = (onLogout: () => void) => {
   });
 
   return { mutate, status, error };
+};
+
+export const useTokenRefresh = () => {
+  const { data, status, error } = useQuery<TokenRefreshType>(
+    QUERY_KEY.tokenRefresh,
+    refreshToken,
+    {
+      refetchInterval: 1000 * 60 * 60,
+      refetchIntervalInBackground: true,
+      enabled: !!getRefreshToken(),
+      select: (data) => {
+        if (data.success) {
+          return data.data.accessToken;
+        }
+      }
+    },
+  );
+
+  return { data, status, error };
 };

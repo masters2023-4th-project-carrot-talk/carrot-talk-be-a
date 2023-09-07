@@ -43,7 +43,7 @@ const modalStyle = (theme: Theme, animationTrigger: boolean) => {
       z-index: 110;
       display: flex;
       width: 320px;
-      height: 700px;
+      height: 100vh;
       box-sizing: border-box;
       flex-direction: column;
       align-items: flex-start;

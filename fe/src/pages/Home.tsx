@@ -21,8 +21,10 @@ import { useLayoutStore } from '@/store/layoutStore';
 import { useProducts } from '@/hooks/products';
 import { SkeletonListItem } from '@/components/common/skeleton/listItem';
 import { useIntersectionObserver } from '@/hooks/observer';
+import { useAuth } from '@/hooks/useAuth';
 
 export const Home: React.FC = () => {
+  const { isLogin } = useAuth();
   const { locations, status: locationStatus } = useMyLocations();
   const { categories } = useCategories();
   // useQuery들 묶을수있는지
@@ -36,8 +38,15 @@ export const Home: React.FC = () => {
 
   const { setShouldSlideLeft } = useLayoutStore();
 
-  const { products, fetchNextPage, hasNextPage, status, isFetchingNextPage } =
-    useProducts(selectedLocationId, selectedCategoryId);
+  const {
+    products,
+    fetchNextPage,
+    hasNextPage,
+    status,
+    isFetchingNextPage,
+    remove,
+    refetch,
+  } = useProducts(selectedLocationId, selectedCategoryId);
 
   const { observeTarget } = useIntersectionObserver(fetchNextPage, hasNextPage);
 
@@ -64,6 +73,9 @@ export const Home: React.FC = () => {
   };
 
   const onSelectCategory = (id: number) => {
+    // 리페치
+    remove();
+    refetch();
     setSelectedCategoryId(id);
   };
 
@@ -74,7 +86,7 @@ export const Home: React.FC = () => {
   };
 
   const shouldShowSkeletons = status === 'loading' || isFetchingNextPage;
-  const shouedShowEndOfData = !hasNextPage && status !== 'loading';
+  const shouldShowEndOfData = !hasNextPage && status !== 'loading';
 
   return (
     <>
@@ -117,8 +129,9 @@ export const Home: React.FC = () => {
                         {location.name}
                       </MenuItem>
                     ))}
-                  <MenuItem onClick={onOpenModal}>내 동네 설정하기</MenuItem>
-                  {/* TODO 동네정보가 없을때 막을 필요가 있음 */}
+                  {isLogin && (
+                    <MenuItem onClick={onOpenModal}>내 동네 설정하기</MenuItem>
+                  )}
                 </MenuBox>
               </Dropdown>
             </LeftButton>
@@ -145,7 +158,7 @@ export const Home: React.FC = () => {
             ))}
             {shouldShowSkeletons && <>{renderSkeletons()}</>}
           </ListBox>
-          {shouedShowEndOfData && (
+          {shouldShowEndOfData && (
             <div className="end-of-data">전부 살펴 봤어요!</div>
           )}
           <LocationModal />

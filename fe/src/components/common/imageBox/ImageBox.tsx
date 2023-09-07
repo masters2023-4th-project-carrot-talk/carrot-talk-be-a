@@ -41,7 +41,7 @@ const imageBoxStyle = (
   return css`
     ${SIZE_STYLES[size]}
     border:  ${imageUrl && `1px solid ${theme.color.neutral.border}`};
-    background: ${imageUrl && `url(${imageUrl})`}
-      ${theme.color.neutral.backgroundBold} 50% / cover no-repeat;
+    background: ${imageUrl && `url('${imageUrl}')`}
+      ${!imageUrl && theme.color.neutral.backgroundBold} 50% / contain no-repeat;
   `;
 };

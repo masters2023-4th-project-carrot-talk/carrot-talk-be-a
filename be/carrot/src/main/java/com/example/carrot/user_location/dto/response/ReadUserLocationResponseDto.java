@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReadUserLocationResponseDto {
 
-	private static final Long DEFAULT_ID = 1L;
-	private static final String DEFAULT_NAME = "역삼 1동";
+	public static final String DEFAULT_NAME = "역삼 1동";
 
 	@JsonProperty("id")
 	private Long id;
@@ -25,7 +24,7 @@ public class ReadUserLocationResponseDto {
 		return new ReadUserLocationResponseDto(id, name, isMainLocation);
 	}
 
-	public static List<ReadUserLocationResponseDto> defaultLocation() {
-		return List.of(new ReadUserLocationResponseDto(DEFAULT_ID, DEFAULT_NAME, true));
+	public static List<ReadUserLocationResponseDto> defaultLocation(Long id) {
+		return List.of(new ReadUserLocationResponseDto(id, DEFAULT_NAME, true));
 	}
 }

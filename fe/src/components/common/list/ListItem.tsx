@@ -20,6 +20,7 @@ export const ListItem: FC<Props> = ({ product, onOpenDetail }) => {
   const formattedChatCount = formatCount(product.chatCount);
   const formattedLikeCount = formatCount(product.likeCount);
 
+  // TODO : dots 드롭다운 달고 기능구현
   return (
     <li css={listItemStyle} onClick={onOpenDetail}>
       <ImageBox imageUrl={product.imageUrl} size="l" />

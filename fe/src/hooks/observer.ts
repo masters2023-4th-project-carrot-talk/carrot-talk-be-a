@@ -1,37 +1,33 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 
-// export const useIntersectionObserver = (callback) => {
-//   const observer = useRef(
-//     new IntersectionObserver(
-//       (entries) => {
-//         entries.forEach((entry) => {
-//           if (entry.isIntersecting) {
-//             callback();
-//           }
-//         });
-//       },
-//       { threshold: 0.5 },
-//     ),
-//   );
+export const useIntersectionObserver = (callback, hasNextPage?: boolean) => {
+  const observeTarget = useRef<HTMLDivElement | null>(null);
 
-//   const observe = (element) => {
-//     observer.current.observe(element);
-//   };
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(
+        (entry) => {
+          console.log('되니???', entry.isIntersecting);
+          console.log('되니???', hasNextPage);
 
-//   return observe;
-// };
-
-export const useIntersectionObserver = (callback) => {
-  const observer = useRef(
-    new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && hasNextPage) {
             callback();
           }
-        });
-      },
-      { threshold: 0.3 }, // 한계점
-    ),
-  );
+        },
+        { threshold: 1 },
+      );
+    });
+
+    if (observeTarget.current) {
+      console.log(observeTarget);
+
+      observer.observe(observeTarget.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [observeTarget, hasNextPage, callback]);
+
+  return { observeTarget };
 };

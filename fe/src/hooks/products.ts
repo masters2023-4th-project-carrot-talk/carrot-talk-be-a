@@ -10,28 +10,20 @@ export const useProducts = (
 ) => {
   console.log(locationId, categoryId, size, 'useProducts');
 
-  const fetchProducts = ({ pageParam = 11 }: { pageParam?: number }) => {
+  const fetchProducts = ({ pageParam = 50 }: { pageParam?: number }) => {
     return getProducts({ locationId, categoryId, next: pageParam, size });
   };
 
   const { data, fetchNextPage, hasNextPage, status, isFetchingNextPage } =
     useInfiniteQuery(QUERY_KEY.products, fetchProducts, {
-      getNextPageParam: (lastPage) => lastPage.data.nextId || null,
+      getNextPageParam: (lastPage) => {
+        console.log(lastPage.data.nextId, lastPage.data, 'lastPage확인중');
+
+        return lastPage.data.nextId || null;
+      },
     });
-  // 여기서 getNextPageParam의 반환값은 fetchNextPage를 호출할 때 다음 페이지를 불러오는데 사용되는 pageParam으로 설정 => next=11&  next값으로 들어가게 됨
-  // lastPage 는 마지막으로 불러온 페이지의 데이터, 따라서 마지막 jsonData 한뭉텅이를 의미
-  // const jsonData = {
-  //   success: true,
-  //   data: {
-  //     products: [],
-  //     nextId: 14,
-  //   },
-  // };
-
-  // fetchNextPage를 호출하면 쿼리 함수로 설정해둔 fetchProducts를 호출
-
-  // status = 초기데이터를 불러오는 상태 status === 'loading' 으로 사용
-  // isFetchingNextPage = 다음 페이지를 불러오는 중일때의 loading 상태
+  console.log(data, 'data확인중');
+  console.log(hasNextPage, 'product hasNextPage확인중');
 
   const allProducts = useMemo(() => {
     if (data) {

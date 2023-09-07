@@ -101,8 +101,10 @@ export const getProducts = ({
   locationId,
   categoryId,
   size,
-  next,
+  next = 50,
 }: FetchProductsParams) => {
+  console.log(next, 'next확인중');
+
   // /api/products?locationId=1&categoryId=3&next=11&size=10
   const query = new URLSearchParams();
 

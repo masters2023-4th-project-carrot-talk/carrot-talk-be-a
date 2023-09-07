@@ -7,7 +7,6 @@ import { AlertContent } from '@/components/common/alert/AlertContent';
 import { AlertButtons } from '@/components/common/alert/AlertButtons';
 import { ModalHeader } from '../../ModalHeader';
 import { usePopupStore } from '@/store/popupStore';
-import { useAuth } from '@/hooks/useAuth';
 import { useLocationControl } from '@/hooks/useLocationControl';
 
 type Props = {
@@ -15,7 +14,6 @@ type Props = {
 };
 
 export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
-  const { isLogin } = useAuth();
   const { locations, deleteLocationById, patchMainLocationById } =
     useLocationControl();
   const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
@@ -112,7 +110,7 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
                 onToggleContent('search');
               }
             }}
-            disabled={shouldBlockAdd || !isLogin}
+            disabled={shouldBlockAdd}
           >
             <Plus className="buttons__plus-icon" />
             추가

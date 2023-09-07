@@ -7,6 +7,7 @@ import { StatusBadge } from '../statusBadge/StatusBadge';
 import { formatTimeStamp } from '@/utils/formatTimeStamp';
 import { formatPrice } from '@/utils/formatPrice';
 import { formatCount } from '@/utils/formatCount';
+import { getUserInfo } from '@/utils/localStorage';
 
 type Props = {
   product: ProductType; // TODO : product 타입 변경
@@ -14,12 +15,11 @@ type Props = {
 };
 
 export const ListItem: FC<Props> = ({ product, onOpenDetail }) => {
-  const isAuthor = true; // TODO : user인지 아닌지 / product를 올린 사람의 id와 user의 id 비교가 필요함 product의 id도 없음..? ???
   const formattedPrice = formatPrice(product.price);
   const formattedTimeStamp = formatTimeStamp(product.createdAt);
   const formattedChatCount = formatCount(product.chatCount);
   const formattedLikeCount = formatCount(product.likeCount);
-
+  const isAuthor = getUserInfo().id === product.sellerId;
   // TODO : dots 드롭다운 달고 기능구현
   return (
     <li css={listItemStyle} onClick={onOpenDetail}>

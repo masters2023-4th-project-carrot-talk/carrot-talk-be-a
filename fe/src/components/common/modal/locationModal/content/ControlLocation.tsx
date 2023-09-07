@@ -112,7 +112,7 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
                 onToggleContent('search');
               }
             }}
-            disabled={shouldBlockAdd || isLogin}
+            disabled={shouldBlockAdd || !isLogin}
           >
             <Plus className="buttons__plus-icon" />
             추가

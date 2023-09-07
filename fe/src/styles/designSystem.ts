@@ -14,6 +14,8 @@ const colors = {
   grey900: '#3C3C43',
   black: '#000000',
   mint: '#00C7BE',
+  yellow: '#FFD43B',
+  yellowStrong: '#FFB800',
   orange: '#FF9500',
   red: '#FF3B30',
 };
@@ -60,6 +62,10 @@ export default {
       background: colors.white,
       backgroundWeak: colors.grey200,
     },
+    brand: {
+      primary: colors.yellow,
+      primaryStrong: colors.yellowStrong,
+    }
   },
   filter: {
     neutralTextWeak:

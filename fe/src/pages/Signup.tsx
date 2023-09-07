@@ -180,13 +180,13 @@ const pageStyle = (theme: Theme) => {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     padding: 0 32px;
 
     .signup-form {
       display: flex;
       flex-direction: column;
       gap: 32px;
-      margin-top: 180px;
     }
 
     .nickname-form {
@@ -206,7 +206,7 @@ const pageStyle = (theme: Theme) => {
         &--check {
           align-self: center;
           stroke: ${theme.color.accent.text};
-          background-color: ${theme.color.accent.backgroundSecondary};
+          background-color: ${theme.color.brand.primaryStrong};
           border-radius: 50%;
         }
       }

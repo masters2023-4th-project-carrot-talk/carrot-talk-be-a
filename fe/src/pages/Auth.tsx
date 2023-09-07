@@ -98,7 +98,7 @@ const pageStyle = (theme: Theme) => {
 
       &__name {
         font: ${theme.font.displayStrong32};
-        color: #FFD43B;
+        color: ${theme.color.brand.primary};
       }
 
       &__description {

@@ -26,6 +26,10 @@ declare module '@emotion/react' {
         background: string;
         backgroundWeak: string;
       };
+      brand: {
+        primary: string;
+        primaryStrong: string;
+      }
     };
     filter: {
       neutralTextWeak: string;

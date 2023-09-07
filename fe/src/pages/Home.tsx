@@ -80,7 +80,7 @@ export const Home: React.FC = () => {
 
   return (
     <>
-      <div css={pageStyle}>
+      <div css={(theme) => pageStyle(theme, shouldShowSkeletons)}>
         <>
           <TopBar>
             <RightButton>
@@ -164,9 +164,10 @@ export const Home: React.FC = () => {
   );
 };
 
-const pageStyle = (theme: Theme) => {
+const pageStyle = (theme: Theme, shouldShowSkeletons: boolean) => {
   return css`
-    overflow-y: auto;
+    overflow-y: ${shouldShowSkeletons ? 'hidden' : 'auto'};
+
     scroll-behavior: smooth;
     ::-webkit-scrollbar {
       display: none;

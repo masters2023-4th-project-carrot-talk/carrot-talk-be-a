@@ -35,14 +35,14 @@ export const getMyLocations = () => {
 
   // TODO  if (!accesToken) return {id: 0, name: '역삼 1동', isMainLocation: true};
 
-  return fetchData('/api/users/locations', false);
+  return fetchData('/api/users/locations', true);
 };
 
 export const deleteLocation = (id: number) => {
   // TODO 액세스 토큰을 헤더에 담아서 보내야 함
   // TODO const accesToken =
 
-  return fetchData(`/api/users/locations/${id}`, false, {
+  return fetchData(`/api/users/locations/${id}`, true, {
     method: 'DELETE',
   });
 };
@@ -51,7 +51,7 @@ export const patchMainLocation = (id: number) => {
   // TODO 액세스 토큰을 헤더에 담아서 보내야 함
   // TODO const accesToken =
 
-  return fetchData(`/api/users/locations`, false, {
+  return fetchData(`/api/users/locations`, true, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -68,17 +68,14 @@ export const getLocationWithQuery = (query: string) => {
   // TODO 액세스 토큰을 헤더에 담아서 보내야 함
   // TODO const accesToken =
 
-  return fetchData(
-    `/api/locations?keyword=${encodeURIComponent(query)}`,
-    false,
-  );
+  return fetchData(`/api/locations?keyword=${encodeURIComponent(query)}`, true);
 };
 
 export const getCategories = () => {
   // TODO 액세스 토큰을 헤더에 담아서 보내야 함
   // TODO const accesToken = null;
 
-  return fetchData('/api/categories', false);
+  return fetchData('/api/categories', true);
 };
 
 // export const getProducts = ({ locationId, categoryId, next, size }) => {
@@ -106,6 +103,7 @@ export const getProducts = ({
   console.log(next, 'next확인중');
 
   // /api/products?locationId=1&categoryId=3&next=11&size=10
+  // TODO 여기 처리 다른곳으로 분리
   const query = new URLSearchParams();
 
   if (locationId !== undefined && locationId !== null) {

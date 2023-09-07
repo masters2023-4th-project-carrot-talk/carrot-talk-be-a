@@ -141,8 +141,8 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(data));
   }),
 
-  rest.post('/api/users/login', (req, res, ctx) => {
-    const code = req.url?.searchParams?.get('code');
+  rest.post('/api/users/login', async (req, res, ctx) => {
+    const { code } = await req.json();
 
     if (!code) {
       return res(ctx.status(200), ctx.json({ success: false }));

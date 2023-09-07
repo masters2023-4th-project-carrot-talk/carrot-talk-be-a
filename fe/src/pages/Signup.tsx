@@ -166,9 +166,9 @@ export const Signup: React.FC = () => {
               <Plus />
               위치 추가
             </Button>
-            <LocationModal />
           </div>
         </div>
+        <LocationModal />
       </div>
     </>
   );
@@ -176,6 +176,7 @@ export const Signup: React.FC = () => {
 
 const pageStyle = (theme: Theme) => {
   return css`
+    height: 100vh;
     flex: 1;
     display: flex;
     flex-direction: column;

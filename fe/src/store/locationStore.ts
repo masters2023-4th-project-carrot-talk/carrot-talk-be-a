@@ -1,24 +1,14 @@
 import { create } from 'zustand';
 
-type LocationState = {
-  isMainLocationSet: boolean;
-  setMainLocation: () => void;
-};
-
 type RegisteredLocationsState = {
   locationList: LocationType[];
   addLocation: (location: LocationWithQueryType) => void;
   deleteLocation: (id: number) => void;
 };
 
-export const useLocationStore = create<LocationState>((set) => ({
-  isMainLocationSet: false,
-  setMainLocation: () => set({ isMainLocationSet: true }),
-}));
-
 export const useRegisteredLocationsStore = create<RegisteredLocationsState>(
   (set) => ({
-    locationList: [],
+    locationList: [{ id: 1, name: '역삼 1동', isMainLocation: true }],
     addLocation: (location: LocationWithQueryType) =>
       set((state) => ({ locationList: addLocationToState(state, location) })),
 

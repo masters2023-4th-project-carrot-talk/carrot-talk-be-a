@@ -5,7 +5,6 @@ import {
   patchMainLocation,
 } from '@api/api';
 import { QUERY_KEY } from '@/constants/queryKey';
-import { useLocationStore } from '@/store/locationStore';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export const useMyLocations = () => {
@@ -58,13 +57,11 @@ export const useDeleteLocation = () => {
 
 export const usePatchMainLocation = (onSuccessCallback?: () => void) => {
   const queryClient = useQueryClient();
-  const { setMainLocation } = useLocationStore();
 
   const patchMainLocationMutation = useMutation(patchMainLocation, {
     onSuccess: () => {
       queryClient.invalidateQueries(QUERY_KEY.locations);
       onSuccessCallback?.();
-      setMainLocation();
     },
   });
 

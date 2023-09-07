@@ -6,6 +6,12 @@ type LocationType = {
   isMainLocation: boolean;
 };
 
+type UserType = {
+  id: number;
+  nickname: string;
+  imageUrl: string;
+};
+
 type LocationWithQueryDataFromServer = {
   success: boolean;
   data: LocationWithQueryType[];
@@ -54,3 +60,4 @@ type FetchProductsParams = {
   next?: number | null;
   size?: number | null;
 };
+

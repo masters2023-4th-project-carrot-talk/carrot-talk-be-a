@@ -1,16 +1,11 @@
-// export const BASE_URL = 'http://localhost:5173';
-export const BASE_URL = 'http://43.201.101.2:8080';
-// export const BASE_URL =
-//   'http://ec2-52-78-56-188.ap-northeast-2.compute.amazonaws.com:8080';
+import { BASE_URL } from '@/constants/path';
+import { getAccessToken, getRefreshToken } from '@/utils/localStorage';
 
 const fetchData = async (
   path: string,
-  isReady?: boolean,
   options?: RequestInit,
 ) => {
-  const BASE_URL = isReady
-    ? 'http://43.201.101.2:8080'
-    : 'http://localhost:5173';
+
 
   const response = await fetch(BASE_URL + path, options);
 
@@ -20,13 +15,14 @@ const fetchData = async (
     throw new Error(errorMessage);
   }
 
-  if (response.headers.get('content-type') === 'application/json') {
-    const data = await response.json();
-
-    return data;
+  if (response.headers.get('content-type') !== 'application/json') {
+    throw new Error('Content type is not json');
   }
 
-  // throw new Error('Content type is not json');
+  const data = await response.json();
+
+  return data;
+
 };
 
 export const getMyLocations = () => {
@@ -35,14 +31,14 @@ export const getMyLocations = () => {
 
   // TODO  if (!accesToken) return {id: 0, name: '역삼 1동', isMainLocation: true};
 
-  return fetchData('/api/users/locations', true);
+  return fetchData('/api/users/locations');
 };
 
 export const deleteLocation = (id: number) => {
   // TODO 액세스 토큰을 헤더에 담아서 보내야 함
   // TODO const accesToken =
 
-  return fetchData(`/api/users/locations/${id}`, true, {
+  return fetchData(`/api/users/locations/${id}`, {
     method: 'DELETE',
   });
 };
@@ -51,7 +47,7 @@ export const patchMainLocation = (id: number) => {
   // TODO 액세스 토큰을 헤더에 담아서 보내야 함
   // TODO const accesToken =
 
-  return fetchData(`/api/users/locations`, true, {
+  return fetchData(`/api/users/locations`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -62,20 +58,81 @@ export const patchMainLocation = (id: number) => {
   });
 };
 
+export const checkNickname = async (nickname: string) => {
+  return fetchData(`/api/users/nickname?nickname=${nickname}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
+export const signup = async (signupInfo: {
+  nickname: string;
+  mainLocationId: number;
+  subLocationId?: number;
+}) => {
+  return fetchData('/api/users/signup', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+    body: JSON.stringify(signupInfo),
+  });
+};
+
+export const login = async (code: string) => {
+  return fetchData(`/api/users/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      code: code,
+    }),
+  });
+};
+
+export const logout = async () => {
+  return fetchData(`/api/users/logout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+    body: JSON.stringify({
+      refreshToken: getRefreshToken(),
+    }),
+  });
+};
+
+export const refreshToken = async () => {
+  return fetchData(`/api/users/reissue-access-token`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      refreshToken: getRefreshToken(),
+    }),
+  });
+};
+
 export const getLocationWithQuery = (query: string) => {
   // /api/locations?keyword=”강남구”
 
   // TODO 액세스 토큰을 헤더에 담아서 보내야 함
   // TODO const accesToken =
 
-  return fetchData(`/api/locations?keyword=${encodeURIComponent(query)}`, true);
+  return fetchData(`/api/locations?keyword=${encodeURIComponent(query)}`);
 };
 
 export const getCategories = () => {
   // TODO 액세스 토큰을 헤더에 담아서 보내야 함
   // TODO const accesToken = null;
 
-  return fetchData('/api/categories', true);
+  return fetchData('/api/categories');
 };
 
 // export const getProducts = ({ locationId, categoryId, next, size }) => {
@@ -121,5 +178,5 @@ export const getProducts = ({
 
   console.log(query.toString(), '쿼리확인중');
 
-  return fetchData(`/api/products?${query.toString()}`, true);
+  return fetchData(`/api/products?${query.toString()}`);
 };

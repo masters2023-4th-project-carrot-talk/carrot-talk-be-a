@@ -21,11 +21,10 @@ export const useIntersectionObserver = (
 
   useEffect(() => {
     const observer = new IntersectionObserver(observerCallback, {
-      threshold: 1,
+      threshold: 0.5,
     });
 
     if (observeTarget.current) {
-      console.log(observeTarget);
       observer.observe(observeTarget.current);
     }
 

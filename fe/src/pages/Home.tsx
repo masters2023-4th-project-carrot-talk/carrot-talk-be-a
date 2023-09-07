@@ -20,6 +20,7 @@ import { useMyLocations } from '@/hooks/location';
 import { useIntersectionObserver } from '@/hooks/observer';
 import { useProducts } from '@/hooks/products';
 import { useAuth } from '@/hooks/useAuth';
+import { modifiedLocaitionName } from '@/utils/modifyLocationName';
 import { useLayoutStore } from '@/store/layoutStore';
 import { usePopupStore } from '@/store/popupStore';
 
@@ -29,8 +30,10 @@ export const Home: React.FC = () => {
   const { categories } = useCategories();
   // useQuery들 묶을수있는지
   const { togglePopup, setCurrentDim } = usePopupStore();
+
+  const mainLocation = locations?.find((location) => location.isMainLocation);
   const [selectedLocationId, setSelectedLocationId] = useState<number | null>(
-    1,
+    mainLocation?.id || null,
   );
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     null,
@@ -69,11 +72,14 @@ export const Home: React.FC = () => {
   };
 
   const onFilterProducts = (id: number) => {
+    // TODO : remove와 refetch를 같이 써야하는가?
+    remove();
+    refetch();
     setSelectedLocationId(id);
   };
 
   const onSelectCategory = (id: number) => {
-    // 리페치
+    // TODO: 두번씩 눌러야 갱신이 되는 버그
     remove();
     refetch();
     setSelectedCategoryId(id);
@@ -87,6 +93,10 @@ export const Home: React.FC = () => {
 
   const shouldShowSkeletons = status === 'loading' || isFetchingNextPage;
   const shouldShowEndOfData = !hasNextPage && status !== 'loading';
+
+  const mainLocationName = locations
+    ? modifiedLocaitionName(mainLocation?.name as string)
+    : '역삼 1동';
 
   return (
     <>
@@ -106,7 +116,7 @@ export const Home: React.FC = () => {
               <Dropdown
                 opener={
                   <Button variant="text" className="button__topbar">
-                    역삼1동
+                    {mainLocationName}
                     <ChevronDown />
                   </Button>
                 }
@@ -215,6 +225,6 @@ const pageStyle = (theme: Theme, shouldShowSkeletons: boolean) => {
 };
 
 const obseverStyle = css`
-  height: 1px;
+  height: 20px;
   width: 100%;
 `;

@@ -41,24 +41,20 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional(readOnly = true)
 public class UserService {
 
-	@Value("${oauth.kakao.client_id}")
-	private String clientId;
-
-	@Value("${oauth.kakao.client_secret}")
-	private String clientSecret;
-
-	@Value("${oauth.kakao.grant_type}")
-	private String grantType;
-
-	@Value("${oauth.kakao.redirect_uri}")
-	private String redirectUri;
-
 	private final LocationService locationService;
 	private final UserLocationService userLocationService;
 	private final LocationRepository locationRepository;
 	private final UserLocationRepository userLocationRepository;
 	private final UserRepository userRepository;
 	private final JwtProvider jwtProvider;
+	@Value("${oauth.kakao.client_id}")
+	private String clientId;
+	@Value("${oauth.kakao.client_secret}")
+	private String clientSecret;
+	@Value("${oauth.kakao.grant_type}")
+	private String grantType;
+	@Value("${oauth.kakao.redirect_uri}")
+	private String redirectUri;
 
 	@Transactional
 	public UserResponseDto kakaoLogin(String code) {

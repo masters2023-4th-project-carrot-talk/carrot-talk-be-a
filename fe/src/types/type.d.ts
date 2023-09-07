@@ -1,5 +1,10 @@
 type PopupType = 'modal' | 'alert';
 
+type LocationDataFromServer = {
+  success: boolean;
+  data: LocationType[];
+};
+
 type LocationType = {
   id: number;
   name: string;
@@ -20,6 +25,7 @@ type LocationWithQueryDataFromServer = {
 type LocationWithQueryType = {
   id: number;
   name: string;
+  isMainLocation?: boolean;
 };
 
 type CategoriesDataFromServer = {
@@ -60,4 +66,3 @@ type FetchProductsParams = {
   next?: number | null;
   size?: number | null;
 };
-

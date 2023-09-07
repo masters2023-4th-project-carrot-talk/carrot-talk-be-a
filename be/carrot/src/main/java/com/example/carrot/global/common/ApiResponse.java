@@ -21,20 +21,20 @@ public class ApiResponse<T> {
 	}
 
 	public static <T> ApiResponse<T> success() {
-		return ApiResponse.<T> builder()
+		return ApiResponse.<T>builder()
 			.success(true)
 			.build();
 	}
 
 	public static <T> ApiResponse<T> success(T data) {
-		return ApiResponse.<T> builder()
+		return ApiResponse.<T>builder()
 			.success(true)
 			.data(data)
 			.build();
 	}
 
 	public static <T> ApiResponse<T> fail(T errorCode) {
-		return ApiResponse.<T> builder()
+		return ApiResponse.<T>builder()
 			.success(false)
 			.errorCode(errorCode)
 			.build();

@@ -54,8 +54,7 @@ public class User extends BaseAllTimeEntity {
 	private List<Product> products = new ArrayList<>();
 
 	@Builder
-	public User(Long userId, String nickName, String imageUrl, String refreshToken, String socialId) {
-		this.userId = userId;
+	public User(String nickName, String imageUrl, String refreshToken, String socialId) {
 		this.nickName = nickName;
 		this.imageUrl = imageUrl;
 		this.refreshToken = refreshToken;

@@ -1,5 +1,7 @@
 import { rest } from 'msw';
 import { token, users } from './data/users';
+import { categoryList } from './data/categories';
+import { locationsWithQuery } from './data/locations';
 
 let locations: LocationType[] = [
   { id: 1, name: '안양99동', isMainLocation: true },
@@ -7,24 +9,19 @@ let locations: LocationType[] = [
 ];
 
 export const handlers = [
-  rest.get(`/users/locations`, (_, res, ctx) => {
-    // 딜레이 주기
-    return res(ctx.delay(1000), ctx.status(200), ctx.json(locations));
+  //내동네
+  rest.get(`/api/users/locations`, (_, res, ctx) => {
+    return res(ctx.delay(300), ctx.status(200), ctx.json(locations));
   }),
-
-  // 삭제
-  rest.delete(`/users/locations/:id`, (req, res, ctx) => {
+  // 내동네 삭제
+  rest.delete(`/api/users/locations/:id`, (req, res, ctx) => {
     const { id } = req.params;
-    const deletedLocation = locations.find(
-      (location) => location.id === Number(id),
-    );
 
-    // 삭제 처리
     locations = locations.filter((location) => location.id !== Number(id));
 
-    // 만약 삭제된 위치가 주요 위치였다면, 다른 위치를 주요 위치로 설정
-    if (deletedLocation?.isMainLocation && locations.length > 0) {
-      locations[0].isMainLocation = true; // 첫 번째 요소를 주요 위치로 설정
+    // 남아있는 위치가 있다면 첫 번째 위치를 주요 위치로 설정
+    if (locations.length > 0) {
+      locations[0].isMainLocation = true;
     }
 
     // 반환 데이터
@@ -38,27 +35,55 @@ export const handlers = [
 
     return res(ctx.status(200), ctx.json(data));
   }),
+  // 내동네 변경
+  rest.patch(`/api/users/locations`, (req, res, ctx) => {
+    const { locationId } = req.body as { locationId: number };
 
-  rest.patch(`/users/locations`, (req, res, ctx) => {
-    const { id } = req.body as { id: number };
+    // locationId에 해당하는 location이 있는지 확인
+    const exists = locations.some((location) => location.id === locationId);
 
-    // 기존 주요 위치를 일반 위치로 변경
-    locations.find((location) => location.isMainLocation)!.isMainLocation =
-      false;
+    // 없다면 새로운 location을 추가
+    if (!exists) {
+      locations.push({
+        id: locationId,
+        name: `개포${locationId}동`,
+        isMainLocation: false,
+      });
+    }
 
-    // 새로운 주요 위치를 설정
-    locations.find((location) => location.id === id)!.isMainLocation = true;
+    locations = locations.map((location) => ({
+      ...location,
+      isMainLocation: location.id === locationId,
+    }));
 
-    // 반환 데이터
     const data = {
       success: true,
       data: {
-        mainLocationId: id,
+        mainLocationId: locationId,
       },
     };
 
     return res(ctx.status(200), ctx.json(data));
   }),
+
+  //동네 검색
+  // 핸들러 설정
+  rest.get(`/api/locations`, (req, res, ctx) => {
+    const query = req.url.searchParams.get('keyword');
+
+    // 쿼리에 맞는 위치를 필터링
+    const filteredLocations = locationsWithQuery.data.filter((location) =>
+      location.name.includes(query!),
+    );
+
+    return res(ctx.status(200), ctx.json({ data: filteredLocations }));
+  }),
+
+  //카테고리
+  rest.get(`/api/categories`, (_, res, ctx) => {
+    return res(ctx.delay(200), ctx.status(200), ctx.json(categoryList));
+  }),
+  //
 
   rest.get('/api/users/nickname', (req, res, ctx) => {
     const query = req.url.searchParams;

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { PATH } from './constants/path';
-import { useTokenRefresh } from './hooks/hook';
+import { useTokenRefresh } from './hooks/auth';
 import { useAuth } from './hooks/useAuth';
 import { Layout } from './layout/Layout';
 import { Auth } from './pages/Auth';
@@ -66,10 +66,9 @@ const globalStyle = css`
   display: flex;
   flex-direction: column;
   width: 393px;
-  height: 852px;
+  height: 100vh;
   margin: auto;
-  border: 1px solid black;
-
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
   overflow-x: hidden;
   overflow-y: auto;
 

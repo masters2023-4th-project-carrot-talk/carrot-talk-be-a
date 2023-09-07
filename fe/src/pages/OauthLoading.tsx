@@ -1,5 +1,5 @@
 import { PATH } from '@/constants/path';
-import { useLogin } from '@/hooks/hook';
+import { useLogin } from '@/hooks/auth';
 import { setAccessToken, setLoginInfo } from '@/utils/localStorage';
 import kakao from '@assets/kakao.png';
 import { Theme, css } from '@emotion/react';

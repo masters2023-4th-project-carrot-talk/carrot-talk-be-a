@@ -8,36 +8,56 @@ import { Title } from '@/components/common/topBar/Title';
 import { TopBar } from '@/components/common/topBar/TopBar';
 import { PATH } from '@/constants/path';
 import { useCheckNickname, useSignup } from '@/hooks/auth';
+import { useLocationControl } from '@/hooks/useLocationControl';
 import { usePopupStore } from '@/store/popupStore';
 import { ReactComponent as Plus } from '@assets/plus.svg';
 import { Theme, css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
+type NicknameCheck =
+  | {
+      status: 'passed' | 'ready';
+    }
+  | {
+      status: 'failed';
+      warningMessage: string;
+    };
+
 export const Signup: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const routeLocation = useLocation();
 
   const [nickname, setNickname] = useState('');
-  const [locations, setLocations] = useState<number[]>([]);
-  const [nicknameCheckPassed, setNicknameCheckPassed] = useState(false);
-  const [nicknameCheckWarning, setNicknameCheckWarning] = useState('');
+  const { locations } = useLocationControl();
+  const [nicknameCheck, setNicknameCheck] = useState<NicknameCheck>({
+    status: 'ready',
+  });
   const { togglePopup, setCurrentDim } = usePopupStore();
   const { refetch: refetchNicknameCheck } = useCheckNickname(nickname);
   const { mutate: signupWithInfo } = useSignup();
 
   useEffect(() => {
-    setNicknameCheckWarning('');
-    setNicknameCheckPassed(false);
+    setNicknameCheck((n) => {
+      if (n?.status !== 'ready') {
+        return {
+          status: 'ready',
+        };
+      }
+      return n;
+    });
   }, [nickname]);
 
-  if (!location.state?.isOauth) {
+  if (!routeLocation.state?.isOauth) {
     return <Navigate to={PATH.auth} replace={true} />;
   }
 
   const invalidNickName = !/^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]{2,10}$/.test(nickname);
+  const nicknameCheckPassed = nicknameCheck?.status === 'passed';
+  const nicknameCheckWarningMessage =
+    nicknameCheck?.status === 'failed' ? nicknameCheck?.warningMessage : '';
   const submitDisabled =
-    invalidNickName || !nicknameCheckPassed || locations.length === 0;
+    invalidNickName || !nicknameCheckPassed || locations?.length === 0;
 
   const goToAuth = () => {
     navigate(PATH.auth, { replace: true });
@@ -53,23 +73,38 @@ export const Signup: React.FC = () => {
     }
     const { data } = await refetchNicknameCheck();
 
-    setNicknameCheckWarning(data?.errorCode?.message);
-    setNicknameCheckPassed(data?.success ?? false);
+    setNicknameCheck(() => {
+      if (data?.success) {
+        return { status: 'passed' };
+      }
+      return { status: 'failed', warningMessage: data?.errorCode };
+    });
   };
 
   const openLocationModal = () => {
-    // TODO : 위치 데이터 변경
     togglePopup('modal', true);
     setCurrentDim('modal');
-    setLocations([1, 2]);
   };
 
   const requestSignup = () => {
-    signupWithInfo({
+    if (submitDisabled || !locations) {
+      return;
+    }
+
+    const mainLocationId = locations.find((location) => location.isMainLocation)
+      ?.id as number;
+    const subLocationId = locations?.find(
+      (location) => !location.isMainLocation,
+    )?.id;
+
+    const signupInfo = {
       nickname,
-      mainLocationId: locations[0],
-      subLocationId: locations[1],
-    });
+      mainLocationId,
+      ...(!!subLocationId && { subLocationId }),
+    };
+
+    signupWithInfo(signupInfo);
+
     navigate(PATH.home, { replace: true });
   };
 
@@ -105,7 +140,7 @@ export const Signup: React.FC = () => {
                 maxLength={10}
                 value={nickname}
                 onChange={changeNickname}
-                warningMessage={nicknameCheckWarning}
+                warningMessage={nicknameCheckWarningMessage}
               />
               {nicknameCheckPassed ? (
                 <Check className="nickname-form__input--check" />

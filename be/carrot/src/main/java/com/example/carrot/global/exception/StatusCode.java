@@ -1,5 +1,8 @@
 package com.example.carrot.global.exception;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -7,8 +10,10 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public enum StatusCode {
 
 	// -- [JWT] -- //
@@ -42,30 +47,21 @@ public enum StatusCode {
 	// -- [IMAGE] -- //
 	NOT_FOUND_IMAGE(HttpStatus.NOT_FOUND, "해당하는 이미지가 없습니다.");
 
-	private HttpStatus status;
-	private String message;
+	private final HttpStatus status;
+	private final String message;
 
-	StatusCode(HttpStatus status, String message) {
-		this.status = status;
-		this.message = message;
+	public static final Map<Class<? extends RuntimeException>, StatusCode> exceptionMappings;
+
+	static {
+		exceptionMappings = new HashMap<>();
+		exceptionMappings.put(MalformedJwtException.class, MALFORMED_JWT_EXCEPTION);
+		exceptionMappings.put(ExpiredJwtException.class, EXPIRED_JWT_EXCEPTION);
+		exceptionMappings.put(SignatureException.class, SIGNATURE_EXCEPTION);
+		exceptionMappings.put(UnsupportedJwtException.class, UNSUPPORTED_JWT_EXCEPTION);
+		exceptionMappings.put(IllegalArgumentException.class, ILLEGAL_ARGUMENT_EXCEPTION);
 	}
 
 	public static StatusCode from(RuntimeException e) {
-		if (e instanceof MalformedJwtException) {
-			return StatusCode.MALFORMED_JWT_EXCEPTION;
-		}
-		if (e instanceof ExpiredJwtException) {
-			return StatusCode.EXPIRED_JWT_EXCEPTION;
-		}
-		if (e instanceof SignatureException) {
-			return StatusCode.SIGNATURE_EXCEPTION;
-		}
-		if (e instanceof UnsupportedJwtException) {
-			return StatusCode.UNSUPPORTED_JWT_EXCEPTION;
-		}
-		if (e instanceof IllegalArgumentException) {
-			return StatusCode.ILLEGAL_ARGUMENT_EXCEPTION;
-		}
-		return StatusCode.UNKNOWN_EXCEPTION;
+		return exceptionMappings.getOrDefault(e.getClass(), UNKNOWN_EXCEPTION);
 	}
 }

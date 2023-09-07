@@ -6,23 +6,23 @@ import { Theme, css } from '@emotion/react';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
+type LoginResponseType =
+  | {
+      isUser: false;
+      accessToken: string;
+    }
+  | {
+      isUser: true;
+      accessToken: string;
+      refreshToken: string;
+      user: UserType;
+    };
+
 export const OauthLoading: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const onLogin = (
-    data:
-      | {
-          isUser: false;
-          accessToken: string;
-        }
-      | {
-          isUser: true;
-          accessToken: string;
-          refreshToken: string;
-          user: UserType;
-        },
-  ) => {
+  const onLogin = (data: LoginResponseType) => {
     if (data.isUser) {
       setLoginInfo(data);
     } else {
@@ -31,9 +31,14 @@ export const OauthLoading: React.FC = () => {
     navigate(data.isUser ? PATH.home : PATH.signup, { replace: true });
   };
 
+  const onLoginFail = () => {
+    navigate(PATH.auth, { replace: true });
+  }
+
   const { mutate: loginMutation } = useLogin(
     searchParams.get('code') || '',
     onLogin,
+    onLoginFail
   );
 
   useEffect(() => {

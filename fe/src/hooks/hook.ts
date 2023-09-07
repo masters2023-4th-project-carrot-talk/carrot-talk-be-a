@@ -106,9 +106,13 @@ export const useLogin = (
           user: UserType;
         },
   ) => void,
+  onLoginFail: () => void,
 ) => {
   const { mutate, status, error } = useMutation(() => login(code), {
-    onSuccess: ({ data }) => {
+    onSuccess: ({ success, data }) => {
+      if (!success) {
+        onLoginFail();
+      }
       onLogin(data);
     },
   });
@@ -138,7 +142,7 @@ export const useTokenRefresh = () => {
         if (data.success) {
           return data.data.accessToken;
         }
-      }
+      },
     },
   );
 

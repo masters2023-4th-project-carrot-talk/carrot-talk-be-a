@@ -116,7 +116,13 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(data));
   }),
 
-  rest.post('/api/users/login', (_, res, ctx) => {
+  rest.post('/api/users/login', (req, res, ctx) => {
+    const code = req.url?.searchParams?.get('code');
+
+    if (!code) {
+      return res(ctx.status(200), ctx.json({ success: false }));
+    }
+
     const data = {
       success: true,
       data: {

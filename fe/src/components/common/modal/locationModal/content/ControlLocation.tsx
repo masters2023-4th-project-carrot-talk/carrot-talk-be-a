@@ -12,15 +12,17 @@ import { AlertContent } from '@/components/common/alert/AlertContent';
 import { AlertButtons } from '@/components/common/alert/AlertButtons';
 import { ModalHeader } from '../../ModalHeader';
 import { usePopupStore } from '@/store/popupStore';
+import { useAuth } from '@/hooks/useAuth';
 
 type Props = {
   onToggleContent: (content: 'control' | 'search') => void;
 };
 
 export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
+  const { isLogin } = useAuth();
   const { locations } = useMyLocations();
   const deleteLocationById = useDeleteLocation(); // TODO delete, patch 에러 핸들링
-  const patchMainLocationById = usePatchMainLocation();
+  const { patchMainLocationById, locationList } = usePatchMainLocation();
   const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
 
   const [selectLocation, setSelectLocation] = useState<LocationType | null>(
@@ -51,7 +53,7 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
   };
 
   const onChangeMainLocation = () => {
-    selectLocation && patchMainLocationById(selectLocation.id);
+    selectLocation && patchMainLocationById(selectLocation);
     setSelectLocation(null);
   };
 
@@ -67,9 +69,14 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
     setSelectLocation(selectedLocation);
   };
 
-  const isUser = true; // TODO 로그인한 유저인지 아닌지 확인 필요
-  const shouldBlockDelete = locations?.length === 1;
-  const shouldBlockAdd = locations?.length === 2;
+  const isUser = isLogin;
+  const shouldBlockDelete =
+    (isUser && locations?.length === 1) ||
+    (!isUser && locationList.length === 1);
+  const shouldBlockAdd =
+    (isUser && locations?.length === 2) ||
+    (!isUser && locationList.length === 2);
+  const locationsToRender = isUser ? locations : locationList;
 
   return (
     <>
@@ -86,8 +93,8 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
           <p>최대 2개까지 설정 가능해요.</p>
         </div>
         <div className="buttons">
-          {locations && //TODO 배열 길이 2로 제한
-            locations.map((location) => (
+          {locationsToRender &&
+            locationsToRender.map((location) => (
               <LocationButton
                 key={location.id}
                 isMainLocation={location.isMainLocation}
@@ -116,7 +123,7 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
                 onToggleContent('search');
               }
             }}
-            disabled={shouldBlockAdd} // TODO user인지 아닌지 추가하기
+            disabled={shouldBlockAdd || isUser} // TODO user인지 아닌지 추가하기
           >
             <Plus className="buttons__plus-icon" />
             추가

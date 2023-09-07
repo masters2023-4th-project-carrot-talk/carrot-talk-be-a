@@ -17,13 +17,13 @@ export const useProducts = (
   const { data, fetchNextPage, hasNextPage, status, isFetchingNextPage } =
     useInfiniteQuery(QUERY_KEY.products, fetchProducts, {
       getNextPageParam: (lastPage) => {
-        console.log(lastPage.data.nextId, lastPage.data, 'lastPage확인중');
+        console.log(lastPage, 'lastPage확인중');
 
         return lastPage.data.nextId || null;
       },
     });
-  console.log(data, 'data확인중');
-  console.log(hasNextPage, 'product hasNextPage확인중');
+  // console.log(data, 'data확인중');
+  // console.log(hasNextPage, 'product hasNextPage확인중');
 
   const allProducts = useMemo(() => {
     if (data) {

@@ -1,8 +1,6 @@
 package com.example.carrot.user.controller;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +13,6 @@ import com.example.carrot.user.dto.request.LogoutRequestDto;
 import com.example.carrot.user.dto.request.ReissueRequestDto;
 import com.example.carrot.user.dto.request.SignUpRequestDto;
 import com.example.carrot.user.dto.response.ReissueResponseDto;
-import com.example.carrot.user.dto.response.UserLocationDeleteResponseDto;
 import com.example.carrot.user.dto.response.UserResponseDto;
 import com.example.carrot.user.service.UserService;
 

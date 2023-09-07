@@ -32,7 +32,8 @@ public class UserLocationController {
 	private final UserLocationService userLocationService;
 
 	@GetMapping("/users/locations")
-	public ApiResponse<List<ReadUserLocationResponseDto>> getUserLocation(@RequestAttribute(required = false) Long userId) {
+	public ApiResponse<List<ReadUserLocationResponseDto>> getUserLocation(
+		@RequestAttribute(required = false) Long userId) {
 		return ApiResponse.success(userLocationService.getUserLocation(userId));
 	}
 

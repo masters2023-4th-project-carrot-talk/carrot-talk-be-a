@@ -1,27 +1,27 @@
-import { useState } from 'react';
+import { ReactComponent as Plus } from '@/assets/plus.svg';
 import { Button } from '@/components/common/button/Button';
 import { Dropdown } from '@/components/common/dropdown/Dropdown';
+import { ListBox } from '@/components/common/list/ListBox';
 import { ListItem } from '@/components/common/list/ListItem';
 import { MenuBox } from '@/components/common/menu/MenuBox';
 import { MenuItem } from '@/components/common/menu/MenuItem';
+import { LocationModal } from '@/components/common/modal/locationModal/LocationModal';
 import { LeftButton } from '@/components/common/topBar/LeftButton';
 import { RightButton } from '@/components/common/topBar/RightButton';
 import { TopBar } from '@/components/common/topBar/TopBar';
 import { ChevronDown, LayoutGrid } from '@components/common/icons';
 import { Theme, css } from '@emotion/react';
-import { ReactComponent as Plus } from '@/assets/plus.svg';
-import { ListBox } from '@/components/common/list/ListBox';
-import { LocationModal } from '@/components/common/modal/locationModal/LocationModal';
+import { useState } from 'react';
 
-import { useMyLocations } from '@/hooks/location';
-import { usePopupStore } from '@/store/popupStore';
+import { SkeletonListItem } from '@/components/common/skeleton/listItem';
 import { Category } from '@/components/home/Category';
 import { useCategories } from '@/hooks/category';
-import { useLayoutStore } from '@/store/layoutStore';
-import { useProducts } from '@/hooks/products';
-import { SkeletonListItem } from '@/components/common/skeleton/listItem';
+import { useMyLocations } from '@/hooks/location';
 import { useIntersectionObserver } from '@/hooks/observer';
+import { useProducts } from '@/hooks/products';
 import { useAuth } from '@/hooks/useAuth';
+import { useLayoutStore } from '@/store/layoutStore';
+import { usePopupStore } from '@/store/popupStore';
 
 export const Home: React.FC = () => {
   const { isLogin } = useAuth();
@@ -103,37 +103,44 @@ export const Home: React.FC = () => {
               </Button>
             </RightButton>
             <LeftButton>
-              <Dropdown autoClose>
-                <Button variant="text" className="button__topbar">
-                  역삼1동
-                  <ChevronDown />
-                </Button>
-                <MenuBox>
-                  {locationStatus === 'loading' && (
-                    <MenuItem>로딩스피너</MenuItem>
-                  )}
-                  {locationStatus === 'error' && (
-                    <MenuItem>동네 정보를 가져오지 못했습니다</MenuItem>
-                  )}
-                  {locations &&
-                    locations.map((location) => (
-                      <MenuItem
-                        key={location.id}
-                        state={
-                          selectedLocationId === location.id
-                            ? 'selected'
-                            : 'default'
-                        }
-                        onClick={() => onFilterProducts(location.id)}
-                      >
-                        {location.name}
+              <Dropdown
+                opener={
+                  <Button variant="text" className="button__topbar">
+                    역삼1동
+                    <ChevronDown />
+                  </Button>
+                }
+                menu={
+                  <MenuBox>
+                    {locationStatus === 'loading' && (
+                      <MenuItem>로딩스피너</MenuItem>
+                    )}
+                    {locationStatus === 'error' && (
+                      <MenuItem>동네 정보를 가져오지 못했습니다</MenuItem>
+                    )}
+                    {locations &&
+                      locations.map((location) => (
+                        <MenuItem
+                          key={location.id}
+                          state={
+                            selectedLocationId === location.id
+                              ? 'selected'
+                              : 'default'
+                          }
+                          onClick={() => onFilterProducts(location.id)}
+                        >
+                          {location.name}
+                        </MenuItem>
+                      ))}
+                    {isLogin && (
+                      <MenuItem onClick={onOpenModal}>
+                        내 동네 설정하기
                       </MenuItem>
-                    ))}
-                  {isLogin && (
-                    <MenuItem onClick={onOpenModal}>내 동네 설정하기</MenuItem>
-                  )}
-                </MenuBox>
-              </Dropdown>
+                    )}
+                  </MenuBox>
+                }
+                autoClose
+              />
             </LeftButton>
             <RightButton>
               <Button

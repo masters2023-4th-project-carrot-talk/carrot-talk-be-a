@@ -21,7 +21,7 @@ type LoginResponseType =
 export const OauthLoading: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
+  
   const onLogin = (data: LoginResponseType) => {
     if (data.isUser) {
       setLoginInfo(data);

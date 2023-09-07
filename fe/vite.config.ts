@@ -20,7 +20,4 @@ export default defineConfig({
       '@constants': path.resolve(__dirname, './src/constants'),
     },
   },
-  server: {
-    port: 3000, //임시 포트
-  },
 });

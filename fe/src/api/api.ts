@@ -15,14 +15,11 @@ const fetchData = async (
     throw new Error(errorMessage);
   }
 
-  if (response.headers.get('content-type') !== 'application/json') {
-    throw new Error('Content type is not json');
+  if (response.headers.get('content-type') === 'application/json') {
+    const data = await response.json();
+  
+    return data;
   }
-
-  const data = await response.json();
-
-  return data;
-
 };
 
 export const getMyLocations = () => {
@@ -31,7 +28,12 @@ export const getMyLocations = () => {
 
   // TODO  if (!accesToken) return {id: 0, name: '역삼 1동', isMainLocation: true};
 
-  return fetchData('/api/users/locations');
+  return fetchData('/api/users/locations', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${getAccessToken()}`,
+    }
+  });
 };
 
 export const deleteLocation = (id: number) => {
@@ -63,6 +65,7 @@ export const checkNickname = async (nickname: string) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAccessToken()}`,
     },
   });
 };

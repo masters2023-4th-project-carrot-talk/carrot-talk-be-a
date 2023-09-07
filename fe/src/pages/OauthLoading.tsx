@@ -25,10 +25,11 @@ export const OauthLoading: React.FC = () => {
   const onLogin = (data: LoginResponseType) => {
     if (data.isUser) {
       setLoginInfo(data);
+      navigate(PATH.home, { replace: true });
     } else {
       setAccessToken(data.accessToken);
+      navigate(PATH.signup, { replace: true, state: { isOauth: true } });
     }
-    navigate(data.isUser ? PATH.home : PATH.signup, { replace: true });
   };
 
   const onLoginFail = () => {

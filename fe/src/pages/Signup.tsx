@@ -12,14 +12,11 @@ import { usePopupStore } from '@/store/PopupStore';
 import { ReactComponent as Plus } from '@assets/plus.svg';
 import { Theme, css } from '@emotion/react';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 export const Signup: React.FC = () => {
-  // TODO : 라우트 가드
-  // 앞/뒤로 가기로 회원가입 접근 금지
-  // url로 직접 접근 금지(이전 경로가 /auth/redirect가 아니면 auth로 이동)
-
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [nickname, setNickname] = useState('');
   const [locations, setLocations] = useState<number[]>([]);
@@ -33,6 +30,10 @@ export const Signup: React.FC = () => {
     setNicknameCheckWarning('');
     setNicknameCheckPassed(false);
   }, [nickname]);
+
+  if (!location.state?.isOauth) {
+    return <Navigate to={PATH.auth} replace={true} />;
+  }
 
   const invalidNickName = !/^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]{2,10}$/.test(nickname);
   const submitDisabled =

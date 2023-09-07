@@ -8,7 +8,7 @@ type LocationDataFromServer = {
 type LocationType = {
   id: number;
   name: string;
-  isMainLocation: boolean;
+  isMainLocation?: boolean;
 };
 
 type UserType = {

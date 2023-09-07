@@ -2,23 +2,53 @@ import { create } from 'zustand';
 
 type LocationState = {
   isMainLocationSet: boolean;
-  setIsMainLocationSet: () => void;
+  setMainLocation: () => void;
+};
+
+type RegisteredLocationsState = {
+  locationList: LocationType[];
+  addLocation: (location: LocationWithQueryType) => void;
+  deleteLocation: (id: number) => void;
 };
 
 export const useLocationStore = create<LocationState>((set) => ({
   isMainLocationSet: false,
-  setIsMainLocationSet: () => set({ isMainLocationSet: true }),
+  setMainLocation: () => set({ isMainLocationSet: true }),
 }));
-
-type RegisteredLocationsState = {
-  locationList: LocationType[];
-  setAddLocation: (location: LocationType) => void;
-};
 
 export const useRegisteredLocationsStore = create<RegisteredLocationsState>(
   (set) => ({
     locationList: [],
-    setAddLocation: (location: LocationType) =>
-      set((state) => ({ locationList: [...state.locationList, location] })),
+    addLocation: (location: LocationWithQueryType) =>
+      set((state) => ({ locationList: addLocationToState(state, location) })),
+
+    deleteLocation: (id: number) =>
+      set((state) => ({ locationList: deleteLocationFromState(state, id) })),
   }),
 );
+
+const addLocationToState = (
+  state: RegisteredLocationsState,
+  location: LocationWithQueryType,
+) => {
+  if (!state.locationList.some((item) => item.id === location.id)) {
+    return [
+      ...state.locationList,
+      { ...location, isMainLocation: state.locationList.length === 0 },
+    ];
+  }
+  return state.locationList;
+};
+
+const deleteLocationFromState = (
+  state: RegisteredLocationsState,
+  id: number,
+) => {
+  const updatedList = state.locationList.filter(
+    (location) => location.id !== id,
+  );
+  if (updatedList.length > 0) {
+    updatedList[0].isMainLocation = true;
+  }
+  return updatedList;
+};

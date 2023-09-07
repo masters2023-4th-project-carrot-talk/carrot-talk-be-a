@@ -9,7 +9,7 @@ import { formatPrice } from '@/utils/formatPrice';
 import { formatCount } from '@/utils/formatCount';
 
 type Props = {
-  product: any; // TODO : product 타입 변경
+  product: ProductType; // TODO : product 타입 변경
   onOpenDetail?: () => void;
 };
 

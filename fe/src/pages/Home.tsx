@@ -60,12 +60,10 @@ export const Home: React.FC = () => {
   };
 
   const onFilterProducts = (id: number) => {
-    //TODO 필터링만 수행
     setSelectedLocationId(id);
   };
 
   const onSelectCategory = (id: number) => {
-    //TODO 카테고리 선택
     setSelectedCategoryId(id);
   };
 
@@ -199,5 +197,4 @@ const pageStyle = (theme: Theme, shouldShowSkeletons: boolean) => {
 const obseverStyle = css`
   height: 1px;
   width: 100%;
-  background-color: lightblue;
 `;

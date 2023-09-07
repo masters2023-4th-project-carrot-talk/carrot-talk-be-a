@@ -8,8 +8,6 @@ export const useProducts = (
   categoryId: number | null,
   size = 10,
 ) => {
-  console.log(locationId, categoryId, size, 'useProducts');
-
   const fetchProducts = ({ pageParam = 50 }: { pageParam?: number }) => {
     return getProducts({ locationId, categoryId, next: pageParam, size });
   };
@@ -17,13 +15,9 @@ export const useProducts = (
   const { data, fetchNextPage, hasNextPage, status, isFetchingNextPage } =
     useInfiniteQuery(QUERY_KEY.products, fetchProducts, {
       getNextPageParam: (lastPage) => {
-        console.log(lastPage, 'lastPage확인중');
-
         return lastPage.data.nextId || null;
       },
     });
-  // console.log(data, 'data확인중');
-  // console.log(hasNextPage, 'product hasNextPage확인중');
 
   const allProducts = useMemo(() => {
     if (data) {

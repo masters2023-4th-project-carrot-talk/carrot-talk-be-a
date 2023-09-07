@@ -4,27 +4,23 @@ import { Input } from '@/components/common/input/Input';
 import { ModalListItem } from '../../ModalListItem';
 import { ModalHeader } from '../../ModalHeader';
 import { usePopupStore } from '@/store/popupStore';
-import { useLocationWithQuery, usePatchMainLocation } from '@/hooks/location';
+import { useLocationWithQuery } from '@/hooks/location';
+import { useLocationControl } from '@/hooks/useLocationControl';
 
 type Props = {
-  // TODO : locationList의 타입 변경
   onToggleContent: (content: 'control' | 'search') => void;
 };
 
 export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
-  const [inputValue, setInputValue] = useState<string>(''); //훅으로 빼기 input은 디바운스 걸기
+  const [inputValue, setInputValue] = useState<string>('');
   const trimedInputValue = inputValue.trim();
   const { locations, refetch } = useLocationWithQuery(trimedInputValue);
-  const [hasPressedEnter, setHasPressedEnter] = useState<boolean>(false); // 엔터를 눌렀는지 확인하는 상태
+  const [hasPressedEnter, setHasPressedEnter] = useState<boolean>(false);
   const { togglePopup, setCurrentDim } = usePopupStore();
 
-  const { patchMainLocationById } = usePatchMainLocation(() => {
+  const { patchMainLocationById } = useLocationControl(() => {
     onToggleContent('control');
   });
-
-  // TODO: 엔터를 입력하면 서버에서 검색된 동네 목록을 받아온다.
-  // TODO: 동네는 시/도, 구/군, 동/읍/면 단위
-  // TODO: 검색후 클릭시 대표 동네로 설정하면서 controlLocation으로 이동, input도 비워야한다
 
   const onChangeInput = (value: string) => {
     setInputValue(value);
@@ -72,6 +68,7 @@ export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
                 name={location.name}
                 onClick={() => {
                   onChangeMainLocation(location);
+                  onToggleContent('control');
                 }}
               />
             ))}

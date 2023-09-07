@@ -24,7 +24,7 @@ public class LocationService {
 	private final LocationRepository locationRepository;
 
 	public Location findLocation(Long locationId) {
-		return locationRepository.findByLocationId(locationId)
+		return locationRepository.findById(locationId)
 			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_LOCATION));
 	}
 

@@ -3,6 +3,7 @@ package com.example.carrot.location.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,7 +30,7 @@ public class Location extends BaseCreatedTimeEntity {
 	@Column(nullable = false)
 	private String name;
 
-	@OneToMany(mappedBy = "location")
+	@OneToMany(mappedBy = "location", cascade = CascadeType.PERSIST)
 	private List<UserLocation> userLocations = new ArrayList<>();
 
 	@OneToOne(mappedBy = "location")

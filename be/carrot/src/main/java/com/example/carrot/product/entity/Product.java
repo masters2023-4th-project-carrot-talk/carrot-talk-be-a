@@ -83,7 +83,7 @@ public class Product extends BaseAllTimeEntity {
 	}
 
 	public void validateEditAccess(Long userId) {
-		if (this.user.getUserId() != userId) {
+		if (!this.user.getUserId().equals(userId)) {
 			throw new CustomException(StatusCode.NO_EDIT_PERMISSION);
 		}
 	}

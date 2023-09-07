@@ -35,10 +35,8 @@ public class Category extends BaseCreatedTimeEntity {
 	private List<Product> products = new ArrayList<>();
 
 	@Builder
-	public Category(Long categoryId, String name, String imageUrl, List<Product> products) {
-		this.categoryId = categoryId;
+	public Category(String name, String imageUrl) {
 		this.name = name;
 		this.imageUrl = imageUrl;
-		this.products = products;
 	}
 }

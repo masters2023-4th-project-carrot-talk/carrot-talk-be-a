@@ -33,9 +33,7 @@ public class Image extends BaseCreatedTimeEntity {
 	private List<ProductImage> productImages = new ArrayList<>();
 
 	@Builder
-	public Image(Long imageId, String imageUrl, List<ProductImage> productImages) {
-		this.imageId = imageId;
+	public Image(String imageUrl) {
 		this.imageUrl = imageUrl;
-		this.productImages = productImages;
 	}
 }

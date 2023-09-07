@@ -35,8 +35,7 @@ public class Like extends BaseCreatedTimeEntity {
 	private Product product;
 
 	@Builder
-	public Like(Long likeId, User user, Product product) {
-		this.likeId = likeId;
+	public Like(User user, Product product) {
 		this.user = user;
 		this.product = product;
 	}

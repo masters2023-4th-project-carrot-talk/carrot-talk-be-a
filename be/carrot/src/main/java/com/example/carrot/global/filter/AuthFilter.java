@@ -39,7 +39,7 @@ public class AuthFilter implements Filter {
 	@Value("${filter.allowed-uris}")
 	private String[] whiteListUris;
 
-	@Value("${users-signup-uri}")
+	@Value("${filter.users-signup-uri}")
 	private String signupUri;
 
 	private final ObjectMapper objectMapper;

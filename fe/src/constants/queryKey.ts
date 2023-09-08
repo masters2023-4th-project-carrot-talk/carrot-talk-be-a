@@ -1,5 +1,7 @@
 export const QUERY_KEY = {
-  products: 'products',
   locations: 'locations',
+  nicknameCheck: 'nicknameCheck',
+  tokenRefresh: 'tokenRefresh',
+  products: 'products',
   categories: 'categories',
 };

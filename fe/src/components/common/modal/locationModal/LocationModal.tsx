@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { usePopupStore } from '@/store/popupStore';
 import { Modal } from '@components/common/modal/Modal';
+import { useState } from 'react';
 import { ControlLocation } from './content/ControlLocation';
 import { SearchLocation } from './content/SearchLocation';
-import { usePopupStore } from '@/store/popupStore';
 
 export const LocationModal: React.FC = () => {
   const { isOpen, currentDim } = usePopupStore();

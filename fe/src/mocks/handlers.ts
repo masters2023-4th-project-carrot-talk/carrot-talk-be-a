@@ -1,4 +1,5 @@
 import { rest } from 'msw';
+import { token, users } from './data/users';
 import { categoryList } from './data/categories';
 import { locationsWithQuery } from './data/locations';
 
@@ -64,6 +65,7 @@ export const handlers = [
 
     return res(ctx.status(200), ctx.json(data));
   }),
+
   //동네 검색
   // 핸들러 설정
   rest.get(`/api/locations`, (req, res, ctx) => {
@@ -82,4 +84,99 @@ export const handlers = [
     return res(ctx.delay(200), ctx.status(200), ctx.json(categoryList));
   }),
   //
+
+  rest.get('/api/users/nickname', (req, res, ctx) => {
+    const query = req.url.searchParams;
+    const nickname = query.get('nickname');
+
+    const isUser = users.some((user) => user.nickname === nickname);
+
+    if (isUser) {
+      const data = {
+        success: false,
+        errorCode: {
+          status: 409,
+          message: '같은 닉네임이 존재합니다.',
+        },
+      };
+
+      return res(ctx.status(200), ctx.json(data));
+    }
+
+    const data = {
+      success: true,
+    };
+
+    return res(ctx.status(200), ctx.json(data));
+  }),
+
+  rest.post('/api/users/signup', async (req, res, ctx) => {
+    const { nickname, mainLocationId, subLocationId } = await req.json();
+
+    const newUser = {
+      id: users.length + 1,
+      nickname,
+      mainLocationId,
+      subLocationId,
+      imageUrl:
+        'https://i.pinimg.com/originals/3a/22/bd/3a22bdb8957e81ed560635383d483e97.png',
+    };
+
+    users.push(newUser);
+
+    const data = {
+      success: true,
+      data: {
+        isUser: true,
+        accessToken: token,
+        refreshToken: token,
+        user: {
+          id: newUser.id,
+          nickname: newUser.nickname,
+          imageUrl: newUser.imageUrl,
+        },
+      },
+    };
+
+    return res(ctx.status(200), ctx.json(data));
+  }),
+
+  rest.post('/api/users/login', async (req, res, ctx) => {
+    const { code } = await req.json();
+
+    if (!code) {
+      return res(ctx.status(200), ctx.json({ success: false }));
+    }
+
+    const data = {
+      success: true,
+      data: {
+        isUser: false,
+        accessToken: 'accessTokenForSignup',
+      },
+    };
+
+    return res(ctx.status(200), ctx.json(data));
+  }),
+
+  rest.post('/api/users/logout', async (req, res, ctx) => {
+    const authorization = req.headers.get('Authorization');
+    const body = await req.json();
+
+    if (authorization !== `Bearer ${token}` || body?.refreshToken !== token) {
+      return res(ctx.status(200), ctx.json({ success: false }));
+    }
+
+    return res(ctx.status(200), ctx.json({ success: true }));
+  }),
+
+  rest.post('/api/users/reissue-access-token', async (req, res, ctx) => {
+    const body = await req.json();
+
+    if (body?.refreshToken !== token) {
+      return res(ctx.status(200), ctx.json({ success: false }));
+    }
+
+    return res(ctx.status(200), ctx.json({ success: true, accessToken: token }));
+  })
 ];

@@ -1,26 +1,21 @@
-import React, { useState } from 'react';
-import { Button } from '@components/common/button/Button';
-import { Theme, css } from '@emotion/react';
-import { Plus, CircleXFilled } from '@components/common/icons';
-import {
-  useDeleteLocation,
-  useMyLocations,
-  usePatchMainLocation,
-} from '@/hooks/location';
 import { Alert } from '@/components/common/alert/Alert';
-import { AlertContent } from '@/components/common/alert/AlertContent';
 import { AlertButtons } from '@/components/common/alert/AlertButtons';
-import { ModalHeader } from '../../ModalHeader';
+import { AlertContent } from '@/components/common/alert/AlertContent';
+import { useLocationControl } from '@/hooks/useLocationControl';
 import { usePopupStore } from '@/store/popupStore';
+import { Button } from '@components/common/button/Button';
+import { CircleXFilled, Plus } from '@components/common/icons';
+import { Theme, css } from '@emotion/react';
+import React, { useState } from 'react';
+import { ModalHeader } from '../../ModalHeader';
 
 type Props = {
   onToggleContent: (content: 'control' | 'search') => void;
 };
 
 export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
-  const { locations } = useMyLocations();
-  const deleteLocationById = useDeleteLocation(); // TODO delete, patch 에러 핸들링
-  const patchMainLocationById = usePatchMainLocation();
+  const { locations, deleteLocationById, patchMainLocationById } =
+    useLocationControl();
   const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
 
   const [selectLocation, setSelectLocation] = useState<LocationType | null>(
@@ -51,7 +46,7 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
   };
 
   const onChangeMainLocation = () => {
-    selectLocation && patchMainLocationById(selectLocation.id);
+    selectLocation && patchMainLocationById(selectLocation);
     setSelectLocation(null);
   };
 
@@ -67,7 +62,6 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
     setSelectLocation(selectedLocation);
   };
 
-  const isUser = true; // TODO 로그인한 유저인지 아닌지 확인 필요
   const shouldBlockDelete = locations?.length === 1;
   const shouldBlockAdd = locations?.length === 2;
 
@@ -86,7 +80,7 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
           <p>최대 2개까지 설정 가능해요.</p>
         </div>
         <div className="buttons">
-          {locations && //TODO 배열 길이 2로 제한
+          {locations &&
             locations.map((location) => (
               <LocationButton
                 key={location.id}
@@ -116,7 +110,7 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
                 onToggleContent('search');
               }
             }}
-            disabled={shouldBlockAdd} // TODO user인지 아닌지 추가하기
+            disabled={shouldBlockAdd}
           >
             <Plus className="buttons__plus-icon" />
             추가
@@ -151,7 +145,7 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
 };
 
 type LocationButtonProps = {
-  isMainLocation: boolean;
+  isMainLocation?: boolean;
   children: React.ReactNode;
   onClick: () => void;
 };
@@ -171,7 +165,7 @@ const LocationButton: React.FC<LocationButtonProps> = ({
   );
 };
 
-const locationButtonStyle = (theme: Theme, isMainLocation: boolean) => {
+const locationButtonStyle = (theme: Theme, isMainLocation?: boolean) => {
   return css`
     cursor: pointer;
     display: flex;

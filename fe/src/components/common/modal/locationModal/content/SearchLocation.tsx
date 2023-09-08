@@ -1,25 +1,26 @@
-import { useState } from 'react';
-import { css } from '@emotion/react';
 import { Input } from '@/components/common/input/Input';
-import { ModalListItem } from '../../ModalListItem';
-import { ModalHeader } from '../../ModalHeader';
+import { useLocationWithQuery } from '@/hooks/location';
+import { useLocationControl } from '@/hooks/useLocationControl';
 import { usePopupStore } from '@/store/popupStore';
-import { useLocationWithQuery, usePatchMainLocation } from '@/hooks/location';
+import { css } from '@emotion/react';
+import { useState } from 'react';
+import { ModalHeader } from '../../ModalHeader';
+import { ModalListItem } from '../../ModalListItem';
 
 type Props = {
-  // TODO : locationList의 타입 변경
   onToggleContent: (content: 'control' | 'search') => void;
 };
 
 export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
-  const [inputValue, setInputValue] = useState<string>(''); //훅으로 빼기 input은 디바운스 걸기
+  const [inputValue, setInputValue] = useState<string>('');
   const trimedInputValue = inputValue.trim();
   const { locations, refetch } = useLocationWithQuery(trimedInputValue);
-  const [hasPressedEnter, setHasPressedEnter] = useState<boolean>(false); // 엔터를 눌렀는지 확인하는 상태
+  const [hasPressedEnter, setHasPressedEnter] = useState<boolean>(false);
   const { togglePopup, setCurrentDim } = usePopupStore();
-  // TODO: 엔터를 입력하면 서버에서 검색된 동네 목록을 받아온다.
-  // TODO: 동네는 시/도, 구/군, 동/읍/면 단위
-  // TODO: 검색후 클릭시 대표 동네로 설정하면서 controlLocation으로 이동, input도 비워야한다
+
+  const { patchMainLocationById } = useLocationControl(() => {
+    onToggleContent('control');
+  });
 
   const onChangeInput = (value: string) => {
     setInputValue(value);
@@ -31,13 +32,9 @@ export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
     setHasPressedEnter(true);
   };
 
-  const patchMainLocationById = usePatchMainLocation(() => {
-    onToggleContent('control');
-  });
-
-  const onChangeMainLocation = (id: number) => {
+  const onChangeMainLocation = (location: LocationType) => {
     setInputValue('');
-    patchMainLocationById(id);
+    patchMainLocationById(location);
   };
 
   const onCloseModal = () => {
@@ -70,7 +67,8 @@ export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
                 key={location.id}
                 name={location.name}
                 onClick={() => {
-                  onChangeMainLocation(location.id);
+                  onChangeMainLocation(location);
+                  onToggleContent('control');
                 }}
               />
             ))}

@@ -22,6 +22,8 @@ export const Layout: React.FC = () => {
 
 const layoutStyle = (animationTrigger: boolean) => {
   return css`
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
     transition: 300ms ease;
     transform: translateX(${animationTrigger ? '-392px' : '0px'});

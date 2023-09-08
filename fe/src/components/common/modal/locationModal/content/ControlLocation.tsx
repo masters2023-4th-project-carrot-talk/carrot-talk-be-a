@@ -2,12 +2,12 @@ import { Alert } from '@components/common/alert/Alert';
 import { AlertButtons } from '@components/common/alert/AlertButtons';
 import { AlertContent } from '@components/common/alert/AlertContent';
 import { useLocationControl } from '@hooks/useLocationControl';
-import { usePopupStore } from '@store/popupStore';
 import { Button } from '@components/common/button/Button';
 import { CircleXFilled, Plus } from '@components/common/icons';
 import { Theme, css } from '@emotion/react';
 import React, { useState } from 'react';
 import { ModalHeader } from '../../ModalHeader';
+import { usePopupStore } from '@/stores/popupStore';
 
 type Props = {
   onToggleContent: (content: 'control' | 'search') => void;
@@ -51,7 +51,7 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
   };
 
   const onSelectLocation = (selectedLocation: LocationType) => {
-    locations?.map((location) => {
+    locations?.map((location: LocationType) => {
       if (location.id === selectedLocation.id) {
         location.isMainLocation = true;
       } else {
@@ -81,7 +81,7 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
         </div>
         <div className="buttons">
           {locations &&
-            locations.map((location) => (
+            locations.map((location: LocationType) => (
               <LocationButton
                 key={location.id}
                 isMainLocation={location.isMainLocation}

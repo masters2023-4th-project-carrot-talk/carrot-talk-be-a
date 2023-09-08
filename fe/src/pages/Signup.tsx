@@ -9,11 +9,11 @@ import { TopBar } from '@components/common/topBar/TopBar';
 import { PATH } from '@constants/path';
 import { useCheckNickname, useSignup } from '@hooks/auth';
 import { useLocationControl } from '@hooks/useLocationControl';
-import { usePopupStore } from '@store/popupStore';
 import { ReactComponent as Plus } from '@assets/plus.svg';
 import { Theme, css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { usePopupStore } from '@/stores/popupStore';
 
 type NicknameCheck =
   | {
@@ -91,10 +91,11 @@ export const Signup: React.FC = () => {
       return;
     }
 
-    const mainLocationId = locations.find((location) => location.isMainLocation)
-      ?.id as number;
+    const mainLocationId = locations.find(
+      (location: LocationType) => location.isMainLocation,
+    )?.id as number;
     const subLocationId = locations?.find(
-      (location) => !location.isMainLocation,
+      (location: LocationType) => !location.isMainLocation,
     )?.id;
 
     const signupInfo = {

@@ -1,6 +1,6 @@
-import { usePopupStore } from '@store/popupStore';
 import { Theme, css } from '@emotion/react';
 import { Button } from '../button/Button';
+import { usePopupStore } from '@/stores/popupStore';
 
 type Props = {
   buttonText: '취소' | '닫기';

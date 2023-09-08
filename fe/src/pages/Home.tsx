@@ -21,8 +21,8 @@ import { useIntersectionObserver } from '@hooks/observer';
 import { useProducts } from '@hooks/products';
 import { useAuth } from '@hooks/useAuth';
 import { modifiedLocaitionName } from '@utils/modifyLocationName';
-import { useLayoutStore } from '@store/layoutStore';
-import { usePopupStore } from '@store/popupStore';
+import { useLayoutStore } from '@/stores/layoutStore';
+import { usePopupStore } from '@/stores/popupStore';
 
 export const Home: React.FC = () => {
   const { isLogin } = useAuth();

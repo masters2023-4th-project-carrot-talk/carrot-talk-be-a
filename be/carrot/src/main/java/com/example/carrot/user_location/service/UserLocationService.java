@@ -92,7 +92,7 @@ public class UserLocationService {
 
 		List<ReadUserLocationResponseDto> readUserLocationResponseDtos = new ArrayList<>();
 		for (UserLocation userLocation : findUserLocations) {
-			Location location = locationRepository.findByLocationId(userLocation.findLocationId())
+			Location location = locationRepository.findById(userLocation.findLocationId())
 				.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_LOCATION));
 
 			readUserLocationResponseDtos.add(
@@ -110,7 +110,7 @@ public class UserLocationService {
 	public UserLocationDeleteResponseDto deleteUserLocation(Long locationId, Long userId) {
 		User user = userRepository.findByUserId(userId)
 			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_USER));
-		Location location = locationRepository.findByLocationId(locationId)
+		Location location = locationRepository.findById(locationId)
 			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_LOCATION));
 
 		// 등록된 동네가 하나라면 제거 불가능 -> 예외 처리

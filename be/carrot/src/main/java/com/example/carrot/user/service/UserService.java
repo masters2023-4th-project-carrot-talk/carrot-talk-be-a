@@ -24,7 +24,6 @@ import com.example.carrot.user.dto.request.SignUpRequestDto;
 import com.example.carrot.user.dto.response.LoginUserResponseDto;
 import com.example.carrot.user.dto.response.OauthTokenResponseDto;
 import com.example.carrot.user.dto.response.ReissueResponseDto;
-import com.example.carrot.user.dto.response.UserLocationDeleteResponseDto;
 import com.example.carrot.user.dto.response.UserResponseDto;
 import com.example.carrot.user.entity.User;
 import com.example.carrot.user.repository.UserRepository;

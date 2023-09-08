@@ -3,6 +3,7 @@ package com.example.carrot.product.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,6 +18,8 @@ import javax.persistence.OneToOne;
 
 import com.example.carrot.category.entity.Category;
 import com.example.carrot.global.common.BaseAllTimeEntity;
+import com.example.carrot.global.exception.CustomException;
+import com.example.carrot.global.exception.StatusCode;
 import com.example.carrot.like.entity.Like;
 import com.example.carrot.location.entity.Location;
 import com.example.carrot.product_image.entity.ProductImage;
@@ -60,10 +63,10 @@ public class Product extends BaseAllTimeEntity {
 	@JoinColumn(name = "location_id")
 	private Location location;
 
-	@OneToMany(mappedBy = "product")
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 	private List<Like> likes = new ArrayList<>();
 
-	@OneToMany(mappedBy = "product")
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 	private List<ProductImage> productImages = new ArrayList<>();
 
 	@Builder
@@ -77,5 +80,20 @@ public class Product extends BaseAllTimeEntity {
 		this.user = user;
 		this.category = category;
 		this.location = location;
+	}
+
+	public void validateEditAccess(Long userId) {
+		if (this.user.getUserId() != userId) {
+			throw new CustomException(StatusCode.NO_EDIT_PERMISSION);
+		}
+	}
+
+	public Product update(String title, String content, Long price, Category category, Location location) {
+		this.name = title;
+		this.content = content;
+		this.price = price;
+		this.category = category;
+		this.location = location;
+		return this;
 	}
 }

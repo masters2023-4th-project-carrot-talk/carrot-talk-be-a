@@ -15,6 +15,7 @@ export const Interests: React.FC = () => {
 
 const pageStyle = (theme: Theme) => {
   return css`
+    background-color: ${theme.color.neutral.backgroundBold};
     flex: 1;
   `;
 };

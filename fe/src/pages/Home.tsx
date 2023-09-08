@@ -16,24 +16,24 @@ import { useState } from 'react';
 import { SkeletonListItem } from '@components/common/skeleton/listItem';
 import { Category } from '@components/home/Category';
 import { useCategories } from '@hooks/category';
-import { useMyLocations } from '@hooks/location';
 import { useIntersectionObserver } from '@hooks/observer';
 import { useProducts } from '@hooks/products';
 import { useAuth } from '@hooks/useAuth';
 import { modifiedLocaitionName } from '@utils/modifyLocationName';
 import { useLayoutStore } from '@/stores/layoutStore';
 import { usePopupStore } from '@/stores/popupStore';
+import { useLocationControl } from '@/hooks/useLocationControl';
 
 export const Home: React.FC = () => {
   const { isLogin } = useAuth();
-  const { locations, status: locationStatus } = useMyLocations();
+  const { locations } = useLocationControl();
   const { categories } = useCategories();
   // useQuery들 묶을수있는지
   const { togglePopup, setCurrentDim } = usePopupStore();
 
   const mainLocation = locations?.find((location) => location.isMainLocation);
   const [selectedLocationId, setSelectedLocationId] = useState<number | null>(
-    mainLocation?.id || null,
+    mainLocation?.id || 1,
   );
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     null,
@@ -78,10 +78,10 @@ export const Home: React.FC = () => {
     setSelectedLocationId(id);
   };
 
-  const onSelectCategory = (id: number) => {
+  const onSelectCategory = async (id: number) => {
     // TODO: 두번씩 눌러야 갱신이 되는 버그
     remove();
-    refetch();
+    refetch(); //콜백처리
     setSelectedCategoryId(id);
   };
 
@@ -96,7 +96,7 @@ export const Home: React.FC = () => {
 
   const mainLocationName = locations
     ? modifiedLocaitionName(mainLocation?.name as string)
-    : '역삼 1동';
+    : modifiedLocaitionName('역삼1동');
 
   return (
     <>
@@ -122,12 +122,12 @@ export const Home: React.FC = () => {
                 }
                 menu={
                   <MenuBox>
-                    {locationStatus === 'loading' && (
+                    {/* {locationStatus === 'loading' && (
                       <MenuItem>로딩스피너</MenuItem>
                     )}
                     {locationStatus === 'error' && (
                       <MenuItem>동네 정보를 가져오지 못했습니다</MenuItem>
-                    )}
+                    )} */}
                     {locations &&
                       locations.map((location) => (
                         <MenuItem

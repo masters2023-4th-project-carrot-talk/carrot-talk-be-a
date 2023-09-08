@@ -8,7 +8,7 @@ type RegisteredLocationsState = {
 
 export const useRegisteredLocationsStore = create<RegisteredLocationsState>(
   (set) => ({
-    locationList: [{ id: 1, name: '역삼 1동', isMainLocation: true }],
+    locationList: [{ id: 1, name: '역삼1동', isMainLocation: true }],
     addLocation: (location: LocationWithQueryType) =>
       set((state) => ({ locationList: addLocationToState(state, location) })),
 

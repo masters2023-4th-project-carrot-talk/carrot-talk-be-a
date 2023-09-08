@@ -19,7 +19,7 @@ export const ListItem: FC<Props> = ({ product, onOpenDetail }) => {
   const formattedTimeStamp = formatTimeStamp(product.createdAt);
   const formattedChatCount = formatCount(product.chatCount);
   const formattedLikeCount = formatCount(product.likeCount);
-  const isAuthor = getUserInfo().id === product.sellerId;
+  const isAuthor =  getUserInfo() ? getUserInfo().id === product.sellerId : false;
   // TODO : dots 드롭다운 달고 기능구현
   return (
     <li css={listItemStyle} onClick={onOpenDetail}>

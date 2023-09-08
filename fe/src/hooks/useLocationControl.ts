@@ -1,4 +1,4 @@
-import { useRegisteredLocationsStore } from '@stores/locationStore';
+import { useRegisteredLocationsStore } from '@/stores/locationStore';
 import { useAuth } from './useAuth';
 import {
   useDeleteLocation,

@@ -4,7 +4,7 @@ import {
   useDeleteLocation,
   useMyLocations,
   usePatchMainLocation,
-} from './location';
+} from '../queries/location';
 
 export const useLocationControl = (onPatchMainLocation?: () => void) => {
   const { isLogin } = useAuth();

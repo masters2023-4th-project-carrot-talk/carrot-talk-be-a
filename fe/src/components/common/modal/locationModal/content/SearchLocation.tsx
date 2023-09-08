@@ -1,5 +1,5 @@
 import { Input } from '@components/common/input/Input';
-import { useLocationWithQuery } from '@hooks/location';
+import { useLocationWithQuery } from '@/queries/location';
 import { useLocationControl } from '@hooks/useLocationControl';
 import { css } from '@emotion/react';
 import { useState } from 'react';

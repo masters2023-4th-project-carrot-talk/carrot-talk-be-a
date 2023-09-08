@@ -7,7 +7,7 @@ import { RightButton } from '@components/common/topBar/RightButton';
 import { Title } from '@components/common/topBar/Title';
 import { TopBar } from '@components/common/topBar/TopBar';
 import { PATH } from '@constants/path';
-import { useCheckNickname, useSignup } from '@hooks/auth';
+import { useCheckNickname, useSignup } from '@/queries/auth';
 import { useLocationControl } from '@hooks/useLocationControl';
 import { ReactComponent as Plus } from '@assets/plus.svg';
 import { Theme, css } from '@emotion/react';

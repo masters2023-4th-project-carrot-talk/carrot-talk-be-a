@@ -4,7 +4,7 @@ import { Beez } from '@components/common/icons';
 import { Title } from '@components/common/topBar/Title';
 import { TopBar } from '@components/common/topBar/TopBar';
 import { KAKAO_AUTH_URL, PATH } from '@constants/path';
-import { useLogout } from '@hooks/auth';
+import { useLogout } from '@/queries/auth';
 import { useAuth } from '@hooks/useAuth';
 import { clearLoginInfo } from '@utils/localStorage';
 import kakaoLogin from '@assets/kakao_login.png';

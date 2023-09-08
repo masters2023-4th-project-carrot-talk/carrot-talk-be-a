@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { PATH } from './constants/path';
-import { useTokenRefresh } from './hooks/auth';
+import { useTokenRefresh } from './queries/auth';
 import { useAuth } from './hooks/useAuth';
 import { Layout } from './layout/Layout';
 import { Auth } from './pages/Auth';

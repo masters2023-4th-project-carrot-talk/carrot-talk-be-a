@@ -15,9 +15,9 @@ import { useState } from 'react';
 
 import { SkeletonListItem } from '@components/common/skeleton/listItem';
 import { Category } from '@components/home/Category';
-import { useCategories } from '@hooks/category';
+import { useCategories } from '@/queries/category';
 import { useIntersectionObserver } from '@hooks/observer';
-import { useProducts } from '@hooks/products';
+import { useProducts } from '@/queries/products';
 import { useAuth } from '@hooks/useAuth';
 import { modifiedLocaitionName } from '@utils/modifyLocationName';
 import { useLayoutStore } from '@/stores/layoutStore';

@@ -30,14 +30,14 @@ import com.example.carrot.user.repository.UserRepository;
 import com.example.carrot.user_location.entity.UserLocation;
 import com.example.carrot.user_location.service.UserLocationService;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService {
+	private static final String KAKAO_TOKEN_URI = "https://kauth.kakao.com/oauth/token";
+	private static final String KAKAO_USER_ME_URI = "https://kapi.kakao.com/v2/user/me";
 
 	private final LocationService locationService;
 	private final UserLocationService userLocationService;
@@ -51,6 +51,14 @@ public class UserService {
 	private String grantType;
 	@Value("${oauth.kakao.redirect_uri}")
 	private String redirectUri;
+
+	public UserService(LocationService locationService, UserLocationService userLocationService, UserRepository userRepository,
+		JwtProvider jwtProvider) {
+		this.locationService = locationService;
+		this.userLocationService = userLocationService;
+		this.userRepository = userRepository;
+		this.jwtProvider = jwtProvider;
+	}
 
 	@Transactional
 	public UserResponseDto kakaoLogin(LoginRequestDto loginRequestDto) {
@@ -91,7 +99,7 @@ public class UserService {
 
 		return WebClient.create()
 			.post()
-			.uri("https://kauth.kakao.com/oauth/token")
+			.uri(KAKAO_TOKEN_URI)
 			.header("Content-type", "application/x-www-form-urlencoded;charset=utf-8")
 			.bodyValue(formData)
 			.retrieve()

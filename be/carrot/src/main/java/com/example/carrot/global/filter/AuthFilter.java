@@ -65,17 +65,8 @@ public class AuthFilter implements Filter {
 
 		if (whiteListCheck(httpServletRequest.getRequestURI())) {
 			log.info("whileListCheck 진입");
-			if (httpServletRequest.getRequestURI().equals(signupUri)) {
-				try {
-					Claims claims = jwtProvider.getClaims(getToken(httpServletRequest));
-
-					request.setAttribute(SOCIAL_ID, claims.get(SOCIAL_ID));
-					request.setAttribute(IMAGE_URL, claims.get(IMAGE_URL));
-
-				} catch (RuntimeException e) {
-					log.info(e.getClass().getName());
-					sendErrorApiResponse(httpServletResponse, e);
-				}
+			if (isSignupUri(httpServletRequest.getRequestURI())) {
+				processSignupJwt(httpServletRequest, httpServletResponse);
 			}
 			chain.doFilter(request, response);
 			return;
@@ -94,6 +85,22 @@ public class AuthFilter implements Filter {
 			chain.doFilter(request, response);
 		} catch (RuntimeException e) {
 			log.debug(e.getClass().getName());
+			sendErrorApiResponse(httpServletResponse, e);
+		}
+	}
+
+	private boolean isSignupUri(String uri) {
+		return signupUri.equals(uri);
+	}
+
+	private void processSignupJwt(HttpServletRequest request, HttpServletResponse httpServletResponse) throws
+		IOException {
+		try {
+			Claims claims = jwtProvider.getClaims(getToken(request));
+			request.setAttribute(SOCIAL_ID, claims.get(SOCIAL_ID));
+			request.setAttribute(IMAGE_URL, claims.get(IMAGE_URL));
+		} catch (RuntimeException e) {
+			log.info(e.getClass().getName());
 			sendErrorApiResponse(httpServletResponse, e);
 		}
 	}

@@ -33,7 +33,7 @@ public class Location extends BaseCreatedTimeEntity {
 	@OneToOne(mappedBy = "location")
 	private Product product;
 
-	@OneToMany(mappedBy = "location", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
 	private List<UserLocation> userLocations = new ArrayList<>();
 
 	@Builder

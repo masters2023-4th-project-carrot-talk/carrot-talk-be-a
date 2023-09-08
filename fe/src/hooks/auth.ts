@@ -1,7 +1,7 @@
-import { checkNickname, login, logout, refreshToken, signup } from "@/api/api";
-import { QUERY_KEY } from "@/constants/queryKey";
-import { getRefreshToken, setLoginInfo } from "@/utils/localStorage";
-import { useMutation, useQuery } from "react-query";
+import { checkNickname, login, logout, refreshToken, signup } from '@api/api';
+import { QUERY_KEY } from '@constants/queryKey';
+import { getRefreshToken, setLoginInfo } from '@utils/localStorage';
+import { useMutation, useQuery } from 'react-query';
 
 export const useCheckNickname = (nickname: string) => {
   const { data, status, error, refetch } = useQuery(

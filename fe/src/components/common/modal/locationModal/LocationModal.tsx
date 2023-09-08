@@ -1,4 +1,4 @@
-import { usePopupStore } from '@/store/popupStore';
+import { usePopupStore } from '@store/popupStore';
 import { Modal } from '@components/common/modal/Modal';
 import { useState } from 'react';
 import { ControlLocation } from './content/ControlLocation';

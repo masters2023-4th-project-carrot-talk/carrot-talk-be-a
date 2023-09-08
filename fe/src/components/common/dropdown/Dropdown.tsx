@@ -1,4 +1,4 @@
-import { ButtonProps } from '@/components/common/button/Button';
+import { ButtonProps } from '@components/common/button/Button';
 import { DropdownContext } from '@/contexts/DropdownContext';
 import { css } from '@emotion/react';
 import { useState } from 'react';

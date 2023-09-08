@@ -4,10 +4,10 @@ import { ImageBox } from '../imageBox/ImageBox';
 import { Message, Heart, Dots } from '../icons';
 import { Button } from '../button/Button';
 import { StatusBadge } from '../statusBadge/StatusBadge';
-import { formatTimeStamp } from '@/utils/formatTimeStamp';
-import { formatPrice } from '@/utils/formatPrice';
-import { formatCount } from '@/utils/formatCount';
-import { getUserInfo } from '@/utils/localStorage';
+import { formatTimeStamp } from '@utils/formatTimeStamp';
+import { formatPrice } from '@utils/formatPrice';
+import { formatCount } from '@utils/formatCount';
+import { getUserInfo } from '@utils/localStorage';
 
 type Props = {
   product: ProductType; // TODO : product 타입 변경

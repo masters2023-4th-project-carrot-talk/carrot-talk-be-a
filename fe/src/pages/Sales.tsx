@@ -1,5 +1,5 @@
-import { Title } from '@/components/common/topBar/Title';
-import { TopBar } from '@/components/common/topBar/TopBar';
+import { Title } from '@components/common/topBar/Title';
+import { TopBar } from '@components/common/topBar/TopBar';
 import { Theme, css } from '@emotion/react';
 
 export const Sales: React.FC = () => {

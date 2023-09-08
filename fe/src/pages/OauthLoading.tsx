@@ -1,6 +1,6 @@
-import { PATH } from '@/constants/path';
-import { useLogin } from '@/hooks/auth';
-import { setAccessToken, setLoginInfo } from '@/utils/localStorage';
+import { PATH } from '@constants/path';
+import { useLogin } from '@hooks/auth';
+import { setAccessToken, setLoginInfo } from '@utils/localStorage';
 import kakao from '@assets/kakao.png';
 import { Theme, css } from '@emotion/react';
 import { useEffect } from 'react';
@@ -21,7 +21,7 @@ type LoginResponseType =
 export const OauthLoading: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  
+
   const onLogin = (data: LoginResponseType) => {
     if (data.isUser) {
       setLoginInfo(data);
@@ -34,12 +34,12 @@ export const OauthLoading: React.FC = () => {
 
   const onLoginFail = () => {
     navigate(PATH.auth, { replace: true });
-  }
+  };
 
   const { mutate: loginMutation } = useLogin(
     searchParams.get('code') || '',
     onLogin,
-    onLoginFail
+    onLoginFail,
   );
 
   useEffect(() => {

@@ -1,5 +1,5 @@
-import { BASE_URL } from '@/constants/path';
-import { getAccessToken, getRefreshToken } from '@/utils/localStorage';
+import { BASE_URL } from '@constants/path';
+import { getAccessToken, getRefreshToken } from '@utils/localStorage';
 
 const fetchData = async (path: string, options?: RequestInit) => {
   const response = await fetch(BASE_URL + path, options);

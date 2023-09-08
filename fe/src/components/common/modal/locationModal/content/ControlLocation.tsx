@@ -1,8 +1,8 @@
-import { Alert } from '@/components/common/alert/Alert';
-import { AlertButtons } from '@/components/common/alert/AlertButtons';
-import { AlertContent } from '@/components/common/alert/AlertContent';
-import { useLocationControl } from '@/hooks/useLocationControl';
-import { usePopupStore } from '@/store/popupStore';
+import { Alert } from '@components/common/alert/Alert';
+import { AlertButtons } from '@components/common/alert/AlertButtons';
+import { AlertContent } from '@components/common/alert/AlertContent';
+import { useLocationControl } from '@hooks/useLocationControl';
+import { usePopupStore } from '@store/popupStore';
 import { Button } from '@components/common/button/Button';
 import { CircleXFilled, Plus } from '@components/common/icons';
 import { Theme, css } from '@emotion/react';

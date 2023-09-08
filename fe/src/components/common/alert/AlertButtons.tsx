@@ -1,4 +1,4 @@
-import { usePopupStore } from '@/store/popupStore';
+import { usePopupStore } from '@store/popupStore';
 import { Theme, css } from '@emotion/react';
 import { Button } from '../button/Button';
 

@@ -1,12 +1,12 @@
-import { ReactComponent as UserCircle } from '@/assets/user-circle.svg';
-import { Button } from '@/components/common/button/Button';
-import { Beez } from '@/components/common/icons';
-import { Title } from '@/components/common/topBar/Title';
-import { TopBar } from '@/components/common/topBar/TopBar';
-import { KAKAO_AUTH_URL, PATH } from '@/constants/path';
-import { useLogout } from '@/hooks/auth';
-import { useAuth } from '@/hooks/useAuth';
-import { clearLoginInfo } from '@/utils/localStorage';
+import { ReactComponent as UserCircle } from '@assets/user-circle.svg';
+import { Button } from '@components/common/button/Button';
+import { Beez } from '@components/common/icons';
+import { Title } from '@components/common/topBar/Title';
+import { TopBar } from '@components/common/topBar/TopBar';
+import { KAKAO_AUTH_URL, PATH } from '@constants/path';
+import { useLogout } from '@hooks/auth';
+import { useAuth } from '@hooks/useAuth';
+import { clearLoginInfo } from '@utils/localStorage';
 import kakaoLogin from '@assets/kakao_login.png';
 import { Theme, css } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
@@ -62,7 +62,8 @@ export const Auth: React.FC = () => {
               <div className="service-info__title">꿀 찾고 계신가요?</div>
               <h2 className="service-info__name">BEE 마켓</h2>
               <div className="service-info__description">
-                여기저기 숨어있는 꿀 같은 거래,<br />
+                여기저기 숨어있는 꿀 같은 거래,
+                <br />
                 BEE 마켓에서 찾아드릴게요!
               </div>
             </div>

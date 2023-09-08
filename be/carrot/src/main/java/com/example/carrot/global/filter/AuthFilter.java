@@ -10,6 +10,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.PatternMatchUtils;
@@ -22,19 +23,32 @@ import com.example.carrot.global.jwt.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Claims;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequiredArgsConstructor
 public class AuthFilter implements Filter {
 
-	private final String[] whiteListUris = new String[] {"/", "/api/users/login", "/api/users/signup",
-		"/oauth/redirect", "/api/users/nickname", "/api/users/reissue-access-token", "/api/locations", "/api/products"};
+	private static final int BEARER_LENGTH = 7;
+	private static final String SOCIAL_ID = "socialId";
+	private static final String IMAGE_URL = "imgUrl";
+	private static final String USER_ID = "userId";
+	private static final String CHARACTER_ENCODING = "UTF-8";
+	private static final String HEADER_AUTHORIZATION = "Authorization";
+	private static final String TOKEN_PREFIX = "Bearer ";
+
+	@Value("${filter.allowed-uris}")
+	private String[] whiteListUris;
+
+	@Value("${filter.users-signup-uri}")
+	private String signupUri;
 
 	private final ObjectMapper objectMapper;
-
 	private final JwtProvider jwtProvider;
+
+	public AuthFilter(ObjectMapper objectMapper, JwtProvider jwtProvider) {
+		this.objectMapper = objectMapper;
+		this.jwtProvider = jwtProvider;
+	}
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws
@@ -51,17 +65,8 @@ public class AuthFilter implements Filter {
 
 		if (whiteListCheck(httpServletRequest.getRequestURI())) {
 			log.info("whileListCheck 진입");
-			if (httpServletRequest.getRequestURI().equals("/api/users/signup")) {
-				try {
-					Claims claims = jwtProvider.getClaims(getToken(httpServletRequest));
-
-					request.setAttribute("socialId", claims.get("socialId"));
-					request.setAttribute("imgUrl", claims.get("imgUrl"));
-
-				} catch (RuntimeException e) {
-					log.debug(e.getClass().getName());
-					sendErrorApiResponse(httpServletResponse, e);
-				}
+			if (isSignupUri(httpServletRequest.getRequestURI())) {
+				processSignupJwt(httpServletRequest, httpServletResponse);
 			}
 			chain.doFilter(request, response);
 			return;
@@ -69,13 +74,14 @@ public class AuthFilter implements Filter {
 
 		try {
 			if (!isContainToken(httpServletRequest)) {
-				request.setAttribute("userId", null);
+				request.setAttribute(USER_ID, null);
 				chain.doFilter(request, response);
 				return;
 			}
 
 			Claims claims = jwtProvider.getClaims(getToken(httpServletRequest));
-			request.setAttribute("userId", claims.get("userId"));
+
+			request.setAttribute(USER_ID, claims.get(USER_ID));
 			chain.doFilter(request, response);
 		} catch (RuntimeException e) {
 			log.debug(e.getClass().getName());
@@ -83,8 +89,24 @@ public class AuthFilter implements Filter {
 		}
 	}
 
+	private boolean isSignupUri(String uri) {
+		return signupUri.equals(uri);
+	}
+
+	private void processSignupJwt(HttpServletRequest request, HttpServletResponse httpServletResponse) throws
+		IOException {
+		try {
+			Claims claims = jwtProvider.getClaims(getToken(request));
+			request.setAttribute(SOCIAL_ID, claims.get(SOCIAL_ID));
+			request.setAttribute(IMAGE_URL, claims.get(IMAGE_URL));
+		} catch (RuntimeException e) {
+			log.info(e.getClass().getName());
+			sendErrorApiResponse(httpServletResponse, e);
+		}
+	}
+
 	private void sendErrorApiResponse(HttpServletResponse response, RuntimeException e) throws IOException {
-		response.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding(CHARACTER_ENCODING);
 
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		response.setStatus(HttpStatus.UNAUTHORIZED.value());
@@ -100,8 +122,8 @@ public class AuthFilter implements Filter {
 	}
 
 	private boolean isContainToken(HttpServletRequest httpServletRequest) {
-		String authorization = httpServletRequest.getHeader("Authorization");
-		return authorization != null && authorization.startsWith("Bearer ");
+		String authorization = httpServletRequest.getHeader(HEADER_AUTHORIZATION);
+		return authorization != null && authorization.startsWith(TOKEN_PREFIX);
 	}
 
 	private boolean whiteListCheck(String uri) {
@@ -109,7 +131,7 @@ public class AuthFilter implements Filter {
 	}
 
 	private String getToken(HttpServletRequest request) {
-		String authorization = request.getHeader("Authorization");
-		return authorization.substring(7);
+		String authorization = request.getHeader(HEADER_AUTHORIZATION);
+		return authorization.substring(BEARER_LENGTH);
 	}
 }

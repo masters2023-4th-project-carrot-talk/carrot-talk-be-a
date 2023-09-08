@@ -36,8 +36,7 @@ public class UserLocation extends BaseCreatedTimeEntity {
 	private Location location;
 
 	@Builder
-	public UserLocation(Long userLocationId, boolean isMain, User user, Location location) {
-		this.userLocationId = userLocationId;
+	public UserLocation(boolean isMain, User user, Location location) {
 		this.isMain = isMain;
 		this.user = user;
 		this.location = location;

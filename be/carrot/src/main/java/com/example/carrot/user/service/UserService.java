@@ -16,8 +16,8 @@ import com.example.carrot.global.exception.StatusCode;
 import com.example.carrot.global.jwt.Jwt;
 import com.example.carrot.global.jwt.JwtProvider;
 import com.example.carrot.location.entity.Location;
-import com.example.carrot.location.repository.LocationRepository;
 import com.example.carrot.location.service.LocationService;
+import com.example.carrot.user.dto.request.LoginRequestDto;
 import com.example.carrot.user.dto.request.LogoutRequestDto;
 import com.example.carrot.user.dto.request.ReissueRequestDto;
 import com.example.carrot.user.dto.request.SignUpRequestDto;
@@ -28,22 +28,19 @@ import com.example.carrot.user.dto.response.UserResponseDto;
 import com.example.carrot.user.entity.User;
 import com.example.carrot.user.repository.UserRepository;
 import com.example.carrot.user_location.entity.UserLocation;
-import com.example.carrot.user_location.repository.UserLocationRepository;
 import com.example.carrot.user_location.service.UserLocationService;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService {
+	private static final String KAKAO_TOKEN_URI = "https://kauth.kakao.com/oauth/token";
+	private static final String KAKAO_USER_ME_URI = "https://kapi.kakao.com/v2/user/me";
 
 	private final LocationService locationService;
 	private final UserLocationService userLocationService;
-	private final LocationRepository locationRepository;
-	private final UserLocationRepository userLocationRepository;
 	private final UserRepository userRepository;
 	private final JwtProvider jwtProvider;
 	@Value("${oauth.kakao.client_id}")
@@ -55,9 +52,17 @@ public class UserService {
 	@Value("${oauth.kakao.redirect_uri}")
 	private String redirectUri;
 
+	public UserService(LocationService locationService, UserLocationService userLocationService, UserRepository userRepository,
+		JwtProvider jwtProvider) {
+		this.locationService = locationService;
+		this.userLocationService = userLocationService;
+		this.userRepository = userRepository;
+		this.jwtProvider = jwtProvider;
+	}
+
 	@Transactional
-	public UserResponseDto kakaoLogin(String code) {
-		OauthTokenResponseDto tokenResponse = getToken(code);
+	public UserResponseDto kakaoLogin(LoginRequestDto loginRequestDto) {
+		OauthTokenResponseDto tokenResponse = getToken(loginRequestDto.getCode());
 
 		Map<String, Object> userInfo = findUserInfo(tokenResponse.getAccessToken());
 
@@ -94,7 +99,7 @@ public class UserService {
 
 		return WebClient.create()
 			.post()
-			.uri("https://kauth.kakao.com/oauth/token")
+			.uri(KAKAO_TOKEN_URI)
 			.header("Content-type", "application/x-www-form-urlencoded;charset=utf-8")
 			.bodyValue(formData)
 			.retrieve()

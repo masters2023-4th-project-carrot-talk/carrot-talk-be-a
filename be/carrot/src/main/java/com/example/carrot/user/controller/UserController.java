@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.carrot.global.common.ApiResponse;
+import com.example.carrot.user.dto.request.LoginRequestDto;
 import com.example.carrot.user.dto.request.LogoutRequestDto;
 import com.example.carrot.user.dto.request.ReissueRequestDto;
 import com.example.carrot.user.dto.request.SignUpRequestDto;
@@ -31,8 +32,8 @@ public class UserController {
 	 * OAuth 로그인 API
 	 */
 	@PostMapping("/users/login")
-	public ApiResponse<UserResponseDto> kakaoLogin(@RequestParam String code) {
-		UserResponseDto loginResponseDto = userService.kakaoLogin(code);
+	public ApiResponse<UserResponseDto> kakaoLogin(@RequestBody LoginRequestDto loginRequestDto) {
+		UserResponseDto loginResponseDto = userService.kakaoLogin(loginRequestDto);
 		return ApiResponse.success(loginResponseDto);
 	}
 

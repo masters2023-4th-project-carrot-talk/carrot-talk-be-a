@@ -3,6 +3,7 @@ package com.example.carrot.image.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,13 +29,11 @@ public class Image extends BaseCreatedTimeEntity {
 	@Column(nullable = false, length = 500)
 	private String imageUrl;
 
-	@OneToMany(mappedBy = "image")
+	@OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
 	private List<ProductImage> productImages = new ArrayList<>();
 
 	@Builder
-	public Image(Long imageId, String imageUrl, List<ProductImage> productImages) {
-		this.imageId = imageId;
+	public Image(String imageUrl) {
 		this.imageUrl = imageUrl;
-		this.productImages = productImages;
 	}
 }

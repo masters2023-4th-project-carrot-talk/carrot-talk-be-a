@@ -108,7 +108,7 @@ public class UserLocationService {
 
 	@Transactional
 	public UserLocationDeleteResponseDto deleteUserLocation(Long locationId, Long userId) {
-		User user = userRepository.findByUserId(userId)
+		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_USER));
 		Location location = locationRepository.findById(locationId)
 			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_LOCATION));

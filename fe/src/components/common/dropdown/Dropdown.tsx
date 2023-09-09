@@ -1,7 +1,6 @@
 import { ButtonProps } from '@components/common/button/Button';
-import { DropdownContext } from '@/contexts/DropdownContext';
 import { css } from '@emotion/react';
-import { useState } from 'react';
+import { cloneElement, useState } from 'react';
 import { MenuBoxProps } from '../menu/MenuBox';
 import { Backdrop } from './Backdrop';
 
@@ -9,20 +8,14 @@ type Props = {
   opener: React.ReactElement<ButtonProps>;
   menu: React.ReactElement<MenuBoxProps>;
   align?: 'left' | 'right';
-  autoClose?: boolean;
 };
 
 export const Dropdown: React.FC<Props> = ({
   opener,
   menu,
   align,
-  autoClose = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-
-  if (!opener || !menu) {
-    return null;
-  }
 
   const openMenu = () => {
     const appLayout = document.getElementById('app-layout') as HTMLElement;
@@ -37,17 +30,15 @@ export const Dropdown: React.FC<Props> = ({
   };
 
   return (
-    <DropdownContext.Provider value={{ autoClose, closeMenu }}>
-      <div css={() => dropdownStyle(align)}>
-        <div onClick={openMenu}>{opener}</div>
-        {isOpen && (
-          <>
-            <Backdrop onClick={closeMenu} />
-            {menu}
-          </>
-        )}
-      </div>
-    </DropdownContext.Provider>
+    <div css={() => dropdownStyle(align)}>
+      <div onClick={openMenu}>{opener}</div>
+      {isOpen && (
+        <>
+          <Backdrop onClick={closeMenu} />
+          {cloneElement(menu, { onClick: closeMenu })}
+        </>
+      )}
+    </div>
   );
 };
 

@@ -149,7 +149,6 @@ export const Home: React.FC = () => {
                     )}
                   </MenuBox>
                 }
-                autoClose
               />
             </LeftButton>
             <RightButton>

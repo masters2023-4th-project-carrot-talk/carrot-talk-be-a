@@ -30,7 +30,7 @@ export const AppRoutes: React.FC = () => {
         {/* TODO: 하단바 O - 상세페이지 / 인증 필요*/}
         {/* TODO: 하단바 O - 채팅페이지 / 인증 필요 */}
         <Route element={<Layout />}>
-          <Route element={<PrivateRoute />}>
+          <Route element={<OnlyLoginUserRoute />}>
             <Route path={PATH.sales} element={<Sales />} />
             <Route path={PATH.interests} element={<Interests />} />
             <Route path={PATH.chat} element={<Chat />} />
@@ -41,7 +41,7 @@ export const AppRoutes: React.FC = () => {
             <Route path={PATH.auth} element={<Auth />} />
           </Route>
         </Route>
-        <Route element={<PublicRoute />}>
+        <Route element={<OnlyGuestRoute />}>
           <Route path={PATH.redirect} element={<OauthLoading />} />
           <Route path={PATH.signup} element={<Signup />} />
         </Route>
@@ -50,13 +50,13 @@ export const AppRoutes: React.FC = () => {
   );
 };
 
-const PrivateRoute: React.FC = () => {
+const OnlyLoginUserRoute: React.FC = () => {
   const { isLogin } = useAuth();
 
   return isLogin ? <Outlet /> : <Navigate to={PATH.auth} />;
 };
 
-const PublicRoute: React.FC = () => {
+const OnlyGuestRoute: React.FC = () => {
   const { isLogin } = useAuth();
 
   return isLogin ? <Navigate to={PATH.home} /> : <Outlet />;

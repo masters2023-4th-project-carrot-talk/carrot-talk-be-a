@@ -33,7 +33,7 @@ export const OauthLoading: React.FC = () => {
   };
 
   const onLoginFail = () => {
-    navigate(PATH.auth, { replace: true });
+    navigate(PATH.account, { replace: true });
   };
 
   const { mutate: loginMutation } = useLogin(

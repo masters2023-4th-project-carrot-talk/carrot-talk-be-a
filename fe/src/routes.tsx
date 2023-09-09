@@ -4,7 +4,6 @@ import { PATH } from './constants/path';
 import { useTokenRefresh } from './queries/auth';
 import { useAuth } from './hooks/useAuth';
 import { Layout } from './layout/Layout';
-import { Auth } from './pages/Auth';
 import { Chat } from './pages/Chat';
 import { Home } from './pages/Home';
 import { Interests } from './pages/Interests';
@@ -13,6 +12,7 @@ import { OauthLoading } from './pages/OauthLoading';
 import { Sales } from './pages/Sales';
 import { Signup } from './pages/Signup';
 import { setAccessToken } from './utils/localStorage';
+import { Account } from './pages/Account';
 
 export const AppRoutes: React.FC = () => {
   const { data: tokenRefreshResult } = useTokenRefresh();
@@ -38,7 +38,7 @@ export const AppRoutes: React.FC = () => {
           <Route path={PATH.notFound} element={<NotFound />} />
           <Route>
             <Route path={PATH.home} element={<Home />} />
-            <Route path={PATH.auth} element={<Auth />} />
+            <Route path={PATH.account} element={<Account />} />
           </Route>
         </Route>
         <Route element={<OnlyGuestRoute />}>
@@ -53,7 +53,7 @@ export const AppRoutes: React.FC = () => {
 const OnlyLoginUserRoute: React.FC = () => {
   const { isLogin } = useAuth();
 
-  return isLogin ? <Outlet /> : <Navigate to={PATH.auth} />;
+  return isLogin ? <Outlet /> : <Navigate to={PATH.account} />;
 };
 
 const OnlyGuestRoute: React.FC = () => {

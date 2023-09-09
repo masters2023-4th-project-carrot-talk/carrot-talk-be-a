@@ -49,7 +49,7 @@ export const Signup: React.FC = () => {
   }, [nickname]);
 
   if (!routeLocation.state?.isOauth) {
-    return <Navigate to={PATH.auth} replace={true} />;
+    return <Navigate to={PATH.account} replace={true} />;
   }
 
   const invalidNickName = !/^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]{2,10}$/.test(nickname);
@@ -60,7 +60,7 @@ export const Signup: React.FC = () => {
     invalidNickName || !nicknameCheckPassed || locations?.length === 0;
 
   const goToAuth = () => {
-    navigate(PATH.auth, { replace: true });
+    navigate(PATH.account, { replace: true });
   };
 
   const changeNickname = (value: string) => {

@@ -11,13 +11,13 @@ import kakaoLogin from '@assets/kakao_login.png';
 import { Theme, css } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 
-export const Auth: React.FC = () => {
+export const Account: React.FC = () => {
   const navigate = useNavigate();
 
   const { isLogin, userInfo } = useAuth();
   const { mutate: logoutMutation } = useLogout(() => {
     clearLoginInfo();
-    navigate(PATH.auth, { replace: true });
+    navigate(PATH.account, { replace: true });
   });
 
   const onClickLogin = () => {

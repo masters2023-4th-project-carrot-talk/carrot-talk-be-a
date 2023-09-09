@@ -38,7 +38,7 @@ export const NavBar: React.FC = () => {
     },
     {
       label: '내 계정',
-      path: PATH.auth,
+      path: PATH.account,
       icon: <UserCircle />,
     },
   ];

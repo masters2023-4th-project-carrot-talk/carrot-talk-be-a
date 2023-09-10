@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { PATH } from './constants/path';
-import { useTokenRefresh } from './queries/auth';
 import { useAuth } from './hooks/useAuth';
 import { Layout } from './layout/Layout';
+import { Account } from './pages/Account';
 import { Chat } from './pages/Chat';
 import { Home } from './pages/Home';
 import { Interests } from './pages/Interests';
@@ -11,15 +11,10 @@ import { NotFound } from './pages/NotFound';
 import { OauthLoading } from './pages/OauthLoading';
 import { Sales } from './pages/Sales';
 import { Signup } from './pages/Signup';
-import { setAccessToken } from './utils/localStorage';
-import { Account } from './pages/Account';
+import { useTokenRefreshQuery } from './queries/auth';
 
 export const AppRoutes: React.FC = () => {
-  const { data: tokenRefreshResult } = useTokenRefresh();
-
-  if (tokenRefreshResult) {
-    setAccessToken(tokenRefreshResult);
-  }
+  useTokenRefreshQuery();
 
   return (
     <div css={globalStyle} id="app-layout">

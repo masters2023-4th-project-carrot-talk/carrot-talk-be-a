@@ -1,5 +1,5 @@
 import { useNickname } from '@/hooks/useNickname';
-import { useSignup } from '@/queries/auth';
+import { useSignupMutation } from '@/queries/auth';
 import { usePopupStore } from '@/stores/popupStore';
 import { ReactComponent as Check } from '@assets/check.svg';
 import { ReactComponent as Plus } from '@assets/plus.svg';
@@ -21,7 +21,7 @@ export const Signup: React.FC = () => {
 
   const { locations } = useLocationControl();
   const { togglePopup, setCurrentDim } = usePopupStore();
-  const { mutate: signupWithInfo } = useSignup();
+  const signupMutation = useSignupMutation();
 
   const {
     nickname,
@@ -69,7 +69,7 @@ export const Signup: React.FC = () => {
       ...(!!subLocationId && { subLocationId }),
     };
 
-    signupWithInfo(signupInfo);
+    signupMutation.mutate(signupInfo);
 
     navigate(PATH.home, { replace: true });
   };

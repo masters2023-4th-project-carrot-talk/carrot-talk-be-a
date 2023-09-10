@@ -1,28 +1,16 @@
-import { PATH } from '@constants/path';
-import { useLogin } from '@/queries/auth';
-import { setAccessToken, setLoginInfo } from '@utils/localStorage';
+import { useLoginMutation } from '@/queries/auth';
 import kakao from '@assets/kakao.png';
+import { PATH } from '@constants/path';
 import { Theme, css } from '@emotion/react';
+import { setAccessToken, setLoginInfo } from '@utils/localStorage';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-
-type LoginResponseType =
-  | {
-      isUser: false;
-      accessToken: string;
-    }
-  | {
-      isUser: true;
-      accessToken: string;
-      refreshToken: string;
-      user: UserType;
-    };
 
 export const OauthLoading: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const onLogin = (data: LoginResponseType) => {
+  const onLogin = (data: LoginDataFromServer['data']) => {
     if (data.isUser) {
       setLoginInfo(data);
       navigate(PATH.home, { replace: true });
@@ -36,15 +24,11 @@ export const OauthLoading: React.FC = () => {
     navigate(PATH.account, { replace: true });
   };
 
-  const { mutate: loginMutation } = useLogin(
-    searchParams.get('code') || '',
-    onLogin,
-    onLoginFail,
-  );
+  const loginMutation = useLoginMutation(onLogin, onLoginFail);
 
   useEffect(() => {
-    loginMutation();
-  }, [loginMutation]);
+    loginMutation.mutate(searchParams.get('code') || '');
+  }, [loginMutation, searchParams]);
 
   return (
     <>

@@ -1,6 +1,7 @@
 import { useNickname } from '@/hooks/useNickname';
 import { useSignupMutation } from '@/queries/auth';
 import { usePopupStore } from '@/stores/popupStore';
+import { setLoginInfo } from '@/utils/localStorage';
 import { ReactComponent as Check } from '@assets/check.svg';
 import { ReactComponent as Plus } from '@assets/plus.svg';
 import { Button } from '@components/common/button/Button';
@@ -69,9 +70,17 @@ export const Signup: React.FC = () => {
       ...(!!subLocationId && { subLocationId }),
     };
 
-    signupMutation.mutate(signupInfo);
-
-    navigate(PATH.home, { replace: true });
+    signupMutation.mutate(signupInfo, {
+      onSuccess: ({ data }) => {
+        setLoginInfo(data);
+        navigate(PATH.home, { replace: true });
+      },
+      onError: (error) => {
+        if (error instanceof Error) {
+          throw error;
+        }
+      },
+    });
   };
 
   return (

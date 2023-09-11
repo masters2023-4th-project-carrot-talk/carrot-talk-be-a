@@ -1,10 +1,6 @@
 import { checkNickname, login, logout, refreshToken, signup } from '@api/api';
 import { QUERY_KEY } from '@constants/queryKey';
-import {
-  getRefreshToken,
-  setAccessToken,
-  setLoginInfo,
-} from '@utils/localStorage';
+import { getRefreshToken, setAccessToken } from '@utils/localStorage';
 import { useMutation, useQuery } from 'react-query';
 
 export const useNicknameCheckQuery = (nickname: string) =>
@@ -17,39 +13,6 @@ export const useNicknameCheckQuery = (nickname: string) =>
     }),
     enabled: false,
     retry: false,
-  });
-
-export const useSignupMutation = () =>
-  useMutation<SignupDataFromServer, unknown, SignupData>({
-    mutationFn: (signupInfo: SignupData) => signup(signupInfo),
-    onSuccess: ({ data }) => {
-      setLoginInfo(data);
-    },
-    onError: (error) => {
-      if (error instanceof Error) {
-        throw error;
-      }
-    },
-  });
-
-export const useLoginMutation = (
-  onLogin: (data: LoginDataFromServer['data']) => void,
-  onLoginFail: () => void,
-) =>
-  useMutation<LoginDataFromServer, unknown, string>({
-    mutationFn: (code: string) => login(code),
-    onSuccess: ({ success, data }) => {
-      if (!success) {
-        onLoginFail();
-      }
-      onLogin(data);
-    },
-  });
-
-export const useLogoutMutation = (onLogout: () => void) =>
-  useMutation({
-    mutationFn: () => logout(),
-    onSuccess: () => onLogout(),
   });
 
 export const useTokenRefreshQuery = () => {
@@ -70,3 +33,18 @@ export const useTokenRefreshQuery = () => {
     setAccessToken(tokenRefreshQuery.data);
   }
 };
+
+export const useSignupMutation = () =>
+  useMutation<SignupDataFromServer, unknown, SignupData>({
+    mutationFn: (signupInfo: SignupData) => signup(signupInfo),
+  });
+
+export const useLoginMutation = () =>
+  useMutation<LoginDataFromServer, unknown, string>({
+    mutationFn: (code: string) => login(code),
+  });
+
+export const useLogoutMutation = () =>
+  useMutation({
+    mutationFn: () => logout(),
+  });

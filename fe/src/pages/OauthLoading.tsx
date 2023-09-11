@@ -3,32 +3,42 @@ import kakao from '@assets/kakao.png';
 import { PATH } from '@constants/path';
 import { Theme, css } from '@emotion/react';
 import { setAccessToken, setLoginInfo } from '@utils/localStorage';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export const OauthLoading: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const loginMutation = useLoginMutation();
 
-  const onLogin = (data: LoginDataFromServer['data']) => {
-    if (data.isUser) {
-      setLoginInfo(data);
-      navigate(PATH.home, { replace: true });
-    } else {
-      setAccessToken(data.accessToken);
-      navigate(PATH.signup, { replace: true, state: { isOauth: true } });
-    }
-  };
+  const onLogin = useCallback(
+    (data: LoginDataFromServer['data']) => {
+      if (data.isUser) {
+        setLoginInfo(data);
+        navigate(PATH.home, { replace: true });
+      } else {
+        setAccessToken(data.accessToken);
+        navigate(PATH.signup, { replace: true, state: { isOauth: true } });
+      }
+    },
+    [navigate],
+  );
 
-  const onLoginFail = () => {
+  const onLoginFail = useCallback(() => {
     navigate(PATH.account, { replace: true });
-  };
-
-  const loginMutation = useLoginMutation(onLogin, onLoginFail);
+  }, [navigate]);
 
   useEffect(() => {
-    loginMutation.mutate(searchParams.get('code') || '');
-  }, [loginMutation, searchParams]);
+    loginMutation.mutate(searchParams.get('code') || '', {
+      onSuccess: (res) => {
+        if (res.success) {
+          onLogin(res.data);
+        } else {
+          onLoginFail();
+        }
+      },
+    });
+  }, [loginMutation, searchParams, onLogin, onLoginFail]);
 
   return (
     <>

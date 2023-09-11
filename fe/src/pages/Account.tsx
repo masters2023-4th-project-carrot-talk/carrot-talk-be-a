@@ -15,17 +15,19 @@ export const Account: React.FC = () => {
   const navigate = useNavigate();
 
   const { isLogin, userInfo } = useAuth();
-  const logoutMutation = useLogoutMutation(() => {
-    clearLoginInfo();
-    navigate(PATH.account, { replace: true });
-  });
+  const logoutMutation = useLogoutMutation();
 
   const onClickLogin = () => {
     location.assign(KAKAO_AUTH_URL);
   };
 
   const onClickLogout = () => {
-    logoutMutation.mutate();
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        clearLoginInfo();
+        navigate(PATH.account, { replace: true });
+      },
+    });
   };
 
   return (

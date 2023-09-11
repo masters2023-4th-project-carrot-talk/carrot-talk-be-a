@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(BindException.class)
 	public ApiResponse<ErrorCode> handleBindException(BindException e) {
-		log.info("BindException : {}", e);
+		log.error("BindException : {}", e);
 
 		String errorMessages = e.getBindingResult().getFieldErrors().stream()
 			.map(error -> "Field: " + error.getField() + ", Message: " + error.getDefaultMessage())
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(CustomException.class)
 	public ApiResponse<ErrorCode> handleCustomException(CustomException e) {
-		log.info("CustomException : {} ", e);
+		log.error("CustomException : {} ", e);
 		StatusCode statusCode = e.getStatusCode();
 
 		return ApiResponse.fail(new ErrorCode(statusCode.getStatus(), statusCode.getMessage()));

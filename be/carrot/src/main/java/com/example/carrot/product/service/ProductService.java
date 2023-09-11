@@ -1,7 +1,10 @@
 package com.example.carrot.product.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -13,13 +16,17 @@ import com.example.carrot.global.exception.CustomException;
 import com.example.carrot.global.exception.StatusCode;
 import com.example.carrot.image.entity.Image;
 import com.example.carrot.image.repository.ImageRepository;
+import com.example.carrot.like.entity.Like;
 import com.example.carrot.location.entity.Location;
 import com.example.carrot.location.repository.LocationRepository;
 import com.example.carrot.product.dto.request.ModifyProductRequestDto;
 import com.example.carrot.product.dto.request.SaveProductRequestDto;
 import com.example.carrot.product.dto.response.MainPageResponseDto;
 import com.example.carrot.product.dto.response.ModifyProductResponseDto;
+import com.example.carrot.product.dto.response.ProductDetailResponseDto;
+import com.example.carrot.product.dto.response.ProductDetailSellerResponseDto;
 import com.example.carrot.product.dto.response.ProductsResponseDto;
+import com.example.carrot.product.dto.response.ReadProductDetailResponseDto;
 import com.example.carrot.product.dto.response.SaveProductResponseDto;
 import com.example.carrot.product.entity.Product;
 import com.example.carrot.product.entity.ProductStatus;
@@ -154,4 +161,64 @@ public class ProductService {
 
 		return SaveProductResponseDto.of(product.getProductId());
 	}
+
+	public ReadProductDetailResponseDto getProductDetail(Long productId, Long userId) {
+		Product product = getProduct(productId);
+		return ReadProductDetailResponseDto.of(makeImageUrls(product),
+			makeSeller(product), makeProduct(product, userId));
+	}
+
+	private List<String> makeImageUrls(Product product) {
+		// ProductImage의 List 형태가 가장 첫번째로 오는 것이
+		// 이미 대표 이미지의 것이라는 보장이 있어야 함 (이미지 API에서 그렇게 만들어야 함)
+		List<ProductImage> productImages = product.getProductImages();
+		return productImages.stream()
+			.map(productImage -> productImage.getImage().getImageUrl())
+			.collect(Collectors.toUnmodifiableList());
+	}
+
+	private ProductDetailSellerResponseDto makeSeller(Product product) {
+		User user = product.getUser();
+		return ProductDetailSellerResponseDto.of(user.getUserId(), user.getNickName());
+	}
+
+	private ProductDetailResponseDto makeProduct(Product product, Long userId) {
+		String location = product.getLocation().getName();
+
+		String status = ProductStatus.chooseString(product.getStatus());
+		String title = product.getName();
+		String category = product.getCategory().getName();
+		Long price = product.getPrice();
+		String content = product.getContent();
+		LocalDateTime createdAt = product.getCreatedAt();
+
+		// TODO: 채팅 기능 완료 후 추가
+		Long chatCount = 0L;
+
+		// 상품 조회할 때마다 조회수 1 증가
+		product.increaseHit();
+		Long hits = product.getHits();
+
+		List<Like> likes = product.getLikes();
+		Long likeCount = (long)likes.size();
+
+		boolean isLiked = false;
+		if (userId != null) {
+			isLiked = findIsLiked(likes, findUser(userId));
+		}
+
+		return ProductDetailResponseDto.of(location, status, title, category,
+			createdAt, content, chatCount, likeCount, hits, price, isLiked);
+	}
+
+	private User findUser(Long userId) {
+		return userRepository.findById(userId)
+			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_USER));
+	}
+
+	private boolean findIsLiked(List<Like> likes, User user) {
+		return likes.stream()
+			.anyMatch(like -> Objects.equals(like.getUser().getUserId(), user.getUserId()));
+	}
+
 }

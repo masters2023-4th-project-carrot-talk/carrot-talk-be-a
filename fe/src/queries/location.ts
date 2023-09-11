@@ -7,9 +7,9 @@ import {
 import { QUERY_KEY } from '@constants/queryKey';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-export const useMyLocations = () => {
+export const useMyLocations = (isLogin: boolean) => {
   const {
-    data: locations,
+    data: serverLocations,
     status,
     error,
   } = useQuery<LocationDataFromServer, unknown, LocationType[]>(
@@ -17,10 +17,11 @@ export const useMyLocations = () => {
     getMyLocations,
     {
       select: (data) => data.data,
+      enabled: isLogin,
     },
   );
 
-  return { locations, status, error };
+  return { serverLocations, status, error };
 };
 
 export const useLocationWithQuery = (query: string) => {
@@ -69,5 +70,5 @@ export const usePatchMainLocation = (onSuccessCallback?: () => void) => {
     patchMainLocationMutation.mutate(location.id);
   };
 
-  return { patchMainLocationById };
+  return patchMainLocationById;
 };

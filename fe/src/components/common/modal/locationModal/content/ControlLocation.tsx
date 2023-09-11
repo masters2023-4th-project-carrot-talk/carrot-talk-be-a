@@ -1,21 +1,23 @@
 import { Alert } from '@components/common/alert/Alert';
 import { AlertButtons } from '@components/common/alert/AlertButtons';
 import { AlertContent } from '@components/common/alert/AlertContent';
-import { useLocationControl } from '@hooks/useLocationControl';
 import { Button } from '@components/common/button/Button';
 import { CircleXFilled, Plus } from '@components/common/icons';
 import { Theme, css } from '@emotion/react';
 import React, { useState } from 'react';
 import { ModalHeader } from '../../ModalHeader';
 import { usePopupStore } from '@/stores/popupStore';
+import { useAuth } from '@/hooks/useAuth';
+import { useLocationsByAuth } from '@/hooks/useLocationsByAuth';
 
 type Props = {
   onToggleContent: (content: 'control' | 'search') => void;
 };
 
 export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
+  const { isLogin } = useAuth();
   const { locations, deleteLocationById, patchMainLocationById } =
-    useLocationControl();
+    useLocationsByAuth(isLogin);
   const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
 
   const [selectLocation, setSelectLocation] = useState<LocationType | null>(

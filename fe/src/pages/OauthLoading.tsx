@@ -1,4 +1,5 @@
 import { useLoginMutation } from '@/queries/auth';
+import { useAuthStore } from '@/stores/authStore';
 import kakao from '@assets/kakao.png';
 import { PATH } from '@constants/path';
 import { Theme, css } from '@emotion/react';
@@ -10,6 +11,7 @@ export const OauthLoading: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { mutate: loginMutate } = useLoginMutation();
+  const { setSignUpInProgress } = useAuthStore();
 
   const onLoginSucceeded = useCallback(
     (data: LoginDataFromServer['data']) => {
@@ -18,10 +20,11 @@ export const OauthLoading: React.FC = () => {
         navigate(PATH.home, { replace: true });
       } else {
         setAccessToken(data.accessToken);
-        navigate(PATH.signup, { replace: true, state: { isOauth: true } });
+        setSignUpInProgress(true);
+        navigate(PATH.signup, { replace: true });
       }
     },
-    [navigate],
+    [navigate, setSignUpInProgress],
   );
 
   const onLoginFailed = useCallback(() => {

@@ -11,6 +11,10 @@ export const useNicknameCheckQuery = (nickname: string) =>
   useQuery({
     queryKey: [QUERY_KEY.nicknameCheck, nickname],
     queryFn: () => checkNickname(nickname),
+    select: (data) => ({
+      isUnique: data.success,
+      message: data?.errorCode?.message ?? '',
+    }),
     enabled: false,
     retry: false,
   });

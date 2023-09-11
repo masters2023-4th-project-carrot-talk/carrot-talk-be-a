@@ -1,6 +1,5 @@
-import { checkNickname } from '@/api/api';
+import { useNicknameCheckQuery } from '@/queries/auth';
 import { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
 
 type NicknameInputType = {
   defaultWarning: string;
@@ -32,8 +31,11 @@ export const useNickname = ({
   return {
     nickname,
     isValidNickname,
-    isUniqueNickname: isValidNicknameCheck && nicknameCheckResult.data?.isUnique,
-    nicknameInputWarning: (isValidNickname && nicknameCheckResult.data?.message) || nicknameInputWarning,
+    isUniqueNickname:
+      isValidNicknameCheck && nicknameCheckResult.data?.isUnique,
+    nicknameInputWarning:
+      (isValidNickname && nicknameCheckResult.data?.message) ||
+      nicknameInputWarning,
     onChangeNickname,
     checkNicknameUnique,
   };
@@ -59,14 +61,3 @@ const useNicknameInput = ({
     nicknameInputWarning,
   };
 };
-
-const useNicknameCheckQuery = (nickname: string) =>
-  useQuery({
-    queryKey: ['uniqueNickname'],
-    queryFn: () => checkNickname(nickname),
-    select: (data) => ({
-      isUnique: data.success,
-      message: data?.errorCode?.message ?? '',
-    }),
-    enabled: false,
-  });

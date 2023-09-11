@@ -3,16 +3,16 @@ package com.example.carrot.product.entity;
 public enum ProductStatus {
 	ON_SALE, SOLD_OUT, RESERVED;
 
-	public static ProductStatus chooseStatus(final String statusString) {
-		if (statusString.equalsIgnoreCase("RESERVED")) {
-			return ProductStatus.RESERVED;
+	public static String chooseString(ProductStatus status) {
+		if (status == RESERVED) {
+			return "예약중";
 		}
 
-		if (statusString.equalsIgnoreCase("SOLD_OUT")) {
-			return ProductStatus.SOLD_OUT;
+		if (status == SOLD_OUT) {
+			return "판매 완료";
 		}
 
-		return ProductStatus.ON_SALE;
+		return "판매중";
 	}
 
 	public String getName() {

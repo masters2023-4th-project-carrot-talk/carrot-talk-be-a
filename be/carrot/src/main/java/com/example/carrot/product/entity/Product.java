@@ -1,5 +1,8 @@
 package com.example.carrot.product.entity;
 
+import static java.time.LocalDateTime.*;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +68,9 @@ public class Product extends BaseAllTimeEntity {
 	@JoinColumn(name = "location_id")
 	private Location location;
 
+	@JoinColumn(name = "created_at")
+	private LocalDateTime createdAt;
+
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Like> likes = new ArrayList<>();
 
@@ -73,7 +79,7 @@ public class Product extends BaseAllTimeEntity {
 
 	@Builder
 	public Product(String name, Long price, String content, Long hits, ProductStatus status, User user,
-		Category category, Location location) {
+		Category category, Location location, LocalDateTime createdAt) {
 		this.name = name;
 		this.price = price;
 		this.content = content;
@@ -82,6 +88,7 @@ public class Product extends BaseAllTimeEntity {
 		this.user = user;
 		this.category = category;
 		this.location = location;
+		this.createdAt = now();
 	}
 
 	public void validateEditAccess(Long userId) {
@@ -107,6 +114,10 @@ public class Product extends BaseAllTimeEntity {
 	public void addUser(User user) {
 		this.user = user;
 		user.getProducts().add(this);
+	}
+
+	public void increaseHit() {
+		this.hits++;
 	}
 
 }

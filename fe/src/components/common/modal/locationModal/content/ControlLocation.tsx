@@ -52,11 +52,7 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
 
   const onSelectLocation = (selectedLocation: LocationType) => {
     locations?.map((location: LocationType) => {
-      if (location.id === selectedLocation.id) {
-        location.isMainLocation = true;
-      } else {
-        location.isMainLocation = false;
-      }
+      location.isMainLocation = location.id === selectedLocation.id;
     });
 
     setSelectLocation(selectedLocation);

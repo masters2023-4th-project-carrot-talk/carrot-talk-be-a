@@ -16,7 +16,7 @@ import { useState } from 'react';
 import { SkeletonListItem } from '@components/common/skeleton/listItem';
 import { Category } from '@components/home/Category';
 import { useCategories } from '@/queries/category';
-import { useIntersectionObserver } from '@hooks/observer';
+import { useIntersectionObserver } from '@hooks/useObserver';
 import { useProducts } from '@/queries/products';
 import { useAuth } from '@hooks/useAuth';
 import { modifiedLocaitionName } from '@utils/modifyLocationName';
@@ -47,8 +47,7 @@ export const Home: React.FC = () => {
     hasNextPage,
     status,
     isFetchingNextPage,
-    remove,
-    refetch,
+    refetch: refetchProductList,
   } = useProducts(selectedLocationId, selectedCategoryId);
 
   const { observeTarget } = useIntersectionObserver(fetchNextPage, hasNextPage);
@@ -73,15 +72,13 @@ export const Home: React.FC = () => {
 
   const onFilterProducts = (id: number) => {
     // TODO : remove와 refetch를 같이 써야하는가?
-    remove();
-    refetch();
+    refetchProductList();
     setSelectedLocationId(id);
   };
 
   const onSelectCategory = async (id: number) => {
     // TODO: 두번씩 눌러야 갱신이 되는 버그
-    remove();
-    refetch(); //콜백처리
+    refetchProductList(); //콜백처리
     setSelectedCategoryId(id);
   };
 

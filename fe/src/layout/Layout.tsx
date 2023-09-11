@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { NavBar } from '@components/common/navBar/NavBar';
 import { Outlet } from 'react-router-dom';
-import { useAnimation } from '@hooks/animation';
+import { useAnimation } from '@/hooks/useAnimation';
 import { useLayoutStore } from '@/stores/layoutStore';
 
 export const Layout: React.FC = () => {

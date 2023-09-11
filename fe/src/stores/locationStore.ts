@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 type RegisteredLocationsState = {
   locationList: LocationType[];
+  mainLocationId: number | null;
   addLocation: (location: LocationWithQueryType) => void;
   deleteLocation: (id: number) => void;
 };
@@ -9,6 +10,7 @@ type RegisteredLocationsState = {
 export const useRegisteredLocationsStore = create<RegisteredLocationsState>(
   (set) => ({
     locationList: [{ id: 1, name: '역삼1동', isMainLocation: true }],
+    mainLocationId: 1,
     addLocation: (location: LocationWithQueryType) =>
       set((state) => ({ locationList: addLocationToState(state, location) })),
 

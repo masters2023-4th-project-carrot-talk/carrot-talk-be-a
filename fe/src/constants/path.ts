@@ -7,6 +7,7 @@ export const PATH = {
   redirect: '/oauth/redirect',
   signup: '/auth/signup',
   notFound: '/*',
+  detail: '/detail',
 };
 
 export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${

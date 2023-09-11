@@ -17,6 +17,7 @@ import com.example.carrot.product.dto.request.ModifyProductRequestDto;
 import com.example.carrot.product.dto.request.SaveProductRequestDto;
 import com.example.carrot.product.dto.response.MainPageResponseDto;
 import com.example.carrot.product.dto.response.ModifyProductResponseDto;
+import com.example.carrot.product.dto.response.ReadProductDetailResponseDto;
 import com.example.carrot.product.dto.response.SaveProductResponseDto;
 import com.example.carrot.product.service.ProductService;
 
@@ -55,6 +56,11 @@ public class ProductController {
 	public ApiResponse<SaveProductResponseDto> saveProduct(@RequestBody SaveProductRequestDto saveProductRequestDto,
 		@RequestAttribute Long userId) {
 		return ApiResponse.success(productService.saveProduct(saveProductRequestDto, userId));
+	}
+
+	@GetMapping("/products/{productId}")
+	public ApiResponse<ReadProductDetailResponseDto> getProductDetail(@PathVariable Long productId, @RequestAttribute(required = false) Long userId) {
+		return ApiResponse.success(productService.getProductDetail(productId, userId));
 	}
 
 }

@@ -9,9 +9,9 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 export const OauthLoading: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const loginMutation = useLoginMutation();
+  const { mutate: loginMutate } = useLoginMutation();
 
-  const onLogin = useCallback(
+  const onLoginSucceeded = useCallback(
     (data: LoginDataFromServer['data']) => {
       if (data.isUser) {
         setLoginInfo(data);
@@ -24,21 +24,21 @@ export const OauthLoading: React.FC = () => {
     [navigate],
   );
 
-  const onLoginFail = useCallback(() => {
+  const onLoginFailed = useCallback(() => {
     navigate(PATH.account, { replace: true });
   }, [navigate]);
 
   useEffect(() => {
-    loginMutation.mutate(searchParams.get('code') || '', {
+    loginMutate(searchParams.get('code') || '', {
       onSuccess: (res) => {
         if (res.success) {
-          onLogin(res.data);
+          onLoginSucceeded(res.data);
         } else {
-          onLoginFail();
+          onLoginFailed();
         }
       },
     });
-  }, [loginMutation, searchParams, onLogin, onLoginFail]);
+  }, [loginMutate, searchParams, onLoginSucceeded, onLoginFailed]);
 
   return (
     <>

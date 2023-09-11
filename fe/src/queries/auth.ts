@@ -3,7 +3,7 @@ import { QUERY_KEY } from '@constants/queryKey';
 import { getRefreshToken, setAccessToken } from '@utils/localStorage';
 import { useMutation, useQuery } from 'react-query';
 
-export const useNicknameCheckQuery = (nickname: string) =>
+export const useNicknameCheck = (nickname: string) =>
   useQuery({
     queryKey: [QUERY_KEY.nicknameCheck, nickname],
     queryFn: () => checkNickname(nickname),
@@ -15,7 +15,7 @@ export const useNicknameCheckQuery = (nickname: string) =>
     retry: false,
   });
 
-export const useTokenRefreshQuery = () => {
+export const useTokenRefresh = () => {
   const tokenRefreshQuery = useQuery({
     queryKey: QUERY_KEY.tokenRefresh,
     queryFn: () => refreshToken(),
@@ -34,17 +34,17 @@ export const useTokenRefreshQuery = () => {
   }
 };
 
-export const useSignupMutation = () =>
+export const useSignup = () =>
   useMutation<SignupDataFromServer, unknown, SignupData>({
     mutationFn: (signupInfo: SignupData) => signup(signupInfo),
   });
 
-export const useLoginMutation = () =>
+export const useLogin = () =>
   useMutation<LoginDataFromServer, unknown, string>({
     mutationFn: (code: string) => login(code),
   });
 
-export const useLogoutMutation = () =>
+export const useLogout = () =>
   useMutation({
     mutationFn: () => logout(),
   });

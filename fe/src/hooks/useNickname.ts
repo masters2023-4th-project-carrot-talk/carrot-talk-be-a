@@ -1,4 +1,4 @@
-import { useNicknameCheckQuery } from '@/queries/auth';
+import { useNicknameCheck } from '@/queries/auth';
 import { useEffect, useState } from 'react';
 
 type NicknameInputType = {
@@ -17,7 +17,7 @@ export const useNickname = ({
       validateNickname,
       defaultWarning,
     });
-  const nicknameCheckResult = useNicknameCheckQuery(nickname);
+  const nicknameCheckResult = useNicknameCheck(nickname);
 
   useEffect(() => {
     setIsValidNicknameCheck(false);

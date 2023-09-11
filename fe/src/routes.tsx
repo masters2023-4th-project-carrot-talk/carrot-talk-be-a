@@ -11,10 +11,10 @@ import { NotFound } from './pages/NotFound';
 import { OauthLoading } from './pages/OauthLoading';
 import { Sales } from './pages/Sales';
 import { Signup } from './pages/Signup';
-import { useTokenRefreshQuery } from './queries/auth';
+import { useTokenRefresh } from './queries/auth';
 
 export const AppRoutes: React.FC = () => {
-  useTokenRefreshQuery();
+  useTokenRefresh();
 
   return (
     <div css={globalStyle} id="app-layout">

@@ -1,4 +1,4 @@
-import { useLoginMutation } from '@/queries/auth';
+import { useLogin } from '@/queries/auth';
 import { useAuthStore } from '@/stores/authStore';
 import kakao from '@assets/kakao.png';
 import { PATH } from '@constants/path';
@@ -10,7 +10,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 export const OauthLoading: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { mutate: loginMutate } = useLoginMutation();
+  const { mutate: loginMutate } = useLogin();
   const { setSignUpInProgress } = useAuthStore();
 
   const onLoginSucceeded = useCallback(

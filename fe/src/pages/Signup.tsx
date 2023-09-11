@@ -1,5 +1,5 @@
 import { useNickname } from '@/hooks/useNickname';
-import { useSignupMutation } from '@/queries/auth';
+import { useSignup } from '@/queries/auth';
 import { useAuthStore } from '@/stores/authStore';
 import { usePopupStore } from '@/stores/popupStore';
 import { setLoginInfo } from '@/utils/localStorage';
@@ -35,7 +35,7 @@ export const Signup: React.FC = () => {
   const { locations } = useLocationControl();
   const { togglePopup, setCurrentDim } = usePopupStore();
   const { signUpInProgress } = useAuthStore();
-  const signupMutation = useSignupMutation();
+  const signupMutation = useSignup();
 
   const submitEnabled = isUniqueNickname && locations && locations.length > 0;
 

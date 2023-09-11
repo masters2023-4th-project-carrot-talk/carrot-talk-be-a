@@ -1,4 +1,4 @@
-import { useLogoutMutation } from '@/queries/auth';
+import { useLogout } from '@/queries/auth';
 import kakaoLogin from '@assets/kakao_login.png';
 import { ReactComponent as UserCircle } from '@assets/user-circle.svg';
 import { Button } from '@components/common/button/Button';
@@ -15,7 +15,7 @@ export const Account: React.FC = () => {
   const navigate = useNavigate();
 
   const { isLogin, userInfo } = useAuth();
-  const logoutMutation = useLogoutMutation();
+  const logoutMutation = useLogout();
 
   const onClickLogin = () => {
     location.assign(KAKAO_AUTH_URL);

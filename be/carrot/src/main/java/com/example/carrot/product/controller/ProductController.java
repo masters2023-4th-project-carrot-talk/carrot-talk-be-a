@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.carrot.global.common.ApiResponse;
 import com.example.carrot.product.dto.request.ModifyProductRequestDto;
+import com.example.carrot.product.dto.request.ModifyProductStatusRequestDto;
 import com.example.carrot.product.dto.request.SaveProductRequestDto;
 import com.example.carrot.product.dto.response.MainPageResponseDto;
 import com.example.carrot.product.dto.response.ModifyProductResponseDto;
@@ -74,5 +76,18 @@ public class ProductController {
 	public ApiResponse<?> deleteProduct(@RequestAttribute Long userId, @PathVariable Long productId) {
 		productService.deleteProduct(userId, productId);
 		return ApiResponse.success();
+	}
+
+	/**
+	 * 상품 상태 수정 API
+	 */
+	@PatchMapping("/products/{productId}")
+	public ApiResponse<ModifyProductResponseDto> modifyProductStatus(
+		@Valid @RequestBody ModifyProductStatusRequestDto modifyProductStatusRequestDto,
+		@RequestAttribute Long userId,
+		@PathVariable Long productId) {
+		ModifyProductResponseDto modifyProductResponseDto = productService.updateProductStatus(
+			modifyProductStatusRequestDto, userId, productId);
+		return ApiResponse.success(modifyProductResponseDto);
 	}
 }

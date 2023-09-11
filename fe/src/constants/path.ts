@@ -5,7 +5,7 @@ export const PATH = {
   chat: '/chat',
   account: '/account',
   redirect: '/oauth/redirect',
-  signup: '/auth/signup',
+  signup: '/signup',
   notFound: '/*',
 };
 

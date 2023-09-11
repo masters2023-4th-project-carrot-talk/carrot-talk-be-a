@@ -20,6 +20,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.example.carrot.category.entity.Category;
 import com.example.carrot.global.common.BaseAllTimeEntity;
 import com.example.carrot.global.exception.CustomException;
@@ -68,6 +70,7 @@ public class Product extends BaseAllTimeEntity {
 	@JoinColumn(name = "location_id")
 	private Location location;
 
+	// TODO: JoinColumn()을 하기 전까지는 db에서 잘 생성해주는데, 이걸 해준 후부터는 계속 null이 들어감
 	@JoinColumn(name = "created_at")
 	private LocalDateTime createdAt;
 
@@ -88,7 +91,7 @@ public class Product extends BaseAllTimeEntity {
 		this.user = user;
 		this.category = category;
 		this.location = location;
-		this.createdAt = now();
+		this.createdAt = createdAt;
 	}
 
 	public void validateEditAccess(Long userId) {

@@ -154,4 +154,12 @@ public class ProductService {
 
 		return SaveProductResponseDto.of(product.getProductId());
 	}
+
+	@Transactional
+	public void deleteProduct(Long userId, Long productId) {
+		Product product = getProduct(productId);
+		product.validateEditAccess(userId);
+
+		productRepository.delete(product);
+	}
 }

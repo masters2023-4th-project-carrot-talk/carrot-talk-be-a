@@ -54,13 +54,11 @@ export const AppRoutes: React.FC = () => {
 
 const PrivateRoute: React.FC = () => {
   const { isLogin } = useAuth();
-
   return isLogin ? <Outlet /> : <Navigate to={PATH.auth} />;
 };
 
 const PublicRoute: React.FC = () => {
   const { isLogin } = useAuth();
-
   return isLogin ? <Navigate to={PATH.home} /> : <Outlet />;
 };
 

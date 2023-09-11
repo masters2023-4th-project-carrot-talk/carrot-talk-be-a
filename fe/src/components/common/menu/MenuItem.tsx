@@ -1,6 +1,4 @@
-import { DropdownContext } from '@/contexts/DropdownContext';
 import { Theme, css } from '@emotion/react';
-import { useContext } from 'react';
 
 type Props = {
   state?: 'default' | 'selected';
@@ -15,11 +13,8 @@ export const MenuItem: React.FC<Props> = ({
   variant,
   onClick,
 }) => {
-  const { autoClose, closeMenu } = useContext(DropdownContext);
-
   const onMenuItemClick = () => {
     onClick?.();
-    autoClose && closeMenu();
   };
 
   return (

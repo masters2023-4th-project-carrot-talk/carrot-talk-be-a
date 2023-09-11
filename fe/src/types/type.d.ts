@@ -65,3 +65,34 @@ type FetchProductsParams = {
   next?: number | null;
   size?: number | null;
 };
+
+type SignupData = {
+  nickname: string;
+  mainLocationId: number;
+  subLocationId?: number;
+};
+
+type SignupDataFromServer = {
+  success: boolean;
+  data: {
+    isUser: boolean;
+    accessToken: string;
+    refreshToken: string;
+    user: UserType;
+  };
+};
+
+type LoginDataFromServer = {
+  success: true;
+  data:
+    | {
+        isUser: true;
+        accessToken: string;
+        refreshToken: string;
+        user: UserType;
+      }
+    | {
+        isUser: false;
+        accessToken: string;
+      };
+};

@@ -2,10 +2,11 @@ import { Theme, css } from '@emotion/react';
 
 export type MenuBoxProps = {
   children?: React.ReactNode;
+  onClick?: () => void;
 };
 
-export const MenuBox: React.FC<MenuBoxProps> = ({ children }) => {
-  return <ul css={(theme) => menuItemStyle(theme)}>{children}</ul>;
+export const MenuBox: React.FC<MenuBoxProps> = ({ children, onClick }) => {
+  return <ul css={(theme) => menuItemStyle(theme)} onClick={onClick}>{children}</ul>;
 };
 
 const menuItemStyle = (theme: Theme) => css`

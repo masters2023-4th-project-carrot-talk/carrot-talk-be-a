@@ -109,4 +109,8 @@ public class Product extends BaseAllTimeEntity {
 		user.getProducts().add(this);
 	}
 
+	public Product updateStatus(ProductStatus productStatus) {
+		this.status = productStatus;
+		return this;
+	}
 }

@@ -16,6 +16,7 @@ import com.example.carrot.image.repository.ImageRepository;
 import com.example.carrot.location.entity.Location;
 import com.example.carrot.location.repository.LocationRepository;
 import com.example.carrot.product.dto.request.ModifyProductRequestDto;
+import com.example.carrot.product.dto.request.ModifyProductStatusRequestDto;
 import com.example.carrot.product.dto.request.SaveProductRequestDto;
 import com.example.carrot.product.dto.response.MainPageResponseDto;
 import com.example.carrot.product.dto.response.ModifyProductResponseDto;
@@ -103,7 +104,7 @@ public class ProductService {
 			modifyProductRequestDto.getTitle(), modifyProductRequestDto.getContent(),
 			modifyProductRequestDto.getPrice(), category, location);
 
-		return ModifyProductResponseDto.of(product.getProductId());
+		return ModifyProductResponseDto.of(product);
 	}
 
 	private Image getImage(Long imageId) {
@@ -161,5 +162,17 @@ public class ProductService {
 		product.validateEditAccess(userId);
 
 		productRepository.delete(product);
+	}
+
+	@Transactional
+	public ModifyProductResponseDto updateProductStatus(ModifyProductStatusRequestDto modifyProductStatusRequestDto,
+		Long userId, Long productId) {
+
+		Product product = getProduct(productId);
+		product.validateEditAccess(userId);
+
+		Product updateProduct = product.updateStatus(ProductStatus.chooseStatus(modifyProductStatusRequestDto.getStatus()));
+
+		return ModifyProductResponseDto.of(updateProduct);
 	}
 }

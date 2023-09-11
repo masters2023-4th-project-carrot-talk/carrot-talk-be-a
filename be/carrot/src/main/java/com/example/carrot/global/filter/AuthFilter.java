@@ -64,7 +64,7 @@ public class AuthFilter implements Filter {
 		}
 
 		if (whiteListCheck(httpServletRequest.getRequestURI())) {
-			log.info("whileListCheck 진입");
+			log.info("whiteListCheck 진입");
 			if (isSignupUri(httpServletRequest.getRequestURI())) {
 				processSignupJwt(httpServletRequest, httpServletResponse);
 			}

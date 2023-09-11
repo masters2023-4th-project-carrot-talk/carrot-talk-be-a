@@ -2,6 +2,7 @@ package com.example.carrot.product.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,9 @@ public class ProductController {
 
 	private final ProductService productService;
 
+	/**
+	 * 메인페이지 조회 API
+	 */
 	@GetMapping("/products")
 	public ApiResponse<MainPageResponseDto> getMainPage(
 		@RequestParam(required = false) Long locationId,
@@ -40,6 +44,9 @@ public class ProductController {
 		return ApiResponse.success(mainPageResponseDto);
 	}
 
+	/**
+	 * 상품 수정 API
+	 */
 	@PutMapping("/products/{productId}")
 	public ApiResponse<ModifyProductResponseDto> modifyProduct(
 		@Valid @RequestBody ModifyProductRequestDto modifyProductRequestDto,
@@ -51,10 +58,21 @@ public class ProductController {
 		return ApiResponse.success(modifyProductResponseDto);
 	}
 
+	/**
+	 * 상품 등록 API
+	 */
 	@PostMapping("/products")
 	public ApiResponse<SaveProductResponseDto> saveProduct(@RequestBody SaveProductRequestDto saveProductRequestDto,
 		@RequestAttribute Long userId) {
 		return ApiResponse.success(productService.saveProduct(saveProductRequestDto, userId));
 	}
 
+	/**
+	 * 상품 삭제 API
+	 */
+	@DeleteMapping("/products/{productId}")
+	public ApiResponse<?> deleteProduct(@RequestAttribute Long userId, @PathVariable Long productId) {
+		productService.deleteProduct(userId, productId);
+		return ApiResponse.success();
+	}
 }

@@ -35,7 +35,6 @@ public class Image extends BaseCreatedTimeEntity {
 	@OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProductImage> productImages = new ArrayList<>();
 
-	@Builder
 	public Image(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}

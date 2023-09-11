@@ -1,7 +1,5 @@
 package com.example.carrot.product.entity;
 
-import static java.time.LocalDateTime.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,14 +11,11 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 import com.example.carrot.category.entity.Category;
 import com.example.carrot.global.common.BaseAllTimeEntity;
@@ -46,6 +41,7 @@ public class Product extends BaseAllTimeEntity {
 
 	@Column(nullable = false)
 	private String name;
+
 	private Long price;
 
 	@Column(length = 500)
@@ -58,6 +54,10 @@ public class Product extends BaseAllTimeEntity {
 	@Enumerated(EnumType.STRING)
 	private ProductStatus status;
 
+	// TODO: 얘를 추가하면서 이상해짐..
+	@Column(table = "product", name = "created_at")
+	private LocalDateTime createdAt;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -69,10 +69,6 @@ public class Product extends BaseAllTimeEntity {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "location_id")
 	private Location location;
-
-	// TODO: JoinColumn()을 하기 전까지는 db에서 잘 생성해주는데, 이걸 해준 후부터는 계속 null이 들어감
-	@JoinColumn(name = "created_at")
-	private LocalDateTime createdAt;
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Like> likes = new ArrayList<>();

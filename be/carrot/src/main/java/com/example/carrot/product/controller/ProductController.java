@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.carrot.global.common.ApiResponse;
 import com.example.carrot.product.dto.request.ModifyProductRequestDto;
+import com.example.carrot.product.dto.request.SaveProductRequestDto;
 import com.example.carrot.product.dto.response.MainPageResponseDto;
 import com.example.carrot.product.dto.response.ModifyProductResponseDto;
+import com.example.carrot.product.dto.response.SaveProductResponseDto;
 import com.example.carrot.product.service.ProductService;
 
 import lombok.RequiredArgsConstructor;
@@ -47,4 +50,11 @@ public class ProductController {
 			userId, productId);
 		return ApiResponse.success(modifyProductResponseDto);
 	}
+
+	@PostMapping("/products")
+	public ApiResponse<SaveProductResponseDto> saveProduct(@RequestBody SaveProductRequestDto saveProductRequestDto,
+		@RequestAttribute Long userId) {
+		return ApiResponse.success(productService.saveProduct(saveProductRequestDto, userId));
+	}
+
 }

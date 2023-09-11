@@ -10,6 +10,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -25,16 +26,17 @@ import com.example.carrot.location.entity.Location;
 import com.example.carrot.product_image.entity.ProductImage;
 import com.example.carrot.user.entity.User;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product extends BaseAllTimeEntity {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long productId;
 
 	@Column(nullable = false)
@@ -63,10 +65,10 @@ public class Product extends BaseAllTimeEntity {
 	@JoinColumn(name = "location_id")
 	private Location location;
 
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Like> likes = new ArrayList<>();
 
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProductImage> productImages = new ArrayList<>();
 
 	@Builder
@@ -96,4 +98,15 @@ public class Product extends BaseAllTimeEntity {
 		this.location = location;
 		return this;
 	}
+
+	public void addCategory(Category category) {
+		this.category = category;
+		category.getProducts().add(this);
+	}
+
+	public void addUser(User user) {
+		this.user = user;
+		user.getProducts().add(this);
+	}
+
 }

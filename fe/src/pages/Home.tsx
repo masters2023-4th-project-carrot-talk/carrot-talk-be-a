@@ -23,15 +23,21 @@ import { modifiedLocaitionName } from '@utils/modifyLocationName';
 import { useLayoutStore } from '@/stores/layoutStore';
 import { usePopupStore } from '@/stores/popupStore';
 import { useLocationsByAuth } from '@/hooks/useLocationsByAuth';
+import { useMyLocations } from '@/queries/location';
 
 export const Home: React.FC = () => {
   const { isLogin } = useAuth();
-  const { locations } = useLocationsByAuth(isLogin);
+  // const { locations } = useLocationsByAuth(isLogin);
+  const { serverLocations } = useMyLocations(isLogin);
+
   const { categories } = useCategories();
   // useQuery들 묶을수있는지
   const { togglePopup, setCurrentDim } = usePopupStore();
 
-  const mainLocation = locations?.find((location) => location.isMainLocation);
+  // const mainLocation = locations?.find((location) => location.isMainLocation);
+  const mainLocation = serverLocations?.find(
+    (location) => location.isMainLocation,
+  );
   const [selectedLocationId, setSelectedLocationId] = useState<number | null>(
     mainLocation?.id || 1,
   );
@@ -91,9 +97,13 @@ export const Home: React.FC = () => {
   const shouldShowSkeletons = status === 'loading' || isFetchingNextPage;
   const shouldShowEndOfData = !hasNextPage && status !== 'loading';
 
-  const mainLocationName = locations
+  const mainLocationName = serverLocations
     ? modifiedLocaitionName(mainLocation?.name as string)
     : modifiedLocaitionName('역삼1동');
+
+  const locations = isLogin
+    ? serverLocations
+    : [{ id: 1, name: '역삼1동', isMainLocation: true }];
 
   return (
     <>
@@ -175,7 +185,7 @@ export const Home: React.FC = () => {
           {shouldShowEndOfData && (
             <div className="end-of-data">전부 살펴 봤어요!</div>
           )}
-          <LocationModal />
+          <LocationModal locationList={serverLocations} />
           <div ref={observeTarget} css={obseverStyle}></div>
         </>
       </div>

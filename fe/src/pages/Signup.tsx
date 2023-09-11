@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { usePopupStore } from '@/stores/popupStore';
 import { useAuth } from '@/hooks/useAuth';
+import { useRegisteredLocationsStore } from '@/stores/locationStore';
 
 type NicknameCheck =
   | {
@@ -30,8 +31,8 @@ export const Signup: React.FC = () => {
   const routeLocation = useLocation();
 
   const [nickname, setNickname] = useState('');
-  const { isLogin } = useAuth();
-  const { locations } = useLocationsByAuth(isLogin);
+  const { localLocations } = useRegisteredLocationsStore();
+  // const { locations } = useLocationsByAuth(isLogin);
   const [nicknameCheck, setNicknameCheck] = useState<NicknameCheck>({
     status: 'ready',
   });
@@ -59,7 +60,7 @@ export const Signup: React.FC = () => {
   const nicknameCheckWarningMessage =
     nicknameCheck?.status === 'failed' ? nicknameCheck?.warningMessage : '';
   const submitDisabled =
-    invalidNickName || !nicknameCheckPassed || locations?.length === 0;
+    invalidNickName || !nicknameCheckPassed || localLocations?.length === 0;
 
   const goToAuth = () => {
     navigate(PATH.auth, { replace: true });
@@ -89,14 +90,14 @@ export const Signup: React.FC = () => {
   };
 
   const requestSignup = () => {
-    if (submitDisabled || !locations) {
+    if (submitDisabled || !localLocations) {
       return;
     }
 
-    const mainLocationId = locations.find(
+    const mainLocationId = localLocations.find(
       (location: LocationType) => location.isMainLocation,
     )?.id as number;
-    const subLocationId = locations?.find(
+    const subLocationId = localLocations?.find(
       (location: LocationType) => !location.isMainLocation,
     )?.id;
 
@@ -171,7 +172,7 @@ export const Signup: React.FC = () => {
             </Button>
           </div>
         </div>
-        <LocationModal />
+        <LocationModal locationList={localLocations} />
       </div>
     </>
   );

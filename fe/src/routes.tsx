@@ -36,7 +36,7 @@ export const AppRoutes: React.FC = () => {
             <Route path={PATH.account} element={<Account />} />
           </Route>
         </Route>
-        <Route element={<OnlyGuestRoute />}>
+        <Route element={<OnlyNotLoginUserRoute />}>
           <Route path={PATH.redirect} element={<OauthLoading />} />
           <Route path={PATH.signup} element={<Signup />} />
         </Route>
@@ -51,7 +51,7 @@ const OnlyLoginUserRoute: React.FC = () => {
   return isLogin ? <Outlet /> : <Navigate to={PATH.account} />;
 };
 
-const OnlyGuestRoute: React.FC = () => {
+const OnlyNotLoginUserRoute: React.FC = () => {
   const { isLogin } = useAuth();
 
   return isLogin ? <Navigate to={PATH.home} /> : <Outlet />;

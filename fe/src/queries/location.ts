@@ -56,23 +56,6 @@ export const useDeleteLocation = () => {
   return deleteLocationById;
 };
 
-// export const usePatchMainLocation = (onSuccessCallback?: () => void) => {
-//   const queryClient = useQueryClient();
-
-//   const patchMainLocationMutation = useMutation(patchMainLocation, {
-//     onSuccess: () => {
-//       queryClient.invalidateQueries(QUERY_KEY.locations);
-//       onSuccessCallback?.();
-//     },
-//   });
-
-//   const patchMainLocationById = (location: LocationType) => {
-//     patchMainLocationMutation.mutate(location.id);
-//   };
-
-//   return patchMainLocationById;
-// };
-
 export const usePatchMainLocation = () => {
   const queryClient = useQueryClient();
 

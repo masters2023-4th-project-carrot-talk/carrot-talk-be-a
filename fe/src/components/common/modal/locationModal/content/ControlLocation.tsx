@@ -7,10 +7,6 @@ import { Theme, css } from '@emotion/react';
 import React, { useState } from 'react';
 import { ModalHeader } from '../../ModalHeader';
 import { usePopupStore } from '@/stores/popupStore';
-import { useAuth } from '@/hooks/useAuth';
-import { useLocationsByAuth } from '@/hooks/useLocationsByAuth';
-import { useDeleteLocation, usePatchMainLocation } from '@/queries/location';
-import { useRegisteredLocationsStore } from '@/stores/locationStore';
 
 type Props = {
   locationList?: LocationType[];
@@ -25,21 +21,10 @@ export const ControlLocation: React.FC<Props> = ({
   onPatchLocationByAuth,
   onDeleteLocationByAuth,
 }) => {
-  // const { isLogin } = useAuth();
-  // const { deleteLocationById, patchMainLocationById } =
-  //   useLocationsByAuth(isLogin);
-
-  // const { isLogin } = useAuth();
-  // const patchMainLocationById = usePatchMainLocation();
-  // const deleteLocationById = useDeleteLocation();
-  // const { addLocation, deleteLocation } = useRegisteredLocationsStore();
   const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
   const [selectLocation, setSelectLocation] = useState<LocationType | null>(
     null,
   );
-
-  // const onPatchLocationByAuth = isLogin ? patchMainLocationById : addLocation;
-  // const onDeleteLocationByAuth = isLogin ? deleteLocationById : deleteLocation;
 
   const onAlertOpen = (location: LocationType) => {
     togglePopup('alert', true);

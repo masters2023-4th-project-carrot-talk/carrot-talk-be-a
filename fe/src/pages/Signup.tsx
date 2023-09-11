@@ -8,13 +8,11 @@ import { Title } from '@components/common/topBar/Title';
 import { TopBar } from '@components/common/topBar/TopBar';
 import { PATH } from '@constants/path';
 import { useCheckNickname, useSignup } from '@/queries/auth';
-import { useLocationsByAuth } from '@/hooks/useLocationsByAuth';
 import { ReactComponent as Plus } from '@assets/plus.svg';
 import { Theme, css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { usePopupStore } from '@/stores/popupStore';
-import { useAuth } from '@/hooks/useAuth';
 import { useRegisteredLocationsStore } from '@/stores/locationStore';
 
 type NicknameCheck =
@@ -32,7 +30,6 @@ export const Signup: React.FC = () => {
 
   const [nickname, setNickname] = useState('');
   const { localLocations } = useRegisteredLocationsStore();
-  // const { locations } = useLocationsByAuth(isLogin);
   const [nicknameCheck, setNicknameCheck] = useState<NicknameCheck>({
     status: 'ready',
   });

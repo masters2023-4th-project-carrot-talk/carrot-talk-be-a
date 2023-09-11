@@ -22,19 +22,16 @@ import { useAuth } from '@hooks/useAuth';
 import { modifiedLocaitionName } from '@utils/modifyLocationName';
 import { useLayoutStore } from '@/stores/layoutStore';
 import { usePopupStore } from '@/stores/popupStore';
-import { useLocationsByAuth } from '@/hooks/useLocationsByAuth';
 import { useMyLocations } from '@/queries/location';
 
 export const Home: React.FC = () => {
   const { isLogin } = useAuth();
-  // const { locations } = useLocationsByAuth(isLogin);
   const { serverLocations } = useMyLocations(isLogin);
 
   const { categories } = useCategories();
   // useQuery들 묶을수있는지
   const { togglePopup, setCurrentDim } = usePopupStore();
 
-  // const mainLocation = locations?.find((location) => location.isMainLocation);
   const mainLocation = serverLocations?.find(
     (location) => location.isMainLocation,
   );

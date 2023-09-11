@@ -25,8 +25,6 @@ export const LocationModal: React.FC<Props> = ({ locationList }) => {
     setToggleContent(content);
   };
 
-  // const onPatchLocationByAuth = isLogin ? patchMainLocationById : addLocation;
-
   const onPatchLocationByAuth = (location: LocationType) => {
     if (isLogin) {
       patchMainLocationById(location, () => {

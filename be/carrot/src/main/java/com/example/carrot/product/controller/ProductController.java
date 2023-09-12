@@ -50,7 +50,7 @@ public class ProductController {
 	/**
 	 * 상품 수정 API
 	 */
-	@PutMapping("/products/{productId}")
+	@PatchMapping("/products/{productId}")
 	public ApiResponse<ModifyProductResponseDto> modifyProduct(
 		@Valid @RequestBody ModifyProductRequestDto modifyProductRequestDto,
 		@RequestAttribute Long userId,
@@ -73,7 +73,7 @@ public class ProductController {
 	/**
 	 * 상품 상태 수정 API
 	 */
-	@PatchMapping("/products/{productId}")
+	@PatchMapping("/products/{productId}/status")
 	public ApiResponse<ModifyProductResponseDto> modifyProductStatus(
 		@Valid @RequestBody ModifyProductStatusRequestDto modifyProductStatusRequestDto,
 		@RequestAttribute Long userId,
@@ -87,7 +87,8 @@ public class ProductController {
 	 * 상품 등록 API
 	 */
 	@PostMapping("/products")
-	public ApiResponse<SaveProductResponseDto> saveProduct(@RequestBody SaveProductRequestDto saveProductRequestDto,
+	public ApiResponse<SaveProductResponseDto> saveProduct(
+		@Valid @RequestBody SaveProductRequestDto saveProductRequestDto,
 		@RequestAttribute Long userId) {
 		return ApiResponse.success(productService.saveProduct(saveProductRequestDto, userId));
 	}

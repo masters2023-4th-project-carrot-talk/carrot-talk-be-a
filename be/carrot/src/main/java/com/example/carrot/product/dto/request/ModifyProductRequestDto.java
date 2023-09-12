@@ -22,14 +22,4 @@ public class ModifyProductRequestDto {
 	private Long locationId;
 	private String content;
 	private Long price;
-
-	public ModifyProductRequestDto(List<Long> images, String title, Long categoryId, Long locationId, String content,
-		Long price) {
-		this.images = images;
-		this.title = title;
-		this.categoryId = categoryId;
-		this.locationId = locationId;
-		this.content = content;
-		this.price = price;
-	}
 }

@@ -55,10 +55,6 @@ public class Product extends BaseAllTimeEntity {
 	@Enumerated(EnumType.STRING)
 	private ProductStatus status;
 
-	// TODO: 얘를 추가하면서 이상해짐..
-	@Column(table = "product", name = "created_at")
-	private LocalDateTime createdAt;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -79,7 +75,7 @@ public class Product extends BaseAllTimeEntity {
 
 	@Builder
 	public Product(String name, Long price, String content, Long hits, ProductStatus status, User user,
-		Category category, Location location, LocalDateTime createdAt) {
+		Category category, Location location) {
 		this.name = name;
 		this.price = price;
 		this.content = content;
@@ -88,7 +84,6 @@ public class Product extends BaseAllTimeEntity {
 		this.user = user;
 		this.category = category;
 		this.location = location;
-		this.createdAt = createdAt;
 	}
 
 	public void validateEditAccess(Long userId) {

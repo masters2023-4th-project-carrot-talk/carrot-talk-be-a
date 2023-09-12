@@ -17,32 +17,34 @@ import { SkeletonListItem } from '@components/common/skeleton/listItem';
 import { Category } from '@components/home/Category';
 import { useCategories } from '@/queries/category';
 import { useIntersectionObserver } from '@hooks/useObserver';
-import { useProducts } from '@/queries/products';
+import { useDeleteProduct, useProducts } from '@/queries/products';
 import { useAuth } from '@hooks/useAuth';
 import { modifiedLocaitionName } from '@utils/modifyLocationName';
 import { useLayoutStore } from '@/stores/layoutStore';
 import { usePopupStore } from '@/stores/popupStore';
 import { useMyLocations } from '@/queries/location';
+import { Alert } from '@/components/common/alert/Alert';
+import { AlertContent } from '@/components/common/alert/AlertContent';
+import { AlertButtons } from '@/components/common/alert/AlertButtons';
 
 export const Home: React.FC = () => {
   const { isLogin } = useAuth();
   const { serverLocations } = useMyLocations(isLogin);
-
   const { categories } = useCategories();
   // useQuery들 묶을수있는지
-  const { togglePopup, setCurrentDim } = usePopupStore();
+
+  const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
+  const { setShouldSlideLeft } = useLayoutStore();
 
   const mainLocation = serverLocations?.find(
     (location) => location.isMainLocation,
   );
   const [selectedLocationId, setSelectedLocationId] = useState<number | null>(
-    mainLocation?.id || 1,
+    isLogin && mainLocation ? mainLocation.id : 1,
   );
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     null,
   );
-
-  const { setShouldSlideLeft } = useLayoutStore();
 
   const {
     products,
@@ -53,7 +55,10 @@ export const Home: React.FC = () => {
     refetch: refetchProductList,
   } = useProducts(selectedLocationId, selectedCategoryId);
 
+  const deleteProductMutation = useDeleteProduct();
   const { observeTarget } = useIntersectionObserver(fetchNextPage, hasNextPage);
+
+  const [selectProduct, setSelectProduct] = useState<ProductType | null>(null);
 
   const onOpenModal = () => {
     togglePopup('modal', true);
@@ -79,10 +84,10 @@ export const Home: React.FC = () => {
     setSelectedLocationId(id);
   };
 
-  const onSelectCategory = async (id: number) => {
+  const onSelectCategory = (id: number) => {
     // TODO: 두번씩 눌러야 갱신이 되는 버그
-    refetchProductList(); //콜백처리
     setSelectedCategoryId(id);
+    refetchProductList(); //콜백처리
   };
 
   const renderSkeletons = () => {
@@ -91,12 +96,30 @@ export const Home: React.FC = () => {
     ));
   };
 
+  const onAlertOpen = (product: ProductType) => {
+    togglePopup('alert', true);
+    setCurrentDim('alert');
+    setSelectProduct(product);
+  };
+
+  const onAlertClose = () => {
+    togglePopup('alert', false);
+    setCurrentDim(null);
+  };
+
+  const onDeleteProduct = (id?: number) => {
+    if (id == null) return;
+    onAlertClose();
+    deleteProductMutation.mutate(id);
+  };
+
   const shouldShowSkeletons = status === 'loading' || isFetchingNextPage;
   const shouldShowEndOfData = !hasNextPage && status !== 'loading';
 
-  const mainLocationName = serverLocations
-    ? modifiedLocaitionName(mainLocation?.name as string)
-    : modifiedLocaitionName('역삼1동');
+  const mainLocationName =
+    isLogin && serverLocations
+      ? modifiedLocaitionName(mainLocation?.name as string)
+      : modifiedLocaitionName('역삼1동');
 
   const locations = isLogin
     ? serverLocations
@@ -174,8 +197,10 @@ export const Home: React.FC = () => {
                 key={product.id}
                 product={product}
                 onOpenDetail={() => onOpenDetail(product.id)}
+                onAlertOpen={() => onAlertOpen(product)}
               />
             ))}
+
             {shouldShowSkeletons && <>{renderSkeletons()}</>}
           </ListBox>
           {shouldShowEndOfData && (
@@ -185,6 +210,14 @@ export const Home: React.FC = () => {
           <div ref={observeTarget} css={obseverStyle}></div>
         </>
       </div>
+
+      <Alert isOpen={isOpen.alert} currentDim={currentDim}>
+        <AlertContent>'{selectProduct?.name}'을 삭제하시겠어요?</AlertContent>
+        <AlertButtons
+          buttonText="취소"
+          onDelete={() => onDeleteProduct(selectProduct?.id)}
+        />
+      </Alert>
 
       <Category
         categories={categories}

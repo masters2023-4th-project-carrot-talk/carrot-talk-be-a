@@ -3,6 +3,7 @@ import { Button } from '@/components/common/button/Button';
 import { Camera, ChevronRight, MapPinFilled } from '@/components/common/icons';
 import { PictureItem } from '@/components/common/imageBox/PictureItem';
 import { Input } from '@/components/common/input/Input';
+import { TextArea } from '@/components/common/input/TextArea';
 import { CategoryModal } from '@/components/common/modal/categoryModal/CategoryModal';
 import { LeftButton } from '@/components/common/topBar/LeftButton';
 import { RightButton } from '@/components/common/topBar/RightButton';
@@ -12,7 +13,7 @@ import { usePopupStore } from '@/stores/popupStore';
 import { Theme, css } from '@emotion/react';
 
 export const NewProduct: React.FC = () => {
-  const { togglePopup, setCurrentDim} = usePopupStore();
+  const { togglePopup, setCurrentDim } = usePopupStore();
 
   const randomGitProfile =
     'https://avatars.githubusercontent.com/u/48426991?v=4';
@@ -27,7 +28,7 @@ export const NewProduct: React.FC = () => {
   const openCategoryModal = () => {
     togglePopup('modal', true);
     setCurrentDim('modal');
-  }
+  };
 
   return (
     <>
@@ -98,8 +99,9 @@ export const NewProduct: React.FC = () => {
           />
         </div>
         <div className="content-input">
-          <textarea
+          <TextArea
             value={content}
+            onChange={() => {}}
             placeholder="역삼 1동에 올릴 게시물 내용을 작성해주세요.(판매금지 물품은 게시가 제한될 수 있어요.)"
           />
         </div>
@@ -176,16 +178,6 @@ const pageStyle = (theme: Theme) => css`
 
     &--more-btn > svg {
       stroke: ${theme.color.neutral.textStrong};
-    }
-  }
-
-  & .content-input textarea {
-    width: 100%;
-    height: 200px;
-    font: ${theme.font.availableDefault16};
-
-    &::placeholder {
-      color: ${theme.color.neutral.textWeak};
     }
   }
 `;

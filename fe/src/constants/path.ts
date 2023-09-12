@@ -8,6 +8,7 @@ export const PATH = {
   redirect: '/oauth/redirect',
   signup: '/signup',
   notFound: '/*',
+  detail: '/detail',
 };
 
 export const END_POINT = {

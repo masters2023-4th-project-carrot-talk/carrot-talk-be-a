@@ -29,10 +29,7 @@ export const useProducts = (
   });
 
   const allProducts = useMemo(() => {
-    if (data) {
-      return data.pages.flatMap((page) => page.data.products);
-    }
-    return [];
+    return data?.pages.flatMap((page) => page.data.products) ?? [];
   }, [data]);
 
   return {

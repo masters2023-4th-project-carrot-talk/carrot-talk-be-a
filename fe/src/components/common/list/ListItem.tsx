@@ -8,6 +8,9 @@ import { formatTimeStamp } from '@utils/formatTimeStamp';
 import { formatPrice } from '@utils/formatPrice';
 import { formatCount } from '@utils/formatCount';
 import { getUserInfo } from '@utils/localStorage';
+import { Dropdown } from '../dropdown/Dropdown';
+import { MenuBox } from '../menu/MenuBox';
+import { MenuItem } from '../menu/MenuItem';
 
 type Props = {
   product: ProductType; // TODO : product 타입 변경
@@ -19,9 +22,10 @@ export const ListItem: FC<Props> = ({ product, onOpenDetail }) => {
   const formattedTimeStamp = formatTimeStamp(product.createdAt);
   const formattedChatCount = formatCount(product.chatCount);
   const formattedLikeCount = formatCount(product.likeCount);
-  const isAuthor = getUserInfo()
-    ? getUserInfo().id === product.sellerId
-    : false;
+  // const isAuthor = getUserInfo()
+  //   ? getUserInfo()?.id === product.sellerId
+  //   : false;
+  const isAuthor = true;
   // TODO : dots 드롭다운 달고 기능구현
   return (
     <li css={listItemStyle} onClick={onOpenDetail}>
@@ -31,9 +35,21 @@ export const ListItem: FC<Props> = ({ product, onOpenDetail }) => {
           <div className="text-area__information-title">
             <span>{product.name}</span>
             {isAuthor && (
-              <Button variant="text" onClick={() => {}}>
-                <Dots />
-              </Button>
+              <Dropdown
+                opener={
+                  <Button variant="text" onClick={() => {}}>
+                    <Dots />
+                  </Button>
+                }
+                menu={
+                  <MenuBox>
+                    <MenuItem onClick={() => {}}>판매중</MenuItem>
+                    <MenuItem onClick={() => {}}>예약중</MenuItem>
+                    <MenuItem onClick={() => {}}>판매완료</MenuItem>
+                  </MenuBox>
+                }
+                autoClose
+              ></Dropdown>
             )}
           </div>
           <div className="text-area__information-location">

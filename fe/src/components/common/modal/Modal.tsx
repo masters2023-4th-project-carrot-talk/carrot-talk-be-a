@@ -1,6 +1,6 @@
 import { Theme, css } from '@emotion/react';
 import { Dim } from './Dim';
-import { useAnimation } from '@hooks/animation';
+import { useAnimation } from '@/hooks/useAnimation';
 
 type Props = {
   isOpen: boolean;

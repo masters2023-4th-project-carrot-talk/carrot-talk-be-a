@@ -141,3 +141,12 @@ export const getProducts = ({
 
   return fetchData(END_POINT.products(query.toString()));
 };
+
+export const getProductsDetail = (id: number) => {
+  return fetchData(`/api/products/${id}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+  });
+};

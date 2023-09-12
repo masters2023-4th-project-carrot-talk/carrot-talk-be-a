@@ -43,6 +43,7 @@ public enum StatusCode {
 	// -- [PRODUCT] -- //
 	NOT_FOUND_PRODUCT(HttpStatus.NOT_FOUND, "해당하는 상품을 찾을 수 없습니다."),
 	NO_EDIT_PERMISSION(HttpStatus.FORBIDDEN, "수정할 권한이 없습니다."),
+	INVALID_PRODUCT_STATUS(HttpStatus.BAD_REQUEST, "유효하지 않은 상태입니다."),
 
 	// -- [IMAGE] -- //
 	NOT_FOUND_IMAGE(HttpStatus.NOT_FOUND, "해당하는 이미지가 없습니다.");

@@ -1,5 +1,7 @@
 package com.example.carrot.product.dto.response;
 
+import com.example.carrot.product.entity.Product;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,9 +15,9 @@ public class ModifyProductResponseDto {
 		this.productId = productId;
 	}
 
-	public static ModifyProductResponseDto of(Long productId) {
+	public static ModifyProductResponseDto of(Product product) {
 		return ModifyProductResponseDto.builder()
-			.productId(productId)
+			.productId(product.getProductId())
 			.build();
 	}
 }

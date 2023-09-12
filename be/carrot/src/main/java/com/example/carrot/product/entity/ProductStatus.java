@@ -1,18 +1,27 @@
 package com.example.carrot.product.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum ProductStatus {
-	ON_SALE, SOLD_OUT, RESERVED;
+	ON_SALE("판매중"),
+	SOLD_OUT("판매완료"),
+	RESERVED("예약중");
+
+	private String value;
 
 	public static String chooseString(ProductStatus status) {
 		if (status == RESERVED) {
-			return "예약중";
+			return RESERVED.value;
 		}
 
 		if (status == SOLD_OUT) {
-			return "판매완료";
+			return SOLD_OUT.value;
 		}
 
-		return "판매중";
+		return ON_SALE.value;
 	}
 
 	public String getName() {

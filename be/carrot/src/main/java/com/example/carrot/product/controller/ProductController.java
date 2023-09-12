@@ -62,15 +62,6 @@ public class ProductController {
 	}
 
 	/**
-	 * 상품 등록 API
-	 */
-	@PostMapping("/products")
-	public ApiResponse<SaveProductResponseDto> saveProduct(@RequestBody SaveProductRequestDto saveProductRequestDto,
-		@RequestAttribute Long userId) {
-		return ApiResponse.success(productService.saveProduct(saveProductRequestDto, userId));
-	}
-
-	/**
 	 * 상품 삭제 API
 	 */
 	@DeleteMapping("/products/{productId}")
@@ -90,6 +81,15 @@ public class ProductController {
 		ModifyProductResponseDto modifyProductResponseDto = productService.updateProductStatus(
 			modifyProductStatusRequestDto, userId, productId);
 		return ApiResponse.success(modifyProductResponseDto);
+	}
+
+	/**
+	 * 상품 등록 API
+	 */
+	@PostMapping("/products")
+	public ApiResponse<SaveProductResponseDto> saveProduct(@RequestBody SaveProductRequestDto saveProductRequestDto,
+		@RequestAttribute Long userId) {
+		return ApiResponse.success(productService.saveProduct(saveProductRequestDto, userId));
 	}
 
 	/**

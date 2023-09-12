@@ -193,9 +193,18 @@ public class ProductService {
 		// ProductImage의 List 형태가 가장 첫번째로 오는 것이
 		// 이미 대표 이미지의 것이라는 보장이 있어야 함 (이미지 API에서 그렇게 만들어야 함)
 		List<ProductImage> productImages = product.getProductImages();
+
+		catchMainImageException(productImages);
+
 		return productImages.stream()
 			.map(productImage -> productImage.getImage().getImageUrl())
 			.collect(Collectors.toUnmodifiableList());
+	}
+
+	private void catchMainImageException(List<ProductImage> productImages) {
+		if (!productImages.get(0).isMain()) {
+			throw new CustomException(StatusCode.NOT_FOUND_MAIN_IMAGE);
+		}
 	}
 
 	private ProductDetailSellerResponseDto makeSeller(Product product) {
@@ -206,7 +215,7 @@ public class ProductService {
 	private ProductDetailResponseDto makeProduct(Product product, Long userId) {
 		String location = product.getLocation().getName();
 
-		String status = ProductStatus.chooseString(product.getStatus());
+		String status = product.getStatus().getValue();
 		String title = product.getName();
 		String category = product.getCategory().getName();
 		Long price = product.getPrice();
@@ -225,21 +234,16 @@ public class ProductService {
 
 		boolean isLiked = false;
 		if (userId != null) {
-			isLiked = findIsLiked(likes, findUser(userId));
+			isLiked = findIsLiked(likes, userId);
 		}
 
 		return ProductDetailResponseDto.of(location, status, title, category,
 			createdAt, content, chatCount, likeCount, hits, price, isLiked);
 	}
 
-	private User findUser(Long userId) {
-		return userRepository.findById(userId)
-			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_USER));
-	}
-
-	private boolean findIsLiked(List<Like> likes, User user) {
+	private boolean findIsLiked(List<Like> likes, Long userId) {
 		return likes.stream()
-			.anyMatch(like -> Objects.equals(like.getUser().getUserId(), user.getUserId()));
+			.anyMatch(like -> Objects.equals(like.getUser().getUserId(), userId));
 	}
 
 }

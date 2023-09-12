@@ -1,7 +1,6 @@
 import { Alert } from '@components/common/alert/Alert';
 import { AlertButtons } from '@components/common/alert/AlertButtons';
 import { AlertContent } from '@components/common/alert/AlertContent';
-import { useLocationControl } from '@hooks/useLocationControl';
 import { Button } from '@components/common/button/Button';
 import { CircleXFilled, Plus } from '@components/common/icons';
 import { Theme, css } from '@emotion/react';
@@ -10,14 +9,19 @@ import { ModalHeader } from '../../ModalHeader';
 import { usePopupStore } from '@/stores/popupStore';
 
 type Props = {
+  locationList?: LocationType[];
   onToggleContent: (content: 'control' | 'search') => void;
+  onPatchLocationByAuth: (location: LocationType) => void;
+  onDeleteLocationByAuth: (id: number) => void;
 };
 
-export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
-  const { locations, deleteLocationById, patchMainLocationById } =
-    useLocationControl();
+export const ControlLocation: React.FC<Props> = ({
+  locationList,
+  onToggleContent,
+  onPatchLocationByAuth,
+  onDeleteLocationByAuth,
+}) => {
   const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
-
   const [selectLocation, setSelectLocation] = useState<LocationType | null>(
     null,
   );
@@ -41,29 +45,25 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
   const onDeleteLocation = (id?: number) => {
     if (id == null) return;
     onAlertClose();
-    deleteLocationById(id);
+    onDeleteLocationByAuth(id);
     setSelectLocation(null);
   };
 
   const onChangeMainLocation = () => {
-    selectLocation && patchMainLocationById(selectLocation);
+    selectLocation && onPatchLocationByAuth(selectLocation);
     setSelectLocation(null);
   };
 
   const onSelectLocation = (selectedLocation: LocationType) => {
-    locations?.map((location: LocationType) => {
-      if (location.id === selectedLocation.id) {
-        location.isMainLocation = true;
-      } else {
-        location.isMainLocation = false;
-      }
+    locationList?.map((location: LocationType) => {
+      location.isMainLocation = location.id === selectedLocation.id;
     });
 
     setSelectLocation(selectedLocation);
   };
 
-  const shouldBlockDelete = locations?.length === 1;
-  const shouldBlockAdd = locations?.length === 2;
+  const shouldBlockDelete = locationList?.length === 1;
+  const shouldBlockAdd = locationList?.length === 2;
 
   return (
     <>
@@ -80,8 +80,8 @@ export const ControlLocation: React.FC<Props> = ({ onToggleContent }) => {
           <p>최대 2개까지 설정 가능해요.</p>
         </div>
         <div className="buttons">
-          {locations &&
-            locations.map((location: LocationType) => (
+          {locationList &&
+            locationList.map((location: LocationType) => (
               <LocationButton
                 key={location.id}
                 isMainLocation={location.isMainLocation}

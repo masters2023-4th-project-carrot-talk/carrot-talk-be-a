@@ -40,6 +40,7 @@ export const AppRoutes: React.FC = () => {
           <Route path={PATH.redirect} element={<OauthLoading />} />
           <Route path={PATH.signup} element={<Signup />} />
         </Route>
+        <Route path={`${PATH.detail}/:id`} element={<ProductDetail />} />
       </Routes>
     </div>
   );
@@ -47,13 +48,11 @@ export const AppRoutes: React.FC = () => {
 
 const OnlyLoginUserRoute: React.FC = () => {
   const { isLogin } = useAuth();
-
   return isLogin ? <Outlet /> : <Navigate to={PATH.account} />;
 };
 
 const OnlyNotLoginUserRoute: React.FC = () => {
   const { isLogin } = useAuth();
-
   return isLogin ? <Navigate to={PATH.home} /> : <Outlet />;
 };
 
@@ -71,4 +70,3 @@ const globalStyle = css`
     display: none;
   }
 `;
-// height: 852px;

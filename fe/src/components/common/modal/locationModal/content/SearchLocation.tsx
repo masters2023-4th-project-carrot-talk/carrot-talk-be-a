@@ -1,6 +1,5 @@
 import { Input } from '@components/common/input/Input';
 import { useLocationWithQuery } from '@/queries/location';
-import { useLocationControl } from '@hooks/useLocationControl';
 import { css } from '@emotion/react';
 import { useState } from 'react';
 import { ModalHeader } from '../../ModalHeader';
@@ -9,18 +8,19 @@ import { usePopupStore } from '@/stores/popupStore';
 
 type Props = {
   onToggleContent: (content: 'control' | 'search') => void;
+  onPatchLocationByAuth: (location: LocationType) => void;
 };
 
-export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
+export const SearchLocation: React.FC<Props> = ({
+  onToggleContent,
+  onPatchLocationByAuth,
+}) => {
   const [inputValue, setInputValue] = useState<string>('');
   const trimedInputValue = inputValue.trim();
-  const { locations, refetch } = useLocationWithQuery(trimedInputValue);
+  const { locations, refetch: refetchLocations } =
+    useLocationWithQuery(trimedInputValue);
   const [hasPressedEnter, setHasPressedEnter] = useState<boolean>(false);
   const { togglePopup, setCurrentDim } = usePopupStore();
-
-  const { patchMainLocationById } = useLocationControl(() => {
-    onToggleContent('control');
-  });
 
   const onChangeInput = (value: string) => {
     setInputValue(value);
@@ -28,13 +28,13 @@ export const SearchLocation: React.FC<Props> = ({ onToggleContent }) => {
   };
 
   const onSearchLocation = () => {
-    refetch();
+    refetchLocations();
     setHasPressedEnter(true);
   };
 
   const onChangeMainLocation = (location: LocationType) => {
     setInputValue('');
-    patchMainLocationById(location);
+    onPatchLocationByAuth(location);
   };
 
   const onCloseModal = () => {

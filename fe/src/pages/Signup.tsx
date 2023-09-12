@@ -13,12 +13,14 @@ import { RightButton } from '@components/common/topBar/RightButton';
 import { Title } from '@components/common/topBar/Title';
 import { TopBar } from '@components/common/topBar/TopBar';
 import { PATH } from '@constants/path';
+
 import { Theme, css } from '@emotion/react';
 import { useLocationControl } from '@hooks/useLocationControl';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 export const Signup: React.FC = () => {
   const navigate = useNavigate();
+
 
   const {
     nickname,
@@ -53,10 +55,10 @@ export const Signup: React.FC = () => {
       return;
     }
 
-    const mainLocationId = locations.find(
+    const mainLocationId = localLocations.find(
       (location: LocationType) => location.isMainLocation,
     )?.id as number;
-    const subLocationId = locations?.find(
+    const subLocationId = localLocations?.find(
       (location: LocationType) => !location.isMainLocation,
     )?.id;
 
@@ -143,7 +145,7 @@ export const Signup: React.FC = () => {
             </Button>
           </div>
         </div>
-        <LocationModal />
+        <LocationModal locationList={localLocations} />
       </div>
     </>
   );

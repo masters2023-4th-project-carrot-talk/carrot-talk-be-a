@@ -1,6 +1,8 @@
 export const formatTimeStamp = (createdAt: string) => {
   const currentTime = new Date();
-  const time = new Date(createdAt);
+
+  const kstOffset = 9 * 60 * 60000; // 9 hours in milliseconds
+  const time = new Date(new Date(createdAt).getTime() - kstOffset);
 
   const timeDiff = currentTime.getTime() - time.getTime();
 

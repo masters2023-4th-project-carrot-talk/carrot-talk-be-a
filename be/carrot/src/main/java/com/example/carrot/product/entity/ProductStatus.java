@@ -9,7 +9,7 @@ public enum ProductStatus {
 		}
 
 		if (status == SOLD_OUT) {
-			return "판매 완료";
+			return "판매완료";
 		}
 
 		return "판매중";

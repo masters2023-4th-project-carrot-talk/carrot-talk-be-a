@@ -1,5 +1,6 @@
 package com.example.carrot.product.entity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class Product extends BaseAllTimeEntity {
 
 	@Column(nullable = false)
 	private String name;
+
 	private Long price;
 
 	@Column(length = 500)
@@ -113,4 +115,9 @@ public class Product extends BaseAllTimeEntity {
 		this.status = productStatus;
 		return this;
 	}
+
+	public void increaseHit() {
+		this.hits++;
+	}
+
 }

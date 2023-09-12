@@ -32,7 +32,7 @@ public class ProductsResponseDto {
 		this.location = location;
 		this.createdAt = createdAt;
 		this.price = price;
-		this.status = status.getName();
+		this.status = status.getValue();
 		this.chatCount = 0L; // chatroom이 erd에 추가되면 수정해야 함
 		this.likeCount = likeCount;
 	}

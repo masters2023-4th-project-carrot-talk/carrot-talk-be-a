@@ -20,6 +20,7 @@ import com.example.carrot.product.dto.request.ModifyProductStatusRequestDto;
 import com.example.carrot.product.dto.request.SaveProductRequestDto;
 import com.example.carrot.product.dto.response.MainPageResponseDto;
 import com.example.carrot.product.dto.response.ModifyProductResponseDto;
+import com.example.carrot.product.dto.response.ReadProductDetailResponseDto;
 import com.example.carrot.product.dto.response.SaveProductResponseDto;
 import com.example.carrot.product.service.ProductService;
 
@@ -61,15 +62,6 @@ public class ProductController {
 	}
 
 	/**
-	 * 상품 등록 API
-	 */
-	@PostMapping("/products")
-	public ApiResponse<SaveProductResponseDto> saveProduct(@RequestBody SaveProductRequestDto saveProductRequestDto,
-		@RequestAttribute Long userId) {
-		return ApiResponse.success(productService.saveProduct(saveProductRequestDto, userId));
-	}
-
-	/**
 	 * 상품 삭제 API
 	 */
 	@DeleteMapping("/products/{productId}")
@@ -90,4 +82,22 @@ public class ProductController {
 			modifyProductStatusRequestDto, userId, productId);
 		return ApiResponse.success(modifyProductResponseDto);
 	}
+
+	/**
+	 * 상품 등록 API
+	 */
+	@PostMapping("/products")
+	public ApiResponse<SaveProductResponseDto> saveProduct(@RequestBody SaveProductRequestDto saveProductRequestDto,
+		@RequestAttribute Long userId) {
+		return ApiResponse.success(productService.saveProduct(saveProductRequestDto, userId));
+	}
+
+	/**
+	 * 상품 상세 조회 API
+	 */
+	@GetMapping("/products/{productId}")
+	public ApiResponse<ReadProductDetailResponseDto> getProductDetail(@PathVariable Long productId, @RequestAttribute(required = false) Long userId) {
+		return ApiResponse.success(productService.getProductDetail(productId, userId));
+	}
+
 }

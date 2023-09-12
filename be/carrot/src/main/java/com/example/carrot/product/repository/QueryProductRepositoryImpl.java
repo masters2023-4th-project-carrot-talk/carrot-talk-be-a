@@ -20,13 +20,13 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
+public class QueryProductRepositoryImpl implements QueryProductRepository {
 
 	private static final Long DEFAULT_LOCATION_ID = 1L;
 
 	private final JPAQueryFactory queryFactory;
 
-	public ProductRepositoryCustomImpl(EntityManager em) {
+	public QueryProductRepositoryImpl(EntityManager em) {
 		this.queryFactory = new JPAQueryFactory(em);
 	}
 

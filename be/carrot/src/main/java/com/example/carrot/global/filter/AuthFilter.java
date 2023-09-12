@@ -10,7 +10,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +24,8 @@ import com.example.carrot.global.jwt.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -43,8 +44,9 @@ public class AuthFilter implements Filter {
 
 	@Value("${filter.users-signup-uri}")
 	private String signupUri;
+	@Value("${filter.open-uris}")
+	private String[] openUris;
 
-	@Autowired
 	private final ExceptionToStatusCodeMapper exceptionMapper;
 
 	private final ObjectMapper objectMapper;
@@ -77,41 +79,55 @@ public class AuthFilter implements Filter {
 
 		if (isSignupUri(httpServletRequest.getRequestURI())) {
 			log.info(signupUri + " 진입");
-			processSignupJwt(httpServletRequest, httpServletResponse);
-			chain.doFilter(request, response);
+			processSignupJwt(httpServletRequest, httpServletResponse, chain);
+			return;
+		}
+
+		if (!isContainToken(httpServletRequest)) {
+			handleIsOpenUriOrNot(httpServletRequest, httpServletResponse, chain);
 			return;
 		}
 
 		try {
-			if (!isContainToken(httpServletRequest)) {
-				request.setAttribute(USER_ID, null);
-				chain.doFilter(request, response);
-				return;
-			}
-
 			Claims claims = jwtProvider.getClaims(getToken(httpServletRequest));
-
 			request.setAttribute(USER_ID, claims.get(USER_ID));
 			chain.doFilter(request, response);
-		} catch (RuntimeException e) {
-			log.debug(e.getClass().getName());
+		} catch (JwtException e) {
+			log.error(e.getClass().getName());
 			sendErrorApiResponse(httpServletResponse, e);
 		}
+	}
+
+	private void handleIsOpenUriOrNot(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+		FilterChain chain) throws
+		IOException, ServletException {
+		if (!openUrisCheck(httpServletRequest.getRequestURI())) {
+			log.info("openUris에 해당하지 않는 uri");
+			sendErrorApiResponse(httpServletResponse, new MalformedJwtException(""));
+			return;
+		}
+		httpServletRequest.setAttribute(USER_ID, null);
+		chain.doFilter(httpServletRequest, httpServletResponse);
+	}
+
+	private boolean openUrisCheck(String uri) {
+		return PatternMatchUtils.simpleMatch(openUris, uri);
 	}
 
 	private boolean isSignupUri(String uri) {
 		return signupUri.equals(uri);
 	}
 
-	private void processSignupJwt(HttpServletRequest request, HttpServletResponse httpServletResponse) throws
-		IOException {
+	private void processSignupJwt(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws
+		IOException, ServletException {
 		try {
 			Claims claims = jwtProvider.getClaims(getToken(request));
 			request.setAttribute(SOCIAL_ID, claims.get(SOCIAL_ID));
 			request.setAttribute(IMAGE_URL, claims.get(IMAGE_URL));
-		} catch (RuntimeException e) {
+			chain.doFilter(request, response);
+		} catch (JwtException e) {
 			log.info(e.getClass().getName());
-			sendErrorApiResponse(httpServletResponse, e);
+			sendErrorApiResponse(response, e);
 		}
 	}
 

@@ -4,6 +4,6 @@ import org.springframework.data.domain.Slice;
 
 import com.example.carrot.product.dto.response.ProductsResponseDto;
 
-public interface ProductRepositoryCustom {
+public interface QueryProductRepository {
 	Slice<ProductsResponseDto> findProducts(Long locationId, Long categoryId, Long next, int size);
 }

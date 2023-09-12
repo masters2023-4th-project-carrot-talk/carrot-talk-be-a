@@ -58,11 +58,7 @@ export const checkNickname = async (nickname: string) => {
   });
 };
 
-export const signup = async (signupInfo: {
-  nickname: string;
-  mainLocationId: number;
-  subLocationId?: number;
-}) => {
+export const signup = async (signupInfo: SignupData) => {
   return fetchData('/api/users/signup', {
     method: 'POST',
     headers: {

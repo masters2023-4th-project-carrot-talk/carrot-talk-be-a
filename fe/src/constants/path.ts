@@ -3,9 +3,9 @@ export const PATH = {
   sales: '/sales',
   interests: '/interests',
   chat: '/chat',
-  auth: '/auth',
+  account: '/account',
   redirect: '/oauth/redirect',
-  signup: '/auth/signup',
+  signup: '/signup',
   notFound: '/*',
   detail: '/detail',
 };

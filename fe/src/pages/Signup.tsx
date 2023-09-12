@@ -1,4 +1,10 @@
+import { useNickname } from '@/hooks/useNickname';
+import { useSignup } from '@/queries/auth';
+import { useAuthStore } from '@/stores/authStore';
+import { usePopupStore } from '@/stores/popupStore';
+import { setLoginInfo } from '@/utils/localStorage';
 import { ReactComponent as Check } from '@assets/check.svg';
+import { ReactComponent as Plus } from '@assets/plus.svg';
 import { Button } from '@components/common/button/Button';
 import { Input } from '@components/common/input/Input';
 import { LocationModal } from '@components/common/modal/locationModal/LocationModal';
@@ -7,78 +13,36 @@ import { RightButton } from '@components/common/topBar/RightButton';
 import { Title } from '@components/common/topBar/Title';
 import { TopBar } from '@components/common/topBar/TopBar';
 import { PATH } from '@constants/path';
-import { useCheckNickname, useSignup } from '@/queries/auth';
-import { ReactComponent as Plus } from '@assets/plus.svg';
-import { Theme, css } from '@emotion/react';
-import { useEffect, useState } from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { usePopupStore } from '@/stores/popupStore';
-import { useRegisteredLocationsStore } from '@/stores/locationStore';
 
-type NicknameCheck =
-  | {
-      status: 'passed' | 'ready';
-    }
-  | {
-      status: 'failed';
-      warningMessage: string;
-    };
+import { Theme, css } from '@emotion/react';
+import { useLocationControl } from '@hooks/useLocationControl';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export const Signup: React.FC = () => {
   const navigate = useNavigate();
-  const routeLocation = useLocation();
 
-  const [nickname, setNickname] = useState('');
-  const { localLocations } = useRegisteredLocationsStore();
-  const [nicknameCheck, setNicknameCheck] = useState<NicknameCheck>({
-    status: 'ready',
+
+  const {
+    nickname,
+    isValidNickname,
+    isUniqueNickname,
+    nicknameInputWarning,
+    onChangeNickname,
+    checkNicknameUnique,
+  } = useNickname({
+    validateNickname: (nickname: string) =>
+      /^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]{2,10}$/.test(nickname),
+    defaultWarning: '2~10글자 닉네임을 입력하세요',
   });
+  const { locations } = useLocationControl();
   const { togglePopup, setCurrentDim } = usePopupStore();
-  const { refetch: refetchNicknameCheck } = useCheckNickname(nickname);
-  const { mutate: signupWithInfo } = useSignup();
+  const { signUpInProgress } = useAuthStore();
+  const signupMutation = useSignup();
 
-  useEffect(() => {
-    setNicknameCheck((n) => {
-      if (n?.status !== 'ready') {
-        return {
-          status: 'ready',
-        };
-      }
-      return n;
-    });
-  }, [nickname]);
-
-  if (!routeLocation.state?.isOauth) {
-    return <Navigate to={PATH.auth} replace={true} />;
-  }
-
-  const invalidNickName = !/^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]{2,10}$/.test(nickname);
-  const nicknameCheckPassed = nicknameCheck?.status === 'passed';
-  const nicknameCheckWarningMessage =
-    nicknameCheck?.status === 'failed' ? nicknameCheck?.warningMessage : '';
-  const submitDisabled =
-    invalidNickName || !nicknameCheckPassed || localLocations?.length === 0;
+  const submitEnabled = isUniqueNickname && locations && locations.length > 0;
 
   const goToAuth = () => {
-    navigate(PATH.auth, { replace: true });
-  };
-
-  const changeNickname = (value: string) => {
-    setNickname(value);
-  };
-
-  const requestNicknameCheck = async () => {
-    if (invalidNickName || nicknameCheckPassed) {
-      return;
-    }
-    const { data } = await refetchNicknameCheck();
-
-    setNicknameCheck(() => {
-      if (data?.success) {
-        return { status: 'passed' };
-      }
-      return { status: 'failed', warningMessage: data?.errorCode };
-    });
+    navigate(PATH.account, { replace: true });
   };
 
   const openLocationModal = () => {
@@ -87,7 +51,7 @@ export const Signup: React.FC = () => {
   };
 
   const requestSignup = () => {
-    if (submitDisabled || !localLocations) {
+    if (!submitEnabled) {
       return;
     }
 
@@ -104,10 +68,22 @@ export const Signup: React.FC = () => {
       ...(!!subLocationId && { subLocationId }),
     };
 
-    signupWithInfo(signupInfo);
-
-    navigate(PATH.home, { replace: true });
+    signupMutation.mutate(signupInfo, {
+      onSuccess: ({ data }) => {
+        setLoginInfo(data);
+        navigate(PATH.home, { replace: true });
+      },
+      onError: (error) => {
+        if (error instanceof Error) {
+          throw error;
+        }
+      },
+    });
   };
+
+  if (!signUpInProgress) {
+    return <Navigate to={PATH.account} replace={true} />;
+  }
 
   return (
     <>
@@ -121,7 +97,7 @@ export const Signup: React.FC = () => {
         <RightButton>
           <Button
             variant="text"
-            disabled={submitDisabled}
+            disabled={!submitEnabled}
             onClick={requestSignup}
           >
             <span className="control-btn">확인</span>
@@ -140,18 +116,18 @@ export const Signup: React.FC = () => {
                 minLength={2}
                 maxLength={10}
                 value={nickname}
-                onChange={changeNickname}
-                warningMessage={nicknameCheckWarningMessage}
+                onChange={onChangeNickname}
+                warningMessage={nicknameInputWarning}
               />
-              {nicknameCheckPassed ? (
+              {isUniqueNickname ? (
                 <Check className="nickname-form__input--check" />
               ) : (
                 <Button
                   variant="rectangle"
                   state="active"
                   size="s"
-                  disabled={invalidNickName}
-                  onClick={requestNicknameCheck}
+                  disabled={!isValidNickname}
+                  onClick={checkNicknameUnique}
                 >
                   중복 체크
                 </Button>

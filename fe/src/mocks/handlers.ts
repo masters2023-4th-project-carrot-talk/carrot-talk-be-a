@@ -1,7 +1,7 @@
 import { rest } from 'msw';
-import { token, users } from './data/users';
 import { categoryList } from './data/categories';
 import { locationsWithQuery } from './data/locations';
+import { token, users } from './data/users';
 
 let locations: LocationType[] = [
   { id: 1, name: '안양99동', isMainLocation: true },
@@ -177,6 +177,9 @@ export const handlers = [
       return res(ctx.status(200), ctx.json({ success: false }));
     }
 
-    return res(ctx.status(200), ctx.json({ success: true, accessToken: token }));
-  })
+    return res(
+      ctx.status(200),
+      ctx.json({ success: true, data: { accessToken: token } }),
+    );
+  }),
 ];

@@ -1,31 +1,33 @@
+import { useLogout } from '@/queries/auth';
+import kakaoLogin from '@assets/kakao_login.png';
 import { ReactComponent as UserCircle } from '@assets/user-circle.svg';
 import { Button } from '@components/common/button/Button';
 import { Beez } from '@components/common/icons';
 import { Title } from '@components/common/topBar/Title';
 import { TopBar } from '@components/common/topBar/TopBar';
 import { KAKAO_AUTH_URL, PATH } from '@constants/path';
-import { useLogout } from '@/queries/auth';
+import { Theme, css } from '@emotion/react';
 import { useAuth } from '@hooks/useAuth';
 import { clearLoginInfo } from '@utils/localStorage';
-import kakaoLogin from '@assets/kakao_login.png';
-import { Theme, css } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 
-export const Auth: React.FC = () => {
+export const Account: React.FC = () => {
   const navigate = useNavigate();
 
   const { isLogin, userInfo } = useAuth();
-  const { mutate: logoutMutation } = useLogout(() => {
-    clearLoginInfo();
-    navigate(PATH.auth, { replace: true });
-  });
+  const logoutMutation = useLogout();
 
   const onClickLogin = () => {
     location.assign(KAKAO_AUTH_URL);
   };
 
   const onClickLogout = () => {
-    logoutMutation();
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        clearLoginInfo();
+        navigate(PATH.account, { replace: true });
+      },
+    });
   };
 
   return (

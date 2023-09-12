@@ -10,6 +10,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +19,7 @@ import org.springframework.web.cors.CorsUtils;
 
 import com.example.carrot.global.common.ApiResponse;
 import com.example.carrot.global.exception.ErrorCode;
+import com.example.carrot.global.exception.ExceptionToStatusCodeMapper;
 import com.example.carrot.global.exception.StatusCode;
 import com.example.carrot.global.jwt.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,10 +44,14 @@ public class AuthFilter implements Filter {
 	@Value("${filter.users-signup-uri}")
 	private String signupUri;
 
+	@Autowired
+	private final ExceptionToStatusCodeMapper exceptionMapper;
+
 	private final ObjectMapper objectMapper;
 	private final JwtProvider jwtProvider;
 
-	public AuthFilter(ObjectMapper objectMapper, JwtProvider jwtProvider) {
+	public AuthFilter(ExceptionToStatusCodeMapper exceptionMapper, ObjectMapper objectMapper, JwtProvider jwtProvider) {
+		this.exceptionMapper = exceptionMapper;
 		this.objectMapper = objectMapper;
 		this.jwtProvider = jwtProvider;
 	}
@@ -120,7 +126,7 @@ public class AuthFilter implements Filter {
 	}
 
 	private ApiResponse<ErrorCode> generateErrorApiResponse(RuntimeException e) {
-		StatusCode statusCode = StatusCode.from(e);
+		StatusCode statusCode = exceptionMapper.mapException(e);
 
 		return ApiResponse.fail(new ErrorCode(statusCode.getStatus(), statusCode.getMessage()));
 	}

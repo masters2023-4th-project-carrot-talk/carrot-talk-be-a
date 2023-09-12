@@ -1,6 +1,7 @@
 import { EditBar } from '@/components/common/actionBar/EditBar';
 import { Button } from '@/components/common/button/Button';
 import { Camera, MapPinFilled } from '@/components/common/icons';
+import { PictureItem } from '@/components/common/imageBox/PictureItem';
 import { Input } from '@/components/common/input/Input';
 import { LeftButton } from '@/components/common/topBar/LeftButton';
 import { RightButton } from '@/components/common/topBar/RightButton';
@@ -9,6 +10,9 @@ import { TopBar } from '@/components/common/topBar/TopBar';
 import { Theme, css } from '@emotion/react';
 
 export const NewProduct: React.FC = () => {
+  const randomGitProfile =
+    'https://avatars.githubusercontent.com/u/48426991?v=4';
+
   return (
     <>
       <TopBar>
@@ -26,19 +30,30 @@ export const NewProduct: React.FC = () => {
       </TopBar>
       <div css={(theme) => pageStyle(theme)}>
         <div className="image-input">
-          <button className="image-input__add-btn">
-            <Camera />
-            <span>0/10</span>
-          </button>
+          <div className="image-input__container">
+            <button className="image-input__add-btn">
+              <Camera />
+              <span>0/10</span>
+            </button>
+            <PictureItem
+              size="m"
+              imageUrl={randomGitProfile}
+              label="대표 사진"
+            />
+            <PictureItem size="m" imageUrl={randomGitProfile} />
+            <PictureItem size="m" imageUrl={randomGitProfile} />
+            <PictureItem size="m" imageUrl={randomGitProfile} />
+            <PictureItem size="m" imageUrl={randomGitProfile} />
+          </div>
         </div>
         <div className="title-input">
-          <Input variant='ghost' placeholder='내용을 입력하세요' />
+          <Input variant="ghost" placeholder="내용을 입력하세요" />
         </div>
         <div className="price-input">
-          <Input variant='ghost' label="₩" placeholder='가격을 입력하세요' />
+          <Input variant="ghost" label="₩" placeholder="가격을 입력하세요" />
         </div>
         <div className="content-input">
-          <textarea placeholder='역삼 1동에 올릴 게시물 내용을 작성해주세요.(판매금지 물품은 게시가 제한될 수 있어요.)' />
+          <textarea placeholder="역삼 1동에 올릴 게시물 내용을 작성해주세요.(판매금지 물품은 게시가 제한될 수 있어요.)" />
         </div>
       </div>
       <EditBar>
@@ -56,7 +71,7 @@ const pageStyle = (theme: Theme) => css`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 24px 16px;
+  padding: 16px;
 
   & .image-input,
   & .title-input,
@@ -67,14 +82,24 @@ const pageStyle = (theme: Theme) => css`
   }
 
   & .image-input {
-    display: flex;
-    gap: 16px;
+    padding-top: 8px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    &__container {
+      display: flex;
+      gap: 16px;
+    }
 
     &__add-btn {
-      display: flex;
       width: 80px;
       height: 80px;
       padding: 16px;
+      display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -83,7 +108,7 @@ const pageStyle = (theme: Theme) => css`
       border: 0.8px solid ${theme.color.neutral.border};
 
       & > svg {
-        stroke: ${theme.color.neutral.textStrong}
+        stroke: ${theme.color.neutral.textStrong};
       }
     }
   }
@@ -91,7 +116,7 @@ const pageStyle = (theme: Theme) => css`
   & .content-input textarea {
     width: 100%;
     font: ${theme.font.availableDefault16};
-    
+
     &::placeholder {
       color: ${theme.color.neutral.textWeak};
     }

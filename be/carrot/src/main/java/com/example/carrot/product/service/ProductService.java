@@ -160,6 +160,33 @@ public class ProductService {
 				.build()
 		);
 
+		// TODO: productImages(List<ProductImage>)의 get(0)이 isMain이 되도록 리팩토링
+		List<Long> images = saveProductRequestDto.getImages();
+		List<ProductImage> productImages = new ArrayList<>();
+		for (int i = 0; i < images.size(); i++) {
+			Long imageId = images.get(i);
+			Image image = getImage(imageId);
+			ProductImage productImage;
+
+			if (i == 0) {
+				productImage = ProductImage.builder()
+					.product(product)
+					.isMain(true)
+					.image(image)
+					.build();
+				productImages.add(productImage);
+				continue;
+			}
+
+			productImage = ProductImage.builder()
+				.product(product)
+				.image(image)
+				.build();
+			productImages.add(productImage);
+		}
+
+		productImageRepository.saveAll(productImages);
+
 		return SaveProductResponseDto.of(product.getProductId());
 	}
 
@@ -178,11 +205,13 @@ public class ProductService {
 		Product product = getProduct(productId);
 		product.validateEditAccess(userId);
 
-		Product updateProduct = product.updateStatus(ProductStatus.chooseStatus(modifyProductStatusRequestDto.getStatus()));
+		Product updateProduct = product.updateStatus(
+			ProductStatus.chooseStatus(modifyProductStatusRequestDto.getStatus()));
 
 		return ModifyProductResponseDto.of(updateProduct);
 	}
 
+	@Transactional
 	public ReadProductDetailResponseDto getProductDetail(Long productId, Long userId) {
 		Product product = getProduct(productId);
 		return ReadProductDetailResponseDto.of(makeImageUrls(product),
@@ -225,7 +254,7 @@ public class ProductService {
 		// TODO: 채팅 기능 완료 후 추가
 		Long chatCount = 0L;
 
-		// 상품 조회할 때마다 조회수 1 증가
+		// 상품 조회할 때마다 조회수 1 증가 (이거 때문에 @Transactional 사용)
 		product.increaseHit();
 		Long hits = product.getHits();
 

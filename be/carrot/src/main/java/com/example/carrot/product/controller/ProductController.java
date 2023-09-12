@@ -87,7 +87,8 @@ public class ProductController {
 	 * 상품 등록 API
 	 */
 	@PostMapping("/products")
-	public ApiResponse<SaveProductResponseDto> saveProduct(@RequestBody SaveProductRequestDto saveProductRequestDto,
+	public ApiResponse<SaveProductResponseDto> saveProduct(
+		@Valid @RequestBody SaveProductRequestDto saveProductRequestDto,
 		@RequestAttribute Long userId) {
 		return ApiResponse.success(productService.saveProduct(saveProductRequestDto, userId));
 	}

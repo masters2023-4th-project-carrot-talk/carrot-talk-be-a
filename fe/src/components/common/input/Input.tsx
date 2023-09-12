@@ -127,8 +127,8 @@ const inputStyle = (
         right: 0;
 
         & svg {
-          width: 20px;
-          height: 20px;
+          width: 16px;
+          height: 16px;
           fill: ${theme.color.accent.textWeak};
         }
       }

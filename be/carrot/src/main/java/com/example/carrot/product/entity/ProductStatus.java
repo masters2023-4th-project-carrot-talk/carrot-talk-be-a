@@ -1,5 +1,8 @@
 package com.example.carrot.product.entity;
 
+import com.example.carrot.global.exception.CustomException;
+import com.example.carrot.global.exception.StatusCode;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,19 +15,13 @@ public enum ProductStatus {
 
 	private String value;
 
-	public static String chooseString(ProductStatus status) {
-		if (status == RESERVED) {
-			return RESERVED.value;
+	public static ProductStatus chooseStatus(final String statusString) {
+		for (ProductStatus status : ProductStatus.values()) {
+			if (status.getValue().equalsIgnoreCase(statusString)) {
+				return status;
+			}
 		}
-
-		if (status == SOLD_OUT) {
-			return SOLD_OUT.value;
-		}
-
-		return ON_SALE.value;
+		throw new CustomException(StatusCode.INVALID_PRODUCT_STATUS);
 	}
 
-	public String getName() {
-		return this.name();
-	}
 }

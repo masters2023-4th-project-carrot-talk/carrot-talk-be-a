@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class ErrorCode {
+public class ErrorCode <T> {
 	private final HttpStatus status;
-	private final String message;
+	private final T message;
 }

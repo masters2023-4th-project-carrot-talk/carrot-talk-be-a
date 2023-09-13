@@ -30,8 +30,6 @@ export const usePopupStore = create<PopupState>((set) => ({
   currentDim: null,
   togglePopup: ({ type, open, source }) =>
     set((state) => {
-      console.log(type, open, source, '확인중');
-
       if (type === 'alert') {
         return {
           isOpen: { ...state.isOpen, [type]: { source: source } },

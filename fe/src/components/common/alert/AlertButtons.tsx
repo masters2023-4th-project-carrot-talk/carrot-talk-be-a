@@ -1,6 +1,7 @@
 import { Theme, css } from '@emotion/react';
 import { Button } from '../button/Button';
 import { usePopupStore } from '@/stores/popupStore';
+import { useAlert } from '@/hooks/usePopups';
 
 type Props = {
   buttonText: '취소' | '닫기';
@@ -8,18 +9,22 @@ type Props = {
 };
 
 export const AlertButtons: React.FC<Props> = ({ buttonText, onDelete }) => {
-  const { togglePopup, setCurrentDim } = usePopupStore();
+  const { onCloseAlert } = useAlert();
+  // const { togglePopup, setCurrentDim } = usePopupStore();
 
-  const onCloseAlert = () => {
-    console.log('onCloseAlert');
+  // const onCloseAlert = () => {
+  //   console.log('onCloseAlert');
 
-    togglePopup({ type: 'alert', source: null });
-    setCurrentDim('modal');
-  };
+  //   togglePopup({ type: 'alert', source: null });
+  //   setCurrentDim('modal');
+  // };
 
   return (
     <div css={alertButtonsStyle}>
-      <Button variant="text" onClick={onCloseAlert}>
+      <Button
+        variant="text"
+        onClick={() => onCloseAlert({ currentDim: 'modal' })}
+      >
         {buttonText}
       </Button>
       {onDelete && (

@@ -8,9 +8,9 @@ export const useAlert = () => {
     setCurrentDim('alert');
   };
 
-  const closeAlert = () => {
+  const closeAlert = ({ currentDim }: { currentDim: PopupType | null }) => {
     togglePopup({ type: 'alert', source: null });
-    setCurrentDim(null);
+    setCurrentDim(currentDim);
   };
 
   return {
@@ -29,9 +29,9 @@ export const useModal = () => {
     setCurrentDim('modal');
   };
 
-  const closeModal = () => {
+  const closeModal = ({ currentDim }: { currentDim: PopupType | null }) => {
     togglePopup({ type: 'modal', open: false });
-    setCurrentDim(null);
+    setCurrentDim(currentDim);
   };
 
   return {

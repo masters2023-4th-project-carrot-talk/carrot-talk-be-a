@@ -89,7 +89,7 @@ export const ProductDetail: React.FC = () => {
   const onDeleteProduct = (productId?: number) => {
     if (productId) {
       // onAlertClose();
-      onCloseAlert();
+      onCloseAlert({ currentDim: null });
       deleteProductMutation.mutate(productId);
     }
   };

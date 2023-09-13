@@ -6,6 +6,7 @@ import { SearchLocation } from './content/SearchLocation';
 import { useDeleteLocation, usePatchMainLocation } from '@/queries/location';
 import { useRegisteredLocationsStore } from '@/stores/locationStore';
 import { useAuth } from '@/hooks/useAuth';
+import { useModal } from '@/hooks/usePopups';
 
 type Props = {
   locationList?: LocationType[];
@@ -16,7 +17,8 @@ export const LocationModal: React.FC<Props> = ({ locationList }) => {
   const patchMainLocationById = usePatchMainLocation();
   const deleteLocationById = useDeleteLocation();
   const { addLocation, deleteLocation } = useRegisteredLocationsStore();
-  const { isOpen, currentDim } = usePopupStore();
+  // const { isOpen, currentDim } = usePopupStore();
+  const { isModalOpen, currentDim } = useModal();
   const [toggleContent, setToggleContent] = useState<'control' | 'search'>(
     'control',
   );
@@ -38,7 +40,7 @@ export const LocationModal: React.FC<Props> = ({ locationList }) => {
   const onDeleteLocationByAuth = isLogin ? deleteLocationById : deleteLocation;
 
   return (
-    <Modal isOpen={isOpen.modal} currentDim={currentDim}>
+    <Modal isOpen={isModalOpen} currentDim={currentDim}>
       {toggleContent === 'control' ? (
         <ControlLocation
           locationList={locationList}

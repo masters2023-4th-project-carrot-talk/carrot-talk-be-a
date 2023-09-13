@@ -135,6 +135,8 @@ export const getProducts = ({
 };
 
 export const getProductsDetail = (id: number) => {
+  console.log('토큰', getAccessToken());
+
   return fetchData(`/api/products/${id}`, {
     method: 'GET',
     headers: {
@@ -160,6 +162,16 @@ export const deleteProduct = (id: number) => {
   return fetchData(`/api/products/${id}`, {
     method: 'DELETE',
     headers: {
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+  });
+};
+
+export const editLikeStatus = (id: number) => {
+  return fetchData(`/api/products/${id}/like`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${getAccessToken()}`,
     },
   });

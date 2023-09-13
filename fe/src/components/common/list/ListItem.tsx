@@ -27,7 +27,7 @@ export const ListItem: React.FC<Props> = ({
   onOpenDetail,
   onAlertOpen,
 }) => {
-  const editProductStatusMutation = useEditProductStatus();
+  const editProductStatusMutation = useEditProductStatus('home');
 
   const formattedPrice = formatPrice(product.price);
   const formattedTimeStamp = formatTimeStamp(product.createdAt);
@@ -113,7 +113,7 @@ export const ListItem: React.FC<Props> = ({
                 <Dropdown
                   align="right"
                   opener={
-                    <Button variant="text" onClick={() => {}}>
+                    <Button variant="text">
                       <Dots />
                     </Button>
                   }
@@ -130,7 +130,6 @@ export const ListItem: React.FC<Props> = ({
                       </MenuItem>
                     </MenuBox>
                   }
-                  autoClose
                 ></Dropdown>
               )}
             </div>

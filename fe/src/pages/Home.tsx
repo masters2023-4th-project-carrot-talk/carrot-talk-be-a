@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Plus } from '@assets/plus.svg';
 import { Button } from '@components/common/button/Button';
 import { Dropdown } from '@components/common/dropdown/Dropdown';
@@ -28,24 +29,21 @@ import { AlertContent } from '@/components/common/alert/AlertContent';
 import { AlertButtons } from '@/components/common/alert/AlertButtons';
 
 export const Home: React.FC = () => {
+  // useQuery들 묶을수있는지
   const { isLogin } = useAuth();
   const { serverLocations } = useMyLocations(isLogin);
   const { categories } = useCategories();
-  // useQuery들 묶을수있는지
-
-  const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
-  const { setShouldSlideLeft } = useLayoutStore();
-
+  const deleteProductMutation = useDeleteProduct('home');
   const mainLocation = serverLocations?.find(
     (location) => location.isMainLocation,
   );
+  const initialLocationId = isLogin && mainLocation ? mainLocation.id : 1; // TODO 초기데이터 고정 어떻게 해줄지
   const [selectedLocationId, setSelectedLocationId] = useState<number | null>(
-    isLogin && mainLocation ? mainLocation.id : 1,
+    initialLocationId,
   );
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     null,
   );
-
   const {
     products,
     fetchNextPage,
@@ -54,11 +52,11 @@ export const Home: React.FC = () => {
     isFetchingNextPage,
     refetch: refetchProductList,
   } = useProducts(selectedLocationId, selectedCategoryId);
-
-  const deleteProductMutation = useDeleteProduct();
   const { observeTarget } = useIntersectionObserver(fetchNextPage, hasNextPage);
-
+  const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
+  const { setShouldSlideLeft } = useLayoutStore();
   const [selectProduct, setSelectProduct] = useState<ProductType | null>(null);
+  const navigate = useNavigate();
 
   const onOpenModal = () => {
     togglePopup('modal', true);
@@ -66,8 +64,7 @@ export const Home: React.FC = () => {
   };
 
   const onOpenDetail = (id: number) => {
-    //TODO : 상세페이지 보여주기
-    console.log(id);
+    navigate(`/detail/${id}`);
   };
 
   const onOpenCategory = () => {
@@ -78,22 +75,14 @@ export const Home: React.FC = () => {
     setShouldSlideLeft();
   };
 
-  const onFilterProducts = (id: number) => {
-    // TODO : remove와 refetch를 같이 써야하는가?
-    refetchProductList();
+  const onSelectLocation = (id: number) => {
     setSelectedLocationId(id);
+    refetchProductList();
   };
 
   const onSelectCategory = (id: number) => {
-    // TODO: 두번씩 눌러야 갱신이 되는 버그
     setSelectedCategoryId(id);
-    refetchProductList(); //콜백처리
-  };
-
-  const renderSkeletons = () => {
-    return Array.from({ length: 10 }).map((_, index) => (
-      <SkeletonListItem key={index} />
-    ));
+    refetchProductList();
   };
 
   const onAlertOpen = (product: ProductType) => {
@@ -113,8 +102,16 @@ export const Home: React.FC = () => {
     deleteProductMutation.mutate(id);
   };
 
-  const shouldShowSkeletons = status === 'loading' || isFetchingNextPage;
+  const renderSkeletons = (length: number) => {
+    return Array.from({ length }).map((_, index) => (
+      <SkeletonListItem key={index} />
+    ));
+  };
+
+  const shouldShowSkeletons = status === 'loading';
   const shouldShowEndOfData = !hasNextPage && status !== 'loading';
+
+  console.log(isFetchingNextPage, '트루니?');
 
   const mainLocationName =
     isLogin && serverLocations
@@ -164,7 +161,7 @@ export const Home: React.FC = () => {
                               ? 'selected'
                               : 'default'
                           }
-                          onClick={() => onFilterProducts(location.id)}
+                          onClick={() => onSelectLocation(location.id)}
                         >
                           {location.name}
                         </MenuItem>
@@ -200,8 +197,7 @@ export const Home: React.FC = () => {
                 onAlertOpen={() => onAlertOpen(product)}
               />
             ))}
-
-            {shouldShowSkeletons && <>{renderSkeletons()}</>}
+            {shouldShowSkeletons && <>{renderSkeletons(10)}</>}
           </ListBox>
           {shouldShowEndOfData && (
             <div className="end-of-data">전부 살펴 봤어요!</div>

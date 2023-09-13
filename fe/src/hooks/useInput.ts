@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-type InputType<T> =
+export type InputType<T> =
   | {
       initialValue: T;
     }
@@ -10,33 +10,39 @@ type InputType<T> =
       validator: (value: T) => boolean;
     };
 
-type ReturnType<T> = {
+export type InputReturnType<T> = {
   value: T;
   onChangeValue: (value: T) => void;
   isValidValue: boolean;
   warningMessage: string;
 };
 
-export const useInput = <T>(props: InputType<T>): ReturnType<T> => {
+export const useInput = <T>(props: InputType<T>): InputReturnType<T> => {
   const [value, setValue] = useState(props.initialValue);
 
-  const onChangeValue = (value: T) => {
-    setValue(value);
-  };
-
-  if ('validator' in props) {
+  if (!('validator' in props)) {
     return {
       value,
-      onChangeValue,
-      isValidValue: props.validator(value),
-      warningMessage: props.warningMessage,
+      onChangeValue: (value: T) => setValue(value),
+      isValidValue: true,
+      warningMessage: '',
     };
   }
+
+  const isValidValue = props.validator(value);
+
+  const onChangeValue = (value: T) => {
+    if (!props.validator(value)) {
+      return;
+    }
+
+    setValue(value);
+  };
 
   return {
     value,
     onChangeValue,
-    isValidValue: true,
-    warningMessage: '',
+    isValidValue,
+    warningMessage: isValidValue ? '' : props.warningMessage,
   };
 };

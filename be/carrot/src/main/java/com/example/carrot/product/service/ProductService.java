@@ -136,6 +136,9 @@ public class ProductService {
 
 	@Transactional
 	public SaveProductResponseDto saveProduct(SaveProductRequestDto saveProductRequestDto, Long userId) {
+		if (userId == null) {
+			throw new CustomException(StatusCode.MALFORMED_JWT_EXCEPTION);
+		}
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_USER));
 
@@ -160,7 +163,6 @@ public class ProductService {
 				.build()
 		);
 
-		// TODO: productImages(List<ProductImage>)의 get(0)이 isMain이 되도록 리팩토링
 		List<ProductImage> productImages = makeProductImages(
 			saveProductRequestDto, product);
 

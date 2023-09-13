@@ -1,6 +1,7 @@
 package com.example.carrot.category.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,11 @@ public class CategoryService {
 
 	private final CategoryRepository categoryRepository;
 
-	public CategoryResponseDto findCategories() {
+	public List<CategoryResponseDto> findCategories() {
 		List<Category> categories = categoryRepository.findAll();
-		return CategoryResponseDto.of(categories);
+		return categories.stream()
+			.map(CategoryResponseDto::of)
+			.collect(Collectors.toUnmodifiableList());
 	}
 
 }

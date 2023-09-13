@@ -89,7 +89,7 @@ public class ProductController {
 	@PostMapping("/products")
 	public ApiResponse<SaveProductResponseDto> saveProduct(
 		@Valid @RequestBody SaveProductRequestDto saveProductRequestDto,
-		@RequestAttribute Long userId) {
+		@RequestAttribute(required = false) Long userId) {
 		return ApiResponse.success(productService.saveProduct(saveProductRequestDto, userId));
 	}
 

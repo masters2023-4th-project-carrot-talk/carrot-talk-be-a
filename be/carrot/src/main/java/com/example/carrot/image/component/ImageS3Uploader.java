@@ -15,7 +15,7 @@ import org.springframework.util.StringUtils;
 
 import com.example.carrot.global.exception.CustomException;
 import com.example.carrot.global.exception.StatusCode;
-import com.example.carrot.image.dto.ImageFormat;
+import com.example.carrot.image.entity.ImageFormat;
 
 import io.awspring.cloud.s3.S3Exception;
 import io.awspring.cloud.s3.S3Template;

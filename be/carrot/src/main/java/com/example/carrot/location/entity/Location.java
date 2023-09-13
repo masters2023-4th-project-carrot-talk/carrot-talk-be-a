@@ -33,16 +33,13 @@ public class Location extends BaseCreatedTimeEntity {
 	@Column(nullable = false)
 	private String name;
 
-	@OneToOne(mappedBy = "location")
-	private Product product;
+	@OneToMany(mappedBy = "location", cascade = CascadeType.PERSIST)
+	private List<Product> products = new ArrayList<>();
 
 	@OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<UserLocation> userLocations = new ArrayList<>();
 
-	@Builder
-	public Location(String name, Product product) {
+	public Location(String name) {
 		this.name = name;
-		this.product = product;
 	}
-
 }

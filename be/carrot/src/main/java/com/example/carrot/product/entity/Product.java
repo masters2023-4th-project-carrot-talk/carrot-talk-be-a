@@ -63,7 +63,7 @@ public class Product extends BaseAllTimeEntity {
 	@JoinColumn(name = "category_id")
 	private Category category;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "location_id")
 	private Location location;
 

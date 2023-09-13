@@ -1,5 +1,7 @@
 package com.example.carrot.category.controller;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +20,7 @@ public class CategoryController {
 	private final CategoryService categoryService;
 
 	@GetMapping("/categories")
-	public ApiResponse<CategoryResponseDto> getCategories() {
+	public ApiResponse<List<CategoryResponseDto>> getCategories() {
 		return ApiResponse.success(categoryService.findCategories());
 	}
 

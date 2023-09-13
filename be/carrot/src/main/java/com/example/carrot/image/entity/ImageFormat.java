@@ -1,4 +1,4 @@
-package com.example.carrot.image.dto;
+package com.example.carrot.image.entity;
 
 import java.util.Arrays;
 

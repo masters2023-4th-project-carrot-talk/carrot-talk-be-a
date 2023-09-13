@@ -30,6 +30,7 @@ import { AlertButtons } from '@/components/common/alert/AlertButtons';
 import { usePopupStore } from '@/stores/popupStore';
 import { useIntersectionObserver } from '@/hooks/useObserver';
 import { Carousel } from '@/components/detail/Carousel';
+import { useAlert } from '@/hooks/usePopups';
 // TODO 로그인하지 않은 사용자에게 데이터가 안뜨고있음
 
 export const ProductDetail: React.FC = () => {
@@ -45,8 +46,8 @@ export const ProductDetail: React.FC = () => {
   const deleteProductMutation = useDeleteProduct('detail');
   const editProductStatusMutation = useEditProductStatus('detail');
   const editLikeStatusMutation = useEditLikeStatus();
-
-  const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
+  const { alertSource, currentDim, onOpenAlert, onCloseAlert } = useAlert();
+  // const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
 
   const [isTransparent, setIsTransparent] = useState<boolean>(true);
 
@@ -75,19 +76,20 @@ export const ProductDetail: React.FC = () => {
     setIsTransparent(false);
   };
 
-  const onAlertOpen = () => {
-    togglePopup({ type: 'alert', source: 'product' });
-    setCurrentDim('alert');
-  };
+  // const onAlertOpen = () => {
+  //   togglePopup({ type: 'alert', source: 'product' });
+  //   setCurrentDim('alert');
+  // };
 
-  const onAlertClose = () => {
-    togglePopup({ type: 'alert', source: null });
-    setCurrentDim(null);
-  };
+  // const onAlertClose = () => {
+  //   togglePopup({ type: 'alert', source: null });
+  //   setCurrentDim(null);
+  // };
 
   const onDeleteProduct = (productId?: number) => {
     if (productId) {
-      onAlertClose();
+      // onAlertClose();
+      onCloseAlert();
       deleteProductMutation.mutate(productId);
     }
   };
@@ -146,7 +148,12 @@ export const ProductDetail: React.FC = () => {
                   >
                     게시글 수정
                   </MenuItem>
-                  <MenuItem variant="warning" onClick={onAlertOpen}>
+                  <MenuItem
+                    variant="warning"
+                    onClick={() => {
+                      onOpenAlert('product');
+                    }}
+                  >
                     삭제
                   </MenuItem>
                 </MenuBox>
@@ -260,7 +267,8 @@ export const ProductDetail: React.FC = () => {
           </Button>
         )}
       </PostBar>
-      <Alert isOpen={isOpen.alert.source === 'product'} currentDim={currentDim}>
+      {/* <Alert isOpen={isOpen.alert.source === 'product'} currentDim={currentDim}> */}
+      <Alert isOpen={alertSource === 'product'} currentDim={currentDim}>
         <AlertContent>'{product?.title}'을 삭제하시겠어요?</AlertContent>
         <AlertButtons
           buttonText="취소"

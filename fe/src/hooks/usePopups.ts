@@ -1,7 +1,7 @@
 import { usePopupStore } from '@/stores/popupStore';
 
 export const useAlert = () => {
-  const { isOpen, togglePopup, setCurrentDim } = usePopupStore();
+  const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
 
   const openAlert = (source: string) => {
     togglePopup({ type: 'alert', source: source });
@@ -13,11 +13,16 @@ export const useAlert = () => {
     setCurrentDim(null);
   };
 
-  return { isAlertOpen: isOpen.alert.source, openAlert, closeAlert };
+  return {
+    alertSource: isOpen.alert.source,
+    currentDim,
+    onOpenAlert: openAlert,
+    onCloseAlert: closeAlert,
+  };
 };
 
 export const useModal = () => {
-  const { isOpen, togglePopup, setCurrentDim } = usePopupStore();
+  const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
 
   const openModal = () => {
     togglePopup({ type: 'modal', open: true });
@@ -29,5 +34,10 @@ export const useModal = () => {
     setCurrentDim(null);
   };
 
-  return { isModalOpen: isOpen.modal, openModal, closeModal };
+  return {
+    isModalOpen: isOpen.modal,
+    currentDim,
+    onOpenModal: openModal,
+    onCloseModal: closeModal,
+  };
 };

@@ -31,6 +31,7 @@ import { useAlert, useModal } from '@/hooks/usePopups';
 export const Home: React.FC = () => {
   // useQuery들 묶을수있는지
   const { isLogin } = useAuth();
+  const { onOpenModal } = useModal();
   const { serverLocations } = useMyLocations(isLogin);
   const { categories } = useCategories();
   const deleteProductMutation = useDeleteProduct('home');
@@ -58,7 +59,6 @@ export const Home: React.FC = () => {
     },
     condition: hasNextPage,
   });
-  const { onOpenModal } = useModal();
   const { alertSource, currentDim, onOpenAlert, onCloseAlert } = useAlert();
 
   const { setShouldSlideLeft } = useLayoutStore();

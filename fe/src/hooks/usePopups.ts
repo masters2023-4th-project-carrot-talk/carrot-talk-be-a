@@ -3,7 +3,7 @@ import { usePopupStore } from '@/stores/popupStore';
 export const useAlert = () => {
   const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
 
-  const openAlert = (source: string) => {
+  const openAlert = (source: AlertSourceType) => {
     togglePopup({ type: 'alert', source: source });
     setCurrentDim('alert');
   };

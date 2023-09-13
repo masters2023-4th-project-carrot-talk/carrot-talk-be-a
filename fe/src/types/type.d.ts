@@ -1,5 +1,11 @@
 type PopupType = 'modal' | 'alert';
 
+type AlertSourceType = 'home' | 'product';
+
+type AlertOpenType = {
+  source?: AlertSourceType | null;
+};
+
 type LocationDataFromServer = {
   success: boolean;
   data: LocationType[];

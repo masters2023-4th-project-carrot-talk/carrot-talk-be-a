@@ -1,13 +1,9 @@
 import { create } from 'zustand';
 
-type AlertOpenType = {
-  source?: string | null;
-};
-
 type TogglePopupType = {
   type: PopupType;
   open?: boolean;
-  source?: string | null;
+  source?: AlertSourceType | null;
 };
 
 type PopupState = {

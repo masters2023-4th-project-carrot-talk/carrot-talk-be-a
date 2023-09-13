@@ -163,7 +163,6 @@ public class ProductService {
 				.build()
 		);
 
-		// TODO: productImages(List<ProductImage>)의 get(0)이 isMain이 되도록 리팩토링
 		List<ProductImage> productImages = makeProductImages(
 			saveProductRequestDto, product);
 

@@ -1,4 +1,5 @@
-export const formatTimeStamp = (createdAt: string) => {
+export const formatTimeStamp = (createdAt?: string) => {
+  if (!createdAt) return;
   const currentTime = new Date();
 
   // 사용자의 현재 시간대에 따라 시간을 조정

@@ -1,7 +1,18 @@
-import { deleteProduct, editProductStatus, getProducts } from '@api/api';
+import {
+  deleteProduct,
+  editLikeStatus,
+  editProductStatus,
+  getProducts,
+  getProductsDetail,
+} from '@api/api';
 import { QUERY_KEY } from '@constants/queryKey';
 import { useMemo } from 'react';
-import { useInfiniteQuery, useMutation, useQueryClient } from 'react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+  useQuery,
+} from 'react-query';
 
 export const useProducts = (
   locationId: number | null,
@@ -45,22 +56,100 @@ export const useProducts = (
   };
 };
 
-export const useEditProductStatus = () => {
+export const useEditProductStatus = (source: 'home' | 'detail') => {
   const queryClient = useQueryClient();
   return useMutation<void, unknown, { id: number; status: ProductStatusType }>({
     mutationFn: ({ id, status }) => editProductStatus(id, status),
     onSuccess: () => {
-      queryClient.invalidateQueries(QUERY_KEY.products);
+      if (source === 'home') queryClient.invalidateQueries(QUERY_KEY.products);
+      if (source === 'detail')
+        queryClient.invalidateQueries(QUERY_KEY.productDetail);
     },
   });
 };
 
-export const useDeleteProduct = () => {
+export const useDeleteProduct = (source: 'home' | 'detail') => {
   const queryClient = useQueryClient();
   return useMutation<void, unknown, number>({
     mutationFn: (id: number) => deleteProduct(id),
     onSuccess: () => {
-      queryClient.invalidateQueries(QUERY_KEY.products);
+      if (source === 'home') queryClient.invalidateQueries(QUERY_KEY.products);
+      if (source === 'detail')
+        queryClient.invalidateQueries(QUERY_KEY.productDetail);
+    },
+  });
+};
+
+export const useProductDetailQuery = (id: number) => {
+  const { data, status, error } = useQuery<
+    ProductDetailDataFromServer,
+    unknown,
+    {
+      product: ProductDetailType['product'];
+      seller: ProductDetailType['seller'];
+      imageUrls: ProductDetailType['imageUrls'];
+    }
+  >({
+    queryKey: [QUERY_KEY.productDetail, id],
+    queryFn: () => getProductsDetail(id),
+    select: (responseData) => {
+      const { imageUrls, seller, product } = responseData.data;
+      return { product, seller, imageUrls };
+    },
+  });
+
+  return {
+    ...data,
+    status,
+    error,
+  };
+};
+
+export const useEditLikeStatus = () => {
+  const queryClient = useQueryClient();
+  // TODO 낙관적 업데이트
+  type MutationContext = {
+    previousProduct?: ProductDetailDataFromServer;
+  };
+
+  return useMutation<void, unknown, number, MutationContext>({
+    mutationFn: (id: number) => editLikeStatus(id),
+    onMutate: async (id: number) => {
+      await queryClient.cancelQueries([QUERY_KEY.productDetail, id]);
+      const previousProduct = queryClient.getQueryData<
+        ProductDetailDataFromServer | undefined
+      >([QUERY_KEY.productDetail, id]);
+
+      if (previousProduct) {
+        const upDatedProduct = {
+          ...previousProduct,
+          data: {
+            ...previousProduct.data,
+            product: {
+              ...previousProduct.data.product,
+              isLiked: !previousProduct.data.product.isLiked,
+              likeCount: previousProduct.data.product.isLiked
+                ? previousProduct.data.product.likeCount - 1
+                : previousProduct.data.product.likeCount + 1,
+            },
+          },
+        };
+        queryClient.setQueryData([QUERY_KEY.productDetail, id], upDatedProduct);
+      }
+
+      return { previousProduct };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries([QUERY_KEY.productDetail]);
+    },
+
+    onError: (error, variables, context) => {
+      if (context?.previousProduct) {
+        queryClient.setQueryData(
+          [QUERY_KEY.productDetail, variables],
+          context.previousProduct,
+        );
+      }
     },
   });
 };

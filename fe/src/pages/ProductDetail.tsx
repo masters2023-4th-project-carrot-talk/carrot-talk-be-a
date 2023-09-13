@@ -27,27 +27,26 @@ import {
 import { Alert } from '@/components/common/alert/Alert';
 import { AlertContent } from '@/components/common/alert/AlertContent';
 import { AlertButtons } from '@/components/common/alert/AlertButtons';
-import { usePopupStore } from '@/stores/popupStore';
 import { useIntersectionObserver } from '@/hooks/useObserver';
 import { Carousel } from '@/components/detail/Carousel';
 import { useAlert } from '@/hooks/usePopups';
 // TODO 로그인하지 않은 사용자에게 데이터가 안뜨고있음
 
 export const ProductDetail: React.FC = () => {
+  const { alertSource, currentDim, onOpenAlert, onCloseAlert } = useAlert();
   const { id: productId } = useParams();
+
   const numberedProductId = Number(productId);
   const {
     product,
     seller,
     imageUrls,
     status: fetchStatus,
-    error,
+    // error, // TODO 에러 토스트 메세지
   } = useProductDetailQuery(numberedProductId);
   const deleteProductMutation = useDeleteProduct('detail');
   const editProductStatusMutation = useEditProductStatus('detail');
   const editLikeStatusMutation = useEditLikeStatus();
-  const { alertSource, currentDim, onOpenAlert, onCloseAlert } = useAlert();
-  // const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
 
   const [isTransparent, setIsTransparent] = useState<boolean>(true);
 
@@ -76,19 +75,8 @@ export const ProductDetail: React.FC = () => {
     setIsTransparent(false);
   };
 
-  // const onAlertOpen = () => {
-  //   togglePopup({ type: 'alert', source: 'product' });
-  //   setCurrentDim('alert');
-  // };
-
-  // const onAlertClose = () => {
-  //   togglePopup({ type: 'alert', source: null });
-  //   setCurrentDim(null);
-  // };
-
   const onDeleteProduct = (productId?: number) => {
     if (productId) {
-      // onAlertClose();
       onCloseAlert({ currentDim: null });
       deleteProductMutation.mutate(productId);
     }
@@ -267,7 +255,7 @@ export const ProductDetail: React.FC = () => {
           </Button>
         )}
       </PostBar>
-      {/* <Alert isOpen={isOpen.alert.source === 'product'} currentDim={currentDim}> */}
+
       <Alert isOpen={alertSource === 'product'} currentDim={currentDim}>
         <AlertContent>'{product?.title}'을 삭제하시겠어요?</AlertContent>
         <AlertButtons

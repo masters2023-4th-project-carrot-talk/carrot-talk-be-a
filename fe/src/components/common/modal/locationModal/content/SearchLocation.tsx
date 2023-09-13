@@ -4,7 +4,6 @@ import { css } from '@emotion/react';
 import { useState } from 'react';
 import { ModalHeader } from '../../ModalHeader';
 import { ModalListItem } from '../../ModalListItem';
-import { usePopupStore } from '@/stores/popupStore';
 import { useModal } from '@/hooks/usePopups';
 
 type Props = {
@@ -16,13 +15,12 @@ export const SearchLocation: React.FC<Props> = ({
   onToggleContent,
   onPatchLocationByAuth,
 }) => {
+  const { onCloseModal } = useModal();
   const [inputValue, setInputValue] = useState<string>('');
   const trimedInputValue = inputValue.trim();
   const { locations, refetch: refetchLocations } =
     useLocationWithQuery(trimedInputValue);
   const [hasPressedEnter, setHasPressedEnter] = useState<boolean>(false);
-  // const { togglePopup, setCurrentDim } = usePopupStore();
-  const { onCloseModal } = useModal();
 
   const onChangeInput = (value: string) => {
     setInputValue(value);
@@ -38,12 +36,6 @@ export const SearchLocation: React.FC<Props> = ({
     setInputValue('');
     onPatchLocationByAuth(location);
   };
-
-  // const onCloseModal = () => {
-  //   togglePopup('modal', false);
-  //   setCurrentDim(null);
-  //   onToggleContent('control');
-  // };
 
   return (
     <>

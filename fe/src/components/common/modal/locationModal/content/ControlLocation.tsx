@@ -6,7 +6,6 @@ import { CircleXFilled, Plus } from '@components/common/icons';
 import { Theme, css } from '@emotion/react';
 import React, { useState } from 'react';
 import { ModalHeader } from '../../ModalHeader';
-import { usePopupStore } from '@/stores/popupStore';
 import { useAlert, useModal } from '@/hooks/usePopups';
 
 type Props = {
@@ -22,7 +21,6 @@ export const ControlLocation: React.FC<Props> = ({
   onPatchLocationByAuth,
   onDeleteLocationByAuth,
 }) => {
-  // const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
   const { alertSource, currentDim, onOpenAlert, onCloseAlert } = useAlert();
   const { onCloseModal } = useModal();
   const [selectLocation, setSelectLocation] = useState<LocationType | null>(
@@ -30,25 +28,12 @@ export const ControlLocation: React.FC<Props> = ({
   );
 
   const onAlertOpen = (location: LocationType) => {
-    // togglePopup({ type: 'alert', open: true, source: 'location' });
-    // setCurrentDim('alert');
     onOpenAlert('location');
     setSelectLocation(location);
   };
 
-  // const onAlertClose = () => {
-  //   togglePopup({ type: 'alert', source: null });
-  //   setCurrentDim('modal');
-  // };
-
-  // const onCloseModal = () => {
-  //   togglePopup({ type: 'modal', open: false });
-  //   setCurrentDim(null);
-  // };
-
   const onDeleteLocation = (id?: number) => {
     if (id == null) return;
-    // onAlertClose();
     onCloseAlert({ currentDim: 'modal' });
     onDeleteLocationByAuth(id);
     setSelectLocation(null);

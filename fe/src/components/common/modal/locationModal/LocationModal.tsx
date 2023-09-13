@@ -1,4 +1,3 @@
-import { usePopupStore } from '@stores/popupStore';
 import { Modal } from '@components/common/modal/Modal';
 import { useState } from 'react';
 import { ControlLocation } from './content/ControlLocation';
@@ -17,7 +16,6 @@ export const LocationModal: React.FC<Props> = ({ locationList }) => {
   const patchMainLocationById = usePatchMainLocation();
   const deleteLocationById = useDeleteLocation();
   const { addLocation, deleteLocation } = useRegisteredLocationsStore();
-  // const { isOpen, currentDim } = usePopupStore();
   const { isModalOpen, currentDim } = useModal();
   const [toggleContent, setToggleContent] = useState<'control' | 'search'>(
     'control',

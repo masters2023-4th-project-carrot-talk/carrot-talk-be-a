@@ -1,6 +1,5 @@
 import { Theme, css } from '@emotion/react';
 import { Button } from '../button/Button';
-import { usePopupStore } from '@/stores/popupStore';
 import { useAlert } from '@/hooks/usePopups';
 
 type Props = {
@@ -10,14 +9,6 @@ type Props = {
 
 export const AlertButtons: React.FC<Props> = ({ buttonText, onDelete }) => {
   const { onCloseAlert } = useAlert();
-  // const { togglePopup, setCurrentDim } = usePopupStore();
-
-  // const onCloseAlert = () => {
-  //   console.log('onCloseAlert');
-
-  //   togglePopup({ type: 'alert', source: null });
-  //   setCurrentDim('modal');
-  // };
 
   return (
     <div css={alertButtonsStyle}>

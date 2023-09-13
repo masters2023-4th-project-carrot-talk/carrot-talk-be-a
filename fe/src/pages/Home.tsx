@@ -22,7 +22,6 @@ import { useDeleteProduct, useProducts } from '@/queries/products';
 import { useAuth } from '@hooks/useAuth';
 import { modifiedLocaitionName } from '@utils/modifyLocationName';
 import { useLayoutStore } from '@/stores/layoutStore';
-import { usePopupStore } from '@/stores/popupStore';
 import { useMyLocations } from '@/queries/location';
 import { Alert } from '@/components/common/alert/Alert';
 import { AlertContent } from '@/components/common/alert/AlertContent';
@@ -59,19 +58,13 @@ export const Home: React.FC = () => {
     },
     condition: hasNextPage,
   });
-  // const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
-  const {  onOpenModal } = useModal();
+  const { onOpenModal } = useModal();
   const { alertSource, currentDim, onOpenAlert, onCloseAlert } = useAlert();
 
   const { setShouldSlideLeft } = useLayoutStore();
   const [selectProduct, setSelectProduct] = useState<ProductType | null>(null);
 
   const navigate = useNavigate();
-
-  // const onOpenModal = () => {
-  //   togglePopup({ type: 'modal', open: true });
-  //   setCurrentDim('modal');
-  // };
 
   const onOpenDetail = (id: number) => {
     navigate(`/detail/${id}`);
@@ -92,20 +85,12 @@ export const Home: React.FC = () => {
   };
 
   const onAlertOpen = (product: ProductType) => {
-    // togglePopup({ type: 'alert', open: true, source: 'product' });
-    // setCurrentDim('alert');
     onOpenAlert('product');
     setSelectProduct(product);
   };
 
-  // const onAlertClose = () => {
-  //   togglePopup({ type: 'alert', source: null });
-  //   setCurrentDim(null);
-  // };
-
   const onDeleteProduct = (id?: number) => {
     if (id == null) return;
-    // onAlertClose();
     onCloseAlert({ currentDim: null });
     deleteProductMutation.mutate(id);
   };
@@ -119,8 +104,6 @@ export const Home: React.FC = () => {
   const shouldShowSkeletons = productStatus === 'loading';
   const shouldShowEndOfData =
     !hasNextPage && productStatus !== 'loading' && productStatus !== 'error';
-
-  console.log(isFetchingNextPage, '트루니?');
 
   const mainLocationName =
     isLogin && serverLocations

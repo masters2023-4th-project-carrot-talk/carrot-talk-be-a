@@ -45,7 +45,7 @@ const carouselStyle = (theme: Theme) => {
       position: absolute;
       bottom: 16px;
       right: 16px;
-      z-index: 200;
+      z-index: 100;
       display: inline-flex;
       padding: 8px 16px;
       align-items: flex-start;

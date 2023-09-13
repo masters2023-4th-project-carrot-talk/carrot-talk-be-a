@@ -11,8 +11,7 @@ import lombok.RequiredArgsConstructor;
 public enum ImageFormat {
 	PNG(".png"),
 	JPG(".jpg"),
-	JPEG(".jpeg"),
-	JPE(".jpe");
+	JPEG(".jpeg");
 
 	private final String extension;
 

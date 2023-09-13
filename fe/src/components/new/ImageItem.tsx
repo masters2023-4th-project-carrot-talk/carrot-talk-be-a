@@ -4,17 +4,13 @@ import { ImageBox, ImageBoxProps } from '../common/imageBox/ImageBox';
 
 type Props = {
   label?: string;
+  onClick?: () => void;
 } & ImageBoxProps;
 
-export const ImageItem: React.FC<Props> = ({
-  label,
-  variant,
-  size,
-  imageUrl,
-}) => {
+export const ImageItem: React.FC<Props> = ({ label, onClick, ...rest }) => {
   return (
-    <div css={(theme) => pictureItemStyle(theme)}>
-      <ImageBox variant={variant} size={size} imageUrl={imageUrl} />
+    <div css={(theme) => pictureItemStyle(theme)} onClick={onClick}>
+      <ImageBox {...rest} />
       <button type="button" className="picture-item__remove-btn">
         <BezeledX />
       </button>
@@ -50,5 +46,11 @@ const pictureItemStyle = (theme: Theme) => css`
     background: ${theme.color.neutral.overlay};
     font: ${theme.font.displayDefault12};
     color: ${theme.color.neutral.background};
+  }
+
+  &:hover,
+  &:active {
+    opacity: 0.8;
+    cursor: pointer;
   }
 `;

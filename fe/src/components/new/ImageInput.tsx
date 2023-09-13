@@ -5,14 +5,12 @@ import { Camera } from '../common/icons';
 import { ImageItem } from './ImageItem';
 
 export const ImageInput: React.FC = () => {
-  const [pictureList, setPictureList] = useState<{ id: number; url: string }[]>(
-    [],
-  );
+  const [imageList, setImageList] = useState<ImageData[]>([]);
   const imageMutation = useImageUpload();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const addImage = () => {
-    if (pictureList.length >= 10) {
+    if (imageList.length >= 10) {
       return;
     }
 
@@ -21,7 +19,7 @@ export const ImageInput: React.FC = () => {
     }
   };
 
-  const onChangeFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const uploadImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
     // 파일이 없으면 업로드 하지 않음
@@ -33,9 +31,6 @@ export const ImageInput: React.FC = () => {
     const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
     const volumeLimit = 1024 * 1024 * 2; // 2MB
 
-    console.log('type', file.type);
-    console.log('size', file.size / volumeLimit);
-
     if (!allowedTypes.includes(file.type) || file.size > volumeLimit) {
       return;
     }
@@ -46,10 +41,7 @@ export const ImageInput: React.FC = () => {
     imageMutation.mutate(formData, {
       onSuccess: (result) => {
         if (result.success) {
-          setPictureList([
-            ...pictureList,
-            { id: result.data.imageId, url: result.data.imageUrl },
-          ]);
+          setImageList([...imageList, result.data]);
         }
       },
       onError: (error) => {
@@ -58,40 +50,53 @@ export const ImageInput: React.FC = () => {
         }
       },
     });
+
+    // 동일한 파일 업로드를 위한 input 초기화
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const deleteImage = (id: number) => {
+    setImageList((i) => i.filter((image) => image.imageId !== id));
   };
 
   return (
-    <div css={(theme) => pictureInputStype(theme)}>
-      <div className="picture__container">
+    <div css={(theme) => imageInputStype(theme)}>
+      <div className="image-input__container">
         <button
-          className="picture__add-btn"
+          className="image-input__add-btn"
           onClick={addImage}
-          disabled={pictureList.length >= 10}
+          disabled={imageList.length >= 10}
         >
           <Camera />
-          <span>{pictureList.length}/10</span>
+          <span>{imageList.length}/10</span>
         </button>
         <input
           type="file"
           accept=".png, .jpg, .jpeg"
-          className="picture__file-input"
+          className="image-input__file-input"
           ref={fileInputRef}
-          onChange={onChangeFileInput}
+          onChange={uploadImageFile}
         />
-        {pictureList.map((picture, index) => (
-          <ImageItem
-            key={picture.id}
-            size="m"
-            imageUrl={picture.url}
-            label={index === 0 ? '대표 사진' : ''}
-          />
-        ))}
+        <ul className="image-input__image-list">
+          {imageList.map(({ imageId, imageUrl }, index) => (
+            <li key={imageId}>
+              <ImageItem
+                size="m"
+                imageUrl={imageUrl}
+                label={index === 0 ? '대표 사진' : ''}
+                onClick={() => deleteImage(imageId)}
+              />
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
 };
 
-const pictureInputStype = (theme: Theme) => css`
+const imageInputStype = (theme: Theme) => css`
   padding-top: 8px;
   overflow-x: auto;
   scroll-behavior: smooth;
@@ -100,7 +105,7 @@ const pictureInputStype = (theme: Theme) => css`
     display: none;
   }
 
-  & .picture {
+  & .image-input {
     &__container {
       display: flex;
       gap: 16px;
@@ -136,6 +141,11 @@ const pictureInputStype = (theme: Theme) => css`
 
     &__file-input {
       display: none;
+    }
+
+    &__image-list {
+      display: flex;
+      gap: 8px;
     }
   }
 `;

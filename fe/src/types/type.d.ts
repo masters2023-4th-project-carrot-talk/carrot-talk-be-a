@@ -97,13 +97,15 @@ type LoginDataFromServer = {
       };
 };
 
+type ImageData = {
+  imageId: number;
+  imageUrl: string;
+}
+
 type ImageDataFromServer =
   | {
       success: true;
-      data: {
-        imageId: number;
-        imageUrl: string;
-      };
+      data: ImageData;
     }
   | {
       success: false;

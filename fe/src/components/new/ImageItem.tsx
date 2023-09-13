@@ -1,12 +1,12 @@
 import { Theme, css } from '@emotion/react';
-import { BezeledX } from '../icons';
-import { ImageBox, ImageBoxProps } from './ImageBox';
+import { BezeledX } from '../common/icons';
+import { ImageBox, ImageBoxProps } from '../common/imageBox/ImageBox';
 
 type Props = {
   label?: string;
 } & ImageBoxProps;
 
-export const PictureItem: React.FC<Props> = ({
+export const ImageItem: React.FC<Props> = ({
   label,
   variant,
   size,

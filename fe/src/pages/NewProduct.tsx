@@ -1,7 +1,6 @@
 import { EditBar } from '@/components/common/actionBar/EditBar';
 import { Button } from '@/components/common/button/Button';
-import { Camera, ChevronRight, MapPinFilled } from '@/components/common/icons';
-import { PictureItem } from '@/components/common/imageBox/PictureItem';
+import { ChevronRight, MapPinFilled } from '@/components/common/icons';
 import { Input } from '@/components/common/input/Input';
 import { TextArea } from '@/components/common/input/TextArea';
 import { CategoryModal } from '@/components/common/modal/categoryModal/CategoryModal';
@@ -9,14 +8,13 @@ import { LeftButton } from '@/components/common/topBar/LeftButton';
 import { RightButton } from '@/components/common/topBar/RightButton';
 import { Title } from '@/components/common/topBar/Title';
 import { TopBar } from '@/components/common/topBar/TopBar';
+import { ImageInput } from '@/components/new/ImageInput';
 import { usePopupStore } from '@/stores/popupStore';
 import { Theme, css } from '@emotion/react';
 
 export const NewProduct: React.FC = () => {
   const { togglePopup, setCurrentDim } = usePopupStore();
 
-  const randomGitProfile =
-    'https://avatars.githubusercontent.com/u/48426991?v=4';
   const title = '빈티지 롤러 스케이트';
   const price = '169,000';
   const content = `어린시절 추억의 향수를 불러 일으키는 롤러 스케이트입니다. 빈티지 특성상 사용감 있지만 전체적으로 깨끗한 상태입니다.
@@ -47,21 +45,7 @@ export const NewProduct: React.FC = () => {
       </TopBar>
       <div css={(theme) => pageStyle(theme)}>
         <div className="image-input">
-          <div className="image-input__container">
-            <button className="image-input__add-btn">
-              <Camera />
-              <span>0/10</span>
-            </button>
-            <PictureItem
-              size="m"
-              imageUrl={randomGitProfile}
-              label="대표 사진"
-            />
-            <PictureItem size="m" imageUrl={randomGitProfile} />
-            <PictureItem size="m" imageUrl={randomGitProfile} />
-            <PictureItem size="m" imageUrl={randomGitProfile} />
-            <PictureItem size="m" imageUrl={randomGitProfile} />
-          </div>
+          <ImageInput />
         </div>
         <div className="title-input">
           <Input
@@ -131,39 +115,6 @@ const pageStyle = (theme: Theme) => css`
     flex-direction: column;
     padding-bottom: 16px;
     border-bottom: 0.8px solid ${theme.color.neutral.border};
-  }
-
-  & .image-input {
-    padding-top: 8px;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-
-    &__container {
-      display: flex;
-      gap: 16px;
-    }
-
-    &__add-btn {
-      flex-shrink: 0;
-      width: 80px;
-      height: 80px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 4px;
-      border-radius: 16px;
-      border: 0.8px solid ${theme.color.neutral.border};
-
-      & > svg {
-        stroke: ${theme.color.neutral.textStrong};
-      }
-    }
   }
 
   & .title-input__categories {

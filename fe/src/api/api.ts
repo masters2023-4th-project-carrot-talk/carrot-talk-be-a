@@ -150,3 +150,16 @@ export const getProductsDetail = (id: number) => {
     },
   });
 };
+
+export const requestImageUpload = (image: FormData) => {
+  return fetchData(END_POINT.imageUpload, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+    body: JSON.stringify({
+      image
+    })
+  })
+}

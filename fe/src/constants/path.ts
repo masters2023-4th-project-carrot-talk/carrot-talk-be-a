@@ -23,6 +23,7 @@ export const END_POINT = {
   refreshToken: `/api/users/reissue-access-token`,
   categories: `/api/categories`,
   products: (query: string) => `/api/products?${query}`,
+  imageUpload: `/api/images`,
 };
 
 export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${

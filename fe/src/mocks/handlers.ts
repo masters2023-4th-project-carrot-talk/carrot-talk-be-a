@@ -2,6 +2,7 @@ import { rest } from 'msw';
 import { categoryList } from './data/categories';
 import { locationsWithQuery } from './data/locations';
 import { token, users } from './data/users';
+import { images } from './data/images';
 
 let locations: LocationType[] = [
   { id: 1, name: '안양99동', isMainLocation: true },
@@ -181,5 +182,25 @@ export const handlers = [
       ctx.status(200),
       ctx.json({ success: true, data: { accessToken: token } }),
     );
+  }),
+
+  rest.post('/api/images', async (req, res, ctx) => {
+    const body = await req.json();
+
+    if (!body?.image) {
+      return res(ctx.status(200), ctx.json({ success: false }));
+    }
+
+    images.push('https://picsum.photos/200');
+
+    const data = {
+      success: true,
+      data: {
+        imageId: images.length,
+        imageUrl: images[images.length - 1],
+      },
+    };
+
+    return res(ctx.status(200), ctx.json(data));
   }),
 ];

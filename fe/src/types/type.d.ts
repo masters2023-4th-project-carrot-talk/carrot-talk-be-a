@@ -96,3 +96,15 @@ type LoginDataFromServer = {
         accessToken: string;
       };
 };
+
+type ImageDataFromServer =
+  | {
+      success: true;
+      data: {
+        imageId: number;
+        imageUrl: string;
+      };
+    }
+  | {
+      success: false;
+    };

@@ -61,6 +61,32 @@ type ProductsDataFromServer = {
   };
 };
 
+type ProductDetailType = {
+  imageUrls: string[];
+  seller: {
+    id: number;
+    nickname: string;
+  };
+  product: {
+    location: string;
+    status: ProductStatusType;
+    title: string;
+    category: string;
+    createdAt: string;
+    content: string;
+    chatCount: number;
+    likeCount: number;
+    hits: number;
+    price: number;
+    isLiked: boolean;
+  };
+};
+
+type ProductDetailDataFromServer = {
+  success: boolean;
+  data: ProductDetail;
+};
+
 type FetchProductsParams = {
   locationId?: number | null;
   categoryId?: number | null;

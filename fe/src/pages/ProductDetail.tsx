@@ -1,4 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
+import { useState } from 'react';
+
 import { Theme, css } from '@emotion/react';
 
 import {
@@ -18,44 +20,95 @@ import { Dropdown } from '@/components/common/dropdown/Dropdown';
 import { MenuBox } from '@/components/common/menu/MenuBox';
 import { MenuItem } from '@/components/common/menu/MenuItem';
 import { formatTimeStamp } from '@/utils/formatTimeStamp';
+import {
+  useDeleteProduct,
+  useEditLikeStatus,
+  useEditProductStatus,
+  useProductDetailQuery,
+} from '@/queries/products';
+import { Alert } from '@/components/common/alert/Alert';
+import { AlertContent } from '@/components/common/alert/AlertContent';
+import { AlertButtons } from '@/components/common/alert/AlertButtons';
+import { usePopupStore } from '@/stores/popupStore';
 
-const mock = {
-  imageUrls: ['www.naver.com', 'www.google.com'], // 첫 번째 원소가 대표 이미지
-  seller: {
-    id: 1,
-    nickname: 'June',
-  },
-  product: {
-    location: '역삼1동',
-    status: '판매중',
-    title: '빈티지 롤러 스케이트',
-    category: '가구/인테리어',
-    createdAt: '2023-08-22T05:48',
-    content: '제발 사줘',
-    chatCount: 3,
-    likeCount: 1,
-    hits: 14,
-    price: 500000,
-    isLiked: true,
-  },
-};
 export const ProductDetail: React.FC = () => {
   const { id } = useParams();
-  // const isAuthor = getUserInfo()
-  //   ? getUserInfo()?.id === product.sellerId
-  //   : false;
+  const { product, seller, imageUrls, status, error } = useProductDetailQuery(
+    Number(id),
+  );
+  const deleteProductMutation = useDeleteProduct('detail');
+  const editProductStatusMutation = useEditProductStatus('detail');
+  const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
+  const [currentIndex, setCurrentIndex] = useState(1);
 
   const randomGitProfile =
     'https://avatars.githubusercontent.com/u/52685259?v=4';
+  const formattedPrice = formatPrice(product?.price);
+  const formattedTimeStamp = formatTimeStamp(product?.createdAt);
+  // const isAuthor = getUserInfo() && getUserInfo()?.id === seller?.id;
   const isAuthor = true;
-  const formattedPrice = formatPrice(mock.product.price);
-  const formattedTimeStamp = formatTimeStamp(mock.product.createdAt);
-  const productStatus = mock.product.status;
-  const isLiked = true;
-  // TODO 상단 네비게이션은 해당 화면 첫 진입시 배경이 투명하다가, 스크롤을 하면 배경이 불투명하고 본문과 구분선이 표시되도록 한다.
+  const navigate = useNavigate();
+  // const isLiked = true;
+  // TODO 상단 네비게이션은 해당 화면 첫 진입시 배경이 투명하다가, 스크롤을 하면 배경이 불투명하고 본문과 구분선이 표시되도록 한다. topbar에 ref boolean
+  // TODO alert 훅으로 빼기
+  // TODO
+
+  const editLikeStatusMutation = useEditLikeStatus();
+
+  const onAlertOpen = () => {
+    togglePopup('alert', true);
+    setCurrentDim('alert');
+  };
+
+  const onAlertClose = () => {
+    togglePopup('alert', false);
+    setCurrentDim(null);
+  };
+
+  const onDeleteProduct = (id?: number) => {
+    if (id == null) return;
+    onAlertClose();
+    deleteProductMutation.mutate(id);
+  };
+
+  const onToggleLike = () => {
+    if (id) {
+      editLikeStatusMutation.mutate(Number(id));
+    }
+  };
+
+  const menuRowsByStatus = [
+    {
+      id: 1,
+      name: '판매중',
+      onClick: () =>
+        editProductStatusMutation.mutate({
+          id: Number(id),
+          status: '판매중',
+        }),
+    },
+    {
+      id: 2,
+      name: '예약중',
+      onClick: () =>
+        editProductStatusMutation.mutate({
+          id: Number(id),
+          status: '예약중',
+        }),
+    },
+    {
+      id: 3,
+      name: '판매완료',
+      onClick: () =>
+        editProductStatusMutation.mutate({
+          id: Number(id),
+          status: '판매완료',
+        }),
+    },
+  ];
 
   return (
-    <div css={(theme) => pageStyle(theme, isLiked)}>
+    <div css={(theme) => pageStyle(theme, product?.isLiked)}>
       <TopBar transparent>
         {isAuthor && (
           <RightButton>
@@ -68,19 +121,30 @@ export const ProductDetail: React.FC = () => {
               }
               menu={
                 <MenuBox>
-                  <MenuItem onClick={() => {}}>게시글 수정</MenuItem>
-                  <MenuItem variant="warning" onClick={() => {}}>
+                  <MenuItem
+                    onClick={() => {
+                      // navigate(`/products/${id}/add?`);
+                    }}
+                  >
+                    게시글 수정
+                  </MenuItem>
+                  <MenuItem variant="warning" onClick={onAlertOpen}>
                     삭제
                   </MenuItem>
                 </MenuBox>
               }
-              autoClose
             />
           </RightButton>
         )}
 
         <LeftButton>
-          <Button className="button__back" variant="text" onClick={() => {}}>
+          <Button
+            className="button__back"
+            variant="text"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
             <ChevronLeft />
             뒤로
           </Button>
@@ -88,17 +152,20 @@ export const ProductDetail: React.FC = () => {
       </TopBar>
       <div className="page-content">
         <div className="thumbnail-box">
-          <img src={randomGitProfile} /> <img src={randomGitProfile} />
-          <img src={randomGitProfile} />
+          <div className="thumbnail-box-track">
+            <img src={randomGitProfile} />
+            <img src={randomGitProfile} />
+            <img src={randomGitProfile} />
+          </div>
           <div className="thumbnail-page-nav">
-            {mock.imageUrls.length} / {mock.imageUrls.length}
+            {currentIndex} / {imageUrls?.length}
           </div>
         </div>
 
         <div className="page-content-info">
           <div className="seller">
             <p className="seller-label">판매자 정보</p>
-            <p className="seller-name">{mock.seller.nickname}</p>
+            <p className="seller-name">{seller?.nickname}</p>
           </div>
           {isAuthor && (
             <Dropdown
@@ -108,60 +175,41 @@ export const ProductDetail: React.FC = () => {
                   state="default"
                   className="button__status"
                 >
-                  <p>{productStatus}</p>
+                  <p>{product?.status}</p>
                   <ChevronDown />
                 </Button>
               }
               menu={
                 <MenuBox>
-                  <MenuItem onClick={() => {}}>판매중</MenuItem>
-                  <MenuItem onClick={() => {}}>예약중</MenuItem>
-                  <MenuItem onClick={() => {}}>판매완료</MenuItem>
+                  {menuRowsByStatus.map((row) => (
+                    <MenuItem key={row.id} onClick={row.onClick}>
+                      {row.name}
+                    </MenuItem>
+                  ))}
                 </MenuBox>
               }
-              autoClose
             ></Dropdown>
           )}
           <div className="description">
             <div className="description-title">
-              <p className="title">{mock.product.title}</p>
+              <p className="title">{product?.title}</p>
               <p className="category">
-                {mock.product.category} · {formattedTimeStamp}
+                {product?.category} · {formattedTimeStamp}
               </p>
             </div>
-            <div className="description-body">
-              {mock.product.content}
-              {mock.product.content}
-              {mock.product.content}
-              {mock.product.content}
-              {mock.product.content}
-              {mock.product.content}
-              {mock.product.content}
-              {mock.product.content}
-              {mock.product.content}
-              {mock.product.content}
-              {mock.product.content}
-              {mock.product.content}
-              {mock.product.content}
-              {mock.product.content}
-              {mock.product.content}
-              {mock.product.content}
-              {mock.product.content}
-              {mock.product.content}
-              {mock.product.content}
-            </div>
+            <div className="description-body">{product?.content}</div>
             <div className="description-caption">
               <div>
                 <span>채팅</span>
-                <span>{mock.product.chatCount}</span>
+                <span>{product?.chatCount}</span>
               </div>
               <div>
                 <span>관심</span>
-                <span>{mock.product.likeCount}</span>
+                <span>{product?.likeCount}</span>
               </div>
               <div>
                 <span>조회</span>
-                <span>{mock.product.hits}</span>
+                <span>{product?.hits}</span>
               </div>
             </div>
           </div>
@@ -169,29 +217,42 @@ export const ProductDetail: React.FC = () => {
       </div>
       <PostBar isLiked={true}>
         <div className="info">
-          {/* 
-        info 클래스 네임으로 사용처에서 스타일을 주어 두 요소를 묶어줍니다 
-          display: flex;
-          gap: 8px;
-          align-items: center;
-        */}
-          <Heart className="like-icon" onClick={() => {}} />
+          <Heart className="like-icon" onClick={onToggleLike} />
           {formattedPrice}
         </div>
-        <Button variant="rectangle" size="s" state="active" onClick={() => {}}>
-          대화 중인 채팅방{/* count가 추가될 수 있습니다 */}
-        </Button>
+        {isAuthor ? (
+          <Button
+            variant="rectangle"
+            size="s"
+            state="active"
+            onClick={() => {}}
+          >
+            대화 중인 채팅방{/* count가 추가될 수 있습니다 */}
+          </Button>
+        ) : (
+          <Button
+            variant="rectangle"
+            size="s"
+            state="active"
+            onClick={() => {}}
+          >
+            채팅하기
+          </Button>
+        )}
       </PostBar>
+      <Alert isOpen={isOpen.alert} currentDim={currentDim}>
+        <AlertContent>'{product?.title}'을 삭제하시겠어요?</AlertContent>
+        <AlertButtons
+          buttonText="취소"
+          onDelete={() => onDeleteProduct(Number(id))}
+        />
+      </Alert>
     </div>
   );
 };
 
-const pageStyle = (theme: Theme, isLiked: boolean) => {
+const pageStyle = (theme: Theme, isLiked: boolean | undefined) => {
   return css`
-    border: 1px solid red;
-    * {
-    }
-
     scroll-behavior: smooth;
     ::-webkit-scrollbar {
       display: none;
@@ -215,6 +276,12 @@ const pageStyle = (theme: Theme, isLiked: boolean) => {
       height: 491px;
       width: 100%;
       border: 1px solid red;
+
+      &-track {
+        display: flex;
+        width: fit-content;
+        border: 5px solid red;
+      }
 
       img {
         width: 100%;
@@ -348,7 +415,7 @@ const pageStyle = (theme: Theme, isLiked: boolean) => {
       stroke: ${isLiked
         ? theme.color.system.warning
         : theme.color.neutral.textStrong};
-      fill: ${isLiked ? theme.color.system.warning : ''};
+      fill: ${isLiked ? theme.color.system.warning : 'none'};
     }
   `;
 };

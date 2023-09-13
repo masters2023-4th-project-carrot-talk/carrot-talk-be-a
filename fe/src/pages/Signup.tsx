@@ -1,6 +1,7 @@
 import { useNickname } from '@/hooks/useNickname';
 import { useSignup } from '@/queries/auth';
 import { useAuthStore } from '@/stores/authStore';
+import { useRegisteredLocationsStore } from '@/stores/locationStore';
 import { usePopupStore } from '@/stores/popupStore';
 import { setLoginInfo } from '@/utils/localStorage';
 import { ReactComponent as Check } from '@assets/check.svg';
@@ -15,12 +16,10 @@ import { TopBar } from '@components/common/topBar/TopBar';
 import { PATH } from '@constants/path';
 
 import { Theme, css } from '@emotion/react';
-import { useLocationControl } from '@hooks/useLocationControl';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 export const Signup: React.FC = () => {
   const navigate = useNavigate();
-
 
   const {
     nickname,
@@ -34,12 +33,13 @@ export const Signup: React.FC = () => {
       /^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]{2,10}$/.test(nickname),
     defaultWarning: '2~10글자 닉네임을 입력하세요',
   });
-  const { locations } = useLocationControl();
+  const { localLocations } = useRegisteredLocationsStore();
   const { togglePopup, setCurrentDim } = usePopupStore();
   const { signUpInProgress } = useAuthStore();
   const signupMutation = useSignup();
 
-  const submitEnabled = isUniqueNickname && locations && locations.length > 0;
+  const submitEnabled =
+    isUniqueNickname && localLocations && localLocations.length > 0;
 
   const goToAuth = () => {
     navigate(PATH.account, { replace: true });

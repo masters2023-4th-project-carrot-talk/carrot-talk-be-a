@@ -13,6 +13,7 @@ import { OauthLoading } from './pages/OauthLoading';
 import { Sales } from './pages/Sales';
 import { Signup } from './pages/Signup';
 import { useTokenRefresh } from './queries/auth';
+import { ProductDetail } from './pages/ProductDetail';
 
 export const AppRoutes: React.FC = () => {
   useTokenRefresh();

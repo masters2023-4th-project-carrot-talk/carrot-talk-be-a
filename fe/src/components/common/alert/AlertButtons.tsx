@@ -11,7 +11,9 @@ export const AlertButtons: React.FC<Props> = ({ buttonText, onDelete }) => {
   const { togglePopup, setCurrentDim } = usePopupStore();
 
   const onCloseAlert = () => {
-    togglePopup('alert', false);
+    console.log('onCloseAlert');
+
+    togglePopup({ type: 'alert', source: null });
     setCurrentDim('modal');
   };
 

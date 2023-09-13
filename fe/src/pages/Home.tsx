@@ -62,12 +62,11 @@ export const Home: React.FC = () => {
 
   const { setShouldSlideLeft } = useLayoutStore();
   const [selectProduct, setSelectProduct] = useState<ProductType | null>(null);
-  const [openAlert, setOpenAlert] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
   const onOpenModal = () => {
-    togglePopup('modal', true);
+    togglePopup({ type: 'modal', open: true });
     setCurrentDim('modal');
   };
 
@@ -90,15 +89,15 @@ export const Home: React.FC = () => {
   };
 
   const onAlertOpen = (product: ProductType) => {
-    togglePopup('alert', true);
-    // setOpenAlert(true);
+    console.log('눌렸니?');
+
+    togglePopup({ type: 'alert', open: true, source: 'product' });
     setCurrentDim('alert');
     setSelectProduct(product);
   };
 
   const onAlertClose = () => {
-    togglePopup('alert', false);
-    // setOpenAlert(false);
+    togglePopup({ type: 'alert', source: null });
     setCurrentDim(null);
   };
 
@@ -229,7 +228,7 @@ export const Home: React.FC = () => {
         </>
       </div>
 
-      <Alert isOpen={isOpen.alert} currentDim={currentDim}>
+      <Alert isOpen={isOpen.alert.source === 'product'} currentDim={currentDim}>
         <AlertContent>'{selectProduct?.name}'을 삭제하시겠어요?</AlertContent>
         <AlertButtons
           buttonText="취소"

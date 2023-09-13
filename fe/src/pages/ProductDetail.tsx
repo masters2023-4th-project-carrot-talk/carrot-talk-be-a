@@ -78,12 +78,12 @@ export const ProductDetail: React.FC = () => {
   };
 
   const onAlertOpen = () => {
-    togglePopup('alert', true);
+    togglePopup({ type: 'alert', source: 'product' });
     setCurrentDim('alert');
   };
 
   const onAlertClose = () => {
-    togglePopup('alert', false);
+    togglePopup({ type: 'alert', source: null });
     setCurrentDim(null);
   };
 
@@ -262,7 +262,7 @@ export const ProductDetail: React.FC = () => {
           </Button>
         )}
       </PostBar>
-      <Alert isOpen={isOpen.alert} currentDim={currentDim}>
+      <Alert isOpen={isOpen.alert.source === 'product'} currentDim={currentDim}>
         <AlertContent>'{product?.title}'을 삭제하시겠어요?</AlertContent>
         <AlertButtons
           buttonText="취소"

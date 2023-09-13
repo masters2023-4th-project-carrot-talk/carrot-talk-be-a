@@ -27,18 +27,18 @@ export const ControlLocation: React.FC<Props> = ({
   );
 
   const onAlertOpen = (location: LocationType) => {
-    togglePopup('alert', true);
+    togglePopup({ type: 'alert', open: true, source: 'location' });
     setCurrentDim('alert');
     setSelectLocation(location);
   };
 
   const onAlertClose = () => {
-    togglePopup('alert', false);
+    togglePopup({ type: 'alert', source: null });
     setCurrentDim('modal');
   };
 
   const onCloseModal = () => {
-    togglePopup('modal', false);
+    togglePopup({ type: 'modal', open: false });
     setCurrentDim(null);
   };
 
@@ -117,7 +117,10 @@ export const ControlLocation: React.FC<Props> = ({
           </Button>
         </div>
 
-        <Alert isOpen={isOpen.alert} currentDim={currentDim}>
+        <Alert
+          isOpen={isOpen.alert.source === 'location'}
+          currentDim={currentDim}
+        >
           {shouldBlockDelete ? (
             <>
               <AlertContent>

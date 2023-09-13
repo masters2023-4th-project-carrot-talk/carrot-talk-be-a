@@ -1,8 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
-
 import { Theme, css } from '@emotion/react';
-
 import {
   ChevronDown,
   ChevronLeft,
@@ -30,30 +28,54 @@ import { Alert } from '@/components/common/alert/Alert';
 import { AlertContent } from '@/components/common/alert/AlertContent';
 import { AlertButtons } from '@/components/common/alert/AlertButtons';
 import { usePopupStore } from '@/stores/popupStore';
+import { useIntersectionObserver } from '@/hooks/useObserver';
+import { Carousel } from '@/components/detail/Carousel';
+// TODO 로그인하지 않은 사용자에게 데이터가 안뜨고있음
 
 export const ProductDetail: React.FC = () => {
-  const { id } = useParams();
-  const { product, seller, imageUrls, status, error } = useProductDetailQuery(
-    Number(id),
-  );
+  const { id: productId } = useParams();
+  const numberedProductId = Number(productId);
+  const {
+    product,
+    seller,
+    imageUrls,
+    status: fetchStatus,
+    error,
+  } = useProductDetailQuery(numberedProductId);
   const deleteProductMutation = useDeleteProduct('detail');
   const editProductStatusMutation = useEditProductStatus('detail');
-  const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
-  const [currentIndex, setCurrentIndex] = useState(1);
+  const editLikeStatusMutation = useEditLikeStatus();
 
-  const randomGitProfile =
-    'https://avatars.githubusercontent.com/u/52685259?v=4';
+  const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
+
+  const [isTransparent, setIsTransparent] = useState<boolean>(true);
+
   const formattedPrice = formatPrice(product?.price);
   const formattedTimeStamp = formatTimeStamp(product?.createdAt);
   // const isAuthor = getUserInfo() && getUserInfo()?.id === seller?.id;
-  const isAuthor = true;
+  const isAuthor = true; // TODO 교체
   const navigate = useNavigate();
-  // const isLiked = true;
-  // TODO 상단 네비게이션은 해당 화면 첫 진입시 배경이 투명하다가, 스크롤을 하면 배경이 불투명하고 본문과 구분선이 표시되도록 한다. topbar에 ref boolean
-  // TODO alert 훅으로 빼기
-  // TODO
+  const realTimeChatRoomCount = 0; //TODO 교체
 
-  const editLikeStatusMutation = useEditLikeStatus();
+  // TODO alert 훅으로 빼기
+
+  const { observeTarget } = useIntersectionObserver({
+    inviewCallback: () => {
+      onScrollInview();
+    },
+    outviewCallback: () => {
+      onScrollOutview();
+    },
+    condition: true,
+  });
+
+  const onScrollInview = () => {
+    setIsTransparent(true);
+  };
+
+  const onScrollOutview = () => {
+    setIsTransparent(false);
+  };
 
   const onAlertOpen = () => {
     togglePopup('alert', true);
@@ -65,51 +87,49 @@ export const ProductDetail: React.FC = () => {
     setCurrentDim(null);
   };
 
-  const onDeleteProduct = (id?: number) => {
-    if (id == null) return;
-    onAlertClose();
-    deleteProductMutation.mutate(id);
-  };
-
-  const onToggleLike = () => {
-    if (id) {
-      editLikeStatusMutation.mutate(Number(id));
+  const onDeleteProduct = (productId?: number) => {
+    if (productId) {
+      onAlertClose();
+      deleteProductMutation.mutate(productId);
     }
   };
 
-  const menuRowsByStatus = [
+  const onEditProductStatus = (
+    status: ProductStatusType,
+    productId?: number,
+  ) => {
+    if (productId) {
+      editProductStatusMutation.mutate({
+        id: productId,
+        status,
+      });
+    }
+  };
+
+  const onToggleLike = () => {
+    if (productId) {
+      editLikeStatusMutation.mutate(numberedProductId);
+    }
+  };
+
+  const menuRowsByStatus: { id: number; status: ProductStatusType }[] = [
     {
       id: 1,
-      name: '판매중',
-      onClick: () =>
-        editProductStatusMutation.mutate({
-          id: Number(id),
-          status: '판매중',
-        }),
+      status: '판매중',
     },
     {
       id: 2,
-      name: '예약중',
-      onClick: () =>
-        editProductStatusMutation.mutate({
-          id: Number(id),
-          status: '예약중',
-        }),
+      status: '예약중',
     },
     {
       id: 3,
-      name: '판매완료',
-      onClick: () =>
-        editProductStatusMutation.mutate({
-          id: Number(id),
-          status: '판매완료',
-        }),
+      status: '판매완료',
     },
   ];
 
   return (
-    <div css={(theme) => pageStyle(theme, product?.isLiked)}>
-      <TopBar transparent>
+    <div css={(theme) => pageStyle(theme, product?.isLiked, isTransparent)}>
+      <TopBar transparent={isTransparent}>
         {isAuthor && (
           <RightButton>
             <Dropdown
@@ -150,18 +170,11 @@ export const ProductDetail: React.FC = () => {
           </Button>
         </LeftButton>
       </TopBar>
+      {fetchStatus === 'loading' && <div>로딩중</div>}
+      {fetchStatus === 'error' && <div>상품 정보를 불러오지 못했습니다</div>}
+      <div css={obseverStyle} ref={observeTarget}></div>
       <div className="page-content">
-        <div className="thumbnail-box">
-          <div className="thumbnail-box-track">
-            <img src={randomGitProfile} />
-            <img src={randomGitProfile} />
-            <img src={randomGitProfile} />
-          </div>
-          <div className="thumbnail-page-nav">
-            {currentIndex} / {imageUrls?.length}
-          </div>
-        </div>
-
+        <Carousel imageUrls={imageUrls} />
         <div className="page-content-info">
           <div className="seller">
             <p className="seller-label">판매자 정보</p>
@@ -182,13 +195,18 @@ export const ProductDetail: React.FC = () => {
               menu={
                 <MenuBox>
                   {menuRowsByStatus.map((row) => (
-                    <MenuItem key={row.id} onClick={row.onClick}>
-                      {row.name}
+                    <MenuItem
+                      key={row.id}
+                      onClick={() => {
+                        onEditProductStatus(row.status, row.id);
+                      }}
+                    >
+                      {row.status}
                     </MenuItem>
                   ))}
                 </MenuBox>
               }
-            ></Dropdown>
+            />
           )}
           <div className="description">
             <div className="description-title">
@@ -225,16 +243,20 @@ export const ProductDetail: React.FC = () => {
             variant="rectangle"
             size="s"
             state="active"
-            onClick={() => {}}
+            onClick={() => {
+              console.log('채팅방 목록으로 이동');
+            }}
           >
-            대화 중인 채팅방{/* count가 추가될 수 있습니다 */}
+            대화 중인 채팅방 {realTimeChatRoomCount}
           </Button>
         ) : (
           <Button
             variant="rectangle"
             size="s"
             state="active"
-            onClick={() => {}}
+            onClick={() => {
+              console.log('1:1 채팅방으로 이동');
+            }}
           >
             채팅하기
           </Button>
@@ -244,14 +266,18 @@ export const ProductDetail: React.FC = () => {
         <AlertContent>'{product?.title}'을 삭제하시겠어요?</AlertContent>
         <AlertButtons
           buttonText="취소"
-          onDelete={() => onDeleteProduct(Number(id))}
+          onDelete={() => onDeleteProduct(numberedProductId)}
         />
       </Alert>
     </div>
   );
 };
 
-const pageStyle = (theme: Theme, isLiked: boolean | undefined) => {
+const pageStyle = (
+  theme: Theme,
+  isLiked: boolean | undefined,
+  isTransparent: boolean,
+) => {
   return css`
     scroll-behavior: smooth;
     ::-webkit-scrollbar {
@@ -259,50 +285,23 @@ const pageStyle = (theme: Theme, isLiked: boolean | undefined) => {
     }
     height: 100vh;
 
-    .button__back {
-      color: ${theme.color.accent.text};
-      path: red;
+    .button__back,
+    .button__status {
+      color: ${isTransparent
+        ? theme.color.accent.text
+        : theme.color.neutral.text};
+      svg {
+        stroke: ${isTransparent
+          ? theme.color.accent.text
+          : theme.color.neutral.text};
+      }
     }
 
     .page-content {
-      margin-top: -64px;
+      margin-top: -66px;
       padding-bottom: 64px;
       box-sizing: border-box;
-    }
-
-    .thumbnail-box {
-      position: relative;
-      display: flex;
-      height: 491px;
-      width: 100%;
       border: 1px solid red;
-
-      &-track {
-        display: flex;
-        width: fit-content;
-        border: 5px solid red;
-      }
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    }
-
-    .thumbnail-page-nav {
-      position: absolute;
-      bottom: 16px;
-      right: 16px;
-      display: inline-flex;
-      padding: 8px 16px;
-      align-items: flex-start;
-      gap: 4px;
-      border-radius: 16px;
-      background: ${theme.color.neutral.backgroundBlur};
-
-      font: ${theme.font.displayDefault12};
-      color: ${theme.color.neutral.textWeak};
     }
 
     .page-content-info {
@@ -382,8 +381,8 @@ const pageStyle = (theme: Theme, isLiked: boolean | undefined) => {
       }
 
       &-body {
-        min-width: 100%;
-        border: 1px solid ${theme.color.neutral.border};
+        width: 100%;
+        white-space: pre-wrap;
         font: ${theme.font.displayDefault16};
         color: ${theme.color.neutral.text};
       }
@@ -419,3 +418,7 @@ const pageStyle = (theme: Theme, isLiked: boolean | undefined) => {
     }
   `;
 };
+const obseverStyle = css`
+  height: 1px;
+  width: 100%;
+`;

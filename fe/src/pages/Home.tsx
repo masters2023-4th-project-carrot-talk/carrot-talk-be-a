@@ -48,14 +48,22 @@ export const Home: React.FC = () => {
     products,
     fetchNextPage,
     hasNextPage,
-    status,
+    status: productStatus,
     isFetchingNextPage,
     refetch: refetchProductList,
   } = useProducts(selectedLocationId, selectedCategoryId);
-  const { observeTarget } = useIntersectionObserver(fetchNextPage, hasNextPage);
+  const { observeTarget } = useIntersectionObserver({
+    inviewCallback: () => {
+      fetchNextPage();
+    },
+    condition: hasNextPage,
+  });
   const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
+
   const { setShouldSlideLeft } = useLayoutStore();
   const [selectProduct, setSelectProduct] = useState<ProductType | null>(null);
+  const [openAlert, setOpenAlert] = useState<boolean>(false);
+
   const navigate = useNavigate();
 
   const onOpenModal = () => {
@@ -71,10 +79,6 @@ export const Home: React.FC = () => {
     setShouldSlideLeft();
   };
 
-  const onCloseCategory = () => {
-    setShouldSlideLeft();
-  };
-
   const onSelectLocation = (id: number) => {
     setSelectedLocationId(id);
     refetchProductList();
@@ -87,12 +91,14 @@ export const Home: React.FC = () => {
 
   const onAlertOpen = (product: ProductType) => {
     togglePopup('alert', true);
+    // setOpenAlert(true);
     setCurrentDim('alert');
     setSelectProduct(product);
   };
 
   const onAlertClose = () => {
     togglePopup('alert', false);
+    // setOpenAlert(false);
     setCurrentDim(null);
   };
 
@@ -108,8 +114,9 @@ export const Home: React.FC = () => {
     ));
   };
 
-  const shouldShowSkeletons = status === 'loading';
-  const shouldShowEndOfData = !hasNextPage && status !== 'loading';
+  const shouldShowSkeletons = productStatus === 'loading';
+  const shouldShowEndOfData =
+    !hasNextPage && productStatus !== 'loading' && productStatus !== 'error';
 
   console.log(isFetchingNextPage, '트루니?');
 
@@ -185,10 +192,25 @@ export const Home: React.FC = () => {
               </Button>
             </RightButton>
           </TopBar>
-          <Button variant="fab" size="l" className="button__add">
+          <Button
+            variant="fab"
+            size="l"
+            className="button__add"
+            onClick={() => {
+              console.log('추가페이지로 이동');
+            }}
+          >
             <Plus />
           </Button>
           <ListBox>
+            {productStatus === 'error' && (
+              <div className="data-status-info">
+                상품을 불러오지 못했어요!
+                <br />
+                연결을 확인해주세요
+              </div>
+            )}
+
             {products?.map((product) => (
               <ListItem
                 key={product.id}
@@ -200,7 +222,7 @@ export const Home: React.FC = () => {
             {shouldShowSkeletons && <>{renderSkeletons(10)}</>}
           </ListBox>
           {shouldShowEndOfData && (
-            <div className="end-of-data">전부 살펴 봤어요!</div>
+            <div className="data-status-info">전부 살펴 봤어요!</div>
           )}
           <LocationModal locationList={serverLocations} />
           <div ref={observeTarget} css={obseverStyle}></div>
@@ -215,11 +237,7 @@ export const Home: React.FC = () => {
         />
       </Alert>
 
-      <Category
-        categories={categories}
-        onCloseCategory={onCloseCategory}
-        onSelectCategory={onSelectCategory}
-      />
+      <Category categories={categories} onSelectCategory={onSelectCategory} />
     </>
   );
 };
@@ -246,7 +264,7 @@ const pageStyle = (theme: Theme, shouldShowSkeletons: boolean) => {
       stroke: ${theme.color.accent.text};
     }
 
-    .end-of-data {
+    .data-status-info {
       cursor: default;
       text-align: center;
       width: 100%;

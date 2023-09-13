@@ -13,14 +13,10 @@ import { MenuItem } from '../menu/MenuItem';
 import { useEditProductStatus } from '@/queries/products';
 
 type Props = {
-  product: ProductType; // TODO : product 타입 변경
+  product: ProductType;
   onOpenDetail?: () => void;
   onAlertOpen?: () => void;
 };
-// 게시글 수정: 해당 게시물을 수정하는 화면으로 이동한다.
-// 예약 중 상태로 전환: 이 옵션을 누르면 상품의 상태가 예약중으로 전환된다. [더보기]버튼에는 [게시글 수정], [판매 중 상태로 전환], [판매 완료 상태로 전환], [삭제]가 보이도록 한다.
-// 판매 완료 상태로 전환: 이 버튼을 누를 경우, ‘판매 완료된 상품 목록’에서 해당 제품이 보이도록 한다. [더보기]버튼에는 [게시글 수정], [판매 중 상태로 전환], [예약 중 상태로 전환], [삭제]가 보이도록 한다.
-// 삭제: 해당 게시물을 삭제한다. 이 버튼을 누르면 정말로 해당 게시물을 삭제할 것인지 묻는 알럿창이 뜨도록한다.
 
 export const ListItem: React.FC<Props> = ({
   product,

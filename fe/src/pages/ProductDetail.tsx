@@ -57,8 +57,6 @@ export const ProductDetail: React.FC = () => {
   const navigate = useNavigate();
   const realTimeChatRoomCount = 0; //TODO 교체
 
-  // TODO alert 훅으로 빼기
-
   const { observeTarget } = useIntersectionObserver({
     inviewCallback: () => {
       onScrollInview();

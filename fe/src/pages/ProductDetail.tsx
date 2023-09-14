@@ -1,23 +1,21 @@
-import { useNavigate, useParams } from 'react-router-dom';
 import { Theme, css } from '@emotion/react';
 
+import { PostBar } from '@/components/common/actionBar/PostBar';
+import { Button } from '@/components/common/button/Button';
+import { Dropdown } from '@/components/common/dropdown/Dropdown';
+import { MenuBox } from '@/components/common/menu/MenuBox';
+import { MenuItem } from '@/components/common/menu/MenuItem';
+import { LeftButton } from '@/components/common/topBar/LeftButton';
+import { RightButton } from '@/components/common/topBar/RightButton';
+import { TopBar } from '@/components/common/topBar/TopBar';
+import { formatPrice } from '@/utils/formatPrice';
+import { formatTimeStamp } from '@/utils/formatTimeStamp';
 import {
   ChevronDown,
   ChevronLeft,
   Dots,
   Heart,
 } from '@components/common/icons';
-import { TopBar } from '@/components/common/topBar/TopBar';
-import { RightButton } from '@/components/common/topBar/RightButton';
-import { LeftButton } from '@/components/common/topBar/LeftButton';
-import { Button } from '@/components/common/button/Button';
-import { getUserInfo } from '@/utils/localStorage';
-import { PostBar } from '@/components/common/actionBar/PostBar';
-import { formatPrice } from '@/utils/formatPrice';
-import { Dropdown } from '@/components/common/dropdown/Dropdown';
-import { MenuBox } from '@/components/common/menu/MenuBox';
-import { MenuItem } from '@/components/common/menu/MenuItem';
-import { formatTimeStamp } from '@/utils/formatTimeStamp';
 
 const mock = {
   imageUrls: ['www.naver.com', 'www.google.com'], // 첫 번째 원소가 대표 이미지
@@ -40,7 +38,7 @@ const mock = {
   },
 };
 export const ProductDetail: React.FC = () => {
-  const { id } = useParams();
+  // const { id } = useParams();
   // const isAuthor = getUserInfo()
   //   ? getUserInfo()?.id === product.sellerId
   //   : false;
@@ -74,7 +72,6 @@ export const ProductDetail: React.FC = () => {
                   </MenuItem>
                 </MenuBox>
               }
-              autoClose
             />
           </RightButton>
         )}
@@ -119,7 +116,6 @@ export const ProductDetail: React.FC = () => {
                   <MenuItem onClick={() => {}}>판매완료</MenuItem>
                 </MenuBox>
               }
-              autoClose
             ></Dropdown>
           )}
           <div className="description">

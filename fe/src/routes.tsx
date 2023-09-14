@@ -10,6 +10,7 @@ import { Interests } from './pages/Interests';
 import { NewProduct } from './pages/NewProduct';
 import { NotFound } from './pages/NotFound';
 import { OauthLoading } from './pages/OauthLoading';
+import { ProductDetail } from './pages/ProductDetail';
 import { Sales } from './pages/Sales';
 import { Signup } from './pages/Signup';
 import { useTokenRefresh } from './queries/auth';
@@ -41,7 +42,7 @@ export const AppRoutes: React.FC = () => {
         </Route>
 
         <Route path={PATH.newProduct} element={<NewProduct />} />
-        
+
         <Route element={<OnlyNotLoginUserRoute />}>
           <Route path={PATH.redirect} element={<OauthLoading />} />
           <Route path={PATH.signup} element={<Signup />} />

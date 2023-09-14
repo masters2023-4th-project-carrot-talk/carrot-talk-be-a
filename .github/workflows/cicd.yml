@@ -107,22 +107,22 @@ jobs:
         if: contains(github.ref, 'release')
         with:
           host: ${{ secrets.HOST }}
-          username: ec2-user
+          username: ubuntu
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           source: "./nginx/nginx-release.conf"
-          target: "/home/ec2-user/"
+          target: "/home/ubuntu/"
       # docker-compose-release.yml 파일 EC2에 업로드
       - name: copy docker-compose-release file via ssh password
         uses: appleboy/scp-action@master
         if: contains(github.ref, 'release')
         with:
           host: ${{ secrets.HOST }}
-          username: ec2-user
+          username: ubuntu
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           source: "docker-compose-release.yml"
-          target: "/home/ec2-user/"
+          target: "/home/ubuntu/"
 
       # docker-compose-release 실행
       - name: Deploy to release
@@ -130,7 +130,7 @@ jobs:
         if: contains(github.ref, 'release')
         with:
           host: ${{ secrets.HOST }}  # EC2 인스턴스 퍼블릭 DNS
-          username: ec2-user
+          username: ubuntu
           key: ${{ secrets.PRIVATE_KEY }}  # pem 키
           port: 22
           script: |

@@ -17,11 +17,6 @@ const meta: Meta<typeof Dropdown> = {
         options: ['left', 'right'],
       },
     },
-    autoClose: {
-      control: {
-        type: 'boolean',
-      },
-    },
   },
 };
 
@@ -55,22 +50,6 @@ export const AlignRight: Story = {
         </MenuBox>
       }
       align="right"
-    />
-  ),
-};
-
-export const AutoClose: Story = {
-  render: () => (
-    <Dropdown
-      opener={<button>열기</button>}
-      menu={
-        <MenuBox>
-          <MenuItem>옵션1</MenuItem>
-          <MenuItem>옵션2</MenuItem>
-          <MenuItem>옵션3</MenuItem>
-        </MenuBox>
-      }
-      autoClose
     />
   ),
 };

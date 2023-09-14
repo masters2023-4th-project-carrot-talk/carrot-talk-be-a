@@ -97,7 +97,7 @@ type LoginDataFromServer = {
       };
 };
 
-type ImageData = {
+type ImageType = {
   imageId: number;
   imageUrl: string;
 }
@@ -105,7 +105,7 @@ type ImageData = {
 type ImageDataFromServer =
   | {
       success: true;
-      data: ImageData;
+      data: ImageType;
     }
   | {
       success: false;

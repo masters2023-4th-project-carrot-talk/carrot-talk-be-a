@@ -1,11 +1,16 @@
 import { useImageUpload } from '@/queries/products';
 import { css, Theme } from '@emotion/react';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Camera } from '../common/icons';
 import { ImageItem } from './ImageItem';
 
-export const ImageInput: React.FC = () => {
-  const [imageList, setImageList] = useState<ImageData[]>([]);
+type Props = {
+  imageList: ImageType[];
+  onAddImage: (image: ImageType) => void;
+  onDeleteImage: (image: ImageType) => void;
+};
+
+export const ImageInput: React.FC<Props> = ({ imageList, onAddImage,  onDeleteImage}) => {
   const imageMutation = useImageUpload();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -41,7 +46,7 @@ export const ImageInput: React.FC = () => {
     imageMutation.mutate(formData, {
       onSuccess: (result) => {
         if (result.success) {
-          setImageList([...imageList, result.data]);
+          onAddImage(result.data);
         }
       },
       onError: (error) => {
@@ -55,10 +60,6 @@ export const ImageInput: React.FC = () => {
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
-  };
-
-  const deleteImage = (id: number) => {
-    setImageList((i) => i.filter((image) => image.imageId !== id));
   };
 
   return (
@@ -80,13 +81,13 @@ export const ImageInput: React.FC = () => {
           onChange={uploadImageFile}
         />
         <ul className="image-input__image-list">
-          {imageList.map(({ imageId, imageUrl }, index) => (
-            <li key={imageId}>
+          {imageList.map((image, index) => (
+            <li key={image.imageId}>
               <ImageItem
                 size="m"
-                imageUrl={imageUrl}
+                imageUrl={image.imageUrl}
                 label={index === 0 ? '대표 사진' : ''}
-                onClick={() => deleteImage(imageId)}
+                onClick={() => onDeleteImage(image)}
               />
             </li>
           ))}

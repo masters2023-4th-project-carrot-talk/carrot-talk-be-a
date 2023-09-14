@@ -18,8 +18,15 @@ import { Theme, css } from '@emotion/react';
 import { useState } from 'react';
 
 export const NewProduct: React.FC = () => {
-  const { value: title, onChangeValue: onChangeTitle } = useInput({
+  const [imageList, setImageList] = useState<ImageType[]>([]);
+  const {
+    value: title,
+    onChangeValue: onChangeTitle,
+    isValidValue: isValidTitle,
+  } = useInput({
     initialValue: '빈티지 롤러 스케이트',
+    validator: (value) => value.length > 0,
+    warningMessage: '제목을 입력해주세요',
   });
   const { selectedCategory, categories, selectCategory } = useCategorySelector({
     initialCategoryName: '가구/인테리어',
@@ -38,6 +45,12 @@ export const NewProduct: React.FC = () => {
     },
   });
 
+  const isRequiredFieldsFilled =
+    imageList.length !== 0 &&
+    isValidTitle &&
+    selectedCategory &&
+    selectedLocation;
+
   return (
     <>
       <TopBar>
@@ -48,14 +61,24 @@ export const NewProduct: React.FC = () => {
           </Button>
         </LeftButton>
         <RightButton>
-          <Button variant="text">
-            <span className="control-btn">다음</span>
+          <Button variant="text" disabled={!isRequiredFieldsFilled}>
+            <span className="control-btn">확인</span>
           </Button>
         </RightButton>
       </TopBar>
       <div css={(theme) => pageStyle(theme)}>
         <div className="image-input">
-          <ImageInput />
+          <ImageInput
+            imageList={imageList}
+            onAddImage={(image: ImageType) =>
+              setImageList((i) => [...i, image])
+            }
+            onDeleteImage={(image: ImageType) =>
+              setImageList((i) =>
+                i.filter((img) => img.imageId !== image.imageId),
+              )
+            }
+          />
         </div>
         <div className="title-input">
           <Input

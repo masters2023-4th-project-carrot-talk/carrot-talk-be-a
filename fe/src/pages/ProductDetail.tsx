@@ -84,7 +84,7 @@ export const ProductDetail: React.FC = () => {
       deleteProductMutation.mutate(productId);
     }
 
-    navigate(-1);
+    onNavigateBack();
   };
 
   const onEditProductStatus = (
@@ -104,9 +104,9 @@ export const ProductDetail: React.FC = () => {
       editLikeStatusMutation.mutate(numberedProductId);
     }
   };
-  console.log(prevPath, '< prevPathddddd');
+  console.log(prevPath, '< prevPath');
   console.log(PATH.newProduct, 'PATH.newProduct');
-  console.log(prevPath === PATH.newProduct, 'tes?');
+  console.log(prevPath === PATH.newProduct, 'PATH test?');
 
   const onNavigateBack = () => {
     prevPath === PATH.newProduct ? navigate(PATH.home) : navigate(-1);
@@ -283,7 +283,6 @@ const pageStyle = (
   isTransparent: boolean,
 ) => {
   return css`
-    scroll-behavior: smooth;
     ::-webkit-scrollbar {
       display: none;
     }

@@ -15,8 +15,8 @@ import {
 } from 'react-query';
 
 export const useProducts = (
-  locationId: number | null,
-  categoryId: number | null,
+  locationId?: number,
+  categoryId?: number | null,
   size = 10,
 ) => {
   console.log(locationId, categoryId, '확인중');

@@ -1,3 +1,5 @@
+import { useState, useRef, useEffect } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Plus } from '@assets/plus.svg';
 import { Button } from '@components/common/button/Button';
@@ -12,7 +14,6 @@ import { RightButton } from '@components/common/topBar/RightButton';
 import { TopBar } from '@components/common/topBar/TopBar';
 import { ChevronDown, LayoutGrid } from '@components/common/icons';
 import { Theme, css } from '@emotion/react';
-import { useState } from 'react';
 
 import { SkeletonListItem } from '@components/common/skeleton/listItem';
 import { Category } from '@components/home/Category';
@@ -30,21 +31,32 @@ import { useAlert, useModal } from '@/hooks/usePopups';
 
 export const Home: React.FC = () => {
   // useQuery들 묶을수있는지
+  //TODO 카테고리 선택돼있는거 ui표시, 동네 선택시 갱신
   const { isLogin } = useAuth();
+  const { setShouldSlideLeft } = useLayoutStore();
   const { onOpenModal } = useModal();
+  const { alertSource, currentDim, onOpenAlert, onCloseAlert } = useAlert();
   const { serverLocations } = useMyLocations(isLogin);
   const { categories } = useCategories();
   const deleteProductMutation = useDeleteProduct('home');
+  const [selectedCategoryId, setSelectedCategoryId] = useState<
+    number | undefined | null
+  >(null);
+
+  const [selectProduct, setSelectProduct] = useState<ProductType | null>(null);
+  const serverLocationsFetchedRef = useRef(false);
+
+  // selectedLocationId 초기값 설정
   const mainLocation = serverLocations?.find(
     (location) => location.isMainLocation,
   );
-  const initialLocationId = isLogin && mainLocation ? mainLocation.id : 1; // TODO 초기데이터 고정 어떻게 해줄지
-  const [selectedLocationId, setSelectedLocationId] = useState<number | null>(
-    initialLocationId,
-  );
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
-    null,
-  );
+  const initialLocationId = serverLocationsFetchedRef.current
+    ? mainLocation?.id
+    : 1;
+  const [selectedLocationId, setSelectedLocationId] = useState<
+    number | undefined
+  >(initialLocationId);
+
   const {
     products,
     fetchNextPage,
@@ -53,19 +65,29 @@ export const Home: React.FC = () => {
     isFetchingNextPage,
     refetch: refetchProductList,
   } = useProducts(selectedLocationId, selectedCategoryId);
+
   const { observeTarget } = useIntersectionObserver({
     inviewCallback: () => {
       fetchNextPage();
     },
     condition: hasNextPage,
   });
-  const { alertSource, currentDim, onOpenAlert, onCloseAlert } = useAlert();
-
-  const { setShouldSlideLeft } = useLayoutStore();
-  const [selectProduct, setSelectProduct] = useState<ProductType | null>(null);
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // serverLocations 데이터가 처음 로드되었을 때만 실행
+    if (serverLocations && !serverLocationsFetchedRef.current) {
+      const mainLocId = serverLocations.find(
+        (location) => location.isMainLocation,
+      )?.id;
+      if (mainLocId) {
+        setSelectedLocationId(mainLocId);
+      }
+      refetchProductList(); // 초기 데이터 로드 시에만 refetch
+      serverLocationsFetchedRef.current = true; // 데이터가 fetch되었음을 나타냄
+    }
+  }, [serverLocations]);
   const onOpenDetail = (id: number) => {
     navigate(`/detail/${id}`);
   };
@@ -105,9 +127,12 @@ export const Home: React.FC = () => {
   const shouldShowEndOfData =
     !hasNextPage && productStatus !== 'loading' && productStatus !== 'error';
 
+  const name = serverLocations?.find(
+    (location) => location.id === selectedLocationId,
+  ); // TODO name.name이상함 네이밍 바꾸기
   const mainLocationName =
     isLogin && serverLocations
-      ? modifiedLocaitionName(mainLocation?.name as string)
+      ? modifiedLocaitionName(name?.name as string)
       : modifiedLocaitionName('역삼1동');
 
   const locations = isLogin
@@ -131,7 +156,11 @@ export const Home: React.FC = () => {
             <LeftButton>
               <Dropdown
                 opener={
-                  <Button variant="text" className="button__topbar">
+                  <Button
+                    variant="text"
+                    className="button__topbar"
+                    disabled={!serverLocations}
+                  >
                     {mainLocationName}
                     <ChevronDown />
                   </Button>

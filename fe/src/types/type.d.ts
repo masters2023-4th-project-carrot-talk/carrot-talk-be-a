@@ -1,6 +1,6 @@
 type PopupType = 'modal' | 'alert';
 
-type AlertSourceType = 'home' | 'product';
+type AlertSourceType = 'location' | 'product';
 
 type AlertOpenType = {
   source?: AlertSourceType | null;
@@ -94,10 +94,10 @@ type ProductDetailDataFromServer = {
 };
 
 type FetchProductsParams = {
-  locationId?: number | null;
+  locationId?: number;
   categoryId?: number | null;
-  next?: number | null;
-  size?: number | null;
+  next?: number;
+  size?: number;
 };
 
 type SignupData = {

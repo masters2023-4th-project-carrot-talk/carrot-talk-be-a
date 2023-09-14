@@ -86,7 +86,7 @@ jobs:
         if: contains(github.ref, 'release') ||
           contains(github.ref, 'infra/#8-cicd')
         run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p & {{ secrets.DOCKER_PASSWORD }}
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -f Dockerfile-release -t ${{ secrets.DOCKER_USERNAME }}/bee_market_web_release .
           docker push ${{ secrets.DOCKER_USERNAME }}/bee_market_web_release
 

@@ -48,7 +48,7 @@ jobs:
           mkdir ./src/main/resources
           cd ./src/main/resources
           touch ./application.yml
-          echo "${{ secrets.APPLICATION_RELEASE }}" > ./applicaiton.yml
+          echo "${{ secrets.APPLICATION_RELEASE }}" > ./application.yml
         shell: bash
         
       # gradlew 실행을 위한 실행 권한 부여

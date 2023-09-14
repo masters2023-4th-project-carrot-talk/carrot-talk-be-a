@@ -10,46 +10,70 @@ import { TopBar } from '@/components/common/topBar/TopBar';
 import { CategorySelector } from '@/components/new/CategorySelector';
 import { ImageInput } from '@/components/new/ImageInput';
 import { LocationSelector } from '@/components/new/LocationSelector';
+import { PATH } from '@/constants/path';
 import { useCategorySelector } from '@/hooks/useCategorySelector';
 import { useInput } from '@/hooks/useInput';
 import { useLocationSelector } from '@/hooks/useLocationSelector';
 import { usePrice } from '@/hooks/usePrice';
+import { useProductAddition } from '@/queries/products';
+import { commaStringToNumber } from '@/utils/formatPrice';
 import { Theme, css } from '@emotion/react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const NewProduct: React.FC = () => {
+  const navigate = useNavigate();
   const [imageList, setImageList] = useState<ImageType[]>([]);
   const {
     value: title,
     onChangeValue: onChangeTitle,
     isValidValue: isValidTitle,
   } = useInput({
-    initialValue: '빈티지 롤러 스케이트',
+    initialValue: '',
     validator: (value) => value.length > 0,
     warningMessage: '제목을 입력해주세요',
   });
-  const { selectedCategory, categories, selectCategory } = useCategorySelector({
-    initialCategoryName: '가구/인테리어',
-  });
-  const { price, onChangePrice, priceWarningMessage } = usePrice('169,000');
-  const [description, setDescription] =
-    useState(`어린시절 추억의 향수를 불러 일으키는 롤러 스케이트입니다. 빈티지 특성상 사용감 있지만 전체적으로 깨끗한 상태입니다.
-
-  촬영용 소품이나, 거실에 장식용으로 추천해 드립니다. 단품 입고 되었습니다. 새 제품으로 보존된 제품으로 전용박스까지 보내드립니다.
-  
-  사이즈는 235 입니다.`);
-  const { selectedLocation, selectLocation, locations } = useLocationSelector({
-    initialLocation: {
-      id: 12,
-      name: '서울 강남구 개포8동',
-    },
-  });
+  const { selectedCategory, categories, selectCategory } = useCategorySelector(
+    {},
+  );
+  const { price, onChangePrice, priceWarningMessage, isValidPrice } = usePrice(
+    {},
+  );
+  const [description, setDescription] = useState('');
+  const { selectedLocation, selectLocation, locations } = useLocationSelector(
+    {},
+  );
+  const productAdditionMutation = useProductAddition();
 
   const isRequiredFieldsFilled =
-    imageList.length !== 0 &&
-    isValidTitle &&
-    selectedCategory &&
-    selectedLocation;
+    imageList.length !== 0 && title && selectedCategory && selectedLocation;
+  const isAllFieldsValid = isValidTitle && isValidPrice;
+
+  const submitProductData = () => {
+    if (!isRequiredFieldsFilled || !isAllFieldsValid) {
+      return;
+    }
+
+    const productData = {
+      name: title,
+      price: commaStringToNumber(price),
+      constent: description,
+      images: imageList.map((image) => image.imageId),
+      categoryId: selectedCategory.id,
+      locationId: selectedLocation.id,
+    };
+
+    productAdditionMutation.mutate(productData, {
+      onSuccess: (result) => {
+        if (result.success) {
+          // 등록 성공 시 상품 상세 페이지로 이동
+          navigate(`${PATH.detail}/${1}`);
+          return;
+        }
+        // 등록 실패 시 사용자 피드백
+      },
+    });
+  };
 
   return (
     <>
@@ -61,7 +85,11 @@ export const NewProduct: React.FC = () => {
           </Button>
         </LeftButton>
         <RightButton>
-          <Button variant="text" disabled={!isRequiredFieldsFilled}>
+          <Button
+            variant="text"
+            disabled={!isRequiredFieldsFilled || !isAllFieldsValid}
+            onClick={submitProductData}
+          >
             <span className="control-btn">확인</span>
           </Button>
         </RightButton>
@@ -100,7 +128,7 @@ export const NewProduct: React.FC = () => {
             variant="ghost"
             label="₩"
             value={price}
-            placeholder="가격을 입력하세요"
+            placeholder="가격(선택사항)"
             onChange={onChangePrice}
             warningMessage={priceWarningMessage}
           />

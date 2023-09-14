@@ -130,6 +130,7 @@ jobs:
       - name: Deploy to release
         uses: appleboy/ssh-action@master
         if: contains(github.ref, 'release')
+          || contains(github.ref, 'infra/#8-cicd')
         with:
           host: ${{ secrets.HOST }}  # EC2 인스턴스 퍼블릭 DNS
           username: ubuntu

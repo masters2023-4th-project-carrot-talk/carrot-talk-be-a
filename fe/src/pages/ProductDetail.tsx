@@ -28,14 +28,14 @@ import { Alert } from '@/components/common/alert/Alert';
 import { AlertContent } from '@/components/common/alert/AlertContent';
 import { AlertButtons } from '@/components/common/alert/AlertButtons';
 import { useIntersectionObserver } from '@/hooks/useObserver';
-import { Carousel } from '@/components/detail/Carousel';
+import { ImageCarousel } from '@/components/detail/ImageCarousel';
 import { useAlert } from '@/hooks/usePopups';
 // TODO 로그인하지 않은 사용자에게 데이터가 안뜨고있음
 
 export const ProductDetail: React.FC = () => {
   const { alertSource, currentDim, onOpenAlert, onCloseAlert } = useAlert();
+  const [isTransparent, setIsTransparent] = useState<boolean>(true);
   const { id: productId } = useParams();
-
   const numberedProductId = Number(productId);
   const {
     product,
@@ -47,8 +47,6 @@ export const ProductDetail: React.FC = () => {
   const deleteProductMutation = useDeleteProduct('detail');
   const editProductStatusMutation = useEditProductStatus('detail');
   const editLikeStatusMutation = useEditLikeStatus();
-
-  const [isTransparent, setIsTransparent] = useState<boolean>(true);
 
   const formattedPrice = formatPrice(product?.price);
   const formattedTimeStamp = formatTimeStamp(product?.createdAt);
@@ -80,6 +78,7 @@ export const ProductDetail: React.FC = () => {
       onCloseAlert({ currentDim: null });
       deleteProductMutation.mutate(productId);
     }
+    // TODO navigate
   };
 
   const onEditProductStatus = (
@@ -118,38 +117,6 @@ export const ProductDetail: React.FC = () => {
   return (
     <div css={(theme) => pageStyle(theme, product?.isLiked, isTransparent)}>
       <TopBar transparent={isTransparent}>
-        {isAuthor && (
-          <RightButton>
-            <Dropdown
-              align="right"
-              opener={
-                <Button variant="text" className="button__status">
-                  <Dots />
-                </Button>
-              }
-              menu={
-                <MenuBox>
-                  <MenuItem
-                    onClick={() => {
-                      // navigate(`/products/${id}/add?`);
-                    }}
-                  >
-                    게시글 수정
-                  </MenuItem>
-                  <MenuItem
-                    variant="warning"
-                    onClick={() => {
-                      onOpenAlert('product');
-                    }}
-                  >
-                    삭제
-                  </MenuItem>
-                </MenuBox>
-              }
-            />
-          </RightButton>
-        )}
-
         <LeftButton>
           <Button
             className="button__back"
@@ -162,12 +129,44 @@ export const ProductDetail: React.FC = () => {
             뒤로
           </Button>
         </LeftButton>
+
+        {/* {isAuthor && ( */}
+        <RightButton>
+          <Dropdown
+            align="right"
+            opener={
+              <Button variant="text" className="button__status">
+                <Dots />
+              </Button>
+            }
+            menu={
+              <MenuBox>
+                <MenuItem
+                  onClick={() => {
+                    // navigate(`/products/${id}/add?`);
+                  }}
+                >
+                  게시글 수정
+                </MenuItem>
+                <MenuItem
+                  variant="warning"
+                  onClick={() => {
+                    onOpenAlert('product');
+                  }}
+                >
+                  삭제
+                </MenuItem>
+              </MenuBox>
+            }
+          />
+        </RightButton>
+        {/* )} */}
       </TopBar>
       {fetchStatus === 'loading' && <div>로딩중</div>}
       {fetchStatus === 'error' && <div>상품 정보를 불러오지 못했습니다</div>}
       <div css={obseverStyle} ref={observeTarget}></div>
       <div className="page-content">
-        <Carousel imageUrls={imageUrls} />
+        <ImageCarousel imageUrls={imageUrls} />
         <div className="page-content-info">
           <div className="seller">
             <p className="seller-label">판매자 정보</p>

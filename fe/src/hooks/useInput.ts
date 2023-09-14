@@ -32,10 +32,6 @@ export const useInput = <T>(props: InputType<T>): InputReturnType<T> => {
   const isValidValue = props.validator(value);
 
   const onChangeValue = (value: T) => {
-    if (!props.validator(value)) {
-      return;
-    }
-
     setValue(value);
   };
 

@@ -1,5 +1,9 @@
 import { useInput } from './useInput';
 
+type PriceInputType = {
+  initialPrice?: string;
+};
+
 type PriceInputReturnType = {
   price: string;
   isValidPrice: boolean;
@@ -7,9 +11,11 @@ type PriceInputReturnType = {
   onChangePrice: (price: string) => void;
 };
 
-export const usePrice = (initialPrice: string = ''): PriceInputReturnType => {
+export const usePrice = ({
+  initialPrice,
+}: PriceInputType): PriceInputReturnType => {
   const { value, onChangeValue, isValidValue, warningMessage } = useInput({
-    initialValue: initialPrice,
+    initialValue: initialPrice ?? '',
     validator: (value: string) => /^[0-9,]*$/.test(value), // 숫자와 쉼표(,)만 입력 가능
     warningMessage: '숫자와 쉼표(,)만 입력 가능합니다.',
   });
@@ -18,14 +24,14 @@ export const usePrice = (initialPrice: string = ''): PriceInputReturnType => {
   const priceValidator = (price: string) => /^[0-9]*$/.test(price);
 
   const onChangePrice = (price: string) => {
-    if (price === '') {
+    const priceWithoutComma = price.replace(/,/g, '');
+
+    if (price.length === 0 || !priceValidator(priceWithoutComma)) {
       onChangeValue(price);
       return;
     }
 
-    const priceWithoutComma = price.replace(/,/g, '');
-
-    if (!priceValidator(priceWithoutComma) || priceWithoutComma.length > 10) {
+    if (priceWithoutComma.length > 10) {
       return;
     }
 

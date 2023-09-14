@@ -93,7 +93,7 @@ export const useProductDetailQuery = (id: number) => {
     queryKey: [QUERY_KEY.productDetail, id],
     queryFn: () => getProductsDetail(id),
     select: (responseData) => {
-      const { imageUrls, seller, product } = responseData.data;
+      const { product, seller, imageUrls } = responseData.data;
       return { product, seller, imageUrls };
     },
   });
@@ -107,7 +107,7 @@ export const useProductDetailQuery = (id: number) => {
 
 export const useEditLikeStatus = () => {
   const queryClient = useQueryClient();
-  // TODO 낙관적 업데이트
+
   type MutationContext = {
     previousProduct?: ProductDetailDataFromServer;
   };
@@ -145,6 +145,8 @@ export const useEditLikeStatus = () => {
 
     onError: (error, variables, context) => {
       if (context?.previousProduct) {
+        console.log('에러발생', error); // TODO 에러처리
+
         queryClient.setQueryData(
           [QUERY_KEY.productDetail, variables],
           context.previousProduct,

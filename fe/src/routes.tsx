@@ -14,7 +14,6 @@ import { ProductDetail } from './pages/ProductDetail';
 import { Sales } from './pages/Sales';
 import { Signup } from './pages/Signup';
 import { useTokenRefresh } from './queries/auth';
-import { ProductDetail } from './pages/ProductDetail';
 
 export const AppRoutes: React.FC = () => {
   useTokenRefresh();
@@ -27,27 +26,25 @@ export const AppRoutes: React.FC = () => {
         {/* TODO: 하단바 O - 등록페이지 / 인증 필요 */}
         {/* TODO: 하단바 O - 상세페이지 / 인증 필요*/}
         {/* TODO: 하단바 O - 채팅페이지 / 인증 필요 */}
-        <Route element={<OnlyLoginUserRoute />}>
-          <Route element={<Layout />}>
+        <Route element={<Layout />}>
+          <Route element={<OnlyLoginUserRoute />}>
             <Route path={PATH.sales} element={<Sales />} />
             <Route path={PATH.interests} element={<Interests />} />
             <Route path={PATH.chat} element={<Chat />} />
           </Route>
-        </Route>
 
-        <Route element={<Layout />}>
           <Route path={PATH.home} element={<Home />} />
           <Route path={PATH.account} element={<Account />} />
           <Route path={PATH.notFound} element={<NotFound />} />
         </Route>
 
         <Route path={PATH.newProduct} element={<NewProduct />} />
+        <Route path={`${PATH.detail}/:id`} element={<ProductDetail />} />
 
         <Route element={<OnlyNotLoginUserRoute />}>
           <Route path={PATH.redirect} element={<OauthLoading />} />
           <Route path={PATH.signup} element={<Signup />} />
         </Route>
-        <Route path={`${PATH.detail}/:id`} element={<ProductDetail />} />
       </Routes>
     </div>
   );

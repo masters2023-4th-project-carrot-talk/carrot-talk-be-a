@@ -14,7 +14,6 @@ import { RightButton } from '@components/common/topBar/RightButton';
 import { Title } from '@components/common/topBar/Title';
 import { TopBar } from '@components/common/topBar/TopBar';
 import { PATH } from '@constants/path';
-
 import { Theme, css } from '@emotion/react';
 import { Navigate, useNavigate } from 'react-router-dom';
 

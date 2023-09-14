@@ -292,10 +292,9 @@ const pageStyle = (
     }
 
     .page-content {
-      margin-top: -66px;
+      margin-top: -72px;
       padding-bottom: 64px;
       box-sizing: border-box;
-      border: 1px solid red;
     }
 
     .page-content-info {

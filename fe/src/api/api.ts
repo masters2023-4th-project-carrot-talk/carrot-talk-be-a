@@ -135,8 +135,6 @@ export const getProducts = ({
 };
 
 export const getProductsDetail = (id: number) => {
-  console.log('토큰', getAccessToken());
-
   return fetchData(`/api/products/${id}`, {
     method: 'GET',
     headers: {

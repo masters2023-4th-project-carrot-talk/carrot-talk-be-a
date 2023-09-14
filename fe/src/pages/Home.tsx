@@ -21,13 +21,14 @@ import { useCategories } from '@/queries/category';
 import { useIntersectionObserver } from '@hooks/useObserver';
 import { useDeleteProduct, useProducts } from '@/queries/products';
 import { useAuth } from '@hooks/useAuth';
-import { modifiedLocaitionName } from '@utils/modifyLocationName';
+import { modifiedLocationName } from '@utils/modifyLocationName';
 import { useLayoutStore } from '@/stores/layoutStore';
 import { useMyLocations } from '@/queries/location';
 import { Alert } from '@/components/common/alert/Alert';
 import { AlertContent } from '@/components/common/alert/AlertContent';
 import { AlertButtons } from '@/components/common/alert/AlertButtons';
 import { useAlert, useModal } from '@/hooks/usePopups';
+import { PATH } from '@/constants/path';
 
 export const Home: React.FC = () => {
   // useQuery들 묶을수있는지
@@ -81,13 +82,12 @@ export const Home: React.FC = () => {
       const mainLocId = serverLocations.find(
         (location) => location.isMainLocation,
       )?.id;
-      if (mainLocId) {
-        setSelectedLocationId(mainLocId);
-      }
+      mainLocId && setSelectedLocationId(mainLocId);
       refetchProductList(); // 초기 데이터 로드 시에만 refetch
-      serverLocationsFetchedRef.current = true; // 데이터가 fetch되었음을 나타냄
+      serverLocationsFetchedRef.current = true;
     }
   }, [serverLocations]);
+
   const onOpenDetail = (id: number) => {
     navigate(`/detail/${id}`);
   };
@@ -112,7 +112,7 @@ export const Home: React.FC = () => {
   };
 
   const onDeleteProduct = (id?: number) => {
-    if (id == null) return;
+    if (!id) return;
     onCloseAlert({ currentDim: null });
     deleteProductMutation.mutate(id);
   };
@@ -123,17 +123,18 @@ export const Home: React.FC = () => {
     ));
   };
 
-  const shouldShowSkeletons = productStatus === 'loading';
+  const shouldShowSkeletons = productStatus === 'loading' || isFetchingNextPage;
   const shouldShowEndOfData =
     !hasNextPage && productStatus !== 'loading' && productStatus !== 'error';
 
-  const name = serverLocations?.find(
+  const selectedLocation = serverLocations?.find(
     (location) => location.id === selectedLocationId,
-  ); // TODO name.name이상함 네이밍 바꾸기
+  );
+
   const mainLocationName =
-    isLogin && serverLocations
-      ? modifiedLocaitionName(name?.name as string)
-      : modifiedLocaitionName('역삼1동');
+    isLogin && selectedLocation
+      ? modifiedLocationName(selectedLocation.name)
+      : modifiedLocationName('역삼1동');
 
   const locations = isLogin
     ? serverLocations
@@ -212,6 +213,7 @@ export const Home: React.FC = () => {
             className="button__add"
             onClick={() => {
               console.log('추가페이지로 이동');
+              navigate(PATH.newProduct);
             }}
           >
             <Plus />
@@ -233,6 +235,7 @@ export const Home: React.FC = () => {
                 onAlertOpen={() => onAlertOpen(product)}
               />
             ))}
+
             {shouldShowSkeletons && <>{renderSkeletons(10)}</>}
           </ListBox>
           {shouldShowEndOfData && (

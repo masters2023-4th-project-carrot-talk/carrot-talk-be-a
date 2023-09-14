@@ -1,8 +1,8 @@
 import { rest } from 'msw';
 import { categoryList } from './data/categories';
+import { images } from './data/images';
 import { locationsWithQuery } from './data/locations';
 import { token, users } from './data/users';
-import { images } from './data/images';
 
 let locations: LocationType[] = [
   { id: 1, name: '역삼1동', isMainLocation: true },
@@ -12,10 +12,14 @@ let locations: LocationType[] = [
 export const handlers = [
   //내동네
   rest.get(`/api/users/locations`, (_, res, ctx) => {
-    return res(ctx.delay(300), ctx.status(200), ctx.json({
-      success: true,
-      data: locations,
-    }));
+    return res(
+      ctx.delay(300),
+      ctx.status(200),
+      ctx.json({
+        success: true,
+        data: locations,
+      }),
+    );
   }),
   // 내동네 삭제
   rest.delete(`/api/users/locations/:id`, (req, res, ctx) => {
@@ -205,5 +209,23 @@ export const handlers = [
     };
 
     return res(ctx.status(200), ctx.json(data));
+  }),
+
+  rest.post('/api/products', async (req, res, ctx) => {
+    const body = await req.json();
+
+    if (
+      !body?.images ||
+      !body?.name ||
+      !body?.categoryId ||
+      !body?.locationId
+    ) {
+      return res(ctx.status(200), ctx.json({ success: false }));
+    }
+
+    return res(
+      ctx.status(200),
+      ctx.json({ success: true, data: { productId: 1 } }),
+    );
   }),
 ];

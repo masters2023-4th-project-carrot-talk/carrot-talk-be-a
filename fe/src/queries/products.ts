@@ -1,4 +1,4 @@
-import { getProducts, requestImageUpload } from '@api/api';
+import { addNewProduct, getProducts, requestImageUpload } from '@api/api';
 import { QUERY_KEY } from '@constants/queryKey';
 import { useMemo } from 'react';
 import { useInfiniteQuery, useMutation } from 'react-query';
@@ -46,5 +46,12 @@ export const useProducts = (
 export const useImageUpload = () => {
   return useMutation<ImageDataFromServer, unknown, FormData>({
     mutationFn: (image: FormData) => requestImageUpload(image),
-  })
-}
+  });
+};
+
+export const useProductAddition = () => {
+  return useMutation<ProductAdditionResponse, unknown, ProductFormData>({
+    mutationFn: (productFormData: ProductFormData) =>
+      addNewProduct(productFormData),
+  });
+};

@@ -100,7 +100,7 @@ type LoginDataFromServer = {
 type ImageType = {
   imageId: number;
   imageUrl: string;
-}
+};
 
 type ImageDataFromServer =
   | {
@@ -110,3 +110,19 @@ type ImageDataFromServer =
   | {
       success: false;
     };
+
+type ProductFormData = {
+  images: number[];
+  name: string;
+  categoryId: number;
+  locationId: number;
+  content?: string;
+  price?: number;
+};
+
+type ProductAdditionResponse = {
+  success: boolean;
+  data?: {
+    productId: number;
+  };
+}

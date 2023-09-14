@@ -155,11 +155,21 @@ export const requestImageUpload = (image: FormData) => {
   return fetchData(END_POINT.imageUpload, {
     method: 'POST',
     headers: {
-      "Content-Type": "multipart/form-data",
+      'Content-Type': 'multipart/form-data',
       Authorization: `Bearer ${getAccessToken()}`,
     },
     body: JSON.stringify({
-      image
-    })
-  })
-}
+      image,
+    }),
+  });
+};
+
+export const addNewProduct = (productFormData: ProductFormData) => {
+  return fetchData(END_POINT.products(), {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+    body: JSON.stringify(productFormData),
+  });
+};

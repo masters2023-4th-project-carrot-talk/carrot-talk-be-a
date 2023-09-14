@@ -22,7 +22,7 @@ export const END_POINT = {
   logout: `/api/users/logout`,
   refreshToken: `/api/users/reissue-access-token`,
   categories: `/api/categories`,
-  products: (query: string) => `/api/products?${query}`,
+  products: (query?: string) => `/api/products${query ? `?${query}` : ''}`,
   imageUpload: `/api/images`,
 };
 

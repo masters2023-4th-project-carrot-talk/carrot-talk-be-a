@@ -12,17 +12,17 @@ services:
     image: won4885/bee_market_web_release:latest
     ports:
       - 5173:5173
-    environment:
-      - DOT_ENV=production
-  nginx:
-    image: nginx:latest
-    container_name: nginx_server
-    ports:
-      - 80:80
-    volumes:
-      - ./nginx/nginx-release.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - web
-      - app
+  #   environment:
+  #     - DOT_ENV=production
+  # nginx:
+  #   image: nginx:latest
+  #   container_name: nginx_server
+  #   ports:
+  #     - 80:80
+  #   volumes:
+  #     - ./nginx/nginx-release.conf:/etc/nginx/nginx.conf
+  #   depends_on:
+  #     - web
+  #     - app
 volumes:
   bee_market_app_release:

@@ -32,7 +32,10 @@ export const NewProduct: React.FC = () => {
   
   사이즈는 235 입니다.`);
   const { selectedLocation, selectLocation, locations } = useLocationSelector({
-    initialLocation: { id: 1, name: '역삼 1동'}
+    initialLocation: {
+      id: 12,
+      name: '서울 강남구 개포8동',
+    },
   });
 
   return (

@@ -2,7 +2,7 @@ import { useAnimation } from '@/hooks/useAnimation';
 import { Theme, css } from '@emotion/react';
 import { useState } from 'react';
 import { Button } from '../common/button/Button';
-import { MapPinFilled } from '../common/icons';
+import { MapPinFilled, X } from '../common/icons';
 
 type Props = {
   selectedLocation?: LocationType;
@@ -15,17 +15,21 @@ export const LocationSelector: React.FC<Props> = ({
   locations,
   onSelectLocation,
 }) => {
-  const [isListOpen, setIsListOpen] = useState(false);
+  const [isContainerOpen, setIsContainerOpen] = useState(false);
   const { shouldRender, handleTransitionEnd, animationTrigger } =
-    useAnimation(isListOpen);
+    useAnimation(isContainerOpen);
 
   const openLocationContainer = () => {
-    setIsListOpen(true);
+    setIsContainerOpen(true);
   };
 
-  const onSelectLocationButton = (locaiton: LocationType) => {
-    onSelectLocation(locaiton);
-    setIsListOpen(false);
+  const closeLocationContainer = () => {
+    setIsContainerOpen(false);
+  };
+
+  const onSelectLocationButton = (location: LocationType) => {
+    onSelectLocation(location);
+    closeLocationContainer();
   };
 
   return (
@@ -35,24 +39,29 @@ export const LocationSelector: React.FC<Props> = ({
         {selectedLocation?.name}
       </Button>
       {locations && shouldRender && (
-        <ul
-          className="location__container"
-          onTransitionEnd={handleTransitionEnd}
-        >
-          {locations.map((location) => (
-            <li key={location.id}>
-              <Button
-                variant="category"
-                state={
-                  selectedLocation?.id === location.id ? 'active' : 'default'
-                }
-                onClick={() => onSelectLocationButton(location)}
-              >
-                {location.name}
-              </Button>
-            </li>
-          ))}
-        </ul>
+        <div className="location__container">
+          <ul
+            className="location__container--location-btns"
+            onTransitionEnd={handleTransitionEnd}
+          >
+            {locations.map((location) => (
+              <li key={location.id}>
+                <Button
+                  variant="category"
+                  state={
+                    selectedLocation?.id === location.id ? 'active' : 'default'
+                  }
+                  onClick={() => onSelectLocationButton(location)}
+                >
+                  {location.name}
+                </Button>
+              </li>
+            ))}
+          </ul>
+          <Button variant="text" onClick={closeLocationContainer} className="location__container--close-btn">
+            <X />
+          </Button>
+        </div>
       )}
     </div>
   );
@@ -76,9 +85,21 @@ const locationSelectorStyle = (theme: Theme, animationTrigger: boolean) => css`
     top: 0;
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: space-between;
     ${animationTrigger ? '' : 'transform: translateY(100%);'};
     background-color: ${theme.color.neutral.backgroundWeak};
     transition: 200ms ease;
+
+    &--location-btns {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    &--close-btn > svg {
+      stroke: ${theme.color.neutral.textWeak};
+    }
   }
 `;

@@ -82,6 +82,17 @@ jobs:
         node-version: [ 18.x ]
     steps:
       - uses: actions/checkout@v3
+      
+      # 환경별 .env 파일 생성
+      - name: make ".env" file
+        if: |
+          contains(github.ref, 'release') ||
+          contains(github.ref, 'infra/#8-cicd')
+        run: |
+          touch ./.env
+          echo "${{ secrets.DOT_ENV }}" > ./.env
+        shell: bash
+      
       - name: Docker build to release
         if: contains(github.ref, 'release') ||
           contains(github.ref, 'infra/#8-cicd')

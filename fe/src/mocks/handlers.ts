@@ -5,14 +5,17 @@ import { token, users } from './data/users';
 import { images } from './data/images';
 
 let locations: LocationType[] = [
-  { id: 1, name: '안양99동', isMainLocation: true },
-  { id: 2, name: '안양100동', isMainLocation: false },
+  { id: 1, name: '역삼1동', isMainLocation: true },
+  { id: 100, name: '안양100동', isMainLocation: false },
 ];
 
 export const handlers = [
   //내동네
   rest.get(`/api/users/locations`, (_, res, ctx) => {
-    return res(ctx.delay(300), ctx.status(200), ctx.json(locations));
+    return res(ctx.delay(300), ctx.status(200), ctx.json({
+      success: true,
+      data: locations,
+    }));
   }),
   // 내동네 삭제
   rest.delete(`/api/users/locations/:id`, (req, res, ctx) => {

@@ -61,6 +61,7 @@ const categorySelectorStyle = (theme: Theme) => css`
 
   .categories__container {
     display: flex;
+    align-items: center;
     gap: 4px;
   }
 

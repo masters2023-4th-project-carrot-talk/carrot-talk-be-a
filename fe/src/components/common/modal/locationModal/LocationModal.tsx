@@ -1,11 +1,11 @@
-import { usePopupStore } from '@stores/popupStore';
+import { useAuth } from '@/hooks/useAuth';
+import { useDeleteLocation, usePatchMainLocation } from '@/queries/location';
+import { useRegisteredLocationsStore } from '@/stores/locationStore';
 import { Modal } from '@components/common/modal/Modal';
+import { usePopupStore } from '@stores/popupStore';
 import { useState } from 'react';
 import { ControlLocation } from './content/ControlLocation';
 import { SearchLocation } from './content/SearchLocation';
-import { useDeleteLocation, usePatchMainLocation } from '@/queries/location';
-import { useRegisteredLocationsStore } from '@/stores/locationStore';
-import { useAuth } from '@/hooks/useAuth';
 
 type Props = {
   locationList?: LocationType[];

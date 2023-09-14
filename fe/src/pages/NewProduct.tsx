@@ -1,6 +1,5 @@
 import { EditBar } from '@/components/common/actionBar/EditBar';
 import { Button } from '@/components/common/button/Button';
-import { MapPinFilled } from '@/components/common/icons';
 import { Input } from '@/components/common/input/Input';
 import { TextArea } from '@/components/common/input/TextArea';
 import { CategoryModal } from '@/components/common/modal/categoryModal/CategoryModal';
@@ -10,8 +9,10 @@ import { Title } from '@/components/common/topBar/Title';
 import { TopBar } from '@/components/common/topBar/TopBar';
 import { CategorySelector } from '@/components/new/CategorySelector';
 import { ImageInput } from '@/components/new/ImageInput';
+import { LocationSelector } from '@/components/new/LocationSelector';
 import { useCategorySelector } from '@/hooks/useCategorySelector';
 import { useInput } from '@/hooks/useInput';
+import { useLocationSelector } from '@/hooks/useLocationSelector';
 import { usePrice } from '@/hooks/usePrice';
 import { Theme, css } from '@emotion/react';
 import { useState } from 'react';
@@ -20,9 +21,9 @@ export const NewProduct: React.FC = () => {
   const { value: title, onChangeValue: onChangeTitle } = useInput({
     initialValue: '빈티지 롤러 스케이트',
   });
-  const { selectedCategory, categories, selectCategory } = useCategorySelector(
-    {},
-  );
+  const { selectedCategory, categories, selectCategory } = useCategorySelector({
+    initialCategoryName: '가구/인테리어',
+  });
   const { price, onChangePrice, priceWarningMessage } = usePrice('169,000');
   const [description, setDescription] =
     useState(`어린시절 추억의 향수를 불러 일으키는 롤러 스케이트입니다. 빈티지 특성상 사용감 있지만 전체적으로 깨끗한 상태입니다.
@@ -30,6 +31,9 @@ export const NewProduct: React.FC = () => {
   촬영용 소품이나, 거실에 장식용으로 추천해 드립니다. 단품 입고 되었습니다. 새 제품으로 보존된 제품으로 전용박스까지 보내드립니다.
   
   사이즈는 235 입니다.`);
+  const { selectedLocation, selectLocation, locations } = useLocationSelector({
+    initialLocation: { id: 1, name: '역삼 1동'}
+  });
 
   return (
     <>
@@ -89,10 +93,11 @@ export const NewProduct: React.FC = () => {
         />
       </div>
       <EditBar>
-        <Button variant="text">
-          <MapPinFilled fill="#000" />
-          역삼1동
-        </Button>
+        <LocationSelector
+          selectedLocation={selectedLocation}
+          locations={locations}
+          onSelectLocation={selectLocation}
+        />
       </EditBar>
     </>
   );

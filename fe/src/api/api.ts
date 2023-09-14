@@ -1,5 +1,5 @@
 import { createQueryParams } from '@/utils/createQueryParams';
-import { BASE_URL } from '@constants/path';
+import { BASE_URL, END_POINT } from '@constants/path';
 import { getAccessToken, getRefreshToken } from '@utils/localStorage';
 
 const fetchData = async (path: string, options?: RequestInit) => {
@@ -19,7 +19,7 @@ const fetchData = async (path: string, options?: RequestInit) => {
 };
 
 export const getMyLocations = () => {
-  return fetchData('/api/users/locations', {
+  return fetchData(END_POINT.locations(), {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${getAccessToken()}`,
@@ -28,7 +28,7 @@ export const getMyLocations = () => {
 };
 
 export const deleteLocation = (id: number) => {
-  return fetchData(`/api/users/locations/${id}`, {
+  return fetchData(END_POINT.locations(id), {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${getAccessToken()}`,
@@ -37,7 +37,7 @@ export const deleteLocation = (id: number) => {
 };
 
 export const patchMainLocation = (id: number) => {
-  return fetchData(`/api/users/locations`, {
+  return fetchData(END_POINT.locations(), {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ export const patchMainLocation = (id: number) => {
 };
 
 export const checkNickname = async (nickname: string) => {
-  return fetchData(`/api/users/nickname?nickname=${nickname}`, {
+  return fetchData(END_POINT.nicknameCheck(nickname), {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ export const checkNickname = async (nickname: string) => {
 };
 
 export const signup = async (signupInfo: SignupData) => {
-  return fetchData('/api/users/signup', {
+  return fetchData(END_POINT.signup, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ export const signup = async (signupInfo: SignupData) => {
 };
 
 export const login = async (code: string) => {
-  return fetchData(`/api/users/login`, {
+  return fetchData(END_POINT.login, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ export const login = async (code: string) => {
 };
 
 export const logout = async () => {
-  return fetchData(`/api/users/logout`, {
+  return fetchData(END_POINT.logout, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ export const logout = async () => {
 };
 
 export const refreshToken = async () => {
-  return fetchData(`/api/users/reissue-access-token`, {
+  return fetchData(END_POINT.refreshToken, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -108,11 +108,11 @@ export const refreshToken = async () => {
 };
 
 export const getLocationWithQuery = (query: string) => {
-  return fetchData(`/api/locations?keyword=${encodeURIComponent(query)}`);
+  return fetchData(END_POINT.locationsOf(encodeURIComponent(query)));
 };
 
 export const getCategories = () => {
-  return fetchData('/api/categories');
+  return fetchData(END_POINT.categories);
 };
 
 export const getProducts = ({

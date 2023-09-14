@@ -1,5 +1,6 @@
 export const PATH = {
   home: '/',
+  newProduct: '/products/new',
   sales: '/sales',
   interests: '/interests',
   chat: '/chat',
@@ -9,6 +10,18 @@ export const PATH = {
   notFound: '/*',
   detail: '/detail',
 };
+
+export const END_POINT = {
+  locations: (id?: number) => id ?  `/api/users/locations/${id}` : '/api/users/locations',
+  locationsOf: (query: string) => `/api/locations?keyword=${query}`,
+  nicknameCheck: (nickname: string) => `/api/users/nickname?nickname=${nickname}`,
+  signup: `/api/users/signup`,
+  login: `/api/users/login`,
+  logout: `/api/users/logout`,
+  refreshToken: `/api/users/reissue-access-token`,
+  categories: `/api/categories`,
+  products: (query: string) => `/api/products/${query}`,
+}
 
 export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${
   import.meta.env.VITE_KAKAO_REST_API_KEY

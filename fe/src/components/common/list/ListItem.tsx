@@ -1,15 +1,15 @@
 import { Theme, css } from '@emotion/react';
-import { ImageBox } from '../imageBox/ImageBox';
-import { Message, Heart, Dots } from '../icons';
-import { Button } from '../button/Button';
-import { StatusBadge } from '../statusBadge/StatusBadge';
-import { formatTimeStamp } from '@utils/formatTimeStamp';
-import { formatPrice } from '@utils/formatPrice';
 import { formatCount } from '@utils/formatCount';
-import { getUserInfo } from '@utils/localStorage';
+import { formatPrice } from '@utils/formatPrice';
+import { formatTimeStamp } from '@utils/formatTimeStamp';
+import { FC } from 'react';
+import { Button } from '../button/Button';
 import { Dropdown } from '../dropdown/Dropdown';
+import { Dots, Heart, Message } from '../icons';
+import { ImageBox } from '../imageBox/ImageBox';
 import { MenuBox } from '../menu/MenuBox';
 import { MenuItem } from '../menu/MenuItem';
+import { StatusBadge } from '../statusBadge/StatusBadge';
 import { useEditProductStatus } from '@/queries/products';
 
 type Props = {

@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ControlLocation } from './locationModal/content/ControlLocation';
-import { ModalHeader } from './ModalHeader';
 import { Modal } from './Modal';
-import { SearchLocation } from './locationModal/content/SearchLocation';
+import { ModalHeader } from './ModalHeader';
 import { ModalListItem } from './ModalListItem';
+import { ControlLocation } from './locationModal/content/ControlLocation';
+import { SearchLocation } from './locationModal/content/SearchLocation';
 
 const meta: Meta = {
   title: 'Modal',
@@ -21,7 +21,12 @@ export const LocationModalControl: Story = {
   render: () => (
     <Modal isOpen={true} currentDim="modal">
       <ModalHeader title="동네 설정" onCloseModal={() => {}} />
-      <ControlLocation onToggleContent={() => {}} />
+      <ControlLocation
+        locationList={[]}
+        onToggleContent={() => {}}
+        onPatchLocationByAuth={() => {}}
+        onDeleteLocationByAuth={() => {}}
+      />
     </Modal>
   ),
 };
@@ -30,7 +35,10 @@ export const LocationModalSearch: Story = {
   render: () => (
     <Modal isOpen={true} currentDim="modal">
       <ModalHeader onNavigateBack={() => {}} onCloseModal={() => {}} />
-      <SearchLocation onToggleContent={() => {}} />
+      <SearchLocation
+        onToggleContent={() => {}}
+        onPatchLocationByAuth={() => {}}
+      />
     </Modal>
   ),
 };

@@ -1,3 +1,5 @@
+import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import { EditBar } from '@/components/common/actionBar/EditBar';
 import { Button } from '@/components/common/button/Button';
 import { Camera, ChevronRight, MapPinFilled } from '@/components/common/icons';
@@ -9,11 +11,20 @@ import { LeftButton } from '@/components/common/topBar/LeftButton';
 import { RightButton } from '@/components/common/topBar/RightButton';
 import { Title } from '@/components/common/topBar/Title';
 import { TopBar } from '@/components/common/topBar/TopBar';
-import { usePopupStore } from '@/stores/popupStore';
 import { Theme, css } from '@emotion/react';
+import { usePathHistoryStore } from '@/stores/pathHistoryStore';
+import { useModal } from '@/hooks/usePopups';
 
 export const NewProduct: React.FC = () => {
-  const { togglePopup, setCurrentDim } = usePopupStore();
+  const currentLocation = useLocation();
+  const { setPrevUrl } = usePathHistoryStore();
+  const { onOpenModal: openCategoryModal } = useModal();
+
+  console.log(currentLocation.pathname);
+
+  useEffect(() => {
+    setPrevUrl(currentLocation.pathname);
+  }, [currentLocation, setPrevUrl]);
 
   const randomGitProfile =
     'https://avatars.githubusercontent.com/u/48426991?v=4';
@@ -24,11 +35,6 @@ export const NewProduct: React.FC = () => {
   촬영용 소품이나, 거실에 장식용으로 추천해 드립니다. 단품 입고 되었습니다. 새 제품으로 보존된 제품으로 전용박스까지 보내드립니다.
   
   사이즈는 235 입니다.`;
-
-  const openCategoryModal = () => {
-    togglePopup('modal', true);
-    setCurrentDim('modal');
-  };
 
   return (
     <>

@@ -116,6 +116,7 @@ export const useEditLikeStatus = () => {
     mutationFn: (id: number) => editLikeStatus(id),
     onMutate: async (id: number) => {
       await queryClient.cancelQueries([QUERY_KEY.productDetail, id]);
+
       const previousProduct = queryClient.getQueryData<
         ProductDetailDataFromServer | undefined
       >([QUERY_KEY.productDetail, id]);

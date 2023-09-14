@@ -31,11 +31,14 @@ import { AlertButtons } from '@/components/common/alert/AlertButtons';
 import { useIntersectionObserver } from '@/hooks/useObserver';
 import { ImageCarousel } from '@/components/detail/ImageCarousel';
 import { useAlert } from '@/hooks/usePopups';
+import { usePathHistoryStore } from '@/stores/pathHistoryStore';
+import { PATH } from '@/constants/path';
 // TODO 로그인하지 않은 사용자에게 데이터가 안뜨고있음
 
 export const ProductDetail: React.FC = () => {
   const { alertSource, currentDim, onOpenAlert, onCloseAlert } = useAlert();
   const [isTransparent, setIsTransparent] = useState<boolean>(true);
+  const navigate = useNavigate();
   const { id: productId } = useParams();
   const numberedProductId = Number(productId);
   const {
@@ -48,12 +51,13 @@ export const ProductDetail: React.FC = () => {
   const deleteProductMutation = useDeleteProduct('detail');
   const editProductStatusMutation = useEditProductStatus('detail');
   const editLikeStatusMutation = useEditLikeStatus();
+  const { prevPath } = usePathHistoryStore();
 
   const formattedPrice = formatPrice(product?.price);
   const formattedTimeStamp = formatTimeStamp(product?.createdAt);
   // const isAuthor = getUserInfo() && getUserInfo()?.id === seller?.id;
   const isAuthor = true; // TODO 교체
-  const navigate = useNavigate();
+
   const realTimeChatRoomCount = 0; //TODO 교체
 
   const { observeTarget } = useIntersectionObserver({
@@ -79,7 +83,8 @@ export const ProductDetail: React.FC = () => {
       onCloseAlert({ currentDim: null });
       deleteProductMutation.mutate(productId);
     }
-    // TODO navigate
+
+    navigate(-1);
   };
 
   const onEditProductStatus = (
@@ -98,6 +103,13 @@ export const ProductDetail: React.FC = () => {
     if (productId) {
       editLikeStatusMutation.mutate(numberedProductId);
     }
+  };
+  console.log(prevPath, '< prevPathddddd');
+  console.log(PATH.newProduct, 'PATH.newProduct');
+  console.log(prevPath === PATH.newProduct, 'tes?');
+
+  const onNavigateBack = () => {
+    prevPath === PATH.newProduct ? navigate(PATH.home) : navigate(-1);
   };
 
   const menuRowsByStatus: { id: number; status: ProductStatusType }[] = [
@@ -122,16 +134,14 @@ export const ProductDetail: React.FC = () => {
           <Button
             className="button__back"
             variant="text"
-            onClick={() => {
-              navigate(-1);
-            }}
+            onClick={onNavigateBack}
           >
             <ChevronLeft />
             뒤로
           </Button>
         </LeftButton>
 
-        {/* {isAuthor && ( */}
+        {/* TODO 인증 잠시 제외 {isAuthor && ( */}
         <RightButton>
           <Dropdown
             align="right"
@@ -144,7 +154,7 @@ export const ProductDetail: React.FC = () => {
               <MenuBox>
                 <MenuItem
                   onClick={() => {
-                    // navigate(`/products/${id}/add?`);
+                    navigate(PATH.newProduct);
                   }}
                 >
                   게시글 수정

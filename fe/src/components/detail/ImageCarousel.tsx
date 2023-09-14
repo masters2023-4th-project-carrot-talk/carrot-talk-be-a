@@ -132,7 +132,7 @@ const carouselStyle = (
       position: absolute;
       bottom: 16px;
       right: 16px;
-      z-index: 99;
+      z-index: 1;
       display: inline-flex;
       padding: 8px 16px;
       align-items: flex-start;

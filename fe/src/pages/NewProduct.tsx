@@ -14,6 +14,7 @@ import { useCategorySelector } from '@/hooks/useCategorySelector';
 import { useInput } from '@/hooks/useInput';
 import { usePrice } from '@/hooks/usePrice';
 import { Theme, css } from '@emotion/react';
+import { useState } from 'react';
 
 export const NewProduct: React.FC = () => {
   const { value: title, onChangeValue: onChangeTitle } = useInput({
@@ -22,16 +23,13 @@ export const NewProduct: React.FC = () => {
   const { selectedCategory, categories, selectCategory } = useCategorySelector(
     {},
   );
-  const {
-    price, 
-    onChangePrice,
-    priceWarningMessage,
-  } = usePrice('169,000');
-  const content = `어린시절 추억의 향수를 불러 일으키는 롤러 스케이트입니다. 빈티지 특성상 사용감 있지만 전체적으로 깨끗한 상태입니다.
+  const { price, onChangePrice, priceWarningMessage } = usePrice('169,000');
+  const [description, setDescription] =
+    useState(`어린시절 추억의 향수를 불러 일으키는 롤러 스케이트입니다. 빈티지 특성상 사용감 있지만 전체적으로 깨끗한 상태입니다.
 
   촬영용 소품이나, 거실에 장식용으로 추천해 드립니다. 단품 입고 되었습니다. 새 제품으로 보존된 제품으로 전용박스까지 보내드립니다.
   
-  사이즈는 235 입니다.`;
+  사이즈는 235 입니다.`);
 
   return (
     <>
@@ -79,8 +77,9 @@ export const NewProduct: React.FC = () => {
         </div>
         <div className="content-input">
           <TextArea
-            value={content}
-            onChange={() => {}}
+            value={description}
+            minRows={5}
+            onChange={(value: string) => setDescription(value)}
             placeholder="역삼 1동에 올릴 게시물 내용을 작성해주세요.(판매금지 물품은 게시가 제한될 수 있어요.)"
           />
         </div>

@@ -38,11 +38,11 @@ export const Dropdown: React.FC<Props> = ({ opener, menu, align }) => {
       </div>
       {isOpen && (
         <>
-          <Backdrop
+          {/* <Backdrop
             onClick={(e) => {
               closeMenu(e); // BUG dropdown 버그로 인해 임시 추가
             }}
-          />
+          /> */}
           {cloneElement(menu, { onClick: closeMenu })}
         </>
       )}

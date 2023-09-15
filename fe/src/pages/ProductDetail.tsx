@@ -41,6 +41,7 @@ export const ProductDetail: React.FC = () => {
   const navigate = useNavigate();
   const { id: productId } = useParams();
   const numberedProductId = Number(productId);
+  console.log(productId);
   const {
     product,
     seller,
@@ -78,31 +79,21 @@ export const ProductDetail: React.FC = () => {
     setIsTransparent(false);
   };
 
-  const onDeleteProduct = (productId?: number) => {
-    if (productId) {
-      onCloseAlert({ currentDim: null });
-      deleteProductMutation.mutate(productId);
-    }
-
+  const onDeleteProduct = () => {
+    onCloseAlert({ currentDim: null });
+    deleteProductMutation.mutate(numberedProductId);
     onNavigateBack();
   };
 
-  const onEditProductStatus = (
-    status: ProductStatusType,
-    productId?: number,
-  ) => {
-    if (productId) {
-      editProductStatusMutation.mutate({
-        id: productId,
-        status,
-      });
-    }
+  const onEditProductStatus = (status: ProductStatusType) => {
+    editProductStatusMutation.mutate({
+      id: numberedProductId,
+      status,
+    });
   };
 
   const onToggleLike = () => {
-    if (productId) {
-      editLikeStatusMutation.mutate(numberedProductId);
-    }
+    editLikeStatusMutation.mutate(numberedProductId);
   };
   console.log(prevPath, '< prevPath');
   console.log(PATH.newProduct, 'PATH.newProduct');
@@ -201,7 +192,7 @@ export const ProductDetail: React.FC = () => {
                     <MenuItem
                       key={row.id}
                       onClick={() => {
-                        onEditProductStatus(row.status, row.id);
+                        onEditProductStatus(row.status);
                       }}
                     >
                       {row.status}
@@ -268,10 +259,7 @@ export const ProductDetail: React.FC = () => {
 
       <Alert isOpen={alertSource === 'product'} currentDim={currentDim}>
         <AlertContent>'{product?.title}'을 삭제하시겠어요?</AlertContent>
-        <AlertButtons
-          buttonText="취소"
-          onDelete={() => onDeleteProduct(numberedProductId)}
-        />
+        <AlertButtons buttonText="취소" onDelete={() => onDeleteProduct()} />
       </Alert>
     </div>
   );

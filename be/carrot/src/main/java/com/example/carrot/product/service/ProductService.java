@@ -191,19 +191,19 @@ public class ProductService {
 	private void buildProductImagesForIndex0(Product product, Image image, List<ProductImage> productImages) {
 		productImages.add(
 			ProductImage.builder()
-			.product(product)
-			.isMain(true)
-			.image(image)
-			.build()
+				.product(product)
+				.isMain(true)
+				.image(image)
+				.build()
 		);
 	}
 
 	private void buildProductImages(Product product, Image image, List<ProductImage> productImages) {
 		productImages.add(
 			ProductImage.builder()
-			.product(product)
-			.image(image)
-			.build()
+				.product(product)
+				.image(image)
+				.build()
 		);
 	}
 

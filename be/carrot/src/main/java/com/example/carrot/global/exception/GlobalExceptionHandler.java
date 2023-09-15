@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
 		log.error("MethodArgumentNotValidException : " + e);
 
 		List<String> errorCodes = e.getBindingResult().getFieldErrors().stream()
-			.map(error ->  error.getDefaultMessage())
+			.map(error -> error.getDefaultMessage())
 			.collect(Collectors.toList());
 
 		return ApiResponse.fail(new ErrorCode(HttpStatus.BAD_REQUEST, errorCodes));

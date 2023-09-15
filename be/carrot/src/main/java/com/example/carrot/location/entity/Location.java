@@ -10,14 +10,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import com.example.carrot.global.common.BaseCreatedTimeEntity;
 import com.example.carrot.product.entity.Product;
 import com.example.carrot.user_location.entity.UserLocation;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

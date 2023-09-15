@@ -101,7 +101,7 @@ public class AuthFilter implements Filter {
 	private void handleIsOpenUriOrNot(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
 		FilterChain chain) throws
 		IOException, ServletException {
-		if (!openUrisCheck(httpServletRequest.getRequestURI())) {
+		if (!openUrisCheck(httpServletRequest.getRequestURI()) || !httpServletRequest.getMethod().equalsIgnoreCase("get")) {
 			log.info("openUris에 해당하지 않는 uri");
 			sendErrorApiResponse(httpServletResponse, new MalformedJwtException(""));
 			return;

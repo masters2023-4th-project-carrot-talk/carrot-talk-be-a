@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { DefaultRequestMultipartBody, rest } from 'msw';
 import { categoryList } from './data/categories';
 import { images } from './data/images';
 import { locationsWithQuery } from './data/locations';
@@ -192,20 +192,30 @@ export const handlers = [
   }),
 
   rest.post('/api/images', async (req, res, ctx) => {
-    const body = await req.json();
-
-    if (!body?.image) {
+    if (!req.body) {
       return res(ctx.status(200), ctx.json({ success: false }));
     }
 
-    images.push('https://picsum.photos/200');
+    const body = req.body as DefaultRequestMultipartBody;
+    const reqImages = body.images;
+
+    if (!reqImages) {
+      return res(ctx.status(200), ctx.json({ success: false }));
+    }
+
+    const newImages = [];
+    for (let i = 0; i < reqImages.length; i++) {
+      newImages.push('https://picsum.photos/200');
+    }
+
+    images.push(...newImages);
 
     const data = {
       success: true,
-      data: {
-        imageId: images.length,
-        imageUrl: images[images.length - 1],
-      },
+      data: newImages.map((image, index) => ({
+        imageId: images.length + index + 1,
+        imageUrl: image,
+      })),
     };
 
     return res(ctx.status(200), ctx.json(data));

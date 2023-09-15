@@ -151,16 +151,13 @@ export const getProductsDetail = (id: number) => {
   });
 };
 
-export const requestImageUpload = (image: FormData) => {
+export const requestImageUpload = (images: FormData) => {
   return fetchData(END_POINT.imageUpload, {
     method: 'POST',
     headers: {
-      'Content-Type': 'multipart/form-data',
       Authorization: `Bearer ${getAccessToken()}`,
     },
-    body: JSON.stringify({
-      image,
-    }),
+    body: images,
   });
 };
 
@@ -168,6 +165,7 @@ export const addNewProduct = (productFormData: ProductFormData) => {
   return fetchData(END_POINT.products(), {
     method: 'POST',
     headers: {
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${getAccessToken()}`,
     },
     body: JSON.stringify(productFormData),

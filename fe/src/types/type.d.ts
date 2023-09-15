@@ -105,7 +105,7 @@ type ImageType = {
 type ImageDataFromServer =
   | {
       success: true;
-      data: ImageType;
+      data: ImageType[];
     }
   | {
       success: false;

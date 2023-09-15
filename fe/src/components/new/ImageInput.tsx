@@ -10,7 +10,11 @@ type Props = {
   onDeleteImage: (image: ImageType) => void;
 };
 
-export const ImageInput: React.FC<Props> = ({ imageList, onAddImage,  onDeleteImage}) => {
+export const ImageInput: React.FC<Props> = ({
+  imageList,
+  onAddImage,
+  onDeleteImage,
+}) => {
   const imageMutation = useImageUpload();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -25,28 +29,40 @@ export const ImageInput: React.FC<Props> = ({ imageList, onAddImage,  onDeleteIm
   };
 
   const uploadImageFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const files = e.target.files;
 
     // 파일이 없으면 업로드 하지 않음
-    if (!file) {
+    if (!files) {
       return;
     }
 
-    // 허용한 타입이 아니거나 용량이 2MB를 초과하면 업로드 하지 않음
-    const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
-    const volumeLimit = 1024 * 1024 * 2; // 2MB
-
-    if (!allowedTypes.includes(file.type) || file.size > volumeLimit) {
+    if (files.length + imageList.length > 10) {
+      alert('이미지는 최대 10개까지 업로드 할 수 있습니다.');
       return;
+    }
+
+    for (const file of files) {
+      // 허용한 타입이 아니거나 용량이 2MB를 초과하면 업로드 하지 않음
+      const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
+      const VOLUME_LIMIT = 1024 * 1024 * 2; // 2MB
+
+      if (!allowedTypes.includes(file.type) || file.size > VOLUME_LIMIT) {
+        alert('이미지는 2MB 이하의 png, jpg, jpeg 파일만 업로드 가능합니다.');
+        return;
+      }
     }
 
     const formData = new FormData();
-    formData.append('image', file);
+    for (const file of files) {
+      formData.append('images', file);
+    }
 
     imageMutation.mutate(formData, {
       onSuccess: (result) => {
         if (result.success) {
-          onAddImage(result.data);
+          result.data.forEach((image) => {
+            onAddImage(image);
+          });
         }
       },
       onError: (error) => {
@@ -75,22 +91,24 @@ export const ImageInput: React.FC<Props> = ({ imageList, onAddImage,  onDeleteIm
         </button>
         <input
           type="file"
+          multiple
           accept=".png, .jpg, .jpeg"
           className="image-input__file-input"
           ref={fileInputRef}
           onChange={uploadImageFile}
         />
         <ul className="image-input__image-list">
-          {imageList.map((image, index) => (
-            <li key={image.imageId}>
-              <ImageItem
-                size="m"
-                imageUrl={image.imageUrl}
-                label={index === 0 ? '대표 사진' : ''}
-                onClick={() => onDeleteImage(image)}
-              />
-            </li>
-          ))}
+          {imageList &&
+            imageList.map((image, index) => (
+              <li key={image.imageId}>
+                <ImageItem
+                  size="m"
+                  imageUrl={image.imageUrl}
+                  label={index === 0 ? '대표 사진' : ''}
+                  onClick={() => onDeleteImage(image)}
+                />
+              </li>
+            ))}
         </ul>
       </div>
     </div>

@@ -55,8 +55,8 @@ export const ProductDetail: React.FC = () => {
 
   const formattedPrice = formatPrice(product?.price);
   const formattedTimeStamp = formatTimeStamp(product?.createdAt);
-  // const isAuthor = getUserInfo() && getUserInfo()?.id === seller?.id;
-  const isAuthor = true; // TODO 교체
+  const isAuthor = getUserInfo() && getUserInfo()?.id === seller?.id;
+  // const isAuthor = true; // TODO 교체
 
   const realTimeChatRoomCount = 0; //TODO 교체
 
@@ -140,38 +140,38 @@ export const ProductDetail: React.FC = () => {
             뒤로
           </Button>
         </LeftButton>
-
-        {/* TODO 인증 잠시 제외 {isAuthor && ( */}
-        <RightButton>
-          <Dropdown
-            align="right"
-            opener={
-              <Button variant="text" className="button__status">
-                <Dots />
-              </Button>
-            }
-            menu={
-              <MenuBox>
-                <MenuItem
-                  onClick={() => {
-                    navigate(PATH.newProduct);
-                  }}
-                >
-                  게시글 수정
-                </MenuItem>
-                <MenuItem
-                  variant="warning"
-                  onClick={() => {
-                    onOpenAlert('product');
-                  }}
-                >
-                  삭제
-                </MenuItem>
-              </MenuBox>
-            }
-          />
-        </RightButton>
-        {/* )} */}
+        {/* TODO 인증 잠시 제외 */}
+        {isAuthor && (
+          <RightButton>
+            <Dropdown
+              align="right"
+              opener={
+                <Button variant="text" className="button__status">
+                  <Dots />
+                </Button>
+              }
+              menu={
+                <MenuBox>
+                  <MenuItem
+                    onClick={() => {
+                      navigate(PATH.newProduct);
+                    }}
+                  >
+                    게시글 수정
+                  </MenuItem>
+                  <MenuItem
+                    variant="warning"
+                    onClick={() => {
+                      onOpenAlert('product');
+                    }}
+                  >
+                    삭제
+                  </MenuItem>
+                </MenuBox>
+              }
+            />
+          </RightButton>
+        )}
       </TopBar>
       {fetchStatus === 'loading' && <div>로딩중</div>}
       {fetchStatus === 'error' && <div>상품 정보를 불러오지 못했습니다</div>}

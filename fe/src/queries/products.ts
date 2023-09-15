@@ -4,6 +4,8 @@ import {
   editProductStatus,
   getProducts,
   getProductsDetail,
+  addNewProduct,
+  requestImageUpload,
 } from '@api/api';
 import { QUERY_KEY } from '@constants/queryKey';
 import { useMemo } from 'react';
@@ -13,8 +15,6 @@ import {
   useQueryClient,
   useQuery,
 } from 'react-query';
-import { addNewProduct, getProducts, requestImageUpload } from '@api/api';
-
 
 export const useProducts = (
   locationId?: number,
@@ -156,6 +156,8 @@ export const useEditLikeStatus = () => {
         );
       }
     },
+  });
+};
 
 export const useImageUpload = () => {
   return useMutation<ImageDataFromServer, unknown, FormData>({

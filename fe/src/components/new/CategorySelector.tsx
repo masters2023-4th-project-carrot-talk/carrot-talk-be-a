@@ -1,8 +1,8 @@
 import { useCategoryExample } from '@/hooks/useCategoryExample';
-import { usePopupStore } from '@/stores/popupStore';
 import { Theme, css } from '@emotion/react';
 import { Button } from '../common/button/Button';
 import { ChevronRight } from '../common/icons';
+import { useModal } from '@/hooks/usePopups';
 
 type Props = {
   categories?: CategoryType[];
@@ -15,20 +15,15 @@ export const CategorySelector: React.FC<Props> = ({
   selectedCategory,
   onSelectCategory,
 }: Props) => {
+  const { onOpenModal: openCategoryModal } = useModal();
   const { categoryExamples } = useCategoryExample({
     categories,
     selectedCategory,
   });
-  const { togglePopup, setCurrentDim } = usePopupStore();
 
   if (!categories) {
     return <div>...카테고리 로딩중</div>;
   }
-
-  const openCategoryModal = () => {
-    togglePopup('modal', true);
-    setCurrentDim('modal');
-  };
 
   return (
     <div css={(theme) => categorySelectorStyle(theme)}>

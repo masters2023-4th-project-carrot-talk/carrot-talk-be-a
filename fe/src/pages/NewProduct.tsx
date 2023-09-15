@@ -1,6 +1,6 @@
 import { Theme, css } from '@emotion/react';
 import { useState, useEffect } from 'react';
-import { useLocation,useNavigate} from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { EditBar } from '@/components/common/actionBar/EditBar';
 import { Button } from '@/components/common/button/Button';
 import { Input } from '@/components/common/input/Input';
@@ -21,20 +21,11 @@ import { usePrice } from '@/hooks/usePrice';
 import { useProductAddition } from '@/queries/products';
 import { commaStringToNumber } from '@/utils/formatPrice';
 import { usePathHistoryStore } from '@/stores/pathHistoryStore';
-import { useModal } from '@/hooks/usePopups';
 
 export const NewProduct: React.FC = () => {
   const currentLocation = useLocation();
   const { setPrevUrl } = usePathHistoryStore();
-  const { onOpenModal: openCategoryModal } = useModal();
 
-  useEffect(() => {
-    setPrevUrl(currentLocation.pathname);
-  }, [currentLocation, setPrevUrl]);
-
-
-
-export const NewProduct: React.FC = () => {
   const navigate = useNavigate();
   const [imageList, setImageList] = useState<ImageType[]>([]);
   const {
@@ -58,6 +49,9 @@ export const NewProduct: React.FC = () => {
   );
   const productAdditionMutation = useProductAddition();
 
+  useEffect(() => {
+    setPrevUrl(currentLocation.pathname);
+  }, [currentLocation, setPrevUrl]);
 
   const isRequiredFieldsFilled =
     imageList.length !== 0 && title && selectedCategory && selectedLocation;
@@ -77,12 +71,13 @@ export const NewProduct: React.FC = () => {
       locationId: selectedLocation.id,
     };
 
-
     productAdditionMutation.mutate(productData, {
       onSuccess: (result) => {
         if (result.success) {
           // 등록 성공 시 상품 상세 페이지로 이동
-          navigate(`${PATH.detail}/${1}`);
+          navigate(`${PATH.detail}/${result.data?.productId}`, {
+            replace: true,
+          });
           return;
         }
         // 등록 실패 시 사용자 피드백

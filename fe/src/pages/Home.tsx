@@ -28,7 +28,6 @@ import { AlertButtons } from '@/components/common/alert/AlertButtons';
 import { useAlert, useModal } from '@/hooks/usePopups';
 import { PATH } from '@/constants/path';
 
-
 export const Home: React.FC = () => {
   const navigate = useNavigate();
 
@@ -72,8 +71,6 @@ export const Home: React.FC = () => {
     },
     condition: hasNextPage,
   });
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     // serverLocations 데이터가 처음 로드되었을 때만 실행
@@ -206,7 +203,12 @@ export const Home: React.FC = () => {
               </Button>
             </RightButton>
           </TopBar>
-          <Button variant="fab" size="l" className="button__add" onClick={() => navigate(PATH.newProduct)}>
+          <Button
+            variant="fab"
+            size="l"
+            className="button__add"
+            onClick={() => navigate(PATH.newProduct)}
+          >
             <Plus />
           </Button>
           <ListBox>

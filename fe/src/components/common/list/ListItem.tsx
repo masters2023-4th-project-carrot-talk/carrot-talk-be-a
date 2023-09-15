@@ -2,7 +2,6 @@ import { Theme, css } from '@emotion/react';
 import { formatCount } from '@utils/formatCount';
 import { formatPrice } from '@utils/formatPrice';
 import { formatTimeStamp } from '@utils/formatTimeStamp';
-import { FC } from 'react';
 import { Button } from '../button/Button';
 import { Dropdown } from '../dropdown/Dropdown';
 import { Dots, Heart, Message } from '../icons';
@@ -11,6 +10,7 @@ import { MenuBox } from '../menu/MenuBox';
 import { MenuItem } from '../menu/MenuItem';
 import { StatusBadge } from '../statusBadge/StatusBadge';
 import { useEditProductStatus } from '@/queries/products';
+import { getUserInfo } from '@/utils/localStorage';
 
 type Props = {
   product: ProductType;
@@ -29,10 +29,10 @@ export const ListItem: React.FC<Props> = ({
   const formattedTimeStamp = formatTimeStamp(product.createdAt);
   const formattedChatCount = formatCount(product.chatCount);
   const formattedLikeCount = formatCount(product.likeCount);
-  // const isAuthor = getUserInfo()
-  //   ? getUserInfo()?.id === product.sellerId
-  //   : false;
-  const isAuthor = true;
+  const isAuthor = getUserInfo()
+    ? getUserInfo()?.id === product.sellerId
+    : false;
+  // const isAuthor = true;
 
   const menuRowsByStatus = {
     판매중: [

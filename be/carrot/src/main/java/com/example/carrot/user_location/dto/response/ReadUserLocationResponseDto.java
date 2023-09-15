@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReadUserLocationResponseDto {
 
-	public static final String DEFAULT_NAME = "역삼 1동";
+	public static final String DEFAULT_NAME = "서울특별시 강남구 역삼1동";
 
 	@JsonProperty("id")
 	private Long id;

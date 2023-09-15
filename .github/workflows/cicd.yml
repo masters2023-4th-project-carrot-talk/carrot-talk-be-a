@@ -122,7 +122,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
-          source: "./nginx/nginx-release.conf"
+          source: "./fe/nginx-release.conf"
           target: "/home/ubuntu/"
       # docker-compose-release.yml 파일 EC2에 업로드
       - name: copy docker-compose-release file via ssh password

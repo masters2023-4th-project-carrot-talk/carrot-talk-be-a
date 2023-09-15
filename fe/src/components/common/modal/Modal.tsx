@@ -3,12 +3,16 @@ import { Dim } from './Dim';
 import { useAnimation } from '@/hooks/useAnimation';
 
 type Props = {
-  isOpen: boolean;
+  isOpen?: boolean;
   currentDim: PopupType | null;
   children: React.ReactNode;
 };
 
-export const Modal: React.FC<Props> = ({ isOpen, currentDim, children }) => {
+export const Modal: React.FC<Props> = ({
+  isOpen = false,
+  currentDim,
+  children,
+}) => {
   const { shouldRender, handleTransitionEnd, animationTrigger } =
     useAnimation(isOpen);
 

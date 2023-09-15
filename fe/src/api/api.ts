@@ -1,3 +1,4 @@
+import { createQueryParams } from '@/utils/createQueryParams';
 import { BASE_URL, END_POINT } from '@constants/path';
 import { getAccessToken, getRefreshToken } from '@utils/localStorage';
 
@@ -122,24 +123,15 @@ export const getProducts = ({
 }: FetchProductsParams) => {
   // /api/products?locationId=1&categoryId=3&next=11&size=10
   // TODO 여기 처리 다른곳으로 분리
-  const query = new URLSearchParams();
+  const queryParams = createQueryParams({
+    locationId,
+    categoryId,
+    size,
+    next,
+  });
+  console.log(queryParams, '쿼리확인중');
 
-  if (locationId !== undefined && locationId !== null) {
-    query.append('locationId', String(locationId));
-  }
-  if (categoryId !== undefined && categoryId !== null) {
-    query.append('categoryId', String(categoryId));
-  }
-  if (size !== undefined && size !== null) {
-    query.append('size', String(size));
-  }
-  if (next !== undefined && next !== null) {
-    query.append('next', String(next));
-  }
-
-  console.log(query.toString(), '쿼리확인중');
-
-  return fetchData(END_POINT.products(query.toString()));
+  return fetchData(`/api/products?${queryParams}`);
 };
 
 export const getProductsDetail = (id: number) => {
@@ -150,6 +142,33 @@ export const getProductsDetail = (id: number) => {
     },
   });
 };
+
+
+export const editProductStatus = (id: number, status: ProductStatusType) => {
+  return fetchData(`/api/products/${id}/status`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+    body: JSON.stringify({
+      status,
+    }),
+  });
+};
+
+export const deleteProduct = (id: number) => {
+  return fetchData(`/api/products/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+  });
+};
+
+export const editLikeStatus = (id: number) => {
+  return fetchData(`/api/products/${id}/like`, {
+    method: 'PATCH',
 
 export const requestImageUpload = (images: FormData) => {
   return fetchData(END_POINT.imageUpload, {
@@ -169,5 +188,6 @@ export const addNewProduct = (productFormData: ProductFormData) => {
       Authorization: `Bearer ${getAccessToken()}`,
     },
     body: JSON.stringify(productFormData),
+
   });
 };

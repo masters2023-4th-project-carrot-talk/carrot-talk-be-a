@@ -1,3 +1,6 @@
+import { Theme, css } from '@emotion/react';
+import { useState, useEffect } from 'react';
+import { useLocation,useNavigate} from 'react-router-dom';
 import { EditBar } from '@/components/common/actionBar/EditBar';
 import { Button } from '@/components/common/button/Button';
 import { Input } from '@/components/common/input/Input';
@@ -17,9 +20,19 @@ import { useLocationSelector } from '@/hooks/useLocationSelector';
 import { usePrice } from '@/hooks/usePrice';
 import { useProductAddition } from '@/queries/products';
 import { commaStringToNumber } from '@/utils/formatPrice';
-import { Theme, css } from '@emotion/react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { usePathHistoryStore } from '@/stores/pathHistoryStore';
+import { useModal } from '@/hooks/usePopups';
+
+export const NewProduct: React.FC = () => {
+  const currentLocation = useLocation();
+  const { setPrevUrl } = usePathHistoryStore();
+  const { onOpenModal: openCategoryModal } = useModal();
+
+  useEffect(() => {
+    setPrevUrl(currentLocation.pathname);
+  }, [currentLocation, setPrevUrl]);
+
+
 
 export const NewProduct: React.FC = () => {
   const navigate = useNavigate();
@@ -45,6 +58,7 @@ export const NewProduct: React.FC = () => {
   );
   const productAdditionMutation = useProductAddition();
 
+
   const isRequiredFieldsFilled =
     imageList.length !== 0 && title && selectedCategory && selectedLocation;
   const isAllFieldsValid = isValidTitle && isValidPrice;
@@ -62,6 +76,7 @@ export const NewProduct: React.FC = () => {
       categoryId: selectedCategory.id,
       locationId: selectedLocation.id,
     };
+
 
     productAdditionMutation.mutate(productData, {
       onSuccess: (result) => {

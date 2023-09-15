@@ -80,7 +80,7 @@ export const NewProduct: React.FC = () => {
       <TopBar>
         <Title>내 물건 팔기</Title>
         <LeftButton>
-          <Button variant="text">
+          <Button variant="text" onClick={() => navigate(-1)}>
             <span className="control-btn">닫기</span>
           </Button>
         </LeftButton>

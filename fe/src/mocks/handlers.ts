@@ -1,17 +1,25 @@
-import { rest } from 'msw';
+import { DefaultRequestMultipartBody, rest } from 'msw';
 import { categoryList } from './data/categories';
+import { images } from './data/images';
 import { locationsWithQuery } from './data/locations';
 import { token, users } from './data/users';
 
 let locations: LocationType[] = [
-  { id: 1, name: '안양99동', isMainLocation: true },
-  { id: 2, name: '안양100동', isMainLocation: false },
+  { id: 1, name: '역삼1동', isMainLocation: true },
+  { id: 100, name: '안양100동', isMainLocation: false },
 ];
 
 export const handlers = [
   //내동네
   rest.get(`/api/users/locations`, (_, res, ctx) => {
-    return res(ctx.delay(300), ctx.status(200), ctx.json(locations));
+    return res(
+      ctx.delay(300),
+      ctx.status(200),
+      ctx.json({
+        success: true,
+        data: locations,
+      }),
+    );
   }),
   // 내동네 삭제
   rest.delete(`/api/users/locations/:id`, (req, res, ctx) => {
@@ -180,6 +188,54 @@ export const handlers = [
     return res(
       ctx.status(200),
       ctx.json({ success: true, data: { accessToken: token } }),
+    );
+  }),
+
+  rest.post('/api/images', async (req, res, ctx) => {
+    if (!req.body) {
+      return res(ctx.status(200), ctx.json({ success: false }));
+    }
+
+    const body = req.body as DefaultRequestMultipartBody;
+    const reqImages = body.images;
+
+    if (!reqImages) {
+      return res(ctx.status(200), ctx.json({ success: false }));
+    }
+
+    const newImages = [];
+    for (let i = 0; i < reqImages.length; i++) {
+      newImages.push('https://picsum.photos/200');
+    }
+
+    images.push(...newImages);
+
+    const data = {
+      success: true,
+      data: newImages.map((image, index) => ({
+        imageId: images.length + index + 1,
+        imageUrl: image,
+      })),
+    };
+
+    return res(ctx.status(200), ctx.json(data));
+  }),
+
+  rest.post('/api/products', async (req, res, ctx) => {
+    const body = await req.json();
+
+    if (
+      !body?.images ||
+      !body?.name ||
+      !body?.categoryId ||
+      !body?.locationId
+    ) {
+      return res(ctx.status(200), ctx.json({ success: false }));
+    }
+
+    return res(
+      ctx.status(200),
+      ctx.json({ success: true, data: { productId: 1 } }),
     );
   }),
 ];

@@ -150,3 +150,24 @@ export const getProductsDetail = (id: number) => {
     },
   });
 };
+
+export const requestImageUpload = (images: FormData) => {
+  return fetchData(END_POINT.imageUpload, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+    body: images,
+  });
+};
+
+export const addNewProduct = (productFormData: ProductFormData) => {
+  return fetchData(END_POINT.products(), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+    body: JSON.stringify(productFormData),
+  });
+};

@@ -1,7 +1,7 @@
-import { getProducts } from '@api/api';
+import { addNewProduct, getProducts, requestImageUpload } from '@api/api';
 import { QUERY_KEY } from '@constants/queryKey';
 import { useMemo } from 'react';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery, useMutation } from 'react-query';
 
 export const useProducts = (
   locationId: number | null,
@@ -41,4 +41,17 @@ export const useProducts = (
     remove,
     refetch,
   };
+};
+
+export const useImageUpload = () => {
+  return useMutation<ImageDataFromServer, unknown, FormData>({
+    mutationFn: (image: FormData) => requestImageUpload(image),
+  });
+};
+
+export const useProductAddition = () => {
+  return useMutation<ProductAdditionResponse, unknown, ProductFormData>({
+    mutationFn: (productFormData: ProductFormData) =>
+      addNewProduct(productFormData),
+  });
 };

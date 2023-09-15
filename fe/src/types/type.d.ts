@@ -96,3 +96,33 @@ type LoginDataFromServer = {
         accessToken: string;
       };
 };
+
+type ImageType = {
+  imageId: number;
+  imageUrl: string;
+};
+
+type ImageDataFromServer =
+  | {
+      success: true;
+      data: ImageType[];
+    }
+  | {
+      success: false;
+    };
+
+type ProductFormData = {
+  images: number[];
+  name: string;
+  categoryId: number;
+  locationId: number;
+  content?: string;
+  price?: number;
+};
+
+type ProductAdditionResponse = {
+  success: boolean;
+  data?: {
+    productId: number;
+  };
+}

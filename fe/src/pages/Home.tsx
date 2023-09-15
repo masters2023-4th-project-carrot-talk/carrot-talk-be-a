@@ -23,8 +23,11 @@ import { modifiedLocaitionName } from '@utils/modifyLocationName';
 import { useLayoutStore } from '@/stores/layoutStore';
 import { usePopupStore } from '@/stores/popupStore';
 import { useMyLocations } from '@/queries/location';
+import { useNavigate } from 'react-router-dom';
+import { PATH } from '@/constants/path';
 
 export const Home: React.FC = () => {
+  const navigate = useNavigate();
   const { isLogin } = useAuth();
   const { serverLocations } = useMyLocations(isLogin);
 
@@ -165,7 +168,7 @@ export const Home: React.FC = () => {
               </Button>
             </RightButton>
           </TopBar>
-          <Button variant="fab" size="l" className="button__add">
+          <Button variant="fab" size="l" className="button__add" onClick={() => navigate(PATH.newProduct)}>
             <Plus />
           </Button>
           <ListBox>

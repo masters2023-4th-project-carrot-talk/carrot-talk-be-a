@@ -12,3 +12,11 @@ export const formatPrice = (price?: number) => {
 
   return `${price.toLocaleString('ko-KR')}원`;
 };
+
+export const commaStringToNumber = (price: string): number => {
+  return Number(price.replace(/,/g, ''));
+};
+
+export const numberToCommaString = (price: number) => {
+  return price.toLocaleString('ko-KR');
+};

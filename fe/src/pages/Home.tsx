@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Plus } from '@assets/plus.svg';
 import { Button } from '@components/common/button/Button';
@@ -14,7 +13,6 @@ import { RightButton } from '@components/common/topBar/RightButton';
 import { TopBar } from '@components/common/topBar/TopBar';
 import { ChevronDown, LayoutGrid } from '@components/common/icons';
 import { Theme, css } from '@emotion/react';
-
 import { SkeletonListItem } from '@components/common/skeleton/listItem';
 import { Category } from '@components/home/Category';
 import { useCategories } from '@/queries/category';
@@ -30,9 +28,10 @@ import { AlertButtons } from '@/components/common/alert/AlertButtons';
 import { useAlert, useModal } from '@/hooks/usePopups';
 import { PATH } from '@/constants/path';
 
+
 export const Home: React.FC = () => {
-  // useQuery들 묶을수있는지
-  //TODO 카테고리 선택돼있는거 ui표시, 동네 선택시 갱신
+  const navigate = useNavigate();
+
   const { isLogin } = useAuth();
   const { setShouldSlideLeft } = useLayoutStore();
   const { onOpenModal } = useModal();
@@ -207,15 +206,7 @@ export const Home: React.FC = () => {
               </Button>
             </RightButton>
           </TopBar>
-          <Button
-            variant="fab"
-            size="l"
-            className="button__add"
-            onClick={() => {
-              console.log('추가페이지로 이동');
-              navigate(PATH.newProduct);
-            }}
-          >
+          <Button variant="fab" size="l" className="button__add" onClick={() => navigate(PATH.newProduct)}>
             <Plus />
           </Button>
           <ListBox>

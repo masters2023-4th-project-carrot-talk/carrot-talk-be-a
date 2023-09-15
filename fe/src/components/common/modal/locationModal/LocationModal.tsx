@@ -1,3 +1,4 @@
+
 import { Modal } from '@components/common/modal/Modal';
 import { useState } from 'react';
 import { ControlLocation } from './content/ControlLocation';
@@ -6,6 +7,7 @@ import { useDeleteLocation, usePatchMainLocation } from '@/queries/location';
 import { useRegisteredLocationsStore } from '@/stores/locationStore';
 import { useAuth } from '@/hooks/useAuth';
 import { useModal } from '@/hooks/usePopups';
+
 
 type Props = {
   locationList?: LocationType[];

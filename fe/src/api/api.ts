@@ -143,6 +143,7 @@ export const getProductsDetail = (id: number) => {
   });
 };
 
+
 export const editProductStatus = (id: number, status: ProductStatusType) => {
   return fetchData(`/api/products/${id}/status`, {
     method: 'PATCH',
@@ -168,9 +169,25 @@ export const deleteProduct = (id: number) => {
 export const editLikeStatus = (id: number) => {
   return fetchData(`/api/products/${id}/like`, {
     method: 'PATCH',
+
+export const requestImageUpload = (images: FormData) => {
+  return fetchData(END_POINT.imageUpload, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+    body: images,
+  });
+};
+
+export const addNewProduct = (productFormData: ProductFormData) => {
+  return fetchData(END_POINT.products(), {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${getAccessToken()}`,
     },
+    body: JSON.stringify(productFormData),
+
   });
 };

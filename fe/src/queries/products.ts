@@ -13,6 +13,8 @@ import {
   useQueryClient,
   useQuery,
 } from 'react-query';
+import { addNewProduct, getProducts, requestImageUpload } from '@api/api';
+
 
 export const useProducts = (
   locationId?: number,
@@ -154,5 +156,16 @@ export const useEditLikeStatus = () => {
         );
       }
     },
+
+export const useImageUpload = () => {
+  return useMutation<ImageDataFromServer, unknown, FormData>({
+    mutationFn: (image: FormData) => requestImageUpload(image),
+  });
+};
+
+export const useProductAddition = () => {
+  return useMutation<ProductAdditionResponse, unknown, ProductFormData>({
+    mutationFn: (productFormData: ProductFormData) =>
+      addNewProduct(productFormData),
   });
 };

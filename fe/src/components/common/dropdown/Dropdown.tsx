@@ -2,7 +2,6 @@ import { ButtonProps } from '@components/common/button/Button';
 import { css } from '@emotion/react';
 import { cloneElement, useState } from 'react';
 import { MenuBoxProps } from '../menu/MenuBox';
-import { Backdrop } from './Backdrop';
 
 type Props = {
   opener: React.ReactElement<ButtonProps>;

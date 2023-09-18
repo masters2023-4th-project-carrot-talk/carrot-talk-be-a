@@ -26,6 +26,7 @@ import com.example.carrot.product.dto.response.MainPageResponseDto;
 import com.example.carrot.product.dto.response.ModifyProductResponseDto;
 import com.example.carrot.product.dto.response.ProductDetailResponseDto;
 import com.example.carrot.product.dto.response.ProductDetailSellerResponseDto;
+import com.example.carrot.product.dto.response.ProductImageResponseDto;
 import com.example.carrot.product.dto.response.ProductsResponseDto;
 import com.example.carrot.product.dto.response.ReadProductDetailResponseDto;
 import com.example.carrot.product.dto.response.SaveProductResponseDto;
@@ -235,7 +236,7 @@ public class ProductService {
 			makeSeller(product), makeProduct(product, userId));
 	}
 
-	private List<String> makeImageUrls(Product product) {
+	private List<ProductImageResponseDto> makeImageUrls(Product product) {
 		// ProductImage의 List 형태가 가장 첫번째로 오는 것이
 		// 이미 대표 이미지의 것이라는 보장이 있어야 함 (이미지 API에서 그렇게 만들어야 함)
 		List<ProductImage> productImages = product.getProductImages();
@@ -243,8 +244,10 @@ public class ProductService {
 		catchMainImageException(productImages);
 
 		return productImages.stream()
-			.map(productImage -> productImage.getImage().getImageUrl())
-			.collect(Collectors.toUnmodifiableList());
+			.map(productImage -> ProductImageResponseDto.of(
+				productImage.getImage().getImageId(),
+				productImage.getImage().getImageUrl()))
+			.toList();
 	}
 
 	private void catchMainImageException(List<ProductImage> productImages) {

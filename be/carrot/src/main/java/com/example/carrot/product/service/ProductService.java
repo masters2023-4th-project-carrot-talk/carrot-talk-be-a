@@ -85,14 +85,17 @@ public class ProductService {
 
 		Product product = getProduct(productId);
 
-		Category category = getCategory(modifyProductRequestDto);
-		Location location = getLocation(modifyProductRequestDto);
-		ProductDetails productDetails = ProductDetails.of(modifyProductRequestDto, category, location);
+		Category category = getOldOrNewCategory(modifyProductRequestDto, product);
+		Location location = getOldOrNewLocation(modifyProductRequestDto, product);
+		String content = getOldOrNewContent(modifyProductRequestDto, product);
+		Long price = getOldOrNewPrice(modifyProductRequestDto, product);
+		String title = getOldOrNewTitle(modifyProductRequestDto, product);
+
+		ProductDetails productDetails = ProductDetails.of(content, price, title, category, location);
 
 		if (product.isContainModifyImages(modifyProductRequestDto.getImages())) {
 			Image mainImage = getImage(modifyProductRequestDto.getImages().get(0));
-			List<Image> subImages = imageRepository.findAllById(
-				modifyProductRequestDto.getImages().subList(1, modifyProductRequestDto.getImages().size()));
+			List<Image> subImages = getSubImages(modifyProductRequestDto);
 
 			deleteOriginImages(product);
 
@@ -103,6 +106,46 @@ public class ProductService {
 		product.update(productDetails, userId);
 
 		return ModifyProductResponseDto.of(product);
+	}
+
+	private String getOldOrNewTitle(ModifyProductRequestDto modifyProductRequestDto, Product product) {
+		if (modifyProductRequestDto.getTitle() == null) {
+			return product.getName();
+		}
+		return modifyProductRequestDto.getTitle();
+	}
+
+	private Long getOldOrNewPrice(ModifyProductRequestDto modifyProductRequestDto, Product product) {
+		if (modifyProductRequestDto.getPrice() == null) {
+			return product.getPrice();
+		}
+		return modifyProductRequestDto.getPrice();
+	}
+
+	private String getOldOrNewContent(ModifyProductRequestDto modifyProductRequestDto, Product product) {
+		if (modifyProductRequestDto.getContent() == null) {
+			return product.getContent();
+		}
+		return modifyProductRequestDto.getContent();
+	}
+
+	private Location getOldOrNewLocation(ModifyProductRequestDto modifyProductRequestDto, Product product) {
+		if (modifyProductRequestDto.getLocationId() == null) {
+			return product.getLocation();
+		}
+		return getLocation(modifyProductRequestDto);
+	}
+
+	private Category getOldOrNewCategory(ModifyProductRequestDto modifyProductRequestDto, Product product) {
+		if (modifyProductRequestDto.getCategoryId() == null) {
+			return product.getCategory();
+		}
+		return getCategory(modifyProductRequestDto);
+	}
+
+	private List<Image> getSubImages(ModifyProductRequestDto modifyProductRequestDto) {
+		return imageRepository.findAllById(
+			modifyProductRequestDto.getImages().subList(1, modifyProductRequestDto.getImages().size()));
 	}
 
 	private void deleteOriginImages(Product product) {

@@ -2,7 +2,6 @@ package com.example.carrot.product.entity;
 
 import com.example.carrot.category.entity.Category;
 import com.example.carrot.location.entity.Location;
-import com.example.carrot.product.dto.request.ModifyProductRequestDto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -24,12 +23,11 @@ public class ProductDetails {
 		this.category = category;
 	}
 
-	public static ProductDetails of(ModifyProductRequestDto modifyProductRequestDto, Category category,
-		Location location) {
+	public static ProductDetails of(String content, Long price, String title, Category category, Location location) {
 		return ProductDetails.builder()
-			.title(modifyProductRequestDto.getTitle())
-			.content(modifyProductRequestDto.getContent())
-			.price(modifyProductRequestDto.getPrice())
+			.title(title)
+			.content(content)
+			.price(price)
 			.category(category)
 			.location(location)
 			.build();

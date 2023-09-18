@@ -23,7 +23,7 @@ export const useProducts = (
 ) => {
   console.log(locationId, categoryId, '확인중');
 
-  const fetchProducts = ({ pageParam = 50 }: { pageParam?: number }) => {
+  const fetchProducts = ({ pageParam }: { pageParam?: number }) => {
     return getProducts({ locationId, categoryId, next: pageParam, size });
   };
 
@@ -89,14 +89,14 @@ export const useProductDetailQuery = (id: number) => {
     {
       product: ProductDetailType['product'];
       seller: ProductDetailType['seller'];
-      imageUrls: ProductDetailType['imageUrls'];
+      images: ProductDetailType['images'];
     }
   >({
     queryKey: [QUERY_KEY.productDetail, id],
     queryFn: () => getProductsDetail(id),
     select: (responseData) => {
-      const { product, seller, imageUrls } = responseData.data;
-      return { product, seller, imageUrls };
+      const { product, seller, images } = responseData.data;
+      return { product, seller, images };
     },
   });
 

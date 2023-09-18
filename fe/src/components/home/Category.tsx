@@ -9,11 +9,22 @@ import { Option } from './Option';
 
 type Props = {
   categories?: CategoryType[];
-  onSelectCategory: (id: number) => void;
+  selectedCategoryId?: number | null;
+  onSelectCategory: (id: number | null) => void;
 };
 
-export const Category: React.FC<Props> = ({ categories, onSelectCategory }) => {
+export const Category: React.FC<Props> = ({
+  categories,
+  selectedCategoryId,
+  onSelectCategory,
+}) => {
   const { setShouldSlideLeft } = useLayoutStore();
+
+  const onToggleCategory = (categoryId: number | null) => {
+    selectedCategoryId === categoryId
+      ? onSelectCategory(null)
+      : onSelectCategory(categoryId);
+  };
 
   const onCloseCategory = () => {
     setShouldSlideLeft();
@@ -38,8 +49,9 @@ export const Category: React.FC<Props> = ({ categories, onSelectCategory }) => {
                 key={category.id}
                 icon={category.imageUrl}
                 label={category.name}
+                selectedCategory={selectedCategoryId === category.id}
                 onSelectCategory={() => {
-                  onSelectCategory(category.id);
+                  onToggleCategory(category.id);
                   onCloseCategory();
                 }}
               />

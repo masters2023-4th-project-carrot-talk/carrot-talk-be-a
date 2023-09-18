@@ -21,6 +21,10 @@ export const END_POINT = {
   categories: `/api/categories`,
   imageUpload: `/api/images`,
   products: (query?: string) => `/api/products${query ? `?${query}` : ''}`,
+  productDetail: (id: number) => `/api/products/${id}`,
+  productStatusEdit: (id: number) => `/api/products/${id}/status`,
+  productDelete: (id: number) => `/api/products/${id}`,
+  productLike: (id: number) => `/api/products/${id}/like`,
   locations: (id?: number) =>
     id ? `/api/users/locations/${id}` : '/api/users/locations',
   locationsOf: (query: string) => `/api/locations?keyword=${query}`,

@@ -306,7 +306,7 @@ const pageStyle = (theme: Theme) => {
       cursor: default;
       text-align: center;
       width: 100%;
-      padding: 30px 0px 100px 0px;
+      padding: 56px 0px 100px 0px;
       font: ${theme.font.displayDefault16};
     }
   `;

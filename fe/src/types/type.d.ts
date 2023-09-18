@@ -68,7 +68,10 @@ type ProductsDataFromServer = {
 };
 
 type ProductDetailType = {
-  imageUrls: string[];
+  images: {
+    imageId: number;
+    imageUrl: string;
+  }[];
   seller: {
     id: number;
     nickname: string;
@@ -159,4 +162,4 @@ type ProductAdditionResponse = {
   data?: {
     productId: number;
   };
-}
+};

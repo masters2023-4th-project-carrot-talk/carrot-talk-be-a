@@ -79,7 +79,7 @@ export const ListItem: React.FC<Props> = ({
 
   return (
     <>
-      <li  css={listItemStyle} onClick={onOpenDetail}>
+      <li css={listItemStyle} onClick={onOpenDetail}>
         <ImageBox imageUrl={product.imageUrl} size="l" />
         <div className="text-area">
           <div className="text-area__information">

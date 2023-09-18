@@ -89,14 +89,14 @@ export const useProductDetailQuery = (id: number) => {
     {
       product: ProductDetailType['product'];
       seller: ProductDetailType['seller'];
-      imageUrls: ProductDetailType['imageUrls'];
+      images: ProductDetailType['images'];
     }
   >({
     queryKey: [QUERY_KEY.productDetail, id],
     queryFn: () => getProductsDetail(id),
     select: (responseData) => {
-      const { product, seller, imageUrls } = responseData.data;
-      return { product, seller, imageUrls };
+      const { product, seller, images } = responseData.data;
+      return { product, seller, images };
     },
   });
 

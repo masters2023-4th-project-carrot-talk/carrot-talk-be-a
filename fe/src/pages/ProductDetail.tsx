@@ -41,11 +41,11 @@ export const ProductDetail: React.FC = () => {
   const navigate = useNavigate();
   const { id: productId } = useParams();
   const numberedProductId = Number(productId);
-  console.log(productId);
+
   const {
     product,
     seller,
-    imageUrls,
+    images,
     status: fetchStatus,
     // error, // TODO 에러 토스트 메세지
   } = useProductDetailQuery(numberedProductId);
@@ -168,7 +168,7 @@ export const ProductDetail: React.FC = () => {
       {fetchStatus === 'error' && <div>상품 정보를 불러오지 못했습니다</div>}
       <div css={obseverStyle} ref={observeTarget}></div>
       <div className="page-content">
-        <ImageCarousel imageUrls={imageUrls} />
+        <ImageCarousel images={images} />
         <div className="page-content-info">
           <div className="seller">
             <p className="seller-label">판매자 정보</p>

@@ -21,6 +21,7 @@ import com.example.carrot.location.entity.Location;
 import com.example.carrot.location.repository.LocationRepository;
 import com.example.carrot.product.dto.request.ModifyProductRequestDto;
 import com.example.carrot.product.dto.request.ModifyProductStatusRequestDto;
+import com.example.carrot.product.entity.ProductDetails;
 import com.example.carrot.product.dto.request.SaveProductRequestDto;
 import com.example.carrot.product.dto.response.MainPageResponseDto;
 import com.example.carrot.product.dto.response.ModifyProductResponseDto;
@@ -84,34 +85,29 @@ public class ProductService {
 
 		Product product = getProduct(productId);
 
-		product.validateEditAccess(userId);
-
-		List<ProductImage> productImages = product.getProductImages();
-
-		productImageRepository.deleteAllInBatch(productImages);
-
-		List<Long> imageIds = modifyProductRequestDto.getImages();
-
-		Image mainImage = getImage(imageIds.get(0));
-		List<Image> images = imageRepository.findAllById(imageIds.subList(1, imageIds.size()));
-
-		List<ProductImage> updatedProductImages = new ArrayList<>();
-		updatedProductImages.add(ProductImage.of(product, mainImage, true));
-
-		for (Image image : images) {
-			updatedProductImages.add(ProductImage.of(product, image, false));
-		}
-
-		productImageRepository.saveAll(updatedProductImages);
-
 		Category category = getCategory(modifyProductRequestDto);
 		Location location = getLocation(modifyProductRequestDto);
+		ProductDetails productDetails = ProductDetails.of(modifyProductRequestDto, category, location);
 
-		product.update(
-			modifyProductRequestDto.getTitle(), modifyProductRequestDto.getContent(),
-			modifyProductRequestDto.getPrice(), category, location);
+		if (product.isContainModifyImages(modifyProductRequestDto.getImages())) {
+			Image mainImage = getImage(modifyProductRequestDto.getImages().get(0));
+			List<Image> subImages = imageRepository.findAllById(
+				modifyProductRequestDto.getImages().subList(1, modifyProductRequestDto.getImages().size()));
+
+			deleteOriginImages(product);
+
+			product.update(mainImage, subImages, productDetails, userId);
+
+			return ModifyProductResponseDto.of(product);
+		}
+		product.update(productDetails, userId);
 
 		return ModifyProductResponseDto.of(product);
+	}
+
+	private void deleteOriginImages(Product product) {
+		product.getProductImages().clear();
+		productImageRepository.deleteByProduct(product);
 	}
 
 	private Image getImage(Long imageId) {

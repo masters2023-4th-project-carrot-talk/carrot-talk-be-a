@@ -51,7 +51,7 @@ public class ProductController {
 	 */
 	@PatchMapping("/products/{productId}")
 	public ApiResponse<ModifyProductResponseDto> modifyProduct(
-		@Valid @RequestBody ModifyProductRequestDto modifyProductRequestDto,
+		@RequestBody ModifyProductRequestDto modifyProductRequestDto,
 		@RequestAttribute Long userId,
 		@PathVariable Long productId) {
 

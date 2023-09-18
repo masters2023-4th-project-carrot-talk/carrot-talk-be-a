@@ -1,38 +1,38 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import { useState } from 'react';
 import { Theme, css } from '@emotion/react';
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
+import { PostBar } from '@components/common/actionBar/PostBar';
+import { Alert } from '@components/common/alert/Alert';
+import { AlertButtons } from '@components/common/alert/AlertButtons';
+import { AlertContent } from '@components/common/alert/AlertContent';
+import { Button } from '@components/common/button/Button';
+import { Dropdown } from '@components/common/dropdown/Dropdown';
 import {
   ChevronDown,
   ChevronLeft,
   Dots,
   Heart,
 } from '@components/common/icons';
-import { TopBar } from '@/components/common/topBar/TopBar';
-import { RightButton } from '@/components/common/topBar/RightButton';
-import { LeftButton } from '@/components/common/topBar/LeftButton';
-import { Button } from '@/components/common/button/Button';
-import { getUserInfo } from '@/utils/localStorage';
-import { PostBar } from '@/components/common/actionBar/PostBar';
-import { formatPrice } from '@/utils/formatPrice';
-import { Dropdown } from '@/components/common/dropdown/Dropdown';
-import { MenuBox } from '@/components/common/menu/MenuBox';
-import { MenuItem } from '@/components/common/menu/MenuItem';
-import { formatTimeStamp } from '@/utils/formatTimeStamp';
+import { MenuBox } from '@components/common/menu/MenuBox';
+import { MenuItem } from '@components/common/menu/MenuItem';
+import { LeftButton } from '@components/common/topBar/LeftButton';
+import { RightButton } from '@components/common/topBar/RightButton';
+import { TopBar } from '@components/common/topBar/TopBar';
+import { ImageCarousel } from '@components/detail/ImageCarousel';
+import { PATH } from '@constants/path';
+import { useIntersectionObserver } from '@hooks/useObserver';
+import { useAlert } from '@hooks/usePopups';
 import {
   useDeleteProduct,
   useEditLikeStatus,
   useEditProductStatus,
   useProductDetailQuery,
-} from '@/queries/products';
-import { Alert } from '@/components/common/alert/Alert';
-import { AlertContent } from '@/components/common/alert/AlertContent';
-import { AlertButtons } from '@/components/common/alert/AlertButtons';
-import { useIntersectionObserver } from '@/hooks/useObserver';
-import { ImageCarousel } from '@/components/detail/ImageCarousel';
-import { useAlert } from '@/hooks/usePopups';
-import { usePathHistoryStore } from '@/stores/pathHistoryStore';
-import { PATH } from '@/constants/path';
+} from '@queries/products';
+import { usePathHistoryStore } from '@stores/pathHistoryStore';
+import { formatPrice } from '@utils/formatPrice';
+import { formatTimeStamp } from '@utils/formatTimeStamp';
+import { getUserInfo } from '@utils/localStorage';
 // TODO 로그인하지 않은 사용자에게 데이터가 안뜨고있음
 
 export const ProductDetail: React.FC = () => {
@@ -145,7 +145,7 @@ export const ProductDetail: React.FC = () => {
                 <MenuBox>
                   <MenuItem
                     onClick={() => {
-                      navigate(PATH.newProduct);
+                      navigate(PATH.editProduct(numberedProductId));
                     }}
                   >
                     게시글 수정

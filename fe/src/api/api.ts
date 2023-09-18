@@ -1,5 +1,5 @@
-import { createQueryParams } from '@/utils/createQueryParams';
 import { BASE_URL, END_POINT } from '@constants/path';
+import { createQueryParams } from '@utils/createQueryParams';
 import { getAccessToken, getRefreshToken } from '@utils/localStorage';
 
 const fetchData = async (path: string, options?: RequestInit) => {

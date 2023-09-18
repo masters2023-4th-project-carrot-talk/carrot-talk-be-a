@@ -1,5 +1,5 @@
-import { useImageUpload } from '@/queries/products';
 import { css, Theme } from '@emotion/react';
+import { useImageUpload } from '@queries/products';
 import { useRef } from 'react';
 import { Camera } from '../common/icons';
 import { ImageItem } from './ImageItem';

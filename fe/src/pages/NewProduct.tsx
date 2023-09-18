@@ -1,26 +1,26 @@
+import { EditBar } from '@components/common/actionBar/EditBar';
+import { Button } from '@components/common/button/Button';
+import { Input } from '@components/common/input/Input';
+import { TextArea } from '@components/common/input/TextArea';
+import { CategoryModal } from '@components/common/modal/categoryModal/CategoryModal';
+import { LeftButton } from '@components/common/topBar/LeftButton';
+import { RightButton } from '@components/common/topBar/RightButton';
+import { Title } from '@components/common/topBar/Title';
+import { TopBar } from '@components/common/topBar/TopBar';
+import { CategorySelector } from '@components/new/CategorySelector';
+import { ImageInput } from '@components/new/ImageInput';
+import { LocationSelector } from '@components/new/LocationSelector';
+import { PATH } from '@constants/path';
 import { Theme, css } from '@emotion/react';
-import { useState, useEffect } from 'react';
+import { useCategorySelector } from '@hooks/useCategorySelector';
+import { useInput } from '@hooks/useInput';
+import { useLocationSelector } from '@hooks/useLocationSelector';
+import { usePrice } from '@hooks/usePrice';
+import { useProductAddition } from '@queries/products';
+import { usePathHistoryStore } from '@stores/pathHistoryStore';
+import { commaStringToNumber } from '@utils/formatPrice';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { EditBar } from '@/components/common/actionBar/EditBar';
-import { Button } from '@/components/common/button/Button';
-import { Input } from '@/components/common/input/Input';
-import { TextArea } from '@/components/common/input/TextArea';
-import { CategoryModal } from '@/components/common/modal/categoryModal/CategoryModal';
-import { LeftButton } from '@/components/common/topBar/LeftButton';
-import { RightButton } from '@/components/common/topBar/RightButton';
-import { Title } from '@/components/common/topBar/Title';
-import { TopBar } from '@/components/common/topBar/TopBar';
-import { CategorySelector } from '@/components/new/CategorySelector';
-import { ImageInput } from '@/components/new/ImageInput';
-import { LocationSelector } from '@/components/new/LocationSelector';
-import { PATH } from '@/constants/path';
-import { useCategorySelector } from '@/hooks/useCategorySelector';
-import { useInput } from '@/hooks/useInput';
-import { useLocationSelector } from '@/hooks/useLocationSelector';
-import { usePrice } from '@/hooks/usePrice';
-import { useProductAddition } from '@/queries/products';
-import { commaStringToNumber } from '@/utils/formatPrice';
-import { usePathHistoryStore } from '@/stores/pathHistoryStore';
 
 export const NewProduct: React.FC = () => {
   const currentLocation = useLocation();
@@ -65,7 +65,7 @@ export const NewProduct: React.FC = () => {
     const productData = {
       name: title,
       price: commaStringToNumber(price),
-      constent: description,
+      content: description,
       images: imageList.map((image) => image.imageId),
       categoryId: selectedCategory.id,
       locationId: selectedLocation.id,

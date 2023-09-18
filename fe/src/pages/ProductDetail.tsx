@@ -191,6 +191,9 @@ export const ProductDetail: React.FC = () => {
                   {menuRowsByStatus.map((row) => (
                     <MenuItem
                       key={row.id}
+                      state={
+                        row.status === product?.status ? 'selected' : 'default'
+                      }
                       onClick={() => {
                         onEditProductStatus(row.status);
                       }}

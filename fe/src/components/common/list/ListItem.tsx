@@ -34,65 +34,45 @@ export const ListItem: React.FC<Props> = ({
     : false;
   // const isAuthor = true;
 
-  const menuRowsByStatus = {
+  const onEditProductStatus = (status: ProductStatusType) => {
+    editProductStatusMutation.mutate({
+      id: product.id,
+      status,
+    });
+  };
+
+  const menuRowsByStatus: Record<
+    ProductStatusType,
+    { id: number; status: ProductStatusType }[]
+  > = {
     판매중: [
       {
         id: 1,
-        name: '예약 중 상태로 전환',
-        onClick: () =>
-          editProductStatusMutation.mutate({
-            id: product.id,
-            status: '예약중',
-          }),
+        status: '예약중',
       },
       {
         id: 2,
-        name: '판매 완료 상태로 전환',
-        onClick: () =>
-          editProductStatusMutation.mutate({
-            id: product.id,
-            status: '판매완료',
-          }),
+        status: '판매완료',
       },
     ],
     예약중: [
       {
         id: 1,
-        name: '판매 중 상태로 전환',
-        onClick: () =>
-          editProductStatusMutation.mutate({
-            id: product.id,
-            status: '판매중',
-          }),
+        status: '판매중',
       },
       {
         id: 2,
-        name: '판매 완료 상태로 전환',
-        onClick: () =>
-          editProductStatusMutation.mutate({
-            id: product.id,
-            status: '판매완료',
-          }),
+        status: '판매완료',
       },
     ],
     판매완료: [
       {
         id: 1,
-        name: '판매 중 상태로 전환',
-        onClick: () =>
-          editProductStatusMutation.mutate({
-            id: product.id,
-            status: '판매중',
-          }),
+        status: '예약중',
       },
       {
         id: 2,
-        name: '예약 중 상태로 전환',
-        onClick: () =>
-          editProductStatusMutation.mutate({
-            id: product.id,
-            status: '예약중',
-          }),
+        status: '판매중',
       },
     ],
   };
@@ -117,8 +97,11 @@ export const ListItem: React.FC<Props> = ({
                     <MenuBox>
                       <MenuItem onClick={() => {}}>게시글 수정</MenuItem>
                       {menuRowsByStatus[product.status].map((row) => (
-                        <MenuItem key={row.id} onClick={row.onClick}>
-                          {row.name}
+                        <MenuItem
+                          key={row.id}
+                          onClick={() => onEditProductStatus(row.status)}
+                        >
+                          {`${row.status} 상태로 전환`}
                         </MenuItem>
                       ))}
                       <MenuItem variant="warning" onClick={onAlertOpen}>
@@ -126,7 +109,7 @@ export const ListItem: React.FC<Props> = ({
                       </MenuItem>
                     </MenuBox>
                   }
-                ></Dropdown>
+                />
               )}
             </div>
             <div className="text-area__information-location">
@@ -166,6 +149,10 @@ const listItemStyle = (theme: Theme) => {
     align-items: flex-start;
     gap: 16px;
     align-self: stretch;
+
+    &:hover .text-area__information-title > span {
+      font: ${theme.font.displayStrong16};
+    }
 
     .text-area {
       display: flex;

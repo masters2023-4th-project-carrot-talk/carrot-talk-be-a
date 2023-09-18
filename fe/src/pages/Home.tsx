@@ -94,12 +94,10 @@ export const Home: React.FC = () => {
 
   const onSelectLocation = (id: number) => {
     setSelectedLocationId(id);
-    refetchProductList();
   };
 
-  const onSelectCategory = (id: number) => {
+  const onSelectCategory = (id: number | null) => {
     setSelectedCategoryId(id);
-    refetchProductList();
   };
 
   const onAlertOpen = (product: ProductType) => {
@@ -138,7 +136,7 @@ export const Home: React.FC = () => {
 
   return (
     <>
-      <div css={(theme) => pageStyle(theme, shouldShowSkeletons)}>
+      <div css={(theme) => pageStyle(theme)}>
         <>
           <TopBar>
             <RightButton>
@@ -211,31 +209,33 @@ export const Home: React.FC = () => {
           >
             <Plus />
           </Button>
-          <ListBox>
-            {productStatus === 'error' && (
-              <div className="data-status-info">
-                상품을 불러오지 못했어요!
-                <br />
-                연결을 확인해주세요
-              </div>
+          <div className="list-box-container">
+            <ListBox>
+              {productStatus === 'error' && (
+                <div className="data-status-info">
+                  상품을 불러오지 못했어요!
+                  <br />
+                  연결을 확인해주세요
+                </div>
+              )}
+
+              {products?.map((product) => (
+                <ListItem
+                  key={product.id}
+                  product={product}
+                  onOpenDetail={() => onOpenDetail(product.id)}
+                  onAlertOpen={() => onAlertOpen(product)}
+                />
+              ))}
+
+              {shouldShowSkeletons && <>{renderSkeletons(10)}</>}
+            </ListBox>
+            {shouldShowEndOfData && (
+              <div className="data-status-info">전부 살펴 봤어요!</div>
             )}
-
-            {products?.map((product) => (
-              <ListItem
-                key={product.id}
-                product={product}
-                onOpenDetail={() => onOpenDetail(product.id)}
-                onAlertOpen={() => onAlertOpen(product)}
-              />
-            ))}
-
-            {shouldShowSkeletons && <>{renderSkeletons(10)}</>}
-          </ListBox>
-          {shouldShowEndOfData && (
-            <div className="data-status-info">전부 살펴 봤어요!</div>
-          )}
-          <LocationModal locationList={serverLocations} />
-          <div ref={observeTarget} css={obseverStyle}></div>
+            <LocationModal locationList={serverLocations} />
+            <div ref={observeTarget} css={obseverStyle}></div>
+          </div>
         </>
       </div>
 
@@ -247,21 +247,51 @@ export const Home: React.FC = () => {
         />
       </Alert>
 
-      <Category categories={categories} onSelectCategory={onSelectCategory} />
+      <Category
+        categories={categories}
+        selectedCategoryId={selectedCategoryId}
+        onSelectCategory={onSelectCategory}
+      />
     </>
   );
 };
 
-const pageStyle = (theme: Theme, shouldShowSkeletons: boolean) => {
+const pageStyle = (theme: Theme) => {
   return css`
-    padding-top: 57px;
-    overflow-y: ${shouldShowSkeletons ? 'hidden' : 'auto'};
-
-    scroll-behavior: smooth;
     ::-webkit-scrollbar {
       display: none;
     }
+
     height: 100vh;
+    padding-top: 57px;
+    overflow-y: auto;
+
+    .list-box-container {
+      height: 100vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      ::-webkit-scrollbar {
+        width: 10px;
+        background-color: ${theme.color.neutral.background};
+      }
+
+      ::-webkit-scrollbar-button {
+        width: 0;
+        height: 0;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        width: 4px;
+        border-radius: 10px;
+        background-color: ${theme.color.neutral.border};
+        border: 3px solid ${theme.color.neutral.background};
+      }
+
+      ::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
+    }
 
     .button__topbar {
       stroke: ${theme.color.neutral.textStrong};
@@ -279,7 +309,7 @@ const pageStyle = (theme: Theme, shouldShowSkeletons: boolean) => {
       cursor: default;
       text-align: center;
       width: 100%;
-      padding: 30px 0px 100px 0px;
+      padding: 56px 0px 100px 0px;
       font: ${theme.font.displayDefault16};
     }
   `;

@@ -121,8 +121,6 @@ export const getProducts = ({
   size,
   next = 50,
 }: FetchProductsParams) => {
-  // /api/products?locationId=1&categoryId=3&next=11&size=10
-  // TODO 여기 처리 다른곳으로 분리
   const queryParams = createQueryParams({
     locationId,
     categoryId,
@@ -131,11 +129,11 @@ export const getProducts = ({
   });
   console.log(queryParams, '쿼리확인중');
 
-  return fetchData(`/api/products?${queryParams}`);
+  return fetchData(END_POINT.products(queryParams));
 };
 
 export const getProductsDetail = (id: number) => {
-  return fetchData(`/api/products/${id}`, {
+  return fetchData(END_POINT.productDetail(id), {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${getAccessToken()}`,
@@ -144,7 +142,7 @@ export const getProductsDetail = (id: number) => {
 };
 
 export const editProductStatus = (id: number, status: ProductStatusType) => {
-  return fetchData(`/api/products/${id}/status`, {
+  return fetchData(END_POINT.productStatusEdit(id), {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -157,7 +155,7 @@ export const editProductStatus = (id: number, status: ProductStatusType) => {
 };
 
 export const deleteProduct = (id: number) => {
-  return fetchData(`/api/products/${id}`, {
+  return fetchData(END_POINT.productDelete(id), {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${getAccessToken()}`,
@@ -166,7 +164,7 @@ export const deleteProduct = (id: number) => {
 };
 
 export const editLikeStatus = (id: number) => {
-  return fetchData(`/api/products/${id}/like`, {
+  return fetchData(END_POINT.productLike(id), {
     method: 'PATCH',
   });
 };

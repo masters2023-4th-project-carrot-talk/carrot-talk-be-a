@@ -23,7 +23,7 @@ export const useProducts = (
 ) => {
   console.log(locationId, categoryId, '확인중');
 
-  const fetchProducts = ({ pageParam = 50 }: { pageParam?: number }) => {
+  const fetchProducts = ({ pageParam }: { pageParam?: number }) => {
     return getProducts({ locationId, categoryId, next: pageParam, size });
   };
 

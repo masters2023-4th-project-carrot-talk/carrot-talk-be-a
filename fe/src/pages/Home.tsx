@@ -94,12 +94,12 @@ export const Home: React.FC = () => {
 
   const onSelectLocation = (id: number) => {
     setSelectedLocationId(id);
-    refetchProductList();
+    // refetchProductList();
   };
 
   const onSelectCategory = (id: number) => {
     setSelectedCategoryId(id);
-    refetchProductList();
+    // refetchProductList();
   };
 
   const onAlertOpen = (product: ProductType) => {
@@ -138,7 +138,7 @@ export const Home: React.FC = () => {
 
   return (
     <>
-      <div css={(theme) => pageStyle(theme, shouldShowSkeletons)}>
+      <div css={(theme) => pageStyle(theme)}>
         <>
           <TopBar>
             <RightButton>
@@ -253,10 +253,7 @@ export const Home: React.FC = () => {
     </>
   );
 };
-// ::-webkit-scrollbar {
-//   display: none;
-// }
-//overflow-y: ${shouldShowSkeletons ? 'hidden' : 'auto'};
+
 const pageStyle = (theme: Theme) => {
   return css`
     ::-webkit-scrollbar {

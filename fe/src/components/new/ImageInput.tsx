@@ -121,7 +121,13 @@ const imageInputStype = (theme: Theme) => css`
   scroll-behavior: smooth;
 
   &::-webkit-scrollbar {
-    display: none;
+    height: 12px;
+
+    &-thumb {
+      background: ${theme.color.neutral.textWeak};
+      border: 4px solid ${theme.color.neutral.background};
+      border-radius: 12px;
+    }
   }
 
   & .image-input {

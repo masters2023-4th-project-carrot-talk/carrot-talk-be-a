@@ -254,6 +254,7 @@ export const Home: React.FC = () => {
 
 const pageStyle = (theme: Theme, shouldShowSkeletons: boolean) => {
   return css`
+    padding-top: 57px;
     overflow-y: ${shouldShowSkeletons ? 'hidden' : 'auto'};
 
     scroll-behavior: smooth;

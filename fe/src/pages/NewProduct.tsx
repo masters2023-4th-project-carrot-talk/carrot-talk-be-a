@@ -173,6 +173,19 @@ const pageStyle = (theme: Theme) => css`
   flex-direction: column;
   gap: 16px;
   padding: 16px;
+  margin-top: 57px;
+  margin-bottom: 64px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+
+    &-thumb {
+      background: ${theme.color.neutral.textWeak}; 
+      border-radius: 12px;
+    }
+  }
 
   & .image-input,
   & .title-input,

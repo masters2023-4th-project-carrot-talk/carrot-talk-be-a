@@ -94,12 +94,10 @@ export const Home: React.FC = () => {
 
   const onSelectLocation = (id: number) => {
     setSelectedLocationId(id);
-    // refetchProductList();
   };
 
-  const onSelectCategory = (id: number) => {
+  const onSelectCategory = (id: number | null) => {
     setSelectedCategoryId(id);
-    // refetchProductList();
   };
 
   const onAlertOpen = (product: ProductType) => {
@@ -249,7 +247,11 @@ export const Home: React.FC = () => {
         />
       </Alert>
 
-      <Category categories={categories} onSelectCategory={onSelectCategory} />
+      <Category
+        categories={categories}
+        selectedCategoryId={selectedCategoryId}
+        onSelectCategory={onSelectCategory}
+      />
     </>
   );
 };

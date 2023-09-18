@@ -1,7 +1,9 @@
 import { Theme, css } from '@emotion/react';
+import { useEditProductStatus } from '@queries/products';
 import { formatCount } from '@utils/formatCount';
 import { formatPrice } from '@utils/formatPrice';
 import { formatTimeStamp } from '@utils/formatTimeStamp';
+import { getUserInfo } from '@utils/localStorage';
 import { Button } from '../button/Button';
 import { Dropdown } from '../dropdown/Dropdown';
 import { Dots, Heart, Message } from '../icons';
@@ -9,8 +11,6 @@ import { ImageBox } from '../imageBox/ImageBox';
 import { MenuBox } from '../menu/MenuBox';
 import { MenuItem } from '../menu/MenuItem';
 import { StatusBadge } from '../statusBadge/StatusBadge';
-import { useEditProductStatus } from '@/queries/products';
-import { getUserInfo } from '@/utils/localStorage';
 
 type Props = {
   product: ProductType;

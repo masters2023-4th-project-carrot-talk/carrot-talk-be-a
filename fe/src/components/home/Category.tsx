@@ -1,11 +1,11 @@
 import { Theme, css } from '@emotion/react';
-import { TopBar } from '../common/topBar/TopBar';
-import { Title } from '../common/topBar/Title';
-import { LeftButton } from '../common/topBar/LeftButton';
+import { useLayoutStore } from '@stores/layoutStore';
 import { Button } from '../common/button/Button';
 import { ChevronLeft } from '../common/icons';
+import { LeftButton } from '../common/topBar/LeftButton';
+import { Title } from '../common/topBar/Title';
+import { TopBar } from '../common/topBar/TopBar';
 import { Option } from './Option';
-import { useLayoutStore } from '@/stores/layoutStore';
 
 type Props = {
   categories?: CategoryType[];

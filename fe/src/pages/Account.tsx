@@ -1,4 +1,3 @@
-import { useLogout } from '@/queries/auth';
 import kakaoLogin from '@assets/kakao_login.png';
 import { ReactComponent as UserCircle } from '@assets/user-circle.svg';
 import { Button } from '@components/common/button/Button';
@@ -8,6 +7,7 @@ import { TopBar } from '@components/common/topBar/TopBar';
 import { KAKAO_AUTH_URL, PATH } from '@constants/path';
 import { Theme, css } from '@emotion/react';
 import { useAuth } from '@hooks/useAuth';
+import { useLogout } from '@queries/auth';
 import { clearLoginInfo } from '@utils/localStorage';
 import { useNavigate } from 'react-router-dom';
 

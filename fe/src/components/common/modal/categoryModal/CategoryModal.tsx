@@ -1,7 +1,7 @@
-import { useModal } from '@/hooks/usePopups';
 import { Modal } from '@components/common/modal/Modal';
 import { ModalHeader } from '@components/common/modal/ModalHeader';
 import { ModalListItem } from '@components/common/modal/ModalListItem';
+import { useModal } from '@hooks/usePopups';
 
 type Props = {
   categoryList?: CategoryType[];

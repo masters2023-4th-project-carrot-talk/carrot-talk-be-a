@@ -52,7 +52,8 @@ public class UserService {
 	@Value("${oauth.kakao.redirect_uri}")
 	private String redirectUri;
 
-	public UserService(LocationService locationService, UserLocationService userLocationService, UserRepository userRepository,
+	public UserService(LocationService locationService, UserLocationService userLocationService,
+		UserRepository userRepository,
 		JwtProvider jwtProvider) {
 		this.locationService = locationService;
 		this.userLocationService = userLocationService;

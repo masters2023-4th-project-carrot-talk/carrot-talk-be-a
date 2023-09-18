@@ -11,16 +11,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReadProductDetailResponseDto {
 
-	@JsonProperty("imageUrls")
-	private List<String> imageUrls;
+	@JsonProperty("images")
+	private List<ProductImageResponseDto> images;
 	@JsonProperty("seller")
 	private ProductDetailSellerResponseDto seller;
 	@JsonProperty("product")
 	private ProductDetailResponseDto product;
 
-	public static ReadProductDetailResponseDto of(List<String> imageUrls, ProductDetailSellerResponseDto seller,
+	public static ReadProductDetailResponseDto of(List<ProductImageResponseDto> images, ProductDetailSellerResponseDto seller,
 		ProductDetailResponseDto product) {
-		return new ReadProductDetailResponseDto(imageUrls, seller, product);
+		return new ReadProductDetailResponseDto(images, seller, product);
 	}
 
 }

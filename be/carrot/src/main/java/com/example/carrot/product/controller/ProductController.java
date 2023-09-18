@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +51,7 @@ public class ProductController {
 	 */
 	@PatchMapping("/products/{productId}")
 	public ApiResponse<ModifyProductResponseDto> modifyProduct(
-		@Valid @RequestBody ModifyProductRequestDto modifyProductRequestDto,
+		@RequestBody ModifyProductRequestDto modifyProductRequestDto,
 		@RequestAttribute Long userId,
 		@PathVariable Long productId) {
 
@@ -89,7 +88,7 @@ public class ProductController {
 	@PostMapping("/products")
 	public ApiResponse<SaveProductResponseDto> saveProduct(
 		@Valid @RequestBody SaveProductRequestDto saveProductRequestDto,
-		@RequestAttribute Long userId) {
+		@RequestAttribute(required = false) Long userId) {
 		return ApiResponse.success(productService.saveProduct(saveProductRequestDto, userId));
 	}
 
@@ -97,7 +96,8 @@ public class ProductController {
 	 * 상품 상세 조회 API
 	 */
 	@GetMapping("/products/{productId}")
-	public ApiResponse<ReadProductDetailResponseDto> getProductDetail(@PathVariable Long productId, @RequestAttribute(required = false) Long userId) {
+	public ApiResponse<ReadProductDetailResponseDto> getProductDetail(@PathVariable Long productId,
+		@RequestAttribute(required = false) Long userId) {
 		return ApiResponse.success(productService.getProductDetail(productId, userId));
 	}
 

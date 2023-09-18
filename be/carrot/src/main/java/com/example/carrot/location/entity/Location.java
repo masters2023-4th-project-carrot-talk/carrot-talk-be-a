@@ -10,14 +10,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import com.example.carrot.global.common.BaseCreatedTimeEntity;
 import com.example.carrot.product.entity.Product;
 import com.example.carrot.user_location.entity.UserLocation;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,16 +31,13 @@ public class Location extends BaseCreatedTimeEntity {
 	@Column(nullable = false)
 	private String name;
 
-	@OneToOne(mappedBy = "location")
-	private Product product;
+	@OneToMany(mappedBy = "location", cascade = CascadeType.PERSIST)
+	private List<Product> products = new ArrayList<>();
 
 	@OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<UserLocation> userLocations = new ArrayList<>();
 
-	@Builder
-	public Location(String name, Product product) {
+	public Location(String name) {
 		this.name = name;
-		this.product = product;
 	}
-
 }

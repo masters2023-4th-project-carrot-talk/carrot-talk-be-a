@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.example.carrot.category.entity.Category;
 import com.example.carrot.global.common.BaseCreatedTimeEntity;
 import com.example.carrot.image.entity.Image;
 import com.example.carrot.product.entity.Product;

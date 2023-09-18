@@ -1,20 +1,30 @@
 package com.example.carrot.category.dto.response;
 
-import java.util.List;
-
 import com.example.carrot.category.entity.Category;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.RequiredArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
-@RequiredArgsConstructor
+@Getter
 public class CategoryResponseDto {
 
-	@JsonProperty("categories")
-	private final List<Category> categories;
+	private Long id;
+	private String name;
+	private String imageUrl;
 
-	public static CategoryResponseDto of(List<Category> categories) {
-		return new CategoryResponseDto(categories);
+	@Builder
+	public CategoryResponseDto(Long id, String name, String imageUrl) {
+		this.id = id;
+		this.name = name;
+		this.imageUrl = imageUrl;
+	}
+
+	public static CategoryResponseDto of(Category category) {
+		return CategoryResponseDto.builder()
+			.id(category.getCategoryId())
+			.name(category.getName())
+			.imageUrl(category.getImageUrl())
+			.build();
 	}
 
 }

@@ -7,8 +7,8 @@ type DropdownMenuPosition = {
 export const useDropdownMenuPosition = ({
   appLayout,
 }: DropdownMenuPosition) => {
-  const [positionStyle, setPositionStyle] = useState({} as React.CSSProperties);
-  const [appLayoutRect, setAppLayoutRect] = useState<DOMRect>({} as DOMRect);
+  const [positionStyle, setPositionStyle] = useState<React.CSSProperties>({});
+  const [appLayoutRect, setAppLayoutRect] = useState<DOMRect>(appLayout?.getBoundingClientRect());
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 

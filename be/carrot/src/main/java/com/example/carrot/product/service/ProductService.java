@@ -175,6 +175,7 @@ public class ProductService {
 	private List<ProductImage> makeProductImages(SaveProductRequestDto saveProductRequestDto, Product product) {
 		List<Long> images = saveProductRequestDto.getImages();
 		List<ProductImage> productImages = new ArrayList<>();
+		// TODO: flag 방식 사용할 수 있도록 (인덱스가 아니라)
 		for (int i = 0; i < images.size(); i++) {
 			Long imageId = images.get(i);
 			Image image = getImage(imageId);

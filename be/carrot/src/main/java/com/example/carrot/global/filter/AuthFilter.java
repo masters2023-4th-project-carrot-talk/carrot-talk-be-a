@@ -163,9 +163,12 @@ public class AuthFilter implements Filter {
 	private boolean isContainToken(HttpServletRequest httpServletRequest) {
 		log.info("토큰 포함 여부 확인 로직");
 		String authorization = httpServletRequest.getHeader(HEADER_AUTHORIZATION);
-		log.info("authorization : " + authorization);
-		log.info("authorization start with : " + authorization.startsWith(TOKEN_PREFIX));
-		return authorization != null && authorization.startsWith(TOKEN_PREFIX);
+		if (authorization != null && authorization.startsWith(TOKEN_PREFIX)) {
+			log.info("토큰 포함!");
+			return true;
+		}
+		log.info("토큰 포함 안 됨");
+		return false;
 	}
 
 	private boolean whiteListCheck(String uri) {

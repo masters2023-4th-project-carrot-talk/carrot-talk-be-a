@@ -4,7 +4,7 @@ type Props = {
   state?: 'default' | 'selected';
   variant?: 'default' | 'warning';
   children?: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent) => void;
 };
 
 export const MenuItem: React.FC<Props> = ({
@@ -13,8 +13,8 @@ export const MenuItem: React.FC<Props> = ({
   variant,
   onClick,
 }) => {
-  const onMenuItemClick = () => {
-    onClick?.();
+  const onMenuItemClick = (e: React.MouseEvent) => {
+    onClick?.(e); // BUG dropdown 버그로 인해 임시 추가
   };
 
   return (

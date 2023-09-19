@@ -165,6 +165,7 @@ public class AuthFilter implements Filter {
 		String authorization = httpServletRequest.getHeader(HEADER_AUTHORIZATION);
 		if (authorization != null && authorization.startsWith(TOKEN_PREFIX)) {
 			log.info("토큰 포함!");
+			log.info("authorization : " + authorization);
 			return true;
 		}
 		log.info("토큰 포함 안 됨");

@@ -15,7 +15,32 @@ export const Chat: React.FC = () => {
 
 const pageStyle = (theme: Theme) => {
   return css`
-    background-color: ${theme.color.neutral.backgroundBold};
     flex: 1;
+    padding: 73px 16px 0;
+    margin-bottom: 64px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: ${theme.color.neutral.background};
+
+    &::-webkit-scrollbar {
+      width: 10px;
+      background-color: ${theme.color.neutral.background};
+    }
+
+    &::-webkit-scrollbar-button {
+      width: 0;
+      height: 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      width: 4px;
+      border-radius: 10px;
+      background-color: ${theme.color.neutral.border};
+      border: 3px solid ${theme.color.neutral.background};
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
   `;
 };

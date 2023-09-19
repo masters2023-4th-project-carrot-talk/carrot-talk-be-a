@@ -263,6 +263,7 @@ const pageStyle = (theme: Theme) => {
     }
 
     height: 100vh;
+    padding-top: 57px;
     overflow-y: auto;
 
     .list-box-container {

@@ -1,59 +1,65 @@
 import { ButtonProps } from '@components/common/button/Button';
 import { css } from '@emotion/react';
+import { useDropdownMenuPosition } from '@hooks/useDropdownMenuPosition';
 import { cloneElement, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { MenuBoxProps } from '../menu/MenuBox';
+import { Backdrop } from './Backdrop';
 
 type Props = {
   opener: React.ReactElement<ButtonProps>;
   menu: React.ReactElement<MenuBoxProps>;
-  align?: 'left' | 'right';
 };
 
-export const Dropdown: React.FC<Props> = ({ opener, menu, align }) => {
+export const Dropdown: React.FC<Props> = ({ opener, menu }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { dropdownRef, dropdownMenuPositionStyle, calcDropdownMenuPosition } =
+    useDropdownMenuPosition({
+      appLayout: document.getElementById('app-layout') as HTMLElement,
+    });
 
-  const openMenu = () => {
+  const openMenu = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
     const appLayout = document.getElementById('app-layout') as HTMLElement;
     appLayout.style.overflowY = 'hidden';
+
+    calcDropdownMenuPosition();
     setIsOpen(true);
   };
 
   const closeMenu = (e: React.MouseEvent) => {
     e.stopPropagation();
+
     const appLayout = document.getElementById('app-layout') as HTMLElement;
     appLayout.style.overflowY = 'auto';
+
     setIsOpen(false);
   };
 
   return (
-    <div css={() => dropdownStyle(align)}>
-      <div
-        onClick={(e) => {
-          e.stopPropagation();
-          openMenu();
-        }}
-      >
-        {opener}
-      </div>
-      {isOpen && (
-        <>
-          {/* <Backdrop
-            onClick={(e) => {
-              closeMenu(e); // BUG dropdown 버그로 인해 임시 추가
-            }}
-          /> */}
-          {cloneElement(menu, { onClick: closeMenu })}
-        </>
-      )}
+    <div css={() => dropdownStyle()} ref={dropdownRef}>
+      <div onClick={openMenu}>{opener}</div>
+      {isOpen &&
+        createPortal(
+          <>
+            <Backdrop onClick={closeMenu} />
+            {cloneElement(menu, {
+              positionStyle: {
+                position: 'absolute',
+                zIndex: '100',
+                ...dropdownMenuPositionStyle,
+              },
+              onClick: closeMenu,
+            })}
+          </>,
+          document.getElementById('dropdown-root') as HTMLElement,
+        )}
     </div>
   );
 };
 
-const dropdownStyle = (align?: 'left' | 'right') => css`
+const dropdownStyle = () => css`
   position: relative;
   z-index: 100;
-  & ul {
-    position: absolute;
-    ${align ?? 'left'}: 0;
-  }
 `;

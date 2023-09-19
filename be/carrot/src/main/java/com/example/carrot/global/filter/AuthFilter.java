@@ -83,13 +83,21 @@ public class AuthFilter implements Filter {
 			return;
 		}
 
-		if (!isContainToken(httpServletRequest)) {
-			log.info("토큰 포함 여부 확인");
-			handleIsOpenUriOrNot(httpServletRequest, httpServletResponse, chain);
+		// 토큰이 없을 때의 로직이 필요한 경우
+		if (openUrisCheck(httpServletRequest.getRequestURI()) && !isContainToken(httpServletRequest)) {
+			log.info("open uri에 해당하고 토큰이 없는 경우");
+
+			httpServletRequest.setAttribute(USER_ID, null);
+			chain.doFilter(httpServletRequest, httpServletResponse);
 			return;
 		}
 
 		log.info("토큰이 필요한 uri");
+
+		if (!isContainToken(httpServletRequest)) {
+			sendErrorApiResponse(httpServletResponse, new MalformedJwtException(""));
+			return;
+		}
 
 		try {
 			Claims claims = jwtProvider.getClaims(getToken(httpServletRequest));
@@ -99,19 +107,6 @@ public class AuthFilter implements Filter {
 			log.error(e.getClass().getName() + " : " + e);
 			sendErrorApiResponse(httpServletResponse, e);
 		}
-	}
-
-	private void handleIsOpenUriOrNot(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-		FilterChain chain) throws
-		IOException, ServletException {
-		if (!openUrisCheck(httpServletRequest.getRequestURI()) || !httpServletRequest.getMethod().equalsIgnoreCase("get")) {
-			log.info("openUris에 해당하지 않는 uri");
-			sendErrorApiResponse(httpServletResponse, new MalformedJwtException(""));
-			return;
-		}
-		log.info("openUris에 해당하는 uri");
-		httpServletRequest.setAttribute(USER_ID, null);
-		chain.doFilter(httpServletRequest, httpServletResponse);
 	}
 
 	private boolean openUrisCheck(String uri) {

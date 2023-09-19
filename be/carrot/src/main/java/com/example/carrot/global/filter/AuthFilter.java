@@ -84,6 +84,7 @@ public class AuthFilter implements Filter {
 		}
 
 		if (!isContainToken(httpServletRequest)) {
+			log.info("토큰 포함 여부 확인");
 			handleIsOpenUriOrNot(httpServletRequest, httpServletResponse, chain);
 			return;
 		}
@@ -106,6 +107,7 @@ public class AuthFilter implements Filter {
 			sendErrorApiResponse(httpServletResponse, new MalformedJwtException(""));
 			return;
 		}
+		log.info("openUris에 해당하는 uri");
 		httpServletRequest.setAttribute(USER_ID, null);
 		chain.doFilter(httpServletRequest, httpServletResponse);
 	}

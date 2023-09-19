@@ -94,7 +94,7 @@ public class AuthFilter implements Filter {
 			request.setAttribute(USER_ID, claims.get(USER_ID));
 			chain.doFilter(request, response);
 		} catch (JwtException e) {
-			log.error(e.getClass().getName());
+			log.error(e.getClass().getName() + " : " + e);
 			sendErrorApiResponse(httpServletResponse, e);
 		}
 	}

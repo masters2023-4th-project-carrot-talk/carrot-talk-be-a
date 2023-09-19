@@ -89,6 +89,8 @@ public class AuthFilter implements Filter {
 			return;
 		}
 
+		log.info("토큰이 필요한 uri");
+
 		try {
 			Claims claims = jwtProvider.getClaims(getToken(httpServletRequest));
 			request.setAttribute(USER_ID, claims.get(USER_ID));

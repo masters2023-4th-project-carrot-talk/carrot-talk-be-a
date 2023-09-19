@@ -84,11 +84,18 @@ public class AuthFilter implements Filter {
 		}
 
 		// 토큰이 없을 때의 로직이 필요한 경우
-		if (openUrisCheck(httpServletRequest.getRequestURI()) && !isContainToken(httpServletRequest)) {
-			log.info("open uri에 해당하고 토큰이 없는 경우");
+		if (openUrisCheck(httpServletRequest.getRequestURI()) ) {
+			log.info("openUri에 해당");
+			if (!isContainToken(httpServletRequest)) {
+				log.info("토큰이 없는 경우");
 
-			httpServletRequest.setAttribute(USER_ID, null);
-			chain.doFilter(httpServletRequest, httpServletResponse);
+				httpServletRequest.setAttribute(USER_ID, null);
+				chain.doFilter(httpServletRequest, httpServletResponse);
+				return;
+			}
+
+			log.info("토큰이 있는 경우");
+			getUserId(request, response, chain, httpServletRequest, httpServletResponse);
 			return;
 		}
 
@@ -99,6 +106,13 @@ public class AuthFilter implements Filter {
 			return;
 		}
 
+		getUserId(request, response, chain, httpServletRequest, httpServletResponse);
+	}
+
+	private void getUserId(ServletRequest request, ServletResponse response, FilterChain chain,
+		HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws
+		IOException,
+		ServletException {
 		try {
 			Claims claims = jwtProvider.getClaims(getToken(httpServletRequest));
 			request.setAttribute(USER_ID, claims.get(USER_ID));

@@ -11,6 +11,7 @@ export const PATH = {
   notFound: '/*',
   detail: '/detail',
   invalidAccess: '/invalid-access',
+  chatRoom: '/chat-room',
 };
 
 export const END_POINT = {

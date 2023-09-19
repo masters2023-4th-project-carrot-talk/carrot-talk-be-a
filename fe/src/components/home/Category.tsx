@@ -71,6 +71,7 @@ const pageStyle = (theme: Theme) => {
     }
     width: 100%;
     height: 100vh;
+    padding-top: 57px;
 
     position: absolute;
     top: 0;

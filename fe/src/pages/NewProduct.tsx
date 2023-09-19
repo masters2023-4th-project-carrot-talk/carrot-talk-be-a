@@ -105,51 +105,53 @@ export const NewProduct: React.FC = () => {
         </RightButton>
       </TopBar>
       <div css={(theme) => pageStyle(theme)}>
-        <div className="image-input">
-          <ImageInput
-            imageList={imageList}
-            onAddImage={(image: ImageType) =>
-              setImageList((i) => [...i, image])
-            }
-            onDeleteImage={(image: ImageType) =>
-              setImageList((i) =>
-                i.filter((img) => img.imageId !== image.imageId),
-              )
-            }
-          />
-        </div>
-        <div className="title-input">
-          <Input
-            variant="ghost"
-            value={title}
-            placeholder="내용을 입력하세요"
-            onChange={onChangeTitle}
-          />
-          {(title || selectedCategory) && (
-            <CategorySelector
-              categories={categories}
-              selectedCategory={selectedCategory}
-              onSelectCategory={selectCategory}
+        <div className="input-container">
+          <div className="image-input">
+            <ImageInput
+              imageList={imageList}
+              onAddImage={(image: ImageType) =>
+                setImageList((i) => [...i, image])
+              }
+              onDeleteImage={(image: ImageType) =>
+                setImageList((i) =>
+                  i.filter((img) => img.imageId !== image.imageId),
+                )
+              }
             />
-          )}
-        </div>
-        <div className="price-input">
-          <Input
-            variant="ghost"
-            label="₩"
-            value={price}
-            placeholder="가격(선택사항)"
-            onChange={onChangePrice}
-            warningMessage={priceWarningMessage}
-          />
-        </div>
-        <div className="content-input">
-          <TextArea
-            value={description}
-            minRows={5}
-            onChange={(value: string) => setDescription(value)}
-            placeholder="역삼 1동에 올릴 게시물 내용을 작성해주세요.(판매금지 물품은 게시가 제한될 수 있어요.)"
-          />
+          </div>
+          <div className="title-input">
+            <Input
+              variant="ghost"
+              value={title}
+              placeholder="내용을 입력하세요"
+              onChange={onChangeTitle}
+            />
+            {(title || selectedCategory) && (
+              <CategorySelector
+                categories={categories}
+                selectedCategory={selectedCategory}
+                onSelectCategory={selectCategory}
+              />
+            )}
+          </div>
+          <div className="price-input">
+            <Input
+              variant="ghost"
+              label="₩"
+              value={price}
+              placeholder="가격(선택사항)"
+              onChange={onChangePrice}
+              warningMessage={priceWarningMessage}
+            />
+          </div>
+          <div className="content-input">
+            <TextArea
+              value={description}
+              minRows={5}
+              onChange={(value: string) => setDescription(value)}
+              placeholder="역삼 1동에 올릴 게시물 내용을 작성해주세요.(판매금지 물품은 게시가 제한될 수 있어요.)"
+            />
+          </div>
         </div>
         <CategoryModal
           categoryList={categories}
@@ -169,22 +171,39 @@ export const NewProduct: React.FC = () => {
 
 const pageStyle = (theme: Theme) => css`
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 16px;
   margin-top: 57px;
   margin-bottom: 64px;
   overflow-y: auto;
   overflow-x: hidden;
 
   &::-webkit-scrollbar {
-    width: 4px;
+    width: 10px;
+    background-color: ${theme.color.neutral.background};
+  }
 
-    &-thumb {
-      background: ${theme.color.neutral.textWeak}; 
-      border-radius: 12px;
-    }
+  &::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    width: 4px;
+    border-radius: 10px;
+    background-color: ${theme.color.neutral.border};
+    border: 3px solid ${theme.color.neutral.background};
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  & .input-container {
+    box-sizing: border-box;
+    width: 393px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
   }
 
   & .image-input,

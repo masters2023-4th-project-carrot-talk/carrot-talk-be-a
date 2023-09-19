@@ -118,16 +118,28 @@ export const ImageInput: React.FC<Props> = ({
 const imageInputStype = (theme: Theme) => css`
   padding-top: 8px;
   overflow-x: auto;
+  overflow-y: hidden;
   scroll-behavior: smooth;
 
   &::-webkit-scrollbar {
-    height: 12px;
+    height: 10px;
+    background-color: ${theme.color.neutral.background};
+  }
 
-    &-thumb {
-      background: ${theme.color.neutral.textWeak};
-      border: 4px solid ${theme.color.neutral.background};
-      border-radius: 12px;
-    }
+  &::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 4px;
+    border-radius: 10px;
+    background-color: ${theme.color.neutral.border};
+    border: 3px solid ${theme.color.neutral.background};
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
   }
 
   & .image-input {

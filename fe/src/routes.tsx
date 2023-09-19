@@ -21,32 +21,25 @@ export const AppRoutes: React.FC = () => {
   return (
     <div css={globalStyle} id="app-layout">
       <Routes>
-        {/* TODO: 하단바 X - 카테고리 페이지 */}
-        {/* TODO: 하단바 X - 회원가입 페이지(리다이렉트) */}
-        {/* TODO: 하단바 O - 등록페이지 / 인증 필요 */}
-        {/* TODO: 하단바 O - 상세페이지 / 인증 필요*/}
-        {/* TODO: 하단바 O - 채팅페이지 / 인증 필요 */}
-        <Route element={<OnlyLoginUserRoute />}>
-          <Route element={<Layout />}>
+        <Route element={<Layout />}>
+          <Route element={<OnlyLoginUserRoute />}>
             <Route path={PATH.sales} element={<Sales />} />
             <Route path={PATH.interests} element={<Interests />} />
             <Route path={PATH.chat} element={<Chat />} />
+            <Route path={PATH.newProduct} element={<NewProduct />} />
+            <Route path={PATH.editProduct()} element={<NewProduct />} />
           </Route>
-        </Route>
 
-        <Route element={<Layout />}>
+          <Route element={<OnlyNotLoginUserRoute />}>
+            <Route path={PATH.redirect} element={<OauthLoading />} />
+            <Route path={PATH.signup} element={<Signup />} />
+          </Route>
+
           <Route path={PATH.home} element={<Home />} />
           <Route path={PATH.account} element={<Account />} />
           <Route path={PATH.notFound} element={<NotFound />} />
+          <Route path={`${PATH.detail}/:id`} element={<ProductDetail />} />
         </Route>
-
-        <Route path={PATH.newProduct} element={<NewProduct />} />
-
-        <Route element={<OnlyNotLoginUserRoute />}>
-          <Route path={PATH.redirect} element={<OauthLoading />} />
-          <Route path={PATH.signup} element={<Signup />} />
-        </Route>
-        <Route path={`${PATH.detail}/:id`} element={<ProductDetail />} />
       </Routes>
     </div>
   );
@@ -54,12 +47,22 @@ export const AppRoutes: React.FC = () => {
 
 const OnlyLoginUserRoute: React.FC = () => {
   const { isLogin } = useAuth();
-  return isLogin ? <Outlet /> : <Navigate to={PATH.account} />;
+
+  return isLogin ? (
+    <Outlet />
+  ) : (
+    <Navigate to={PATH.invalidAccess} replace={true} />
+  );
 };
 
 const OnlyNotLoginUserRoute: React.FC = () => {
   const { isLogin } = useAuth();
-  return isLogin ? <Navigate to={PATH.home} /> : <Outlet />;
+
+  return isLogin ? (
+    <Navigate to={PATH.invalidAccess} replace={true} />
+  ) : (
+    <Outlet />
+  );
 };
 
 const globalStyle = css`

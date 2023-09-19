@@ -4,9 +4,9 @@ import { AlertContent } from '@components/common/alert/AlertContent';
 import { Button } from '@components/common/button/Button';
 import { CircleXFilled, Plus } from '@components/common/icons';
 import { Theme, css } from '@emotion/react';
+import { useAlert, useModal } from '@hooks/usePopups';
 import React, { useState } from 'react';
 import { ModalHeader } from '../../ModalHeader';
-import { usePopupStore } from '@/stores/popupStore';
 
 type Props = {
   locationList?: LocationType[];
@@ -21,30 +21,20 @@ export const ControlLocation: React.FC<Props> = ({
   onPatchLocationByAuth,
   onDeleteLocationByAuth,
 }) => {
-  const { isOpen, currentDim, togglePopup, setCurrentDim } = usePopupStore();
+  const { alertSource, currentDim, onOpenAlert, onCloseAlert } = useAlert();
+  const { onCloseModal } = useModal();
   const [selectLocation, setSelectLocation] = useState<LocationType | null>(
     null,
   );
 
   const onAlertOpen = (location: LocationType) => {
-    togglePopup('alert', true);
-    setCurrentDim('alert');
+    onOpenAlert('location');
     setSelectLocation(location);
-  };
-
-  const onAlertClose = () => {
-    togglePopup('alert', false);
-    setCurrentDim('modal');
-  };
-
-  const onCloseModal = () => {
-    togglePopup('modal', false);
-    setCurrentDim(null);
   };
 
   const onDeleteLocation = (id?: number) => {
     if (id == null) return;
-    onAlertClose();
+    onCloseAlert({ currentDim: 'modal' });
     onDeleteLocationByAuth(id);
     setSelectLocation(null);
   };
@@ -70,7 +60,7 @@ export const ControlLocation: React.FC<Props> = ({
       <ModalHeader
         title="동네 설정"
         onCloseModal={() => {
-          onCloseModal();
+          onCloseModal({ currentDim: null });
           onChangeMainLocation();
         }}
       />
@@ -117,7 +107,7 @@ export const ControlLocation: React.FC<Props> = ({
           </Button>
         </div>
 
-        <Alert isOpen={isOpen.alert} currentDim={currentDim}>
+        <Alert isOpen={alertSource === 'location'} currentDim={currentDim}>
           {shouldBlockDelete ? (
             <>
               <AlertContent>

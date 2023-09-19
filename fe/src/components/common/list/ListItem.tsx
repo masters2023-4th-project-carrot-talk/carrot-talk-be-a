@@ -1,8 +1,9 @@
 import { Theme, css } from '@emotion/react';
+import { useEditProductStatus } from '@queries/products';
 import { formatCount } from '@utils/formatCount';
 import { formatPrice } from '@utils/formatPrice';
 import { formatTimeStamp } from '@utils/formatTimeStamp';
-import { FC } from 'react';
+import { getUserInfo } from '@utils/localStorage';
 import { Button } from '../button/Button';
 import { Dropdown } from '../dropdown/Dropdown';
 import { Dots, Heart, Message } from '../icons';
@@ -12,69 +13,131 @@ import { MenuItem } from '../menu/MenuItem';
 import { StatusBadge } from '../statusBadge/StatusBadge';
 
 type Props = {
-  product: ProductType; // TODO : product 타입 변경
+  product: ProductType;
   onOpenDetail?: () => void;
+  onAlertOpen?: () => void;
 };
 
-export const ListItem: FC<Props> = ({ product, onOpenDetail }) => {
+export const ListItem: React.FC<Props> = ({
+  product,
+  onOpenDetail,
+  onAlertOpen,
+}) => {
+  const editProductStatusMutation = useEditProductStatus('home');
+
   const formattedPrice = formatPrice(product.price);
   const formattedTimeStamp = formatTimeStamp(product.createdAt);
   const formattedChatCount = formatCount(product.chatCount);
   const formattedLikeCount = formatCount(product.likeCount);
-  // const isAuthor = getUserInfo()
-  //   ? getUserInfo()?.id === product.sellerId
-  //   : false;
-  const isAuthor = true;
-  // TODO : dots 드롭다운 달고 기능구현
+  const isAuthor = getUserInfo()
+    ? getUserInfo()?.id === product.sellerId
+    : false;
+  // const isAuthor = true;
+
+  const onEditProductStatus = (status: ProductStatusType) => {
+    editProductStatusMutation.mutate({
+      id: product.id,
+      status,
+    });
+  };
+
+  const menuRowsByStatus: Record<
+    ProductStatusType,
+    { id: number; status: ProductStatusType }[]
+  > = {
+    판매중: [
+      {
+        id: 1,
+        status: '예약중',
+      },
+      {
+        id: 2,
+        status: '판매완료',
+      },
+    ],
+    예약중: [
+      {
+        id: 1,
+        status: '판매중',
+      },
+      {
+        id: 2,
+        status: '판매완료',
+      },
+    ],
+    판매완료: [
+      {
+        id: 1,
+        status: '예약중',
+      },
+      {
+        id: 2,
+        status: '판매중',
+      },
+    ],
+  };
+
   return (
-    <li css={listItemStyle} onClick={onOpenDetail}>
-      <ImageBox imageUrl={product.imageUrl} size="l" />
-      <div className="text-area">
-        <div className="text-area__information">
-          <div className="text-area__information-title">
-            <span>{product.name}</span>
-            {isAuthor && (
-              <Dropdown
-                opener={
-                  <Button variant="text" onClick={() => {}}>
-                    <Dots />
-                  </Button>
-                }
-                menu={
-                  <MenuBox>
-                    <MenuItem onClick={() => {}}>판매중</MenuItem>
-                    <MenuItem onClick={() => {}}>예약중</MenuItem>
-                    <MenuItem onClick={() => {}}>판매완료</MenuItem>
-                  </MenuBox>
-                }
-              ></Dropdown>
+    <>
+      <li css={listItemStyle} onClick={onOpenDetail}>
+        <ImageBox imageUrl={product.imageUrl} size="l" />
+        <div className="text-area">
+          <div className="text-area__information">
+            <div className="text-area__information-title">
+              <span>{product.name}</span>
+              {isAuthor && (
+                <Dropdown
+                  align="right"
+                  opener={
+                    <Button variant="text">
+                      <Dots />
+                    </Button>
+                  }
+                  menu={
+                    <MenuBox>
+                      <MenuItem onClick={() => {}}>게시글 수정</MenuItem>
+                      {menuRowsByStatus[product.status].map((row) => (
+                        <MenuItem
+                          key={row.id}
+                          onClick={() => onEditProductStatus(row.status)}
+                        >
+                          {`${row.status} 상태로 전환`}
+                        </MenuItem>
+                      ))}
+                      <MenuItem variant="warning" onClick={onAlertOpen}>
+                        삭제
+                      </MenuItem>
+                    </MenuBox>
+                  }
+                />
+              )}
+            </div>
+            <div className="text-area__information-location">
+              {product.location} · {formattedTimeStamp}
+            </div>
+            <div className="text-area__information-state">
+              {product.status && <StatusBadge state={product.status} />}
+              {formattedPrice}
+            </div>
+          </div>
+
+          <div className="text-area__icons">
+            {product.chatCount > 0 && (
+              <div>
+                <Message />
+                <span>{formattedChatCount}</span>
+              </div>
+            )}
+            {product.likeCount > 0 && (
+              <div>
+                <Heart />
+                <span>{formattedLikeCount}</span>
+              </div>
             )}
           </div>
-          <div className="text-area__information-location">
-            {product.location} · {formattedTimeStamp}
-          </div>
-          <div className="text-area__information-state">
-            {product.status && <StatusBadge state={product.status} />}
-            {formattedPrice}
-          </div>
         </div>
-
-        <div className="text-area__icons">
-          {product.chatCount > 0 && (
-            <div>
-              <Message />
-              <span>{formattedChatCount}</span>
-            </div>
-          )}
-          {product.likeCount > 0 && (
-            <div>
-              <Heart />
-              <span>{formattedLikeCount}</span>
-            </div>
-          )}
-        </div>
-      </div>
-    </li>
+      </li>
+    </>
   );
 };
 
@@ -86,6 +149,10 @@ const listItemStyle = (theme: Theme) => {
     align-items: flex-start;
     gap: 16px;
     align-self: stretch;
+
+    &:hover .text-area__information-title > span {
+      font: ${theme.font.displayStrong16};
+    }
 
     .text-area {
       display: flex;

@@ -1,10 +1,10 @@
 import { Input } from '@components/common/input/Input';
-import { useLocationWithQuery } from '@/queries/location';
 import { css } from '@emotion/react';
+import { useModal } from '@hooks/usePopups';
+import { useLocationWithQuery } from '@queries/location';
 import { useState } from 'react';
 import { ModalHeader } from '../../ModalHeader';
 import { ModalListItem } from '../../ModalListItem';
-import { usePopupStore } from '@/stores/popupStore';
 
 type Props = {
   onToggleContent: (content: 'control' | 'search') => void;
@@ -15,12 +15,12 @@ export const SearchLocation: React.FC<Props> = ({
   onToggleContent,
   onPatchLocationByAuth,
 }) => {
+  const { onCloseModal } = useModal();
   const [inputValue, setInputValue] = useState<string>('');
   const trimedInputValue = inputValue.trim();
   const { locations, refetch: refetchLocations } =
     useLocationWithQuery(trimedInputValue);
   const [hasPressedEnter, setHasPressedEnter] = useState<boolean>(false);
-  const { togglePopup, setCurrentDim } = usePopupStore();
 
   const onChangeInput = (value: string) => {
     setInputValue(value);
@@ -37,17 +37,14 @@ export const SearchLocation: React.FC<Props> = ({
     onPatchLocationByAuth(location);
   };
 
-  const onCloseModal = () => {
-    togglePopup('modal', false);
-    setCurrentDim(null);
-    onToggleContent('control');
-  };
-
   return (
     <>
       <ModalHeader
         onNavigateBack={() => onToggleContent('control')}
-        onCloseModal={onCloseModal}
+        onCloseModal={() => {
+          onCloseModal({ currentDim: null });
+          onToggleContent('control');
+        }}
       />
       <div css={searchLocationStyle}>
         <div className="input__search">

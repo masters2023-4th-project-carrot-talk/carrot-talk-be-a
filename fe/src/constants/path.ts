@@ -1,6 +1,7 @@
 export const PATH = {
   home: '/',
   newProduct: '/products/new',
+  editProduct: (id?: number) => `/products/${id ?? ':productId'}/edit`,
   sales: '/sales',
   interests: '/interests',
   chat: '/chat',
@@ -9,19 +10,27 @@ export const PATH = {
   signup: '/signup',
   notFound: '/*',
   detail: '/detail',
+  invalidAccess: '/invalid-access',
 };
 
 export const END_POINT = {
-  locations: (id?: number) => id ?  `/api/users/locations/${id}` : '/api/users/locations',
-  locationsOf: (query: string) => `/api/locations?keyword=${query}`,
-  nicknameCheck: (nickname: string) => `/api/users/nickname?nickname=${nickname}`,
   signup: `/api/users/signup`,
   login: `/api/users/login`,
   logout: `/api/users/logout`,
   refreshToken: `/api/users/reissue-access-token`,
   categories: `/api/categories`,
-  products: (query: string) => `/api/products/${query}`,
-}
+  imageUpload: `/api/images`,
+  products: (query?: string) => `/api/products${query ? `?${query}` : ''}`,
+  productDetail: (id: number) => `/api/products/${id}`,
+  productStatusEdit: (id: number) => `/api/products/${id}/status`,
+  productDelete: (id: number) => `/api/products/${id}`,
+  productLike: (id: number) => `/api/products/${id}/like`,
+  locations: (id?: number) =>
+    id ? `/api/users/locations/${id}` : '/api/users/locations',
+  locationsOf: (query: string) => `/api/locations?keyword=${query}`,
+  nicknameCheck: (nickname: string) =>
+    `/api/users/nickname?nickname=${nickname}`,
+};
 
 export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${
   import.meta.env.VITE_KAKAO_REST_API_KEY

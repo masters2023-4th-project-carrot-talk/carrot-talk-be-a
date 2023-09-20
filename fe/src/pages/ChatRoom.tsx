@@ -1,5 +1,3 @@
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Theme, css } from '@emotion/react';
 
 import { Dropdown } from '@components/common/dropdown/Dropdown';
@@ -9,14 +7,6 @@ import { MenuItem } from '@components/common/menu/MenuItem';
 import { LeftButton } from '@components/common/topBar/LeftButton';
 import { RightButton } from '@components/common/topBar/RightButton';
 import { TopBar } from '@components/common/topBar/TopBar';
-import { Category } from '@components/home/Category';
-import { PATH } from '@constants/path';
-import { useAuth } from '@hooks/useAuth';
-import { useAlert } from '@hooks/usePopups';
-import { useLayoutStore } from '@stores/layoutStore';
-import { Alert } from '@components/common/alert/Alert';
-import { AlertButtons } from '@components/common/alert/AlertButtons';
-import { AlertContent } from '@components/common/alert/AlertContent';
 import { Button } from '@components/common/button/Button';
 import { Title } from '@components/common/topBar/Title';
 import { ChatBar } from '@components/common/actionBar/ChatBar';
@@ -24,9 +14,8 @@ import { Input } from '@components/common/input/Input';
 import { ImageBox } from '@components/common/imageBox/ImageBox';
 import { Bubble } from '@components/chat/bubble';
 
-type Props = {};
 // TODO 그냥 공백이면 안보내져야함
-export const ChatRoom: React.FC<Props> = ({}) => {
+export const ChatRoom: React.FC = () => {
   const receiver = '삼만보';
   const randomImageUrl = 'https://picsum.photos/200/300';
 
@@ -47,7 +36,6 @@ export const ChatRoom: React.FC<Props> = ({}) => {
         <Title>{receiver}</Title>
         <RightButton>
           <Dropdown
-            align="right"
             opener={
               <Button
                 variant="text"

@@ -87,7 +87,6 @@ export const ListItem: React.FC<Props> = ({
               <span>{product.name}</span>
               {isAuthor && (
                 <Dropdown
-                  align="right"
                   opener={
                     <Button variant="text">
                       <Dots />

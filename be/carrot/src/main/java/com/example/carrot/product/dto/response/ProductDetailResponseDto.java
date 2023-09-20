@@ -14,8 +14,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductDetailResponseDto {
 
-	@JsonProperty("location")
-	private String location;
 	@JsonProperty("status")
 	private String status;
 	@JsonProperty("title")
@@ -37,10 +35,10 @@ public class ProductDetailResponseDto {
 	@JsonProperty("isLiked")
 	private boolean isLiked;
 
-	public static ProductDetailResponseDto of(String location, String status, String title, String category,
+	public static ProductDetailResponseDto of(String status, String title, String category,
 		LocalDateTime createdAt,
 		String content, Long chatCount, Long likeCount, Long hits, Long price, boolean isLiked) {
-		return new ProductDetailResponseDto(location, status, title, category, createdAt, content, chatCount, likeCount,
+		return new ProductDetailResponseDto(status, title, category, createdAt, content, chatCount, likeCount,
 			hits, price, isLiked);
 	}
 

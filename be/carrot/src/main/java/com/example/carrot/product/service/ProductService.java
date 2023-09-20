@@ -21,6 +21,7 @@ import com.example.carrot.location.entity.Location;
 import com.example.carrot.location.repository.LocationRepository;
 import com.example.carrot.product.dto.request.ModifyProductRequestDto;
 import com.example.carrot.product.dto.request.ModifyProductStatusRequestDto;
+import com.example.carrot.product.dto.response.ProductDetailLocationResponseDto;
 import com.example.carrot.product.entity.ProductDetails;
 import com.example.carrot.product.dto.request.SaveProductRequestDto;
 import com.example.carrot.product.dto.response.MainPageResponseDto;
@@ -86,16 +87,16 @@ public class ProductService {
 
 		Product product = getProduct(productId);
 
-		Category category = getOldOrNewCategory(modifyProductRequestDto, product);
-		Location location = getOldOrNewLocation(modifyProductRequestDto, product);
-		String content = getOldOrNewContent(modifyProductRequestDto, product);
-		Long price = getOldOrNewPrice(modifyProductRequestDto, product);
-		String title = getOldOrNewTitle(modifyProductRequestDto, product);
+		Category category = getCategory(modifyProductRequestDto);
+		Location location = getLocation(modifyProductRequestDto);
+		String content = modifyProductRequestDto.getContent();
+		Long price = modifyProductRequestDto.getPrice();
+		String title = modifyProductRequestDto.getTitle();
 
 		ProductDetails productDetails = ProductDetails.of(content, price, title, category, location);
 
 		if (product.isContainModifyImages(modifyProductRequestDto.getImages())) {
-			Image mainImage = getImage(modifyProductRequestDto.getImages().get(0));
+			Image mainImage = getMainImage(modifyProductRequestDto);
 			List<Image> subImages = getSubImages(modifyProductRequestDto);
 
 			deleteOriginImages(product);
@@ -109,39 +110,8 @@ public class ProductService {
 		return ModifyProductResponseDto.of(product);
 	}
 
-	private String getOldOrNewTitle(ModifyProductRequestDto modifyProductRequestDto, Product product) {
-		if (modifyProductRequestDto.getTitle() == null) {
-			return product.getName();
-		}
-		return modifyProductRequestDto.getTitle();
-	}
-
-	private Long getOldOrNewPrice(ModifyProductRequestDto modifyProductRequestDto, Product product) {
-		if (modifyProductRequestDto.getPrice() == null) {
-			return product.getPrice();
-		}
-		return modifyProductRequestDto.getPrice();
-	}
-
-	private String getOldOrNewContent(ModifyProductRequestDto modifyProductRequestDto, Product product) {
-		if (modifyProductRequestDto.getContent() == null) {
-			return product.getContent();
-		}
-		return modifyProductRequestDto.getContent();
-	}
-
-	private Location getOldOrNewLocation(ModifyProductRequestDto modifyProductRequestDto, Product product) {
-		if (modifyProductRequestDto.getLocationId() == null) {
-			return product.getLocation();
-		}
-		return getLocation(modifyProductRequestDto);
-	}
-
-	private Category getOldOrNewCategory(ModifyProductRequestDto modifyProductRequestDto, Product product) {
-		if (modifyProductRequestDto.getCategoryId() == null) {
-			return product.getCategory();
-		}
-		return getCategory(modifyProductRequestDto);
+	private Image getMainImage(ModifyProductRequestDto modifyProductRequestDto) {
+		return getImage(modifyProductRequestDto.getImages().get(0));
 	}
 
 	private List<Image> getSubImages(ModifyProductRequestDto modifyProductRequestDto) {
@@ -273,7 +243,7 @@ public class ProductService {
 	public ReadProductDetailResponseDto getProductDetail(Long productId, Long userId) {
 		Product product = getProduct(productId);
 		return ReadProductDetailResponseDto.of(makeImageUrls(product),
-			makeSeller(product), makeProduct(product, userId));
+			makeSeller(product), makeLocation(product), makeProduct(product, userId));
 	}
 
 	private List<ProductImageResponseDto> makeImageUrls(Product product) {
@@ -301,9 +271,12 @@ public class ProductService {
 		return ProductDetailSellerResponseDto.of(user.getUserId(), user.getNickName());
 	}
 
-	private ProductDetailResponseDto makeProduct(Product product, Long userId) {
-		String location = product.getLocation().getName();
+	private ProductDetailLocationResponseDto makeLocation(Product product) {
+		Location location = product.getLocation();
+		return ProductDetailLocationResponseDto.of(location.getLocationId(), location.getName());
+	}
 
+	private ProductDetailResponseDto makeProduct(Product product, Long userId) {
 		String status = product.getStatus().getValue();
 		String title = product.getName();
 		String category = product.getCategory().getName();
@@ -326,7 +299,7 @@ public class ProductService {
 			isLiked = findIsLiked(likes, userId);
 		}
 
-		return ProductDetailResponseDto.of(location, status, title, category,
+		return ProductDetailResponseDto.of(status, title, category,
 			createdAt, content, chatCount, likeCount, hits, price, isLiked);
 	}
 

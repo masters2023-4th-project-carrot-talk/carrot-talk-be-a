@@ -2,16 +2,16 @@ export const PATH = {
   home: '/',
   newProduct: '/products/new',
   editProduct: (id?: number) => `/products/${id ?? ':productId'}/edit`,
+  detail: '/detail',
   sales: '/sales',
   interests: '/interests',
   chat: '/chat',
+  chatRoom: '/chat-room',
   account: '/account',
   redirect: '/oauth/redirect',
   signup: '/signup',
   notFound: '/*',
-  detail: '/detail',
   invalidAccess: '/invalid-access',
-  chatRoom: '/chat-room',
 };
 
 export const END_POINT = {
@@ -21,6 +21,8 @@ export const END_POINT = {
   refreshToken: `/api/users/reissue-access-token`,
   categories: `/api/categories`,
   imageUpload: `/api/images`,
+  chatRooms: `/api/chatrooms`,
+  unreadTotalCount: `/api/chatrooms/unread-total-count`,
   products: (query?: string) => `/api/products${query ? `?${query}` : ''}`,
   productDetail: (id: number) => `/api/products/${id}`,
   productStatusEdit: (id: number) => `/api/products/${id}/status`,

@@ -196,3 +196,21 @@ export const addNewProduct = (productFormData: ProductFormData) => {
     body: JSON.stringify(productFormData),
   });
 };
+
+export const getChatRooms = () => {
+  return fetchData(END_POINT.chatRooms, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+  });
+};
+
+export const getUnreadTotalCount = () => {
+  return fetchData(END_POINT.unreadTotalCount, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+  });
+};

@@ -6,6 +6,7 @@ import {
 import { Title } from '@components/common/topBar/Title';
 import { TopBar } from '@components/common/topBar/TopBar';
 import { Theme, css } from '@emotion/react';
+import { useChatRooms } from '@queries/chat';
 import { useEffect, useState } from 'react';
 
 type ChatRoomType = {
@@ -14,6 +15,7 @@ type ChatRoomType = {
 
 export const Chat: React.FC = () => {
   const [chatItems, setChatItems] = useState<ChatRoomType[]>([]);
+  const { chatRooms, status, error } = useChatRooms(); // TODO 추후 채팅 event로 인하여 커스텀 훅으로 이동할 가능성
 
   useEffect(() => {
     setTimeout(

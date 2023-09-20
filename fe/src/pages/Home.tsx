@@ -257,7 +257,7 @@ export const Home: React.FC = () => {
     </>
   );
 };
-//     padding-top: 56px;
+
 const pageStyle = (theme: Theme) => {
   return css`
     ::-webkit-scrollbar {

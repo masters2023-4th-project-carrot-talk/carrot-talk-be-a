@@ -171,7 +171,7 @@ export const NewProduct: React.FC = () => {
 
 const pageStyle = (theme: Theme) => css`
   flex: 1;
-  margin-top: 57px;
+  margin-top: 56px;
   margin-bottom: 64px;
   overflow-y: auto;
   overflow-x: hidden;

@@ -231,7 +231,9 @@ export const Home: React.FC = () => {
               {shouldShowSkeletons && <>{renderSkeletons(10)}</>}
             </ListBox>
             {shouldShowEndOfData && (
-              <div className="data-status-info">전부 살펴 봤어요!</div>
+              <div className="data-status-info">
+                <p>전부 살펴 봤어요!</p>
+              </div>
             )}
             <LocationModal locationList={serverLocations} />
             <div ref={observeTarget} css={obseverStyle}></div>
@@ -255,41 +257,41 @@ export const Home: React.FC = () => {
     </>
   );
 };
-
+//     padding-top: 56px;
 const pageStyle = (theme: Theme) => {
   return css`
     ::-webkit-scrollbar {
       display: none;
     }
-
     height: 100vh;
-    padding-top: 57px;
     overflow-y: auto;
 
     .list-box-container {
       height: 100vh;
+      padding-top: 56px;
+      margin-bottom: 64px;
       overflow-y: auto;
       overflow-x: hidden;
 
       ::-webkit-scrollbar {
         width: 10px;
         background-color: ${theme.color.neutral.background};
-      }
 
-      ::-webkit-scrollbar-button {
-        width: 0;
-        height: 0;
-      }
+        &-button {
+          width: 0;
+          height: 0;
+        }
 
-      ::-webkit-scrollbar-thumb {
-        width: 4px;
-        border-radius: 10px;
-        background-color: ${theme.color.neutral.border};
-        border: 3px solid ${theme.color.neutral.background};
-      }
+        &-thumb {
+          width: 4px;
+          border-radius: 10px;
+          background-color: ${theme.color.neutral.border};
+          border: 3px solid ${theme.color.neutral.background};
+        }
 
-      ::-webkit-scrollbar-track {
-        background-color: transparent;
+        &-track {
+          background-color: transparent;
+        }
       }
     }
 
@@ -306,10 +308,12 @@ const pageStyle = (theme: Theme) => {
     }
 
     .data-status-info {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       cursor: default;
-      text-align: center;
       width: 100%;
-      padding: 56px 0px 100px 0px;
+      height: 70px;
       font: ${theme.font.displayDefault16};
     }
   `;

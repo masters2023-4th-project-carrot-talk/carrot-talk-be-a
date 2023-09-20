@@ -109,4 +109,3 @@ const navStyle = (theme: Theme) => {
     }
   `;
 };
-// position: sticky;

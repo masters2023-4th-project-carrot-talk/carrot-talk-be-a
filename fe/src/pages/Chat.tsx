@@ -1,4 +1,8 @@
-import { ChatItem, ChatItemProps, SkeletonChatItem } from '@components/common/chat/ChatItem';
+import {
+  ChatItem,
+  ChatItemProps,
+  SkeletonChatItem,
+} from '@components/common/chat/ChatItem';
 import { Title } from '@components/common/topBar/Title';
 import { TopBar } from '@components/common/topBar/TopBar';
 import { Theme, css } from '@emotion/react';
@@ -90,7 +94,7 @@ export const Chat: React.FC = () => {
 const pageStyle = (theme: Theme) => {
   return css`
     flex: 1;
-    padding-top: 57px;
+    padding-top: 56px;
     margin-bottom: 64px;
     overflow-x: hidden;
     overflow-y: auto;

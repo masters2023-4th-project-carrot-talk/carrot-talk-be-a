@@ -7,7 +7,7 @@ import { ChevronRight } from '../common/icons';
 type Props = {
   categories?: CategoryType[];
   selectedCategory?: CategoryType;
-  onSelectCategory: (name: string) => void;
+  onSelectCategory: (id: number) => void;
 };
 
 export const CategorySelector: React.FC<Props> = ({
@@ -35,7 +35,7 @@ export const CategorySelector: React.FC<Props> = ({
               state={
                 selectedCategory?.id === category.id ? 'active' : 'default'
               }
-              onClick={() => onSelectCategory(category.name)}
+              onClick={() => onSelectCategory(category.id)}
             >
               {category.name}
             </Button>

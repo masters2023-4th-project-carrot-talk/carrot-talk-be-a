@@ -5,7 +5,7 @@ import { useModal } from '@hooks/usePopups';
 
 type Props = {
   categoryList?: CategoryType[];
-  onSelectCategory: (name: string) => void;
+  onSelectCategory: (id: number) => void;
 };
 
 export const CategoryModal: React.FC<Props> = ({
@@ -29,7 +29,7 @@ export const CategoryModal: React.FC<Props> = ({
               name={category.name} // TODO props: data에 따라 수정
               key={category.id}
               onClick={() => {
-                onSelectCategory(category.name);
+                onSelectCategory(category.id);
                 onCloseModal({ currentDim: null });
               }}
             />

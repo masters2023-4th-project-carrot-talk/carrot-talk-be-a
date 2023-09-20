@@ -23,12 +23,12 @@ export const useCategorySelector = ({
     setSelectedCategory(initialCategory);
   }, [categories, initialCategoryName]);
 
-  const selectCategory = (name: string) => {
+  const selectCategory = (id: number) => {
     if (!categories) {
       return;
     }
 
-    const category = categories.find((category) => category.name === name)!;
+    const category = categories.find((category) => category.id === id)!;
     setSelectedCategory(category);
   };
 

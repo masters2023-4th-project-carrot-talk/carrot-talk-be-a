@@ -133,12 +133,19 @@ export const getProducts = ({
 };
 
 export const getProductsDetail = (id: number) => {
-  return fetchData(END_POINT.productDetail(id), {
+  const token = getAccessToken();
+
+  const requestOptions: RequestInit = {
     method: 'GET',
-    headers: {
-      Authorization: `Bearer ${getAccessToken()}`,
-    },
-  });
+  };
+
+  if (token) {
+    requestOptions.headers = {
+      Authorization: `Bearer ${token}`,
+    };
+  }
+
+  return fetchData(END_POINT.productDetail(id), requestOptions);
 };
 
 export const editProductStatus = (id: number, status: ProductStatusType) => {

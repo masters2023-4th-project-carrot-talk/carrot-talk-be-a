@@ -95,9 +95,6 @@ export const ProductDetail: React.FC = () => {
   const onToggleLike = () => {
     editLikeStatusMutation.mutate(numberedProductId);
   };
-  console.log(prevPath, '< prevPath');
-  console.log(PATH.newProduct, 'PATH.newProduct');
-  console.log(prevPath === PATH.newProduct, 'PATH test?');
 
   const onNavigateBack = () => {
     prevPath === PATH.newProduct ? navigate(PATH.home) : navigate(-1);
@@ -135,7 +132,6 @@ export const ProductDetail: React.FC = () => {
         {isAuthor && (
           <RightButton>
             <Dropdown
-              align="right"
               opener={
                 <Button variant="text" className="button__status">
                   <Dots />

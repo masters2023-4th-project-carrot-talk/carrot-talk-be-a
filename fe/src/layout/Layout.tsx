@@ -16,6 +16,7 @@ export const Layout: React.FC = () => {
     >
       <Outlet />
       <NavBar />
+      <div id="dropdown-root"></div>
     </div>
   );
 };

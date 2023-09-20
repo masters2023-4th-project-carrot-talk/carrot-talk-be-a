@@ -76,6 +76,10 @@ type ProductDetailType = {
     id: number;
     nickname: string;
   };
+  location: {
+    id: number;
+    name: string;
+  };
   product: {
     location: string;
     status: ProductStatusType;

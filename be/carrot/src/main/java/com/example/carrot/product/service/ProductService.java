@@ -21,6 +21,7 @@ import com.example.carrot.location.entity.Location;
 import com.example.carrot.location.repository.LocationRepository;
 import com.example.carrot.product.dto.request.ModifyProductRequestDto;
 import com.example.carrot.product.dto.request.ModifyProductStatusRequestDto;
+import com.example.carrot.product.dto.response.ProductDetailLocationResponseDto;
 import com.example.carrot.product.entity.ProductDetails;
 import com.example.carrot.product.dto.request.SaveProductRequestDto;
 import com.example.carrot.product.dto.response.MainPageResponseDto;
@@ -273,7 +274,7 @@ public class ProductService {
 	public ReadProductDetailResponseDto getProductDetail(Long productId, Long userId) {
 		Product product = getProduct(productId);
 		return ReadProductDetailResponseDto.of(makeImageUrls(product),
-			makeSeller(product), makeProduct(product, userId));
+			makeSeller(product), makeLocation(product), makeProduct(product, userId));
 	}
 
 	private List<ProductImageResponseDto> makeImageUrls(Product product) {
@@ -301,9 +302,12 @@ public class ProductService {
 		return ProductDetailSellerResponseDto.of(user.getUserId(), user.getNickName());
 	}
 
-	private ProductDetailResponseDto makeProduct(Product product, Long userId) {
-		String location = product.getLocation().getName();
+	private ProductDetailLocationResponseDto makeLocation(Product product) {
+		Location location = product.getLocation();
+		return ProductDetailLocationResponseDto.of(location.getLocationId(), location.getName());
+	}
 
+	private ProductDetailResponseDto makeProduct(Product product, Long userId) {
 		String status = product.getStatus().getValue();
 		String title = product.getName();
 		String category = product.getCategory().getName();
@@ -326,7 +330,7 @@ public class ProductService {
 			isLiked = findIsLiked(likes, userId);
 		}
 
-		return ProductDetailResponseDto.of(location, status, title, category,
+		return ProductDetailResponseDto.of(status, title, category,
 			createdAt, content, chatCount, likeCount, hits, price, isLiked);
 	}
 

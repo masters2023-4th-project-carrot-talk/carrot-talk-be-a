@@ -154,7 +154,7 @@ type ImageDataFromServer =
 
 type ProductFormData = {
   images: number[];
-  name: string;
+  title: string;
   categoryId: number;
   locationId: number;
   content?: string;

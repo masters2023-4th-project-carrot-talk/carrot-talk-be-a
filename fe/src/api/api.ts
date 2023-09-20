@@ -196,3 +196,14 @@ export const addNewProduct = (productFormData: ProductFormData) => {
     body: JSON.stringify(productFormData),
   });
 };
+
+export const editProduct = (id: number, productFormData: ProductFormData) => {
+  return fetchData(END_POINT.productDetail(id), {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+    body: JSON.stringify(productFormData),
+  })
+}

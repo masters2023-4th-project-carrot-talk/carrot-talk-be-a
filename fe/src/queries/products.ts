@@ -2,6 +2,7 @@ import {
   addNewProduct,
   deleteProduct,
   editLikeStatus,
+  editProduct,
   editProductStatus,
   getProducts,
   getProductsDetail,
@@ -173,9 +174,11 @@ export const useImageUpload = () => {
   });
 };
 
-export const useProductAddition = () => {
+export const useProductMutation = (id: number) => {
   return useMutation<ProductAdditionResponse, unknown, ProductFormData>({
     mutationFn: (productFormData: ProductFormData) =>
-      addNewProduct(productFormData),
+      isNaN(id)
+        ? addNewProduct(productFormData)
+        : editProduct(id, productFormData),
   });
 };

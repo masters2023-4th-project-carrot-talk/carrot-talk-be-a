@@ -23,7 +23,7 @@ import { commaStringToNumber } from '@utils/formatPrice';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-export const NewProduct: React.FC = () => {
+export const ProductEditor: React.FC = () => {
   const { id: productId } = useParams();
   const navigate = useNavigate();
   const currentLocation = useLocation();

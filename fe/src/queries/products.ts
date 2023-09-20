@@ -1,19 +1,20 @@
 import {
+  addNewProduct,
   deleteProduct,
   editLikeStatus,
   editProductStatus,
   getProducts,
   getProductsDetail,
-  addNewProduct,
   requestImageUpload,
 } from '@api/api';
 import { QUERY_KEY } from '@constants/queryKey';
+import { modifiedLocationName } from '@utils/modifyLocationName';
 import { useMemo } from 'react';
 import {
   useInfiniteQuery,
   useMutation,
-  useQueryClient,
   useQuery,
+  useQueryClient,
 } from 'react-query';
 
 export const useProducts = (
@@ -97,9 +98,14 @@ export const useProductDetailQuery = (id: number) => {
     queryFn: () => getProductsDetail(id),
     select: (responseData) => {
       const { product, seller, images, location } = responseData.data;
-      return { product, seller, images, location };
+      return {
+        product,
+        seller,
+        images,
+        location: { ...location, name: modifiedLocationName(location.name) },
+      };
     },
-    enabled: !isNaN(id)
+    enabled: !isNaN(id),
   });
 
   return {

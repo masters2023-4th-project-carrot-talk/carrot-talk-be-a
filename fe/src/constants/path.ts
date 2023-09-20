@@ -1,7 +1,5 @@
 export const PATH = {
   home: '/',
-  newProduct: '/products/new',
-  editProduct: (id?: number) => `/products/${id ?? ':productId'}/edit`,
   sales: '/sales',
   interests: '/interests',
   chat: '/chat',
@@ -9,7 +7,9 @@ export const PATH = {
   redirect: '/oauth/redirect',
   signup: '/signup',
   notFound: '/*',
-  detail: '/detail',
+  detail: '/products',
+  newProduct: '/products/new',
+  editProduct: '/products/:id/edit',
   invalidAccess: '/invalid-access',
   chatRoom: '/chat-room',
 };

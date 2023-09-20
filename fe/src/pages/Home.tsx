@@ -85,7 +85,7 @@ export const Home: React.FC = () => {
   }, [serverLocations]);
 
   const onOpenDetail = (id: number) => {
-    navigate(`/detail/${id}`);
+    navigate(`${PATH.detail}/${id}`);
   };
 
   const onOpenCategory = () => {

@@ -28,7 +28,7 @@ export const AppRoutes: React.FC = () => {
             <Route path={PATH.interests} element={<Interests />} />
             <Route path={PATH.chat} element={<Chat />} />
             <Route path={PATH.newProduct} element={<NewProduct />} />
-            <Route path={PATH.editProduct()} element={<NewProduct />} />
+            <Route path={PATH.editProduct} element={<NewProduct />} />
           </Route>
 
           <Route element={<OnlyNotLoginUserRoute />}>

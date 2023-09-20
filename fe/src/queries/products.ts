@@ -99,6 +99,7 @@ export const useProductDetailQuery = (id: number) => {
       const { product, seller, images, location } = responseData.data;
       return { product, seller, images, location };
     },
+    enabled: !isNaN(id)
   });
 
   return {

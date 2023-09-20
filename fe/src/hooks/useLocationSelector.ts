@@ -32,7 +32,11 @@ export const useLocationSelector = ({
     setSelectedLocation(mainLocation);
   }, [serverLocations, selectedLocation]);
 
-  const selectLocation = (location: LocationType) => {
+  const selectLocation = (location: LocationType | undefined) => {
+    if (!location) {
+      return;
+    }
+
     setSelectedLocation(location);
   };
 

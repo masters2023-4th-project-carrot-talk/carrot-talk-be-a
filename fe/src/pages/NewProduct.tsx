@@ -13,6 +13,7 @@ import { LocationSelector } from '@components/new/LocationSelector';
 import { PATH } from '@constants/path';
 import { Theme, css } from '@emotion/react';
 import { useCategorySelector } from '@hooks/useCategorySelector';
+import { useInitialInputValues } from '@hooks/useInitialInputValues';
 import { useInput } from '@hooks/useInput';
 import { useLocationSelector } from '@hooks/useLocationSelector';
 import { usePrice } from '@hooks/usePrice';
@@ -20,38 +21,57 @@ import { useProductAddition } from '@queries/products';
 import { usePathHistoryStore } from '@stores/pathHistoryStore';
 import { commaStringToNumber } from '@utils/formatPrice';
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 export const NewProduct: React.FC = () => {
+  const { id: productId } = useParams();
+  const navigate = useNavigate();
   const currentLocation = useLocation();
   const { setPrevUrl } = usePathHistoryStore();
+  const initialInputValues = useInitialInputValues(Number(productId));
 
-  const navigate = useNavigate();
-  const [imageList, setImageList] = useState<ImageType[]>([]);
+  const [imageList, setImageList] = useState<ImageType[]>(
+    initialInputValues.images,
+  );
   const {
     value: title,
     onChangeValue: onChangeTitle,
     isValidValue: isValidTitle,
   } = useInput({
-    initialValue: '',
+    initialValue: initialInputValues.title,
     validator: (value) => value.length > 0,
     warningMessage: '제목을 입력해주세요',
   });
-  const { selectedCategory, categories, selectCategory } = useCategorySelector(
-    {},
+  const { selectedCategory, categories, selectCategory } = useCategorySelector({
+    initialCategoryName: initialInputValues.category,
+  });
+  const { price, onChangePrice, priceWarningMessage, isValidPrice } = usePrice({
+    initialPrice: initialInputValues.price,
+  });
+  const [description, setDescription] = useState(
+    initialInputValues.description,
   );
-  const { price, onChangePrice, priceWarningMessage, isValidPrice } = usePrice(
-    {},
-  );
-  const [description, setDescription] = useState('');
-  const { selectedLocation, selectLocation, locations } = useLocationSelector(
-    {},
-  );
+  const { selectedLocation, selectLocation, locations } = useLocationSelector({
+    initialLocation: initialInputValues.location,
+  });
   const productAdditionMutation = useProductAddition();
 
   useEffect(() => {
     setPrevUrl(currentLocation.pathname);
   }, [currentLocation, setPrevUrl]);
+
+  useEffect(() => {
+    if (!productId) {
+      return;
+    }
+    // 상품 수정 시 상품 정보를 불러와서 초기값으로 설정
+    setImageList(initialInputValues.images);
+    onChangeTitle(initialInputValues.title);
+    selectCategory(initialInputValues.category);
+    onChangePrice(initialInputValues.price);
+    setDescription(initialInputValues.description);
+    selectLocation(initialInputValues.location);
+  }, [initialInputValues]);
 
   const isRequiredFieldsFilled =
     imageList.length !== 0 && title && selectedCategory && selectedLocation;

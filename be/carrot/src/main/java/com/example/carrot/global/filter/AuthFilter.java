@@ -86,26 +86,35 @@ public class AuthFilter implements Filter {
 		// 토큰이 없을 때의 로직이 필요한 경우
 		if (openUrisCheck(httpServletRequest.getRequestURI()) ) {
 			log.info("openUri에 해당");
-			if (!isContainToken(httpServletRequest)) {
-				log.info("토큰이 없는 경우");
-
-				httpServletRequest.setAttribute(USER_ID, null);
-				chain.doFilter(httpServletRequest, httpServletResponse);
-				return;
-			}
-
-			log.info("토큰이 있는 경우");
-			getUserId(request, response, chain, httpServletRequest, httpServletResponse);
+			handleContainTokenOrNot(request, response, chain, httpServletRequest, httpServletResponse);
 			return;
 		}
 
 		log.info("토큰이 필요한 uri");
 
 		if (!isContainToken(httpServletRequest)) {
+			log.info("토큰이 없는 경우");
 			sendErrorApiResponse(httpServletResponse, new MalformedJwtException(""));
 			return;
 		}
 
+		log.info("토큰이 있는 경우");
+		getUserId(request, response, chain, httpServletRequest, httpServletResponse);
+	}
+
+	private void handleContainTokenOrNot(ServletRequest request, ServletResponse response, FilterChain chain,
+		HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws
+		IOException,
+		ServletException {
+		if (!isContainToken(httpServletRequest)) {
+			log.info("토큰이 없는 경우");
+
+			httpServletRequest.setAttribute(USER_ID, null);
+			chain.doFilter(httpServletRequest, httpServletResponse);
+			return;
+		}
+
+		log.info("토큰이 있는 경우");
 		getUserId(request, response, chain, httpServletRequest, httpServletResponse);
 	}
 
@@ -161,15 +170,8 @@ public class AuthFilter implements Filter {
 	}
 
 	private boolean isContainToken(HttpServletRequest httpServletRequest) {
-		log.info("토큰 포함 여부 확인 로직");
 		String authorization = httpServletRequest.getHeader(HEADER_AUTHORIZATION);
-		if (authorization != null && authorization.startsWith(TOKEN_PREFIX)) {
-			log.info("토큰 포함!");
-			log.info("authorization : " + authorization);
-			return true;
-		}
-		log.info("토큰 포함 안 됨");
-		return false;
+		return authorization != null && authorization.startsWith(TOKEN_PREFIX);
 	}
 
 	private boolean whiteListCheck(String uri) {

@@ -1,7 +1,7 @@
 import { ButtonProps } from '@components/common/button/Button';
 import { css } from '@emotion/react';
 import { useDropdownMenuPosition } from '@hooks/useDropdownMenuPosition';
-import { cloneElement, useState } from 'react';
+import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { MenuBoxProps } from '../menu/MenuBox';
 import { Backdrop } from './Backdrop';
@@ -44,14 +44,16 @@ export const Dropdown: React.FC<Props> = ({ opener, menu }) => {
         createPortal(
           <>
             <Backdrop onClick={closeMenu} />
-            {cloneElement(menu, {
-              positionStyle: {
+            <div
+              style={{
                 position: 'absolute',
                 zIndex: '100',
                 ...dropdownMenuPositionStyle,
-              },
-              onClick: closeMenu,
-            })}
+              }}
+              onClick={closeMenu}
+            >
+              {menu}
+            </div>
           </>,
           document.getElementById('dropdown-root') as HTMLElement,
         )}

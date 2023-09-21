@@ -33,6 +33,7 @@ export const useFcmToken = () => {
       } catch (error) {
         console.log('An error occurred while retrieving token. ', error);
         // TODO 에러처리
+        // 토큰 만료시 삭제? 재요청? 
       }
     };
 

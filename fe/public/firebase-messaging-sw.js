@@ -35,12 +35,12 @@ messaging.onBackgroundMessage((payload) => {
     payload,
   );
   // Customize notification here
-  const notificationTitle = '흠~~~';
+  const notificationTitle = payload.notification.title;
   const notificationOptions = {
-    body: '알림테스트중.',
+    body: payload.notification.body,
     icon: './beez.svg',
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
-// 백그라운드  알림은 서비스워커가 전달해줘야함
+// 백그라운드 알림은 서비스워커가 전달

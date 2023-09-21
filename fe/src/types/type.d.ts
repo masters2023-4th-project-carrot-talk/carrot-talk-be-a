@@ -167,3 +167,8 @@ type ProductAdditionResponse = {
     productId: number;
   };
 };
+
+type ResponseFromServer<T> = {
+  success: boolean;
+  data?: T
+}

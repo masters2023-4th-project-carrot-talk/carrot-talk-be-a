@@ -196,3 +196,16 @@ export const addNewProduct = (productFormData: ProductFormData) => {
     body: JSON.stringify(productFormData),
   });
 };
+
+export const getChatRoomId = (productId: number) => {
+  return fetchData(END_POINT.chatroom, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+    body: JSON.stringify({
+      productId
+    })
+  });
+}

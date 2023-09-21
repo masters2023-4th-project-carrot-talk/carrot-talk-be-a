@@ -21,6 +21,7 @@ export const END_POINT = {
   refreshToken: `/api/users/reissue-access-token`,
   categories: `/api/categories`,
   imageUpload: `/api/images`,
+  chatroom: '/api/chatrooms',
   products: (query?: string) => `/api/products${query ? `?${query}` : ''}`,
   productDetail: (id: number) => `/api/products/${id}`,
   productStatusEdit: (id: number) => `/api/products/${id}/status`,

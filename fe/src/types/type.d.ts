@@ -201,3 +201,7 @@ type UnreadTotalFromServer = {
 type UnreadTotalCountType = {
   unreadTotalCount: number;
 };
+
+type ServiceWorkerGlobalScope = typeof self & {
+  registration: ServiceWorkerRegistration;
+};

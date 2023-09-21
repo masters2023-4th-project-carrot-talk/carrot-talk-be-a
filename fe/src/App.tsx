@@ -6,7 +6,7 @@ import { globalStyle } from './styles/globalStyle';
 import { BrowserRouter } from 'react-router-dom';
 import { AppRoutes } from './routes';
 import './utils/fcm';
-import { requestPermission } from './utils/fcm';
+// import { requestPermission } from './utils/fcm';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,7 +17,7 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  requestPermission(); // TODO test중. 로그인 시에만 허용하도록 변경
+  // requestPermission(); // TODO test중. 로그인 시에만 허용하도록 변경
 
   return (
     <QueryClientProvider client={queryClient}>

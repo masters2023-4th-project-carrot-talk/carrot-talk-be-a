@@ -108,7 +108,13 @@ export const refreshToken = async () => {
 };
 
 export const getLocationWithQuery = (query: string) => {
-  return fetchData(END_POINT.locationsOf(encodeURIComponent(query)));
+  return fetchData(END_POINT.locationsOf(encodeURIComponent(query)), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+  });
 };
 
 export const getCategories = () => {

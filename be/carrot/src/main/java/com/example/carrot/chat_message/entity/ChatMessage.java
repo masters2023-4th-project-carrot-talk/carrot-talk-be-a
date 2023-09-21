@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 
 import com.example.carrot.chat_room.entity.ChatRoom;
 import com.example.carrot.global.common.BaseCreatedTimeEntity;
+import com.example.carrot.user.entity.User;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -36,10 +37,15 @@ public class ChatMessage extends BaseCreatedTimeEntity {
 	@JoinColumn(name = "chatroom_id")
 	private ChatRoom chatRoom;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "sender_id")
+	private User user;
+
 	@Builder
-	public ChatMessage(String content, boolean isRead, ChatRoom chatRoom) {
+	public ChatMessage(String content, boolean isRead, ChatRoom chatRoom, User user) {
 		this.content = content;
 		this.isRead = isRead;
 		this.chatRoom = chatRoom;
+		this.user = user;
 	}
 }

@@ -42,10 +42,10 @@ public class ChatMessage extends BaseCreatedTimeEntity {
 	private User user;
 
 	@Builder
-	public ChatMessage(String content, boolean isRead, ChatRoom chatRoom, User user) {
+	public ChatMessage(String content, ChatRoom chatRoom, User user) {
 		this.content = content;
-		this.isRead = isRead;
 		this.chatRoom = chatRoom;
 		this.user = user;
+		this.isRead = false;
 	}
 }

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class ProductsResponseDto {
 	private Long id;
 	private Long sellerId;
-	private String name;
+	private String title;
 	private String imageUrl;
 	private String location;
 	private LocalDateTime createdAt;
@@ -23,11 +23,11 @@ public class ProductsResponseDto {
 	private Long likeCount;
 
 	@Builder
-	public ProductsResponseDto(Long id, Long sellerId, String name, String imageUrl, String location,
+	public ProductsResponseDto(Long id, Long sellerId, String title, String imageUrl, String location,
 		LocalDateTime createdAt, Long price, ProductStatus status, Long likeCount) {
 		this.id = id;
 		this.sellerId = sellerId;
-		this.name = name;
+		this.title = title;
 		this.imageUrl = imageUrl;
 		this.location = location;
 		this.createdAt = createdAt;

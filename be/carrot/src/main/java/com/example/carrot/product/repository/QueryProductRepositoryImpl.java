@@ -38,7 +38,7 @@ public class QueryProductRepositoryImpl implements QueryProductRepository {
 					ProductsResponseDto.class,
 					product.productId,
 					product.user.userId,
-					product.name,
+					product.title,
 					image.imageUrl,
 					product.location.name,
 					product.createdAt,

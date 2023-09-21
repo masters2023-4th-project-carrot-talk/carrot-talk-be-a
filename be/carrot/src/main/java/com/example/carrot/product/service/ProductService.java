@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -152,7 +151,7 @@ public class ProductService {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_USER));
 
-		String name = saveProductRequestDto.getName();
+		String name = saveProductRequestDto.getTitle();
 		Category category = categoryRepository.findById(saveProductRequestDto.getCategoryId())
 			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_CATEGORY));
 		Location location = locationRepository.findById(saveProductRequestDto.getLocationId())
@@ -162,7 +161,7 @@ public class ProductService {
 
 		Product product = productRepository.save(
 			Product.builder()
-				.name(name)
+				.title(name)
 				.price(price)
 				.content(content)
 				.hits(0L)
@@ -278,7 +277,7 @@ public class ProductService {
 
 	private ProductDetailResponseDto makeProduct(Product product, Long userId) {
 		String status = product.getStatus().getValue();
-		String title = product.getName();
+		String title = product.getTitle();
 		String category = product.getCategory().getName();
 		Long price = product.getPrice();
 		String content = product.getContent();

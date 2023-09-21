@@ -70,7 +70,6 @@ public class ImageS3Uploader {
 	}
 
 	private InputStream getImageInputStream(BufferedImage image, String extension) throws IOException {
-		// 수정 완료
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		ImageIO.write(image, extension, byteArrayOutputStream);
 		return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());

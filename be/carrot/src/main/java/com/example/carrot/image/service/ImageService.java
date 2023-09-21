@@ -43,8 +43,7 @@ public class ImageService {
 	private final ImageRepository imageRepository;
 	private final ImageS3Uploader imageS3Uploader;
 
-	@Transactional
-	// TODO: 업로드 실패 시 이미지 롤백 작업 수행, Delete @Transactional Annotation
+	// TODO: 업로드 실패 시 이미지 롤백 작업 수행
 	public List<ImageResponse> uploadImages(List<MultipartFile> multipartFiles) {
 		List<String> imagesUrls = multipartFiles.parallelStream()
 			.map(this::uploadImage)

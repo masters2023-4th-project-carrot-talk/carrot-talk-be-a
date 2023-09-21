@@ -40,7 +40,7 @@ public class Product extends BaseAllTimeEntity {
 	private Long productId;
 
 	@Column(nullable = false)
-	private String name;
+	private String title;
 
 	private Long price;
 
@@ -73,9 +73,9 @@ public class Product extends BaseAllTimeEntity {
 	private List<ProductImage> productImages = new ArrayList<>();
 
 	@Builder
-	public Product(String name, Long price, String content, Long hits, ProductStatus status, User user,
+	public Product(String title, Long price, String content, Long hits, ProductStatus status, User user,
 		Category category, Location location) {
-		this.name = name;
+		this.title = title;
 		this.price = price;
 		this.content = content;
 		this.hits = hits;
@@ -89,16 +89,6 @@ public class Product extends BaseAllTimeEntity {
 		if (!this.user.getUserId().equals(userId)) {
 			throw new CustomException(StatusCode.NO_EDIT_PERMISSION);
 		}
-	}
-
-	public void addCategory(Category category) {
-		this.category = category;
-		category.getProducts().add(this);
-	}
-
-	public void addUser(User user) {
-		this.user = user;
-		user.getProducts().add(this);
 	}
 
 	public Product updateStatus(ProductStatus productStatus) {
@@ -120,7 +110,7 @@ public class Product extends BaseAllTimeEntity {
 		this.category = productDetails.getCategory();
 		this.location = productDetails.getLocation();
 		this.price = productDetails.getPrice();
-		this.name = productDetails.getTitle();
+		this.title = productDetails.getTitle();
 		this.content = productDetails.getContent();
 	}
 

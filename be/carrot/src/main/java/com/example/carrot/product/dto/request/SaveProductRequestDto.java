@@ -13,7 +13,7 @@ public class SaveProductRequestDto {
 	@NotNull
 	private List<Long> images; // imageId
 	@NotNull
-	private String name;
+	private String title;
 	@NotNull
 	private Long categoryId;
 	@NotNull
@@ -22,10 +22,10 @@ public class SaveProductRequestDto {
 	private Long price;
 
 	@Builder
-	public SaveProductRequestDto(List<Long> images, String name, Long categoryId, Long locationId, String content,
+	public SaveProductRequestDto(List<Long> images, String title, Long categoryId, Long locationId, String content,
 		Long price) {
 		this.images = images;
-		this.name = name;
+		this.title = title;
 		this.categoryId = categoryId;
 		this.locationId = locationId;
 		this.content = content;
@@ -36,8 +36,8 @@ public class SaveProductRequestDto {
 		return images;
 	}
 
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 
 	public Long getCategoryId() {

@@ -87,7 +87,7 @@ export const ListItem: React.FC<Props> = ({
         <div className="text-area">
           <div className="text-area__information">
             <div className="text-area__information-title">
-              <span>{product.name}</span>
+              <span>{product.title}</span>
               {isAuthor && (
                 <Dropdown
                   opener={

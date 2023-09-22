@@ -240,7 +240,7 @@ export const Home: React.FC = () => {
       </div>
 
       <Alert isOpen={alertSource === 'product'} currentDim={currentDim}>
-        <AlertContent>'{selectProduct?.name}'을 삭제하시겠어요?</AlertContent>
+        <AlertContent>'{selectProduct?.title}'을 삭제하시겠어요?</AlertContent>
         <AlertButtons
           buttonText="취소"
           onDelete={() => onDeleteProduct(selectProduct?.id)}

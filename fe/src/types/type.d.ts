@@ -47,7 +47,7 @@ type CategoryType = {
 type ProductType = {
   id: number;
   sellerId: number;
-  name: string;
+  title: string;
   location: string;
   imageUrl: string;
   createdAt: string;

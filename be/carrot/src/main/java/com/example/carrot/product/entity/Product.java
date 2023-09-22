@@ -135,7 +135,7 @@ public class Product extends BaseAllTimeEntity {
 
 	private List<ProductImage> addProductImages(List<Image> images) {
 		return images.stream()
-			.map(image ->ProductImage.builder()
+			.map(image -> ProductImage.builder()
 				.product(this)
 				.isMain(false)
 				.image(image)

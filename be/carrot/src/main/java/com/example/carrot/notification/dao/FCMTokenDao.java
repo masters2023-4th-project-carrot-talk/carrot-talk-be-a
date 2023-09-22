@@ -1,7 +1,5 @@
 package com.example.carrot.notification.dao;
 
-import java.util.UUID;
-
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 

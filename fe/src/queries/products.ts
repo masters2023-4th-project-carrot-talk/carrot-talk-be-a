@@ -1,19 +1,21 @@
 import {
+  addNewProduct,
   deleteProduct,
   editLikeStatus,
+  editProduct,
   editProductStatus,
   getProducts,
   getProductsDetail,
-  addNewProduct,
   requestImageUpload,
 } from '@api/api';
 import { QUERY_KEY } from '@constants/queryKey';
+import { modifiedLocationName } from '@utils/modifyLocationName';
 import { useMemo } from 'react';
 import {
   useInfiniteQuery,
   useMutation,
-  useQueryClient,
   useQuery,
+  useQueryClient,
 } from 'react-query';
 
 export const useProducts = (
@@ -97,8 +99,14 @@ export const useProductDetailQuery = (id: number) => {
     queryFn: () => getProductsDetail(id),
     select: (responseData) => {
       const { product, seller, images, location } = responseData.data;
-      return { product, seller, images, location };
+      return {
+        product,
+        seller,
+        images,
+        location: { ...location, name: modifiedLocationName(location.name) },
+      };
     },
+    enabled: !isNaN(id),
   });
 
   return {
@@ -166,9 +174,11 @@ export const useImageUpload = () => {
   });
 };
 
-export const useProductAddition = () => {
+export const useProductMutation = (id: number) => {
   return useMutation<ProductAdditionResponse, unknown, ProductFormData>({
     mutationFn: (productFormData: ProductFormData) =>
-      addNewProduct(productFormData),
+      isNaN(id)
+        ? addNewProduct(productFormData)
+        : editProduct(id, productFormData),
   });
 };

@@ -18,6 +18,7 @@ import { Category } from '@components/home/Category';
 import { PATH } from '@constants/path';
 import { Theme, css } from '@emotion/react';
 import { useAuth } from '@hooks/useAuth';
+import { useFcmToken } from '@hooks/useFcmToken';
 import { useIntersectionObserver } from '@hooks/useObserver';
 import { useAlert, useModal } from '@hooks/usePopups';
 import { useCategories } from '@queries/category';
@@ -30,6 +31,8 @@ import { useNavigate } from 'react-router-dom';
 
 export const Home: React.FC = () => {
   const navigate = useNavigate();
+  const { fcmToken } = useFcmToken();
+  console.log('fcmToken >>', fcmToken);
 
   const { isLogin } = useAuth();
   const { setShouldSlideLeft } = useLayoutStore();
@@ -85,7 +88,7 @@ export const Home: React.FC = () => {
   }, [serverLocations]);
 
   const onOpenDetail = (id: number) => {
-    navigate(`/detail/${id}`);
+    navigate(`${PATH.detail}/${id}`);
   };
 
   const onOpenCategory = () => {
@@ -231,7 +234,9 @@ export const Home: React.FC = () => {
               {shouldShowSkeletons && <>{renderSkeletons(10)}</>}
             </ListBox>
             {shouldShowEndOfData && (
-              <div className="data-status-info">전부 살펴 봤어요!</div>
+              <div className="data-status-info">
+                <p>전부 살펴 봤어요!</p>
+              </div>
             )}
             <LocationModal locationList={serverLocations} />
             <div ref={observeTarget} css={obseverStyle}></div>
@@ -240,7 +245,7 @@ export const Home: React.FC = () => {
       </div>
 
       <Alert isOpen={alertSource === 'product'} currentDim={currentDim}>
-        <AlertContent>'{selectProduct?.name}'을 삭제하시겠어요?</AlertContent>
+        <AlertContent>'{selectProduct?.title}'을 삭제하시겠어요?</AlertContent>
         <AlertButtons
           buttonText="취소"
           onDelete={() => onDeleteProduct(selectProduct?.id)}
@@ -261,35 +266,35 @@ const pageStyle = (theme: Theme) => {
     ::-webkit-scrollbar {
       display: none;
     }
-
     height: 100vh;
-    padding-top: 57px;
     overflow-y: auto;
 
     .list-box-container {
       height: 100vh;
+      padding-top: 56px;
+      margin-bottom: 64px;
       overflow-y: auto;
       overflow-x: hidden;
 
       ::-webkit-scrollbar {
         width: 10px;
         background-color: ${theme.color.neutral.background};
-      }
 
-      ::-webkit-scrollbar-button {
-        width: 0;
-        height: 0;
-      }
+        &-button {
+          width: 0;
+          height: 0;
+        }
 
-      ::-webkit-scrollbar-thumb {
-        width: 4px;
-        border-radius: 10px;
-        background-color: ${theme.color.neutral.border};
-        border: 3px solid ${theme.color.neutral.background};
-      }
+        &-thumb {
+          width: 4px;
+          border-radius: 10px;
+          background-color: ${theme.color.neutral.border};
+          border: 3px solid ${theme.color.neutral.background};
+        }
 
-      ::-webkit-scrollbar-track {
-        background-color: transparent;
+        &-track {
+          background-color: transparent;
+        }
       }
     }
 
@@ -306,10 +311,12 @@ const pageStyle = (theme: Theme) => {
     }
 
     .data-status-info {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       cursor: default;
-      text-align: center;
       width: 100%;
-      padding: 56px 0px 100px 0px;
+      height: 70px;
       font: ${theme.font.displayDefault16};
     }
   `;

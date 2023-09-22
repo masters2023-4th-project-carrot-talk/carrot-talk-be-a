@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { ChatRoom } from '@pages/ChatRoom';
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { PATH } from './constants/path';
 import { useAuth } from './hooks/useAuth';
@@ -7,14 +8,13 @@ import { Account } from './pages/Account';
 import { Chat } from './pages/Chat';
 import { Home } from './pages/Home';
 import { Interests } from './pages/Interests';
-import { NewProduct } from './pages/NewProduct';
 import { NotFound } from './pages/NotFound';
 import { OauthLoading } from './pages/OauthLoading';
 import { ProductDetail } from './pages/ProductDetail';
+import { ProductEditor } from './pages/ProductEditor';
 import { Sales } from './pages/Sales';
 import { Signup } from './pages/Signup';
 import { useTokenRefresh } from './queries/auth';
-import { ChatRoom } from '@pages/ChatRoom';
 
 export const AppRoutes: React.FC = () => {
   useTokenRefresh();
@@ -27,8 +27,8 @@ export const AppRoutes: React.FC = () => {
             <Route path={PATH.sales} element={<Sales />} />
             <Route path={PATH.interests} element={<Interests />} />
             <Route path={PATH.chat} element={<Chat />} />
-            <Route path={PATH.newProduct} element={<NewProduct />} />
-            <Route path={PATH.editProduct()} element={<NewProduct />} />
+            <Route path={PATH.newProduct} element={<ProductEditor />} />
+            <Route path={PATH.editProduct} element={<ProductEditor />} />
           </Route>
 
           <Route element={<OnlyNotLoginUserRoute />}>

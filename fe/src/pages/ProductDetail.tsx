@@ -141,7 +141,7 @@ export const ProductDetail: React.FC = () => {
                 <MenuBox>
                   <MenuItem
                     onClick={() => {
-                      navigate(PATH.editProduct(numberedProductId));
+                      navigate(`${PATH.detail}/${numberedProductId}/edit`);
                     }}
                   >
                     게시글 수정

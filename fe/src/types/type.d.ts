@@ -47,7 +47,7 @@ type CategoryType = {
 type ProductType = {
   id: number;
   sellerId: number;
-  name: string;
+  title: string;
   location: string;
   imageUrl: string;
   createdAt: string;
@@ -154,7 +154,7 @@ type ImageDataFromServer =
 
 type ProductFormData = {
   images: number[];
-  name: string;
+  title: string;
   categoryId: number;
   locationId: number;
   content?: string;

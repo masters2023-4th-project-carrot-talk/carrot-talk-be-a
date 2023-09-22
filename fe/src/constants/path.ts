@@ -7,9 +7,9 @@ export const PATH = {
   redirect: '/oauth/redirect',
   signup: '/signup',
   notFound: '/*',
-  detail: '/products',
-  newProduct: '/products/new',
-  editProduct: '/products/:id/edit',
+  detail: '/product',
+  newProduct: '/product/new',
+  editProduct: '/product/:id/edit',
   invalidAccess: '/invalid-access',
   chatRoom: '/chat-room',
 };

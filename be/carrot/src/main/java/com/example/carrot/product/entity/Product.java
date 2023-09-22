@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.example.carrot.category.entity.Category;
+import com.example.carrot.chat_room.entity.ChatRoom;
 import com.example.carrot.global.common.BaseAllTimeEntity;
 import com.example.carrot.global.exception.CustomException;
 import com.example.carrot.global.exception.StatusCode;
@@ -71,6 +72,9 @@ public class Product extends BaseAllTimeEntity {
 
 	@OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<ProductImage> productImages = new ArrayList<>();
+
+	@OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<ChatRoom> chatRooms = new ArrayList<>();
 
 	@Builder
 	public Product(String title, Long price, String content, Long hits, ProductStatus status, User user,
@@ -131,7 +135,7 @@ public class Product extends BaseAllTimeEntity {
 
 	private List<ProductImage> addProductImages(List<Image> images) {
 		return images.stream()
-			.map(image ->ProductImage.builder()
+			.map(image -> ProductImage.builder()
 				.product(this)
 				.isMain(false)
 				.image(image)

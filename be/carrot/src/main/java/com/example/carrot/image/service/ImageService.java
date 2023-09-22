@@ -2,10 +2,8 @@ package com.example.carrot.image.service;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
@@ -44,20 +42,18 @@ public class ImageService {
 	private final ImageRepository imageRepository;
 	private final ImageS3Uploader imageS3Uploader;
 
-	@Transactional
+	// TODO: 업로드 실패 시 이미지 롤백 작업 수행
 	public List<ImageResponse> uploadImages(List<MultipartFile> multipartFiles) {
-		List<String> imagesUrls = new ArrayList<>();
-
-		for (MultipartFile file : multipartFiles) {
-			imagesUrls.add(uploadImage(file));
-		}
+		List<String> imagesUrls = multipartFiles.parallelStream()
+			.map(this::uploadImage)
+			.toList();
 
 		List<Image> images = Image.makeImages(imagesUrls);
 		imageRepository.saveAll(images);
 
 		return images.stream()
 			.map(ImageResponse::of)
-			.collect(Collectors.toUnmodifiableList());
+			.toList();
 	}
 
 	private String uploadImage(MultipartFile file) {
@@ -80,6 +76,7 @@ public class ImageService {
 		return uploadDirectory + fileName + EXTENSION_SEPARATOR + extension;
 	}
 
+	// TODO: 스레드 동시성 고려해서 DIRECTORY_SEPARATOR가 2번 붙지 않도록 하기
 	private void fixDirectory() {
 		if (!uploadDirectory.endsWith(DIRECTORY_SEPARATOR)) {
 			uploadDirectory += DIRECTORY_SEPARATOR;

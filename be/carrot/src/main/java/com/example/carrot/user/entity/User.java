@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.example.carrot.chat_room.entity.ChatRoom;
 import com.example.carrot.global.common.BaseAllTimeEntity;
 import com.example.carrot.global.exception.CustomException;
 import com.example.carrot.global.exception.StatusCode;
@@ -55,6 +56,9 @@ public class User extends BaseAllTimeEntity {
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Product> products = new ArrayList<>();
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<ChatRoom> chatRooms = new ArrayList<>();
 
 	@Builder
 	public User(String nickName, String imageUrl, String refreshToken, String socialId) {

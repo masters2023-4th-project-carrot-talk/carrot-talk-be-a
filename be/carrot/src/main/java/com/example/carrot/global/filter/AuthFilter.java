@@ -84,7 +84,7 @@ public class AuthFilter implements Filter {
 		}
 
 		// 토큰이 없을 때의 로직이 필요한 경우
-		if (openUrisCheck(httpServletRequest.getRequestURI()) ) {
+		if (openUrisCheck(httpServletRequest.getRequestURI())) {
 			log.info("openUri에 해당");
 			handleContainTokenOrNot(request, response, chain, httpServletRequest, httpServletResponse);
 			return;

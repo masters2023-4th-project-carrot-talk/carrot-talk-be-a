@@ -20,11 +20,10 @@ import com.example.carrot.location.entity.Location;
 import com.example.carrot.location.repository.LocationRepository;
 import com.example.carrot.product.dto.request.ModifyProductRequestDto;
 import com.example.carrot.product.dto.request.ModifyProductStatusRequestDto;
-import com.example.carrot.product.dto.response.ProductDetailLocationResponseDto;
-import com.example.carrot.product.entity.ProductDetails;
 import com.example.carrot.product.dto.request.SaveProductRequestDto;
 import com.example.carrot.product.dto.response.MainPageResponseDto;
 import com.example.carrot.product.dto.response.ModifyProductResponseDto;
+import com.example.carrot.product.dto.response.ProductDetailLocationResponseDto;
 import com.example.carrot.product.dto.response.ProductDetailResponseDto;
 import com.example.carrot.product.dto.response.ProductDetailSellerResponseDto;
 import com.example.carrot.product.dto.response.ProductImageResponseDto;
@@ -32,6 +31,7 @@ import com.example.carrot.product.dto.response.ProductsResponseDto;
 import com.example.carrot.product.dto.response.ReadProductDetailResponseDto;
 import com.example.carrot.product.dto.response.SaveProductResponseDto;
 import com.example.carrot.product.entity.Product;
+import com.example.carrot.product.entity.ProductDetails;
 import com.example.carrot.product.entity.ProductStatus;
 import com.example.carrot.product.repository.ProductRepository;
 import com.example.carrot.product_image.entity.ProductImage;
@@ -183,18 +183,20 @@ public class ProductService {
 	private List<ProductImage> makeProductImages(SaveProductRequestDto saveProductRequestDto, Product product) {
 		List<Long> images = saveProductRequestDto.getImages();
 		List<ProductImage> productImages = new ArrayList<>();
-		// TODO: flag 방식 사용할 수 있도록 (인덱스가 아니라)
-		for (int i = 0; i < images.size(); i++) {
-			Long imageId = images.get(i);
+
+		boolean isFirstImage = true;
+		for (Long imageId : images) {
 			Image image = getImage(imageId);
 
-			if (i == 0) {
+			if (isFirstImage) {
 				buildProductImagesForIndex0(product, image, productImages);
+				isFirstImage = false;
 				continue;
 			}
 
 			buildProductImages(product, image, productImages);
 		}
+
 		return productImages;
 	}
 
@@ -247,7 +249,7 @@ public class ProductService {
 
 	private List<ProductImageResponseDto> makeImageUrls(Product product) {
 		// ProductImage의 List 형태가 가장 첫번째로 오는 것이
-		// 이미 대표 이미지의 것이라는 보장이 있어야 함 (이미지 API에서 그렇게 만들어야 함)
+		// 이미 대표 이미지의 것이라는 보장이 있기 때문에 이런 식으로 할 수 있는 것
 		List<ProductImage> productImages = product.getProductImages();
 
 		catchMainImageException(productImages);

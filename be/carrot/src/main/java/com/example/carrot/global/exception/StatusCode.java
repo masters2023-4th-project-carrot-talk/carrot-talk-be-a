@@ -39,9 +39,13 @@ public enum StatusCode {
 	INVALID_PRODUCT_STATUS(HttpStatus.BAD_REQUEST, "유효하지 않은 상태입니다."),
 
 	// -- [IMAGE] -- //
+	NOT_IMAGE(HttpStatus.BAD_REQUEST, "이미지 형식이 아닙니다."),
 	UPLOAD_IMAGE_EXCEPTION(HttpStatus.BAD_REQUEST, "이미지 업로드에 실패했습니다."),
 	NOT_FOUND_IMAGE(HttpStatus.NOT_FOUND, "해당하는 이미지가 없습니다."),
-	NOT_FOUND_MAIN_IMAGE(HttpStatus.NOT_FOUND, "메인 이미지를 찾을 수 없습니다.");
+	NOT_FOUND_MAIN_IMAGE(HttpStatus.NOT_FOUND, "메인 이미지를 찾을 수 없습니다."),
+
+	// -- [NOTIFICATION] -- //
+	NOT_FOUND_FCM(HttpStatus.NOT_FOUND, "FCM 토큰을 불러오는 도중 문제가 생겼습니다.");
 
 	private final HttpStatus status;
 	private final String message;

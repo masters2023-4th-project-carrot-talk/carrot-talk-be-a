@@ -36,7 +36,7 @@ public class UserController {
 	@PostMapping("/users/login")
 	public ApiResponse<UserResponseDto> kakaoLogin(@RequestBody LoginRequestDto loginRequestDto) {
 		UserResponseDto loginResponseDto = userService.kakaoLogin(loginRequestDto);
-		fcmService.saveToken(loginResponseDto);
+		fcmService.saveToken(loginRequestDto, loginResponseDto);
 		return ApiResponse.success(loginResponseDto);
 	}
 

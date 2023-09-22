@@ -3,6 +3,7 @@ package com.example.carrot.notification.service;
 import org.springframework.stereotype.Service;
 
 import com.example.carrot.notification.dao.FCMTokenDao;
+import com.example.carrot.user.dto.request.LoginRequestDto;
 import com.example.carrot.user.dto.response.UserResponseDto;
 
 import lombok.RequiredArgsConstructor;
@@ -13,9 +14,10 @@ public class FCMService {
 
 	private final FCMTokenDao fcmTokenDao;
 
-	public void saveToken(UserResponseDto userResponseDto) {
+	public void saveToken(LoginRequestDto loginRequestDto, UserResponseDto userResponseDto) {
 		String userId = userResponseDto.getLoginUserResponseDto().getId().toString();
-		fcmTokenDao.saveToken(userId);
+		String token = loginRequestDto.getToken();
+		fcmTokenDao.saveToken(token, userId);
 	}
 
 	public void deleteToken(String userId) {

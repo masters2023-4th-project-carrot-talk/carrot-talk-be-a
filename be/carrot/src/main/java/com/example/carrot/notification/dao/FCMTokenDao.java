@@ -16,13 +16,13 @@ public class FCMTokenDao {
 
 	private final StringRedisTemplate tokenRedisTemplate;
 
-	public void saveToken(String userId) {
+	public void saveToken(String token, String userId) {
 		if (!hasKey(userId)) {
 			throw new CustomException(StatusCode.ALREADY_EXIST_USER);
 		}
 
 		tokenRedisTemplate.opsForValue()
-			.set(userId, UUID.randomUUID().toString());
+			.set(userId, token);
 	}
 
 	public String getToken(String userId) {

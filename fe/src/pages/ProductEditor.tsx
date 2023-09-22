@@ -13,41 +13,49 @@ import { LocationSelector } from '@components/new/LocationSelector';
 import { PATH } from '@constants/path';
 import { Theme, css } from '@emotion/react';
 import { useCategorySelector } from '@hooks/useCategorySelector';
+import { useImageListInput } from '@hooks/useImageListInput';
+import { useInitialInputValues } from '@hooks/useInitialInputValues';
 import { useInput } from '@hooks/useInput';
 import { useLocationSelector } from '@hooks/useLocationSelector';
 import { usePrice } from '@hooks/usePrice';
-import { useProductAddition } from '@queries/products';
+import { useProductMutation } from '@queries/products';
 import { usePathHistoryStore } from '@stores/pathHistoryStore';
 import { commaStringToNumber } from '@utils/formatPrice';
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-export const NewProduct: React.FC = () => {
+export const ProductEditor: React.FC = () => {
+  const { id: productId } = useParams();
+  const navigate = useNavigate();
   const currentLocation = useLocation();
   const { setPrevUrl } = usePathHistoryStore();
+  const initialInputValues = useInitialInputValues(Number(productId));
+  const productMutation = useProductMutation(Number(productId));
 
-  const navigate = useNavigate();
-  const [imageList, setImageList] = useState<ImageType[]>([]);
+  const { imageList, addImage, deleteImage } = useImageListInput({
+    initialImageList: initialInputValues.images,
+  });
   const {
     value: title,
     onChangeValue: onChangeTitle,
     isValidValue: isValidTitle,
   } = useInput({
-    initialValue: '',
+    initialValue: initialInputValues.title,
     validator: (value) => value.length > 0,
     warningMessage: '제목을 입력해주세요',
   });
-  const { selectedCategory, categories, selectCategory } = useCategorySelector(
-    {},
-  );
-  const { price, onChangePrice, priceWarningMessage, isValidPrice } = usePrice(
-    {},
-  );
-  const [description, setDescription] = useState('');
-  const { selectedLocation, selectLocation, locations } = useLocationSelector(
-    {},
-  );
-  const productAdditionMutation = useProductAddition();
+  const { selectedCategory, categories, selectCategory } = useCategorySelector({
+    initialCategoryName: initialInputValues.category,
+  });
+  const { price, onChangePrice, priceWarningMessage, isValidPrice } = usePrice({
+    initialPrice: initialInputValues.price,
+  });
+  const { value: description, onChangeValue: onChangeDescription } = useInput({
+    initialValue: initialInputValues.description,
+  });
+  const { selectedLocation, selectLocation, locations } = useLocationSelector({
+    initialLocation: initialInputValues.location,
+  });
 
   useEffect(() => {
     setPrevUrl(currentLocation.pathname);
@@ -56,14 +64,22 @@ export const NewProduct: React.FC = () => {
   const isRequiredFieldsFilled =
     imageList.length !== 0 && title && selectedCategory && selectedLocation;
   const isAllFieldsValid = isValidTitle && isValidPrice;
+  const isFieldChanged =
+    title !== initialInputValues.title ||
+    price !== initialInputValues.price.toString() ||
+    description !== initialInputValues.description ||
+    selectedLocation?.id !== initialInputValues.location?.id ||
+    selectedCategory?.name !== initialInputValues.category ||
+    imageList.length !== initialInputValues.images?.length ||
+    imageList.some((image) => !initialInputValues.images?.includes(image));
 
   const submitProductData = () => {
-    if (!isRequiredFieldsFilled || !isAllFieldsValid) {
+    if (!isRequiredFieldsFilled || !isAllFieldsValid || !isFieldChanged) {
       return;
     }
 
     const productData = {
-      name: title,
+      title: title,
       price: commaStringToNumber(price),
       content: description,
       images: imageList.map((image) => image.imageId),
@@ -71,7 +87,7 @@ export const NewProduct: React.FC = () => {
       locationId: selectedLocation.id,
     };
 
-    productAdditionMutation.mutate(productData, {
+    productMutation.mutate(productData, {
       onSuccess: (result) => {
         if (result.success) {
           // 등록 성공 시 상품 상세 페이지로 이동
@@ -97,7 +113,7 @@ export const NewProduct: React.FC = () => {
         <RightButton>
           <Button
             variant="text"
-            disabled={!isRequiredFieldsFilled || !isAllFieldsValid}
+            disabled={!isRequiredFieldsFilled || !isAllFieldsValid || !isFieldChanged}
             onClick={submitProductData}
           >
             <span className="control-btn">확인</span>
@@ -109,14 +125,8 @@ export const NewProduct: React.FC = () => {
           <div className="image-input">
             <ImageInput
               imageList={imageList}
-              onAddImage={(image: ImageType) =>
-                setImageList((i) => [...i, image])
-              }
-              onDeleteImage={(image: ImageType) =>
-                setImageList((i) =>
-                  i.filter((img) => img.imageId !== image.imageId),
-                )
-              }
+              onAddImage={addImage}
+              onDeleteImage={deleteImage}
             />
           </div>
           <div className="title-input">
@@ -148,7 +158,7 @@ export const NewProduct: React.FC = () => {
             <TextArea
               value={description}
               minRows={5}
-              onChange={(value: string) => setDescription(value)}
+              onChange={onChangeDescription}
               placeholder="역삼 1동에 올릴 게시물 내용을 작성해주세요.(판매금지 물품은 게시가 제한될 수 있어요.)"
             />
           </div>

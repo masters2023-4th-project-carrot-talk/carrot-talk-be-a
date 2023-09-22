@@ -1,9 +1,11 @@
+import { PATH } from '@constants/path';
 import { Theme, css } from '@emotion/react';
 import { useEditProductStatus } from '@queries/products';
 import { formatCount } from '@utils/formatCount';
 import { formatPrice } from '@utils/formatPrice';
 import { formatTimeStamp } from '@utils/formatTimeStamp';
 import { getUserInfo } from '@utils/localStorage';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../button/Button';
 import { Dropdown } from '../dropdown/Dropdown';
 import { Dots, Heart, Message } from '../icons';
@@ -23,6 +25,7 @@ export const ListItem: React.FC<Props> = ({
   onOpenDetail,
   onAlertOpen,
 }) => {
+  const navigate = useNavigate();
   const editProductStatusMutation = useEditProductStatus('home');
 
   const formattedPrice = formatPrice(product.price);
@@ -84,7 +87,7 @@ export const ListItem: React.FC<Props> = ({
         <div className="text-area">
           <div className="text-area__information">
             <div className="text-area__information-title">
-              <span>{product.name}</span>
+              <span>{product.title}</span>
               {isAuthor && (
                 <Dropdown
                   opener={
@@ -94,7 +97,13 @@ export const ListItem: React.FC<Props> = ({
                   }
                   menu={
                     <MenuBox>
-                      <MenuItem onClick={() => {}}>게시글 수정</MenuItem>
+                      <MenuItem
+                        onClick={() =>
+                          navigate(`${PATH.detail}/${product.id}/edit`)
+                        }
+                      >
+                        게시글 수정
+                      </MenuItem>
                       {menuRowsByStatus[product.status].map((row) => (
                         <MenuItem
                           key={row.id}

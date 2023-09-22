@@ -20,7 +20,8 @@ public class ReadProductDetailResponseDto {
 	@JsonProperty("product")
 	private ProductDetailResponseDto product;
 
-	public static ReadProductDetailResponseDto of(List<ProductImageResponseDto> images, ProductDetailSellerResponseDto seller,
+	public static ReadProductDetailResponseDto of(List<ProductImageResponseDto> images,
+		ProductDetailSellerResponseDto seller,
 		ProductDetailLocationResponseDto location, ProductDetailResponseDto product) {
 		return new ReadProductDetailResponseDto(images, seller, location, product);
 	}

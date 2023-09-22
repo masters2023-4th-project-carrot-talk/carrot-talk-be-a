@@ -70,9 +70,8 @@ export const Home: React.FC = () => {
 
   const { observeTarget } = useIntersectionObserver({
     inviewCallback: () => {
-      fetchNextPage();
+      if (hasNextPage) fetchNextPage();
     },
-    condition: hasNextPage,
   });
 
   useEffect(() => {

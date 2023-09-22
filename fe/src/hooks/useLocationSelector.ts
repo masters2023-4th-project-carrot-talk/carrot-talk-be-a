@@ -16,7 +16,6 @@ export const useLocationSelector = ({
   const { serverLocations } = useMyLocations(isLogin);
 
   useEffect(() => {
-    // 사용자 동네를 못 가져오거나, 이미 선택된 동네가 있으면 return
     if (!serverLocations || selectedLocation) {
       return;
     }
@@ -31,6 +30,14 @@ export const useLocationSelector = ({
 
     setSelectedLocation(mainLocation);
   }, [serverLocations, selectedLocation]);
+
+  useEffect(() => {
+    if (!initialLocation) {
+      return;
+    }
+
+    setSelectedLocation(initialLocation);
+  }, [initialLocation]);
 
   const selectLocation = (location: LocationType | undefined) => {
     if (!location) {

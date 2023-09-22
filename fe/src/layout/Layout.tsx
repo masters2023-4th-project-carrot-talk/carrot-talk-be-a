@@ -23,10 +23,11 @@ export const Layout: React.FC = () => {
 
 const layoutStyle = (animationTrigger: boolean) => {
   return css`
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
     transition: 300ms ease;
-    transform: translateX(${animationTrigger ? '-392px' : '0px'});
+    transform: translateX(${animationTrigger ? '-393px' : '0px'});
   `;
 };
+//min-height: 100vh;

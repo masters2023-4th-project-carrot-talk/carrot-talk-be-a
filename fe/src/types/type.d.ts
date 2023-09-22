@@ -167,3 +167,41 @@ type ProductAdditionResponse = {
     productId: number;
   };
 };
+
+type ChatRoomsDataFromServer = {
+  success: boolean;
+  data: ChatRoomType[];
+};
+
+type ChatRoomType = {
+  chatroomId: number;
+  lastChatContent: string;
+  lastChatTime: string;
+  unreadChatCount: number;
+  opponent: OpponentType;
+  product: ProductType;
+};
+
+type OpponentType = {
+  id: number;
+  nickname: string;
+  imageUrl: string;
+};
+
+type ProductType = {
+  id: number;
+  thumbnail: string;
+};
+
+type UnreadTotalFromServer = {
+  success: boolean;
+  data: UnreadTotalCountType;
+};
+
+type UnreadTotalCountType = {
+  unreadTotalCount: number;
+};
+
+type ServiceWorkerGlobalScope = typeof self & {
+  registration: ServiceWorkerRegistration;
+};

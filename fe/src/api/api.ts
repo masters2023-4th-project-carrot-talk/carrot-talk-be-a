@@ -108,7 +108,13 @@ export const refreshToken = async () => {
 };
 
 export const getLocationWithQuery = (query: string) => {
-  return fetchData(END_POINT.locationsOf(encodeURIComponent(query)));
+  return fetchData(END_POINT.locationsOf(encodeURIComponent(query)), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+  });
 };
 
 export const getCategories = () => {
@@ -205,5 +211,23 @@ export const editProduct = (id: number, productFormData: ProductFormData) => {
       Authorization: `Bearer ${getAccessToken()}`,
     },
     body: JSON.stringify(productFormData),
-  })
-}
+  });
+};
+
+export const getChatRooms = () => {
+  return fetchData(END_POINT.chatRooms, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+  });
+};
+
+export const getUnreadTotalCount = () => {
+  return fetchData(END_POINT.unreadTotalCount, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+  });
+};

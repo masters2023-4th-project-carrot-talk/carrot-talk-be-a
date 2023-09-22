@@ -47,7 +47,7 @@ type CategoryType = {
 type ProductType = {
   id: number;
   sellerId: number;
-  name: string;
+  title: string;
   location: string;
   imageUrl: string;
   createdAt: string;
@@ -154,7 +154,7 @@ type ImageDataFromServer =
 
 type ProductFormData = {
   images: number[];
-  name: string;
+  title: string;
   categoryId: number;
   locationId: number;
   content?: string;
@@ -166,4 +166,42 @@ type ProductAdditionResponse = {
   data?: {
     productId: number;
   };
+};
+
+type ChatRoomsDataFromServer = {
+  success: boolean;
+  data: ChatRoomType[];
+};
+
+type ChatRoomType = {
+  chatroomId: number;
+  lastChatContent: string;
+  lastChatTime: string;
+  unreadChatCount: number;
+  opponent: OpponentType;
+  product: ProductType;
+};
+
+type OpponentType = {
+  id: number;
+  nickname: string;
+  imageUrl: string;
+};
+
+type ProductType = {
+  id: number;
+  thumbnail: string;
+};
+
+type UnreadTotalFromServer = {
+  success: boolean;
+  data: UnreadTotalCountType;
+};
+
+type UnreadTotalCountType = {
+  unreadTotalCount: number;
+};
+
+type ServiceWorkerGlobalScope = typeof self & {
+  registration: ServiceWorkerRegistration;
 };

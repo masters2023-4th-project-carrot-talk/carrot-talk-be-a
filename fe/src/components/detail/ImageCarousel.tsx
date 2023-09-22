@@ -120,12 +120,29 @@ const carouselStyle = (
     max-height: 491px;
 
     .thumbnail-box-track {
+      position: relative;
       display: flex;
       align-items: center;
       width: fit-content;
       transform: translateX(${-index * imageWidth + deltaX}px);
       transition: transform ${deltaX ? '0ms' : '300ms'} ease-in-out;
       min-height: 200px;
+    }
+
+    .thumbnail-box-track::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.24) 0%,
+        rgba(0, 0, 0, 0.138832) 9.16%,
+        rgba(0, 0, 0, 0) 32.27%
+      );
+      pointer-events: none;
     }
 
     img {

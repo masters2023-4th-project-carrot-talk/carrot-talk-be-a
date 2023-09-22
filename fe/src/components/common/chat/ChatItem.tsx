@@ -3,36 +3,36 @@ import { ImageBox } from '@components/common/imageBox/ImageBox';
 import { css, keyframes, Theme } from '@emotion/react';
 
 export type ChatItemProps = {
-  chatPartner: UserType;
-  lastMessage: string;
-  updatedAt: Date;
-  unreadMessages: number;
+  opponent: OpponentType;
+  lastChatContent: string;
+  lastChatTime: string;
+  unreadChatCount: number;
   thumbnailUrl: string;
 };
 
 export const ChatItem: React.FC<ChatItemProps> = ({
-  chatPartner,
-  lastMessage,
-  updatedAt,
-  unreadMessages,
+  opponent,
+  lastChatContent,
+  lastChatTime,
+  unreadChatCount,
   thumbnailUrl,
 }) => {
   return (
     <li css={(theme) => chatItemStyle(theme)}>
-      <ImageBox size="s" imageUrl={chatPartner.imageUrl} variant="circle" />
+      <ImageBox size="s" imageUrl={opponent.imageUrl} variant="circle" />
       <div className="info">
         <div className="info__title">
-          <span className="info__title--nickname">{chatPartner.nickname}</span>
+          <span className="info__title--nickname">{opponent.nickname}</span>
           <span className="info__title--time">
-            {updatedAt.toLocaleDateString()}
+            {lastChatTime} {/* TODO n분전 util */}
           </span>
         </div>
         <div className="info__message">
-          <p>{lastMessage}</p>
+          <p>{lastChatContent}</p>
         </div>
       </div>
       <div className="unread-messages">
-        <CountBadge count={unreadMessages} />
+        <CountBadge count={unreadChatCount} />
       </div>
       <ImageBox size="s" imageUrl={thumbnailUrl} />
     </li>

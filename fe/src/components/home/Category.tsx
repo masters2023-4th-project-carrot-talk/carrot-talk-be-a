@@ -65,13 +65,11 @@ export const Category: React.FC<Props> = ({
 const pageStyle = (theme: Theme) => {
   return css`
     overflow-y: auto;
-    scroll-behavior: smooth;
     ::-webkit-scrollbar {
       display: none;
     }
     width: 100%;
     height: 100vh;
-    padding-top: 57px;
 
     position: absolute;
     top: 0;
@@ -85,6 +83,7 @@ const pageStyle = (theme: Theme) => {
     }
 
     .page {
+      margin-top: 56px;
       padding: 40px;
       box-sizing: border-box;
 

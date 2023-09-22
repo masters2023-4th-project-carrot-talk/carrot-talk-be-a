@@ -11,6 +11,7 @@ export const useFcmToken = () => {
 
   useEffect(() => {
     if (!isLogin) return;
+    // if (!isLogin || isSubscribed) return;
 
     const retrieveToken = async () => {
       try {

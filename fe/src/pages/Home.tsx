@@ -18,7 +18,6 @@ import { Category } from '@components/home/Category';
 import { PATH } from '@constants/path';
 import { Theme, css } from '@emotion/react';
 import { useAuth } from '@hooks/useAuth';
-import { useFcmToken } from '@hooks/useFcmToken';
 import { useIntersectionObserver } from '@hooks/useObserver';
 import { useAlert, useModal } from '@hooks/usePopups';
 import { useCategories } from '@queries/category';
@@ -31,9 +30,6 @@ import { useNavigate } from 'react-router-dom';
 
 export const Home: React.FC = () => {
   const navigate = useNavigate();
-  const { fcmToken } = useFcmToken();
-  console.log('fcmToken >>', fcmToken);
-
   const { isLogin } = useAuth();
   const { setShouldSlideLeft } = useLayoutStore();
   const { onOpenModal } = useModal();

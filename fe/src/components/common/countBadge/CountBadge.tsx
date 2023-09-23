@@ -2,22 +2,23 @@ import { css, Theme } from '@emotion/react';
 
 type Props = {
   count: number;
-};
+  size?: 's' | 'l';
+} & React.HTMLAttributes<HTMLDivElement>;
 
-export const CountBadge: React.FC<Props> = ({ count }) => {
+export const CountBadge: React.FC<Props> = ({ count, size = 'l', ...rest }) => {
   return (
-    <div css={(theme) => countBadgeStyle(theme)}>
+    <div css={(theme) => countBadgeStyle(theme, size)} {...rest}>
       <span>{count}</span>
     </div>
   );
 };
 
-const countBadgeStyle = (theme: Theme) => css`
+const countBadgeStyle = (theme: Theme, size: 's' | 'l') => css`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: ${size === 's' ? '16px' : '24px'};
+  height: ${size === 's' ? '16px' : '24px'};
   font: ${theme.font.displayDefault12};
   color: ${theme.color.neutral.background};
   background-color: ${theme.color.accent.backgroundPrimary};

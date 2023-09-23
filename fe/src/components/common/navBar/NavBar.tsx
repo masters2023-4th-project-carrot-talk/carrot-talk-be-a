@@ -1,21 +1,11 @@
-import {
-  Heart,
-  Home,
-  Message,
-  MessageNoti,
-  News,
-  UserCircle,
-} from '@components/common/icons';
+import { Heart, Home, News, UserCircle } from '@components/common/icons';
 import { PATH } from '@constants/path';
 import { Theme, css } from '@emotion/react';
 import { NavLink, matchRoutes, useLocation } from 'react-router-dom';
+import { NotiCount } from './NotiCount';
 
 export const NavBar: React.FC = () => {
   const currentLocation = useLocation();
-
-  const isMessageNoti = false; //TODO 추후 교체합니다
-
-  const messageTabIcon = isMessageNoti ? <MessageNoti /> : <Message />;
 
   const tabs = [
     {
@@ -36,7 +26,7 @@ export const NavBar: React.FC = () => {
     {
       label: '채팅',
       path: PATH.chat,
-      icon: messageTabIcon,
+      icon: <NotiCount />,
     },
     {
       label: '내 계정',
@@ -109,4 +99,3 @@ const navStyle = (theme: Theme) => {
     }
   `;
 };
-// position: sticky;

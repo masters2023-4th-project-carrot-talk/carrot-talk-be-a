@@ -125,7 +125,7 @@ export const getProducts = ({
   locationId,
   categoryId,
   size,
-  next = 50,
+  next,
 }: FetchProductsParams) => {
   const queryParams = createQueryParams({
     locationId,
@@ -224,6 +224,29 @@ export const editProduct = (id: number, productFormData: ProductFormData) => {
       Authorization: `Bearer ${getAccessToken()}`,
     },
     body: JSON.stringify(productFormData),
+  });
+};
+
+export const getChatRoomHistories = (
+  chatroomId: number,
+  queryParams: string,
+) => {
+  return fetchData(END_POINT.chatroomHistories(chatroomId, queryParams), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+  });
+};
+
+export const getChatRoomInfo = (chatroomId: number) => {
+  return fetchData(END_POINT.chatroomInfo(chatroomId), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
   });
 };
 

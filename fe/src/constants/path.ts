@@ -33,6 +33,8 @@ export const END_POINT = {
   locationsOf: (query: string) => `/api/locations?keyword=${query}`,
   nicknameCheck: (nickname: string) =>
     `/api/users/nickname?nickname=${nickname}`,
+  chatroomHistories: (chatroomId:number, query?: string) => `/api/chatrooms/${chatroomId}${query ? `?${query}` : ''}`,
+  chatroomInfo: (chatroomId:number) => `/api/chatrooms/${chatroomId}/product`,
 };
 
 export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${

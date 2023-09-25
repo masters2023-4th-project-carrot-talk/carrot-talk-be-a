@@ -1,39 +1,131 @@
-import { Theme, css } from '@emotion/react';
-
+import { Bubble } from '@components/chat/Bubble';
+import { ChatBar } from '@components/common/actionBar/ChatBar';
+import { Button } from '@components/common/button/Button';
 import { Dropdown } from '@components/common/dropdown/Dropdown';
 import { ChevronLeft, Dots, Send } from '@components/common/icons';
+import { ImageBox } from '@components/common/imageBox/ImageBox';
+import { Input } from '@components/common/input/Input';
 import { MenuBox } from '@components/common/menu/MenuBox';
 import { MenuItem } from '@components/common/menu/MenuItem';
 import { LeftButton } from '@components/common/topBar/LeftButton';
 import { RightButton } from '@components/common/topBar/RightButton';
-import { TopBar } from '@components/common/topBar/TopBar';
-import { Button } from '@components/common/button/Button';
 import { Title } from '@components/common/topBar/Title';
-import { ChatBar } from '@components/common/actionBar/ChatBar';
-import { Input } from '@components/common/input/Input';
-import { ImageBox } from '@components/common/imageBox/ImageBox';
-import { Bubble } from '@components/chat/bubble';
+import { TopBar } from '@components/common/topBar/TopBar';
+import { Theme, css } from '@emotion/react';
+import { useAuth } from '@hooks/useAuth';
+import { useInput } from '@hooks/useInput';
+import { useChatRoomHistories, useChatRoomInfo } from '@queries/chat';
+import { Client } from '@stomp/stompjs';
+import { numberToCommaString } from '@utils/formatPrice';
+import { getAccessToken } from '@utils/localStorage';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-// TODO 그냥 공백이면 안보내져야함
+type RealtimeChattingType = {
+  chatroomId: number;
+  content: string;
+  read: boolean;
+  senderId: number;
+};
+
 export const ChatRoom: React.FC = () => {
-  const receiver = '삼만보';
-  const randomImageUrl = 'https://picsum.photos/200/300';
+  const { id: chatRoomId } = useParams();
+  const { userInfo } = useAuth();
+  const navigate = useNavigate();
+  const chatroomInfo = useChatRoomInfo(Number(chatRoomId));
+  const chattingHistories = useChatRoomHistories(Number(chatRoomId));
+  const [realtimeChattings, setRealtimeChattings] = useState<
+    RealtimeChattingType[]
+  >([]);
+  const {
+    value: message,
+    onChangeValue: onChangeMessage,
+    isValidValue: isValidMessage,
+  } = useInput({
+    initialValue: '',
+    validator: (value) => value.trim().length > 0,
+    warningMessage: '',
+  });
+  const client = useRef<Client>();
+
+  const serverUrl = 'ws://13.125.16.208:8080';
+
+  useEffect(() => {
+    console.log('chatroomInfo', chatroomInfo.data);
+  }, [chatroomInfo.data]);
+
+  useEffect(() => {
+    client.current = new Client({
+      brokerURL: `${serverUrl}/chat`,
+      connectHeaders: {
+        Authorization: getAccessToken()!,
+        ChatroomId: chatRoomId!,
+      },  
+      disconnectHeaders: {
+        Authorization: getAccessToken()!,
+        ChatroomId: chatRoomId!,
+      },
+      onConnect: () => {
+        if (!client.current) {
+          return;
+        }
+
+        console.log('연결 성공');
+
+        client.current.subscribe(`/subscribe/${chatRoomId}`, (message) => {
+          const body = JSON.parse(message.body);
+
+          if ('anyoneEnterRoom' in body) {
+            return;
+          }
+
+          console.log("body", body);
+          setRealtimeChattings((prev) => [...prev, body]);
+        });
+      },
+      onDisconnect: () => {
+        console.log('연결 끊김');
+      },
+    });
+
+    client.current.activate();
+
+    return () => {
+      client.current?.deactivate();
+    };
+  }, []);
+
+  const resetMessageInput = () => {
+    onChangeMessage('');
+  };
+
+  const sendMessage = () => {
+    if (!client.current || !isValidMessage) {
+      return;
+    }
+
+    client.current.publish({
+      destination: `/publish/message`,
+      body: JSON.stringify({
+        chatroomId: Number(chatRoomId),
+        content: message,
+        senderId: userInfo.id,
+        isRead: false,
+      }),
+    });
+    resetMessageInput();
+  };
 
   return (
     <div css={(theme) => pageStyle(theme)}>
       <TopBar>
         <LeftButton>
-          <Button
-            variant="text"
-            onClick={() => {
-              console.log('onCloseChatRoom');
-            }}
-          >
+          <Button variant="text" onClick={() => navigate(-1)}>
             <ChevronLeft className="button__back" />
             닫기
           </Button>
         </LeftButton>
-        <Title>{receiver}</Title>
+        <Title>{chatroomInfo.data?.opponent.nickname}</Title>
         <RightButton>
           <Dropdown
             opener={
@@ -82,55 +174,49 @@ export const ChatRoom: React.FC = () => {
           console.log('상세페이지로 이동');
         }}
       >
-        <ImageBox size="s" imageUrl={randomImageUrl} />
+        <ImageBox size="s" imageUrl={chatroomInfo.data?.product.thumbnail} />
         <div className="info-banner-body">
-          <p className="info-banner-body__title">빈티지 롤러 스케이트</p>
-          <p className="info-banner-body__price">169,000원</p>
+          <p className="info-banner-body__title">
+            {chatroomInfo.data?.product.title}
+          </p>
+          <p className="info-banner-body__price">
+            {numberToCommaString(chatroomInfo.data?.product.price ?? 0)}원
+          </p>
         </div>
       </div>
       <div className="chat-body">
-        <Bubble isMine={false} message="안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={false} message="안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={false} message="안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={false} message="안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={false} message="안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={false} message="안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={false} message="안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={false} message="안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
-        <Bubble isMine={true} message="네안녕하세요요요요요요요요" />
+        {chattingHistories.data?.map((history) => (
+          <Bubble
+            key={history.chattingId}
+            isMine={history.senderId === userInfo.id}
+            isRead={history.isRead}
+            message={history.content}
+          />
+        ))}
+        {realtimeChattings.map((chatting, index) => (
+          <Bubble
+            key={index}
+            isMine={chatting.senderId === userInfo.id}
+            isRead={chatting.read}
+            message={chatting.content}
+          />
+        ))}
       </div>
       <ChatBar>
         <Input
-          onChange={() => {}}
-          onPressEnter={() => {}}
+          value={message}
+          onChange={onChangeMessage}
+          onPressEnter={sendMessage}
           placeholder="내용을 입력하세요"
           radius="l"
           variant="outlined"
         />
-        <Button variant="fab" size="s">
+        <Button
+          variant="fab"
+          size="s"
+          onClick={sendMessage}
+          disabled={!isValidMessage}
+        >
           <Send />
         </Button>
       </ChatBar>
@@ -156,11 +242,12 @@ const pageStyle = (theme: Theme) => {
     }
 
     .info-banner {
+      box-sizing: border-box;
       cursor: pointer;
+      height: 80px;
       position: fixed;
       top: 56px;
       display: flex;
-      width: 393px;
       align-items: center;
       gap: 8px;
       padding: 16px;
@@ -196,8 +283,9 @@ const pageStyle = (theme: Theme) => {
       display: flex;
       flex-direction: column;
       align-items: stretch;
-      padding: 12px 16px;
-      margin-top: 80px;
+      gap: 8px;
+      padding: 92px 16px 12px;
+      margin-top: 57px;
       margin-bottom: 64px;
     }
   `;

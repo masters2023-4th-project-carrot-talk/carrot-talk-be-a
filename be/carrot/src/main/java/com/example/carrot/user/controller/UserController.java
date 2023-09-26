@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.carrot.global.common.ApiResponse;
-import com.example.carrot.notification.service.FCMService;
 import com.example.carrot.user.dto.request.LoginRequestDto;
 import com.example.carrot.user.dto.request.LogoutRequestDto;
 import com.example.carrot.user.dto.request.ReissueRequestDto;
@@ -28,7 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 
 	private final UserService userService;
-	private final FCMService fcmService;
 
 	/**
 	 * OAuth 로그인 API
@@ -36,7 +34,6 @@ public class UserController {
 	@PostMapping("/users/login")
 	public ApiResponse<UserResponseDto> kakaoLogin(@RequestBody LoginRequestDto loginRequestDto) {
 		UserResponseDto loginResponseDto = userService.kakaoLogin(loginRequestDto);
-		fcmService.saveToken(loginRequestDto, loginResponseDto);
 		return ApiResponse.success(loginResponseDto);
 	}
 
@@ -76,7 +73,6 @@ public class UserController {
 	@PostMapping("/users/logout")
 	public ApiResponse<?> kakaoLogout(@RequestBody LogoutRequestDto logoutRequestDto, @RequestAttribute Long userId) {
 		userService.kakaoLogout(logoutRequestDto, userId);
-		fcmService.deleteToken(userId.toString());
 
 		return ApiResponse.success();
 	}

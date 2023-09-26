@@ -68,7 +68,6 @@ export const ProductDetail: React.FC = () => {
     outviewCallback: () => {
       onScrollOutview();
     },
-    condition: true,
   });
 
   const onScrollInview = () => {
@@ -93,6 +92,10 @@ export const ProductDetail: React.FC = () => {
   };
 
   const onToggleLike = () => {
+    if (!getUserInfo()) {
+      navigate(PATH.account);
+      return;
+    }
     editLikeStatusMutation.mutate(numberedProductId);
   };
 

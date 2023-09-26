@@ -3,9 +3,11 @@ import { PATH } from '@constants/path';
 import { Theme, css } from '@emotion/react';
 import { NavLink, matchRoutes, useLocation } from 'react-router-dom';
 import { NotiCount } from './NotiCount';
+import { useNotification } from '@hooks/useNotification';
 
 export const NavBar: React.FC = () => {
   const currentLocation = useLocation();
+  useNotification();
 
   const tabs = [
     {

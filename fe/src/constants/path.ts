@@ -15,6 +15,7 @@ export const PATH = {
 };
 
 export const END_POINT = {
+  notify: `/connect`, // TODO 백에 물어보기
   signup: `/api/users/signup`,
   login: `/api/users/login`,
   logout: `/api/users/logout`,

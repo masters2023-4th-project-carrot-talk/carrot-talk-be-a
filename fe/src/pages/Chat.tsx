@@ -5,7 +5,7 @@ import { Theme, css } from '@emotion/react';
 import { useChatRooms } from '@queries/chat';
 
 export const Chat: React.FC = () => {
-  const { chatRooms } = useChatRooms(); // TODO fcm연동 고려
+  const { data: chatRooms } = useChatRooms(); // TODO fcm연동 고려
 
   const renderSkeletons = (length: number) => {
     return Array.from({ length }).map((_, index) => (
@@ -23,7 +23,7 @@ export const Chat: React.FC = () => {
       <div css={(theme) => pageStyle(theme)}>
         <ul>
           {chatRooms?.length === 0 && renderSkeletons(5)}
-          {chatRooms?.map((chatItem) => (
+          {chatRooms?.map((chatItem: ChatRoomType) => (
             <ChatItem
               key={chatItem.chatroomId}
               opponent={chatItem.opponent}

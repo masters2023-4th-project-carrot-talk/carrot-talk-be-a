@@ -95,7 +95,14 @@ export const ProductDetail: React.FC = () => {
     if (!getUserInfo()) {
       navigate(PATH.account);
       return;
+    } else if (isAuthor) {
+      // TODO like개수를 작성자가 늘릴 수 있는 건 별로 인 것 같음
+      // toast메시지
+      console.log('내 물건에 좋아요를 누를 수 없어요');
+
+      return;
     }
+
     editLikeStatusMutation.mutate(numberedProductId);
   };
 

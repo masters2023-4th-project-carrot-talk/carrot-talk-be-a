@@ -22,10 +22,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry registry) {
-		// /pub 으로 접근하는 메시지만 핸들러로 라우팅
-		registry.setApplicationDestinationPrefixes("/pub");
-		// 메모리 기반 메시지 브로커가 /sub 접두사가 붙은 클라이언트로 메시지를 전달할 수 있도록 설정
-		registry.enableSimpleBroker("/sub");
+		// /publish 으로 접근하는 메시지만 핸들러로 라우팅
+		registry.setApplicationDestinationPrefixes("/publish");
+		// 메모리 기반 메시지 브로커가 /subscribe 접두사가 붙은 클라이언트로 메시지를 전달할 수 있도록 설정
+		registry.enableSimpleBroker("/subscribe");
 	}
 
 	@Override

@@ -33,4 +33,8 @@ public class MessageDto implements Serializable {
 	public boolean getIsRead() {
 		return isRead;
 	}
+
+	public void readMessage() {
+		this.isRead = true;
+	}
 }

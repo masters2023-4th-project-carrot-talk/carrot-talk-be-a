@@ -13,6 +13,7 @@ import com.example.carrot.chat_message.service.message.MessagePublisher;
 import com.example.carrot.chat_message.service.message.MessageSubscriber;
 import com.example.carrot.chat_room.entity.ChatRoom;
 import com.example.carrot.chat_room.repository.ChatRoomRepository;
+import com.example.carrot.chat_room.repository.ChatRoomSessionRepository;
 import com.example.carrot.global.exception.CustomException;
 import com.example.carrot.global.exception.StatusCode;
 import com.example.carrot.user.entity.User;
@@ -30,10 +31,15 @@ public class ChatMessageService {
 	private final ChatMessageRepository chatMessageRepository;
 	private final ChatRoomRepository chatRoomRepository;
 	private final UserRepository userRepository;
+	private final ChatRoomSessionRepository chatRoomSessionRepository;
 
 	private final RedisMessageListenerContainer redisMessageListener;
 
 	public void sendMessage(MessageDto message) {
+		if (isAnyoneInChatRoom(message.getChatroomId())) {
+			message.readMessage();
+		}
+
 		messagePublisher.publish(new ChannelTopic(String.valueOf(message.getChatroomId())), message);
 		ChatMessage chatMessage = ChatMessage.createChatMessage(
 			getChatRoom(message.getChatroomId()),
@@ -61,8 +67,10 @@ public class ChatMessageService {
 
 	@Transactional
 	public void readMessageCountByChatRoom(Long chatRoomId) {
-		if (chatMessageRepository.findByChatRoom_Id(chatRoomId).size() > 0) {
-			chatMessageRepository.updateMessageStatusByChatRoomId(chatRoomId);
-		}
+		chatMessageRepository.updateMessageStatusByChatRoomId(chatRoomId);
+	}
+
+	private boolean isAnyoneInChatRoom(Long chatRoomId) {
+		return chatRoomSessionRepository.findByChatRoomId(chatRoomId).size() == 2;
 	}
 }

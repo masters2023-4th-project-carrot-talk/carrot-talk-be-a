@@ -57,10 +57,16 @@ public class ChatRoomService {
 			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_USER));
 	}
 
+	/**
+	 * redis에 채팅방 입장 정보 저장
+	 */
 	public void connectChatRoom(Long chatRoomId, String sessionId) {
 		chatRoomSessionRepository.save(ChatRoomSession.create(sessionId, chatRoomId));
 	}
 
+	/**
+	 * redis에서 채팅방 입장 정보 삭제
+	 */
 	public void disconnectChatRoom(String sessionId) {
 		chatRoomSessionRepository.findBySessionId(sessionId)
 			.ifPresent(chatRoomSession -> chatRoomSessionRepository.deleteById(chatRoomSession.getId()));

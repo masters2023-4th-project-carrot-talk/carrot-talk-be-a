@@ -2,7 +2,6 @@ package com.example.carrot.global.interceptor;
 
 import java.util.Objects;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.messaging.Message;
@@ -27,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Order(Ordered.HIGHEST_PRECEDENCE + 99)
 @Slf4j
-@Lazy
 @Component
 @RequiredArgsConstructor
 public class StompHandler implements ChannelInterceptor {

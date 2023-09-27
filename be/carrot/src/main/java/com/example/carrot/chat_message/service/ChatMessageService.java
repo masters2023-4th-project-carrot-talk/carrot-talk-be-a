@@ -44,7 +44,8 @@ public class ChatMessageService {
 		ChatMessage chatMessage = ChatMessage.createChatMessage(
 			getChatRoom(message.getChatroomId()),
 			getUser(message.getSenderId()),
-			message.getContent()
+			message.getContent(),
+			message.getIsRead()
 		);
 		chatMessageRepository.save(chatMessage);
 	}

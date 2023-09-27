@@ -19,11 +19,10 @@ public class ChatMessageController {
 	private final ChatMessageService chatMessageService;
 
 	/**
-	 * websocket "/pub/message"로 들어오는 메시징을 처리한다.
+	 * websocket "/publish/message"로 들어오는 메시징을 처리한다.
 	 */
 	@MessageMapping("/message")
 	public ApiResponse<Void> message(MessageDto message) {
-		// Websocket에 발행된 메시지를 redis로 발행한다(publish)
 		log.info("chatroom id : {} ", message.getChatroomId());
 		chatMessageService.sendMessage(message);
 		return ApiResponse.success();

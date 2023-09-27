@@ -14,4 +14,13 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
 	@Query("select c from ChatRoom c where c.user.userId = :userId and c.product.productId = :productId")
 	Optional<ChatRoom> findByUserIdAndProductId(@Param("userId") Long userId, @Param("productId") Long productId);
+
+	@Query("SELECT count(cm.id) "
+		+ "FROM ChatMessage cm "
+		+ "         JOIN ChatRoom cr ON cm.chatRoom.id = cr.id "
+		+ "         JOIN Product p ON cr.product.productId = p.productId "
+		+ "WHERE cm.isRead = false "
+		+ "  AND (cr.user.userId = :userId OR p.user.userId = :userId) "
+		+ "	 AND cm.user.userId != :userId")
+	int findTotalUnReadCountByUserId(@Param("userId") Long userId);
 }

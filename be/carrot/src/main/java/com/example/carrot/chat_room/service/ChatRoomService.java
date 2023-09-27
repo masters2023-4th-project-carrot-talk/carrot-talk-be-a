@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.carrot.chat_room.dto.request.ChatRoomRequestDto;
 import com.example.carrot.chat_room.dto.response.ChatRoomResponseDto;
+import com.example.carrot.chat_room.dto.response.UnReadCountResponseDto;
 import com.example.carrot.chat_room.entity.ChatRoom;
 import com.example.carrot.chat_room.entity.ChatRoomSession;
 import com.example.carrot.chat_room.repository.ChatRoomRepository;
@@ -56,12 +57,23 @@ public class ChatRoomService {
 			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_USER));
 	}
 
+	/**
+	 * redis에 채팅방 입장 정보 저장
+	 */
 	public void connectChatRoom(Long chatRoomId, String sessionId) {
 		chatRoomSessionRepository.save(ChatRoomSession.create(sessionId, chatRoomId));
 	}
 
+	/**
+	 * redis에서 채팅방 입장 정보 삭제
+	 */
 	public void disconnectChatRoom(String sessionId) {
 		chatRoomSessionRepository.findBySessionId(sessionId)
 			.ifPresent(chatRoomSession -> chatRoomSessionRepository.deleteById(chatRoomSession.getId()));
+	}
+
+	public UnReadCountResponseDto getUnReadTotalCount(Long userId) {
+		int totalCount = chatRoomRepository.findTotalUnReadCountByUserId(userId);
+		return UnReadCountResponseDto.of(totalCount);
 	}
 }

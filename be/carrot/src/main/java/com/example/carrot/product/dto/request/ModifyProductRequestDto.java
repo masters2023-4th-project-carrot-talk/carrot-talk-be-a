@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ModifyProductRequestDto {
 
-	@Size(min = 1, message = "이미지는 최소 1개 이상 등록되어야 합니다.")
+	@Size(min = 1, max = 10, message = "상품 이미지는 1개 이상, 10개 이하여야 합니다.")
 	private List<Long> images;
-	@NotNull(message = "상품의 이름을 입력해주세요")
+	@NotNull(message = "제목은 필수로 입력해주세요.")
 	private String title;
-	@NotNull(message = "카테고리를 입력해주세요")
+	@NotNull(message = "카테고리는 필수로 입력해주세요.")
 	private Long categoryId;
-	@NotNull(message = "동네를 입력해주세요")
+	@NotNull(message = "동네는 필수로 입력해주세요.")
 	private Long locationId;
 	private String content;
 	private Long price;

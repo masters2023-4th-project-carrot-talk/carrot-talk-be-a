@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -24,6 +23,7 @@ import com.example.carrot.product.dto.request.ModifyProductStatusRequestDto;
 import com.example.carrot.product.dto.request.SaveProductRequestDto;
 import com.example.carrot.product.dto.response.MainPageResponseDto;
 import com.example.carrot.product.dto.response.ModifyProductResponseDto;
+import com.example.carrot.product.dto.response.ProductDetailLocationResponseDto;
 import com.example.carrot.product.dto.response.ProductDetailResponseDto;
 import com.example.carrot.product.dto.response.ProductDetailSellerResponseDto;
 import com.example.carrot.product.dto.response.ProductImageResponseDto;
@@ -31,6 +31,7 @@ import com.example.carrot.product.dto.response.ProductsResponseDto;
 import com.example.carrot.product.dto.response.ReadProductDetailResponseDto;
 import com.example.carrot.product.dto.response.SaveProductResponseDto;
 import com.example.carrot.product.entity.Product;
+import com.example.carrot.product.entity.ProductDetails;
 import com.example.carrot.product.entity.ProductStatus;
 import com.example.carrot.product.repository.ProductRepository;
 import com.example.carrot.product_image.entity.ProductImage;
@@ -85,34 +86,41 @@ public class ProductService {
 
 		Product product = getProduct(productId);
 
-		product.validateEditAccess(userId);
-
-		List<ProductImage> productImages = product.getProductImages();
-
-		productImageRepository.deleteAllInBatch(productImages);
-
-		List<Long> imageIds = modifyProductRequestDto.getImages();
-
-		Image mainImage = getImage(imageIds.get(0));
-		List<Image> images = imageRepository.findAllById(imageIds.subList(1, imageIds.size()));
-
-		List<ProductImage> updatedProductImages = new ArrayList<>();
-		updatedProductImages.add(ProductImage.of(product, mainImage, true));
-
-		for (Image image : images) {
-			updatedProductImages.add(ProductImage.of(product, image, false));
-		}
-
-		productImageRepository.saveAll(updatedProductImages);
-
 		Category category = getCategory(modifyProductRequestDto);
 		Location location = getLocation(modifyProductRequestDto);
+		String content = modifyProductRequestDto.getContent();
+		Long price = modifyProductRequestDto.getPrice();
+		String title = modifyProductRequestDto.getTitle();
 
-		product.update(
-			modifyProductRequestDto.getTitle(), modifyProductRequestDto.getContent(),
-			modifyProductRequestDto.getPrice(), category, location);
+		ProductDetails productDetails = ProductDetails.of(content, price, title, category, location);
+
+		if (product.isContainModifyImages(modifyProductRequestDto.getImages())) {
+			Image mainImage = getMainImage(modifyProductRequestDto);
+			List<Image> subImages = getSubImages(modifyProductRequestDto);
+
+			deleteOriginImages(product);
+
+			product.update(mainImage, subImages, productDetails, userId);
+
+			return ModifyProductResponseDto.of(product);
+		}
+		product.update(productDetails, userId);
 
 		return ModifyProductResponseDto.of(product);
+	}
+
+	private Image getMainImage(ModifyProductRequestDto modifyProductRequestDto) {
+		return getImage(modifyProductRequestDto.getImages().get(0));
+	}
+
+	private List<Image> getSubImages(ModifyProductRequestDto modifyProductRequestDto) {
+		return imageRepository.findAllById(
+			modifyProductRequestDto.getImages().subList(1, modifyProductRequestDto.getImages().size()));
+	}
+
+	private void deleteOriginImages(Product product) {
+		product.getProductImages().clear();
+		productImageRepository.deleteByProduct(product);
 	}
 
 	private Image getImage(Long imageId) {
@@ -143,7 +151,7 @@ public class ProductService {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_USER));
 
-		String name = saveProductRequestDto.getName();
+		String name = saveProductRequestDto.getTitle();
 		Category category = categoryRepository.findById(saveProductRequestDto.getCategoryId())
 			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_CATEGORY));
 		Location location = locationRepository.findById(saveProductRequestDto.getLocationId())
@@ -153,7 +161,7 @@ public class ProductService {
 
 		Product product = productRepository.save(
 			Product.builder()
-				.name(name)
+				.title(name)
 				.price(price)
 				.content(content)
 				.hits(0L)
@@ -175,18 +183,20 @@ public class ProductService {
 	private List<ProductImage> makeProductImages(SaveProductRequestDto saveProductRequestDto, Product product) {
 		List<Long> images = saveProductRequestDto.getImages();
 		List<ProductImage> productImages = new ArrayList<>();
-		// TODO: flag 방식 사용할 수 있도록 (인덱스가 아니라)
-		for (int i = 0; i < images.size(); i++) {
-			Long imageId = images.get(i);
+
+		boolean isFirstImage = true;
+		for (Long imageId : images) {
 			Image image = getImage(imageId);
 
-			if (i == 0) {
+			if (isFirstImage) {
 				buildProductImagesForIndex0(product, image, productImages);
+				isFirstImage = false;
 				continue;
 			}
 
 			buildProductImages(product, image, productImages);
 		}
+
 		return productImages;
 	}
 
@@ -234,12 +244,12 @@ public class ProductService {
 	public ReadProductDetailResponseDto getProductDetail(Long productId, Long userId) {
 		Product product = getProduct(productId);
 		return ReadProductDetailResponseDto.of(makeImageUrls(product),
-			makeSeller(product), makeProduct(product, userId));
+			makeSeller(product), makeLocation(product), makeProduct(product, userId));
 	}
 
 	private List<ProductImageResponseDto> makeImageUrls(Product product) {
 		// ProductImage의 List 형태가 가장 첫번째로 오는 것이
-		// 이미 대표 이미지의 것이라는 보장이 있어야 함 (이미지 API에서 그렇게 만들어야 함)
+		// 이미 대표 이미지의 것이라는 보장이 있기 때문에 이런 식으로 할 수 있는 것
 		List<ProductImage> productImages = product.getProductImages();
 
 		catchMainImageException(productImages);
@@ -262,11 +272,14 @@ public class ProductService {
 		return ProductDetailSellerResponseDto.of(user.getUserId(), user.getNickName());
 	}
 
-	private ProductDetailResponseDto makeProduct(Product product, Long userId) {
-		String location = product.getLocation().getName();
+	private ProductDetailLocationResponseDto makeLocation(Product product) {
+		Location location = product.getLocation();
+		return ProductDetailLocationResponseDto.of(location.getLocationId(), location.getName());
+	}
 
+	private ProductDetailResponseDto makeProduct(Product product, Long userId) {
 		String status = product.getStatus().getValue();
-		String title = product.getName();
+		String title = product.getTitle();
 		String category = product.getCategory().getName();
 		Long price = product.getPrice();
 		String content = product.getContent();
@@ -287,7 +300,7 @@ public class ProductService {
 			isLiked = findIsLiked(likes, userId);
 		}
 
-		return ProductDetailResponseDto.of(location, status, title, category,
+		return ProductDetailResponseDto.of(status, title, category,
 			createdAt, content, chatCount, likeCount, hits, price, isLiked);
 	}
 

@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class SignUpRequestDto {
 
-	// TODO: @Size 회의 안건으로 정하기
 	@NotNull(message = "닉네임 입력은 필수입니다.")
 	@Size(min = 1, max = 10, message = "닉네임은 1글자 이상, 10글자 이하여야 합니다.")
 	private String nickname;

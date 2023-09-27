@@ -2,6 +2,7 @@ package com.example.carrot.product.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,9 +17,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.example.carrot.category.entity.Category;
+import com.example.carrot.chat_room.entity.ChatRoom;
 import com.example.carrot.global.common.BaseAllTimeEntity;
 import com.example.carrot.global.exception.CustomException;
 import com.example.carrot.global.exception.StatusCode;
+import com.example.carrot.image.entity.Image;
 import com.example.carrot.like.entity.Like;
 import com.example.carrot.location.entity.Location;
 import com.example.carrot.product_image.entity.ProductImage;
@@ -38,7 +41,7 @@ public class Product extends BaseAllTimeEntity {
 	private Long productId;
 
 	@Column(nullable = false)
-	private String name;
+	private String title;
 
 	private Long price;
 
@@ -64,16 +67,19 @@ public class Product extends BaseAllTimeEntity {
 	@JoinColumn(name = "location_id")
 	private Location location;
 
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<Like> likes = new ArrayList<>();
 
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<ProductImage> productImages = new ArrayList<>();
 
+	@OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<ChatRoom> chatRooms = new ArrayList<>();
+
 	@Builder
-	public Product(String name, Long price, String content, Long hits, ProductStatus status, User user,
+	public Product(String title, Long price, String content, Long hits, ProductStatus status, User user,
 		Category category, Location location) {
-		this.name = name;
+		this.title = title;
 		this.price = price;
 		this.content = content;
 		this.hits = hits;
@@ -89,25 +95,6 @@ public class Product extends BaseAllTimeEntity {
 		}
 	}
 
-	public Product update(String title, String content, Long price, Category category, Location location) {
-		this.name = title;
-		this.content = content;
-		this.price = price;
-		this.category = category;
-		this.location = location;
-		return this;
-	}
-
-	public void addCategory(Category category) {
-		this.category = category;
-		category.getProducts().add(this);
-	}
-
-	public void addUser(User user) {
-		this.user = user;
-		user.getProducts().add(this);
-	}
-
 	public Product updateStatus(ProductStatus productStatus) {
 		this.status = productStatus;
 		return this;
@@ -117,4 +104,42 @@ public class Product extends BaseAllTimeEntity {
 		this.hits++;
 	}
 
+	public boolean isContainModifyImages(List<Long> images) {
+		return this.productImages.stream()
+			.noneMatch(productImage -> images.contains(productImage.getImage()));
+	}
+
+	public void update(ProductDetails productDetails, Long userId) {
+		this.validateEditAccess(userId);
+		this.category = productDetails.getCategory();
+		this.location = productDetails.getLocation();
+		this.price = productDetails.getPrice();
+		this.title = productDetails.getTitle();
+		this.content = productDetails.getContent();
+	}
+
+	public void update(Image mainImage, List<Image> subImages, ProductDetails productDetails, Long userId) {
+		this.update(productDetails, userId);
+		this.productImages = new ArrayList<>();
+		this.productImages.add(addProductMainImage(mainImage));
+		this.productImages.addAll(addProductImages(subImages));
+	}
+
+	private ProductImage addProductMainImage(Image mainImage) {
+		return ProductImage.builder()
+			.image(mainImage)
+			.isMain(true)
+			.product(this)
+			.build();
+	}
+
+	private List<ProductImage> addProductImages(List<Image> images) {
+		return images.stream()
+			.map(image -> ProductImage.builder()
+				.product(this)
+				.isMain(false)
+				.image(image)
+				.build())
+			.collect(Collectors.toList());
+	}
 }

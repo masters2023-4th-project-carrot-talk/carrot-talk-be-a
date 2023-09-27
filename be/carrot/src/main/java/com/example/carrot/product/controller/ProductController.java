@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,7 +50,7 @@ public class ProductController {
 	/**
 	 * 상품 수정 API
 	 */
-	@PatchMapping("/products/{productId}")
+	@PutMapping("/products/{productId}")
 	public ApiResponse<ModifyProductResponseDto> modifyProduct(
 		@Valid @RequestBody ModifyProductRequestDto modifyProductRequestDto,
 		@RequestAttribute Long userId,

@@ -15,12 +15,15 @@ public class ReadProductDetailResponseDto {
 	private List<ProductImageResponseDto> images;
 	@JsonProperty("seller")
 	private ProductDetailSellerResponseDto seller;
+	@JsonProperty("location")
+	private ProductDetailLocationResponseDto location;
 	@JsonProperty("product")
 	private ProductDetailResponseDto product;
 
-	public static ReadProductDetailResponseDto of(List<ProductImageResponseDto> images, ProductDetailSellerResponseDto seller,
-		ProductDetailResponseDto product) {
-		return new ReadProductDetailResponseDto(images, seller, product);
+	public static ReadProductDetailResponseDto of(List<ProductImageResponseDto> images,
+		ProductDetailSellerResponseDto seller,
+		ProductDetailLocationResponseDto location, ProductDetailResponseDto product) {
+		return new ReadProductDetailResponseDto(images, seller, location, product);
 	}
 
 }

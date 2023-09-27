@@ -21,12 +21,12 @@ public class MessageReceivedEventListener {
 		Object content = event.getContent();
 		if (content instanceof Entry) {
 			Entry entry = (Entry) content;
-			simpMessagingTemplate.convertAndSend("/subscribe/chatroom/" + entry.getChatroomId(), entry);
+			simpMessagingTemplate.convertAndSend("/subscribe/" + entry.getChatroomId(), entry);
 		}
 		if (content instanceof MessageDto) {
 			MessageDto messageDto = (MessageDto) content;
 			messageDto.setChatTime();
-			simpMessagingTemplate.convertAndSend("/subscribe/chatroom/" + messageDto.getChatroomId(), messageDto);
+			simpMessagingTemplate.convertAndSend("/subscribe/" + messageDto.getChatroomId(), messageDto);
 		}
 	}
 }

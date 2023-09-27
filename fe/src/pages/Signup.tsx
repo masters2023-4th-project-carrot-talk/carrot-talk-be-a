@@ -1,9 +1,3 @@
-import { useNickname } from '@/hooks/useNickname';
-import { useSignup } from '@/queries/auth';
-import { useAuthStore } from '@/stores/authStore';
-import { useRegisteredLocationsStore } from '@/stores/locationStore';
-import { usePopupStore } from '@/stores/popupStore';
-import { setLoginInfo } from '@/utils/localStorage';
 import { ReactComponent as Check } from '@assets/check.svg';
 import { ReactComponent as Plus } from '@assets/plus.svg';
 import { Button } from '@components/common/button/Button';
@@ -14,8 +8,13 @@ import { RightButton } from '@components/common/topBar/RightButton';
 import { Title } from '@components/common/topBar/Title';
 import { TopBar } from '@components/common/topBar/TopBar';
 import { PATH } from '@constants/path';
-
 import { Theme, css } from '@emotion/react';
+import { useNickname } from '@hooks/useNickname';
+import { useModal } from '@hooks/usePopups';
+import { useSignup } from '@queries/auth';
+import { useAuthStore } from '@stores/authStore';
+import { useRegisteredLocationsStore } from '@stores/locationStore';
+import { setLoginInfo } from '@utils/localStorage';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 export const Signup: React.FC = () => {
@@ -33,8 +32,8 @@ export const Signup: React.FC = () => {
       /^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]{2,10}$/.test(nickname),
     defaultWarning: '2~10글자 닉네임을 입력하세요',
   });
+  const { onOpenModal } = useModal();
   const { localLocations } = useRegisteredLocationsStore();
-  const { togglePopup, setCurrentDim } = usePopupStore();
   const { signUpInProgress } = useAuthStore();
   const signupMutation = useSignup();
 
@@ -43,11 +42,6 @@ export const Signup: React.FC = () => {
 
   const goToAuth = () => {
     navigate(PATH.account, { replace: true });
-  };
-
-  const openLocationModal = () => {
-    togglePopup('modal', true);
-    setCurrentDim('modal');
   };
 
   const requestSignup = () => {
@@ -135,11 +129,7 @@ export const Signup: React.FC = () => {
             </div>
           </div>
           <div className="location__form">
-            <Button
-              variant="rectangle"
-              state="default"
-              onClick={openLocationModal}
-            >
+            <Button variant="rectangle" state="default" onClick={onOpenModal}>
               <Plus />
               위치 추가
             </Button>

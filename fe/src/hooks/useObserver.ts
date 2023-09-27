@@ -1,22 +1,27 @@
 import { useRef, useEffect, useCallback } from 'react';
 
-type Callback = () => void;
+type UseIntersectionObserverType = {
+  inviewCallback: () => void;
+  outviewCallback?: () => void;
+};
 
-export const useIntersectionObserver = (
-  callback: Callback,
-  hasNextPage?: boolean,
-) => {
+export const useIntersectionObserver = ({
+  inviewCallback,
+  outviewCallback,
+}: UseIntersectionObserverType) => {
   const observeTarget = useRef<HTMLDivElement | null>(null);
 
   const observerCallback = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting && hasNextPage) {
-          callback();
+        if (entry.isIntersecting) {
+          inviewCallback();
+          return;
         }
+        outviewCallback?.();
       });
     },
-    [hasNextPage, callback],
+    [inviewCallback, outviewCallback],
   );
 
   useEffect(() => {

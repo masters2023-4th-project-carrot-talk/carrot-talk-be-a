@@ -1,7 +1,7 @@
 import { css, Theme } from '@emotion/react';
 
 type Props = {
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent) => void;
 };
 
 export const Backdrop: React.FC<Props> = ({ onClick }) => {
@@ -10,6 +10,7 @@ export const Backdrop: React.FC<Props> = ({ onClick }) => {
 
 const backdropStyle = (theme: Theme) => css`
   position: fixed;
+  z-index: 100;
   inset: 0;
   width: 393px;
   height: 100vh;

@@ -3,5 +3,8 @@ export const QUERY_KEY = {
   nicknameCheck: 'nicknameCheck',
   tokenRefresh: 'tokenRefresh',
   products: 'products',
+  productDetail: 'productDetail',
   categories: 'categories',
+  chatRooms: 'chatRooms',
+  unreadTotalCount: 'unreadTotalCount',
 };

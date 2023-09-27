@@ -1,19 +1,11 @@
+import { Heart, Home, News, UserCircle } from '@components/common/icons';
 import { PATH } from '@constants/path';
-import {
-  Heart,
-  Home,
-  MessageNoti,
-  Message,
-  News,
-  UserCircle,
-} from '@components/common/icons';
 import { Theme, css } from '@emotion/react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, matchRoutes, useLocation } from 'react-router-dom';
+import { NotiCount } from './NotiCount';
 
 export const NavBar: React.FC = () => {
-  const isMessageNoti = false; //TODO 추후 교체합니다
-
-  const messageTabIcon = isMessageNoti ? <MessageNoti /> : <Message />;
+  const currentLocation = useLocation();
 
   const tabs = [
     {
@@ -34,7 +26,7 @@ export const NavBar: React.FC = () => {
     {
       label: '채팅',
       path: PATH.chat,
-      icon: messageTabIcon,
+      icon: <NotiCount />,
     },
     {
       label: '내 계정',
@@ -43,16 +35,21 @@ export const NavBar: React.FC = () => {
     },
   ];
 
+  const matchedAllowedRoutes = matchRoutes(tabs, currentLocation) ?? [];
+  const isAllowedRoute = matchedAllowedRoutes.length > 0;
+
   return (
     <>
-      <nav css={(theme) => navStyle(theme)}>
-        {tabs.map((tab) => (
-          <NavLink key={tab.path} to={tab.path} className="tab">
-            {tab.icon}
-            {tab.label}
-          </NavLink>
-        ))}
-      </nav>
+      {isAllowedRoute && (
+        <nav css={(theme) => navStyle(theme)}>
+          {tabs.map((tab) => (
+            <NavLink key={tab.path} to={tab.path} className="tab">
+              {tab.icon}
+              {tab.label}
+            </NavLink>
+          ))}
+        </nav>
+      )}
     </>
   );
 };
@@ -102,4 +99,3 @@ const navStyle = (theme: Theme) => {
     }
   `;
 };
-// position: sticky;

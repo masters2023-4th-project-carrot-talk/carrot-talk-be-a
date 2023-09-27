@@ -8,6 +8,7 @@ export type ChatItemProps = {
   lastChatTime: string;
   unreadChatCount: number;
   thumbnailUrl: string;
+  onEnterChat: () => void;
 };
 
 export const ChatItem: React.FC<ChatItemProps> = ({
@@ -16,9 +17,10 @@ export const ChatItem: React.FC<ChatItemProps> = ({
   lastChatTime,
   unreadChatCount,
   thumbnailUrl,
+  onEnterChat,
 }) => {
   return (
-    <li css={(theme) => chatItemStyle(theme)}>
+    <li css={(theme) => chatItemStyle(theme)} onClick={onEnterChat}>
       <ImageBox size="s" imageUrl={opponent.imageUrl} variant="circle" />
       <div className="info">
         <div className="info__title">

@@ -5,7 +5,12 @@ import { Theme, css } from '@emotion/react';
 import { useChatRooms } from '@queries/chat';
 
 export const Chat: React.FC = () => {
-  const { data: chatRooms } = useChatRooms(); // TODO fcm연동 고려
+  const { data: chatRooms } = useChatRooms(); // TODO
+
+  const onEnterChat = (chatroomId: number) => {
+    // TODO
+    console.log(chatroomId, 'onEnterChat');
+  };
 
   const renderSkeletons = (length: number) => {
     return Array.from({ length }).map((_, index) => (
@@ -31,6 +36,7 @@ export const Chat: React.FC = () => {
               lastChatTime={chatItem.lastChatTime}
               unreadChatCount={chatItem.unreadChatCount}
               thumbnailUrl={chatItem.product.imageUrl}
+              onEnterChat={() => onEnterChat(chatItem.chatroomId)}
             />
           ))}
         </ul>

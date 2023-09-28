@@ -3,13 +3,16 @@ package com.example.carrot.chat_room.controller;
 import javax.validation.Valid;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.carrot.chat_room.dto.request.ChatRoomRequestDto;
+import com.example.carrot.chat_room.dto.response.ChatMessageResponseDtos;
 import com.example.carrot.chat_room.dto.response.ChatRoomResponseDto;
 import com.example.carrot.chat_room.dto.response.UnReadCountResponseDto;
 import com.example.carrot.chat_room.service.ChatRoomService;
@@ -43,4 +46,13 @@ public class ChatRoomController {
 		return ApiResponse.success(unReadCountResponseDto);
 	}
 
+	/**
+	 * 채팅 내역 조회 API
+	 */
+	@GetMapping("/chatrooms/{chatroomId}")
+	public ApiResponse<ChatMessageResponseDtos> getChatMessages(@RequestAttribute Long userId,
+		@PathVariable Long chatroomId, @RequestParam(required = false) Long next) {
+		ChatMessageResponseDtos chatMessageResponseDtos = chatRoomService.getChatMessages(userId, chatroomId, next);
+		return ApiResponse.success(chatMessageResponseDtos);
+	}
 }

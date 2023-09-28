@@ -90,7 +90,8 @@ public class ChatRoomService {
 	 * default size +1 만큼 메세지를 가져와서 있으면 next로 응답, 없으면 null로 응답
 	 */
 	public ChatMessageResponseDtos getChatMessages(Long userId, Long chatroomId, Long nextId) {
-		List<ChatMessageResponseDto> chatMessageResponseDtos = chatMessageRepository.findChatMessages(userId, chatroomId,
+		List<ChatMessageResponseDto> chatMessageResponseDtos = chatMessageRepository.findChatMessages(userId,
+			chatroomId,
 			nextId, DEFAULT_CHAT_SIZE);
 		Long next = findNextChatMessage(chatMessageResponseDtos);
 		List<ChatMessageResponseDto> removedLastChatMessages = getRemovedLastChatMessages(chatMessageResponseDtos);

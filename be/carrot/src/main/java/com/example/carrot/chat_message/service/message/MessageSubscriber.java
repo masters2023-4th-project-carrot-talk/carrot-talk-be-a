@@ -28,7 +28,7 @@ public class MessageSubscriber implements MessageListener {
 	 */
 	@Override
 	public void onMessage(Message message, byte[] pattern) {
-		try{
+		try {
 			// redis에서 발행된 데이터를 받아 deserialize
 			String publishMessage = redisTemplate.getStringSerializer().deserialize(message.getBody());
 			// 입장 메세지 응답
@@ -42,7 +42,7 @@ public class MessageSubscriber implements MessageListener {
 			MessageDto roomMessage = objectMapper.readValue(publishMessage, MessageDto.class);
 			log.info("MessageSubscriber : {}", roomMessage.getContent());
 			eventPublisher.publishEvent(new MessageReceivedEvent(this, roomMessage));
-		} catch (Exception e){
+		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
 	}

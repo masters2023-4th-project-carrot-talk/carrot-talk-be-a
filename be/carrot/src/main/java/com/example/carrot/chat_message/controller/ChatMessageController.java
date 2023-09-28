@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 
 import com.example.carrot.chat_message.dto.MessageDto;
 import com.example.carrot.chat_message.service.ChatMessageService;
-import com.example.carrot.chat_message.service.message.MessagePublisher;
 import com.example.carrot.global.common.ApiResponse;
 
 import lombok.RequiredArgsConstructor;

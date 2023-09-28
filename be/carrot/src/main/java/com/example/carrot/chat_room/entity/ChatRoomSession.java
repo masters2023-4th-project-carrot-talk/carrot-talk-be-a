@@ -4,7 +4,6 @@ import javax.persistence.Id;
 
 import org.springframework.data.redis.core.RedisHash;
 
-
 import lombok.Builder;
 import lombok.Getter;
 

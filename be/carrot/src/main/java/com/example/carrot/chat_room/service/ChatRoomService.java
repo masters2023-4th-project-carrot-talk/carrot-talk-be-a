@@ -114,13 +114,12 @@ public class ChatRoomService {
 	}
 
 	/**
-	 * 해당 채팅방의 판매자도 아니고, 구매자도 아니면 에러처리
+	 * 해당 채팅방의 판매자도 아니고 구매자도 아니면 에러처리
 	 */
 	public void validateChatUser(Long userId, Long chatroomId) {
-		User user = getUser(userId);
 		ChatRoom chatRoom = getChatRoomWithProductAndUser(chatroomId);
 		Product product = chatRoom.getProduct();
-		if (!user.equals(product.getUser()) || !user.equals(chatRoom.getUser())) {
+		if (!userId.equals(product.getUser().getUserId()) && !userId.equals(chatRoom.getUser().getUserId())) {
 			throw new CustomException(StatusCode.ACCESS_DENIED_CHATROOM);
 		}
 	}

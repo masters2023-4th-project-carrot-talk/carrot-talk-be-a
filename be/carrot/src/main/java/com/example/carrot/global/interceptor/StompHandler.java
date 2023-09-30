@@ -50,7 +50,7 @@ public class StompHandler implements ChannelInterceptor {
 				Long userId = validateToken(accessor);
 				Long chatroomId = getChatRoomId(accessor);
 				validateChatUser(userId, chatroomId);
-				connectToChatRoom(accessor, chatroomId);
+				connectToChatRoom(accessor, chatroomId, userId);
 				enterChatRoom(chatroomId, userId);
 				break;
 			case SUBSCRIBE:
@@ -90,10 +90,10 @@ public class StompHandler implements ChannelInterceptor {
 		return accessor.getFirstNativeHeader("Authorization");
 	}
 
-	private void connectToChatRoom(StompHeaderAccessor accessor, Long chatroomId) {
+	private void connectToChatRoom(StompHeaderAccessor accessor, Long chatroomId, Long userId) {
 		log.info("chat connect user id : {} ", accessor.getSessionId());
 		chatRoomService.connectChatRoom(chatroomId, accessor.getSessionId());
-		chatMessageService.readMessageCountByChatRoom(chatroomId);
+		chatMessageService.readMessageCountByChatRoom(chatroomId, userId);
 	}
 
 	private Long getChatRoomId(StompHeaderAccessor accessor) {

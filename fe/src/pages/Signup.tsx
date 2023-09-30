@@ -133,6 +133,11 @@ export const Signup: React.FC = () => {
               <Plus />
               위치 추가
             </Button>
+            {localLocations.length !== 2 && (
+              <div className="warning-message">
+                필수조건: 위치를 2개 등록해주세요.
+              </div>
+            )}
           </div>
         </div>
         <LocationModal locationList={localLocations} />
@@ -177,6 +182,17 @@ const pageStyle = (theme: Theme) => {
           background-color: ${theme.color.brand.primaryStrong};
           border-radius: 50%;
         }
+      }
+    }
+
+    .location__form {
+      & svg {
+        stroke: ${theme.color.neutral.textStrong};
+      }
+
+      .warning-message {
+        font: ${theme.font.enabledStrong12};
+        color: ${theme.color.system.warning};
       }
     }
   `;

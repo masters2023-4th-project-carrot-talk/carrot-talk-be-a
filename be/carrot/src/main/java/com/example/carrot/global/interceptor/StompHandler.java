@@ -49,7 +49,8 @@ public class StompHandler implements ChannelInterceptor {
 				log.info("CONNECT !!");
 				Long userId = validateToken(accessor);
 				Long chatroomId = getChatRoomId(accessor);
-				connectToChatRoom(accessor, chatroomId);
+				validateChatUser(userId, chatroomId);
+				connectToChatRoom(accessor, chatroomId, userId);
 				enterChatRoom(chatroomId, userId);
 				break;
 			case SUBSCRIBE:
@@ -64,8 +65,12 @@ public class StompHandler implements ChannelInterceptor {
 		}
 	}
 
+	private void validateChatUser(Long userId, Long chatroomId) {
+		chatRoomService.validateChatUser(userId, chatroomId);
+	}
+
 	private void enterChatRoom(Long chatroomId, Long userId) {
-		Entry entry = new Entry(true, chatroomId, userId);
+		Entry entry = new Entry(chatroomId, userId);
 		chatMessageService.sendEntry(entry);
 	}
 
@@ -85,10 +90,10 @@ public class StompHandler implements ChannelInterceptor {
 		return accessor.getFirstNativeHeader("Authorization");
 	}
 
-	private void connectToChatRoom(StompHeaderAccessor accessor, Long chatroomId) {
+	private void connectToChatRoom(StompHeaderAccessor accessor, Long chatroomId, Long userId) {
 		log.info("chat connect user id : {} ", accessor.getSessionId());
 		chatRoomService.connectChatRoom(chatroomId, accessor.getSessionId());
-		chatMessageService.readMessageCountByChatRoom(chatroomId);
+		chatMessageService.readMessageCountByChatRoom(chatroomId, userId);
 	}
 
 	private Long getChatRoomId(StompHeaderAccessor accessor) {

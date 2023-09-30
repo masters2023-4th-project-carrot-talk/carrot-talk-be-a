@@ -12,7 +12,7 @@ import com.example.carrot.chat_message.entity.ChatMessage;
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long>, QueryChatMessageRepository {
 
 	@Modifying
-	@Query("update ChatMessage cm set cm.isRead = true where cm.chatRoom.id = :chatRoomId and cm.isRead = false")
-	int updateMessageStatusByChatRoomId(@Param("chatRoomId") Long chatRoomId);
+	@Query("update ChatMessage cm set cm.isRead = true where cm.chatRoom.id = :chatRoomId and cm.isRead = false and cm.user.userId != :userId")
+	int updateMessageByChatRoomIdAndUserId(@Param("chatRoomId") Long chatRoomId, @Param("userId") Long userId);
 
 }

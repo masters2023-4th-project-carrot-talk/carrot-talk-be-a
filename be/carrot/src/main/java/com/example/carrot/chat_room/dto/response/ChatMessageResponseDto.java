@@ -11,28 +11,24 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ChatMessageResponseDto {
-	@JsonProperty("id")
-	private Long id;
+	@JsonProperty("chattingId")
+	private Long chattingId;
 	@JsonProperty("content")
 	private String content;
-	@JsonProperty("isMine")
-	private boolean isMine;
+	@JsonProperty("senderId")
+	private Long senderId;
 	@JsonProperty("isRead")
 	private boolean isRead;
 	@JsonProperty("createdAt")
 	private LocalDateTime createdAt;
 
 	@Builder
-	public ChatMessageResponseDto(Long id, String content, boolean isMine, boolean isRead, LocalDateTime createdAt) {
-		this.id = id;
+	public ChatMessageResponseDto(Long id, String content, Long senderId, boolean isRead, LocalDateTime createdAt) {
+		this.chattingId = id;
 		this.content = content;
-		this.isMine = isMine;
+		this.senderId = senderId;
 		this.isRead = isRead;
 		this.createdAt = createdAt;
-	}
-
-	public boolean getIsMine() {
-		return isMine;
 	}
 
 	public boolean getIsRead() {

@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Entry implements Serializable {
-	private boolean anyoneEnterRoom;
 	private Long chatroomId;
-	private Long senderId;
+	private Long enterMemberId;
 }

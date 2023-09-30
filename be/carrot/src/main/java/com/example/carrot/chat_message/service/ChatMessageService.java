@@ -20,7 +20,9 @@ import com.example.carrot.user.entity.User;
 import com.example.carrot.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChatMessageService {
@@ -67,8 +69,8 @@ public class ChatMessageService {
 	}
 
 	@Transactional
-	public void readMessageCountByChatRoom(Long chatRoomId) {
-		chatMessageRepository.updateMessageStatusByChatRoomId(chatRoomId);
+	public void readMessageCountByChatRoom(Long chatRoomId, Long userId) {
+		chatMessageRepository.updateMessageByChatRoomIdAndUserId(chatRoomId, userId);
 	}
 
 	private boolean isAnyoneInChatRoom(Long chatRoomId) {

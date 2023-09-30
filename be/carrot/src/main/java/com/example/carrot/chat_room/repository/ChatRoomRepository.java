@@ -23,4 +23,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 		+ "  AND (cr.user.userId = :userId OR p.user.userId = :userId) "
 		+ "	 AND cm.user.userId != :userId")
 	int findTotalUnReadCountByUserId(@Param("userId") Long userId);
+
+	@Query("SELECT cr FROM ChatRoom cr JOIN FETCH cr.product p JOIN FETCH p.user u")
+	Optional<ChatRoom> findChatRoomWithProductAndUserById(Long chatroomId);
 }

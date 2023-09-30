@@ -49,6 +49,7 @@ public class StompHandler implements ChannelInterceptor {
 				log.info("CONNECT !!");
 				Long userId = validateToken(accessor);
 				Long chatroomId = getChatRoomId(accessor);
+				validateChatUser(userId, chatroomId);
 				connectToChatRoom(accessor, chatroomId);
 				enterChatRoom(chatroomId, userId);
 				break;
@@ -62,6 +63,10 @@ public class StompHandler implements ChannelInterceptor {
 				log.info("DISCONNECT !!");
 				disconnectChatRoom(accessor);
 		}
+	}
+
+	private void validateChatUser(Long userId, Long chatroomId) {
+		chatRoomService.validateChatUser(userId, chatroomId);
 	}
 
 	private void enterChatRoom(Long chatroomId, Long userId) {

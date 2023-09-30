@@ -10,6 +10,7 @@ import com.example.carrot.chat_room.dto.request.ChatRoomRequestDto;
 import com.example.carrot.chat_room.dto.response.ChatMessageResponseDto;
 import com.example.carrot.chat_room.dto.response.ChatMessageResponseDtos;
 import com.example.carrot.chat_room.dto.response.ChatRoomResponseDto;
+import com.example.carrot.chat_room.dto.response.CreateChatRoomResponseDto;
 import com.example.carrot.chat_room.dto.response.UnReadCountResponseDto;
 import com.example.carrot.chat_room.entity.ChatRoom;
 import com.example.carrot.chat_room.entity.ChatRoomSession;
@@ -44,12 +45,12 @@ public class ChatRoomService {
 	 * 서버간 채팅방 공유를 위해 redis hash에 저장한다.
 	 */
 	@Transactional
-	public ChatRoomResponseDto createChatRoom(ChatRoomRequestDto chatRoomRequestDto, Long userId) {
+	public CreateChatRoomResponseDto createChatRoom(ChatRoomRequestDto chatRoomRequestDto, Long userId) {
 		Long productId = chatRoomRequestDto.getProductId();
 		ChatRoom chatRoom = chatRoomRepository.findByUserIdAndProductId(userId, productId)
 			.orElseGet(() -> createNewChatRoom(userId, productId));
 
-		return ChatRoomResponseDto.of(chatRoom);
+		return CreateChatRoomResponseDto.of(chatRoom);
 	}
 
 	private ChatRoom createNewChatRoom(Long userId, Long productId) {
@@ -127,5 +128,9 @@ public class ChatRoomService {
 	private ChatRoom getChatRoomWithProductAndUser(Long chatroomId) {
 		return chatRoomRepository.findChatRoomWithProductAndUserById(chatroomId)
 			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_CHATROOM));
+	}
+
+	public List<ChatRoomResponseDto> getChatRooms(Long userId) {
+		return chatRoomRepository.findChatRoomsByUserId(userId);
 	}
 }

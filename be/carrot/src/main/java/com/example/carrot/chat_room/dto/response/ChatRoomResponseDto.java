@@ -1,17 +1,29 @@
 package com.example.carrot.chat_room.dto.response;
 
-import com.example.carrot.chat_room.entity.ChatRoom;
+import java.time.LocalDateTime;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 public class ChatRoomResponseDto {
-
 	private Long chatroomId;
+	private String lastChatContent;
+	private LocalDateTime lastChatTime;
+	private int unreadChatCount;
+	private ChatRoomOpponentDto opponent;
+	private ChatRoomProductDto product;
 
-	public static ChatRoomResponseDto of(ChatRoom savedChatRoom) {
-		return new ChatRoomResponseDto(savedChatRoom.getId());
+	@Builder
+	public ChatRoomResponseDto(Long chatroomId, String lastChatContent, LocalDateTime lastChatTime,
+		int unreadChatCount, ChatRoomOpponentDto opponent, ChatRoomProductDto product) {
+		this.chatroomId = chatroomId;
+		this.lastChatContent = lastChatContent;
+		this.lastChatTime = lastChatTime;
+		this.unreadChatCount = unreadChatCount;
+		this.opponent = opponent;
+		this.product = product;
 	}
 }

@@ -110,6 +110,6 @@ public class ChatRoomService {
 		if (chatMessageResponseDtos.size() < DEFAULT_CHAT_SIZE) {
 			return null;
 		}
-		return chatMessageResponseDtos.get(chatMessageResponseDtos.size() - 1).getId();
+		return chatMessageResponseDtos.get(chatMessageResponseDtos.size() - 1).getChattingId();
 	}
 }

@@ -25,7 +25,7 @@ public class QueryChatMessageRepositoryImpl implements QueryChatMessageRepositor
 			.select(Projections.constructor(ChatMessageResponseDto.class,
 				chatMessage.id,
 				chatMessage.content,
-				userEqual(userId),
+				chatMessage.user.userId,
 				chatMessage.isRead,
 				chatMessage.createdAt
 			))
@@ -39,10 +39,6 @@ public class QueryChatMessageRepositoryImpl implements QueryChatMessageRepositor
 			.fetch();
 
 		return results;
-	}
-
-	private Predicate userEqual(Long userId) {
-		return chatMessage.user.userId.eq(userId);
 	}
 
 	private Predicate chatMessageLessThen(Long nextId) {

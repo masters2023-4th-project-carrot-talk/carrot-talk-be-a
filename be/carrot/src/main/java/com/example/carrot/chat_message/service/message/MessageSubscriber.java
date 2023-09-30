@@ -32,9 +32,9 @@ public class MessageSubscriber implements MessageListener {
 			// redis에서 발행된 데이터를 받아 deserialize
 			String publishMessage = redisTemplate.getStringSerializer().deserialize(message.getBody());
 			// 입장 메세지 응답
-			if (publishMessage.contains("anyoneEnterRoom")) {
+			if (publishMessage.contains("enterMemberId")) {
 				Entry entry = objectMapper.readValue(publishMessage, Entry.class);
-				log.info("entry : {}, {}", entry.getChatroomId(), entry.isAnyoneEnterRoom());
+				log.info("entry : {}, {}", entry.getChatroomId(), entry.getEnterMemberId());
 				eventPublisher.publishEvent(new MessageReceivedEvent(this, entry));
 				return;
 			}

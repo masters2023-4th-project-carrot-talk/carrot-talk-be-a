@@ -45,7 +45,8 @@ public enum StatusCode {
 	NOT_FOUND_MAIN_IMAGE(HttpStatus.NOT_FOUND, "메인 이미지를 찾을 수 없습니다."),
 
 	// -- [CHAT] -- //
-	NOT_FOUND_CHATROOM(HttpStatus.NOT_FOUND, "해당하는 채팅방이 없습니다.");
+	NOT_FOUND_CHATROOM(HttpStatus.NOT_FOUND, "해당하는 채팅방이 없습니다."),
+	ACCESS_DENIED_CHATROOM(HttpStatus.FORBIDDEN, "해당 채팅방에 접근할 수 없습니다.");
 
 	private final HttpStatus status;
 	private final String message;

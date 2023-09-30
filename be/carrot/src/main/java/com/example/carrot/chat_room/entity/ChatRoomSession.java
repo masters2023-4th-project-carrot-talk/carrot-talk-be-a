@@ -3,6 +3,7 @@ package com.example.carrot.chat_room.entity;
 import javax.persistence.Id;
 
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -14,8 +15,10 @@ public class ChatRoomSession {
 	@Id
 	private Long id;
 
+	@Indexed
 	private String sessionId;
 
+	@Indexed
 	private Long chatRoomId;
 
 	@Builder

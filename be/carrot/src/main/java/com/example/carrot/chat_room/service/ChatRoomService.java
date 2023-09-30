@@ -110,6 +110,22 @@ public class ChatRoomService {
 		if (chatMessageResponseDtos.size() < DEFAULT_CHAT_SIZE) {
 			return null;
 		}
-		return chatMessageResponseDtos.get(chatMessageResponseDtos.size() - 1).getId();
+		return chatMessageResponseDtos.get(chatMessageResponseDtos.size() - 1).getChattingId();
+	}
+
+	/**
+	 * 해당 채팅방의 판매자도 아니고 구매자도 아니면 에러처리
+	 */
+	public void validateChatUser(Long userId, Long chatroomId) {
+		ChatRoom chatRoom = getChatRoomWithProductAndUser(chatroomId);
+		Product product = chatRoom.getProduct();
+		if (!userId.equals(product.getUser().getUserId()) && !userId.equals(chatRoom.getUser().getUserId())) {
+			throw new CustomException(StatusCode.ACCESS_DENIED_CHATROOM);
+		}
+	}
+
+	private ChatRoom getChatRoomWithProductAndUser(Long chatroomId) {
+		return chatRoomRepository.findChatRoomWithProductAndUserById(chatroomId)
+			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_CHATROOM));
 	}
 }

@@ -65,7 +65,7 @@ public class StompHandler implements ChannelInterceptor {
 	}
 
 	private void enterChatRoom(Long chatroomId, Long userId) {
-		Entry entry = new Entry(true, chatroomId, userId);
+		Entry entry = new Entry(chatroomId, userId);
 		chatMessageService.sendEntry(entry);
 	}
 

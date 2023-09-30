@@ -11,12 +11,14 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import com.example.carrot.chat_message.entity.QChatMessage;
 import com.example.carrot.chat_room.dto.response.ChatRoomOpponentDto;
 import com.example.carrot.chat_room.dto.response.ChatRoomProductDto;
 import com.example.carrot.chat_room.dto.response.ChatRoomResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 public class QueryChatRoomRepositoryImpl implements QueryChatRoomRepository {
@@ -29,16 +31,20 @@ public class QueryChatRoomRepositoryImpl implements QueryChatRoomRepository {
 
 	@Override
 	public List<ChatRoomResponseDto> findChatRoomsByUserId(Long userId) {
+
+		QChatMessage latestMessage = new QChatMessage("latestMessage");
+
 		return queryFactory
 			.select(Projections.constructor(ChatRoomResponseDto.class,
 				chatRoom.id,
-				chatMessage.content.max(),
-				chatMessage.createdAt.max(),
+				latestMessage.content,
+				latestMessage.createdAt,
 				getUnreadCount(userId),
 				Projections.constructor(ChatRoomOpponentDto.class, user.userId, user.nickName, user.imageUrl),
 				Projections.constructor(ChatRoomProductDto.class, product.productId, image.imageUrl)))
 			.from(chatRoom)
-			.leftJoin(chatRoom.chatMessages, chatMessage)
+			.leftJoin(chatRoom.chatMessages, chatMessage) // 기존 chatMessage를 JOIN
+			.leftJoin(chatRoom.chatMessages, latestMessage) // 가장 최신의 chatMessage를 JOIN
 			.leftJoin(chatRoom.product, product)
 			.leftJoin(product.productImages, productImage)
 			.leftJoin(productImage.image, image)
@@ -46,9 +52,15 @@ public class QueryChatRoomRepositoryImpl implements QueryChatRoomRepository {
 			.where(productImage.isMain.eq(true)
 				.and(product.user.userId.eq(userId)
 					.or(chatRoom.user.userId.eq(userId)))
-				.and(user.userId.ne(userId)))
-			.groupBy(chatRoom.id, user.userId, user.nickName, user.imageUrl, image.imageUrl)
-			.orderBy(chatMessage.createdAt.max().desc())
+				.and(user.userId.ne(userId))
+				.and(latestMessage.createdAt.eq(  // 가장 최신의 메시지만 선택
+					JPAExpressions.select(chatMessage.createdAt.max())
+						.from(chatMessage)
+						.where(chatMessage.chatRoom.id.eq(chatRoom.id))
+				)))
+			.groupBy(chatRoom.id, user.userId, user.nickName, user.imageUrl, image.imageUrl, latestMessage.content,
+				latestMessage.createdAt)
+			.orderBy(latestMessage.createdAt.desc())
 			.fetch();
 	}
 

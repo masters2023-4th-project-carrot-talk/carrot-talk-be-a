@@ -1,5 +1,6 @@
 package com.example.carrot.chat_room.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class ChatRoom extends BaseCreatedTimeEntity {
+public class ChatRoom extends BaseCreatedTimeEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,5 +48,16 @@ public class ChatRoom extends BaseCreatedTimeEntity {
 	public ChatRoom(User user, Product product) {
 		this.user = user;
 		this.product = product;
+	}
+
+	public static ChatRoom create(User user, Product product) {
+		return ChatRoom.builder()
+			.user(user)
+			.product(product)
+			.build();
+	}
+
+	public void addChatMessages(ChatMessage chatMessage) {
+		this.chatMessages.add(chatMessage);
 	}
 }

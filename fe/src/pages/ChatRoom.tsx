@@ -14,6 +14,7 @@ import { TopBar } from '@components/common/topBar/TopBar';
 import { Theme, css } from '@emotion/react';
 import { useAuth } from '@hooks/useAuth';
 import { useInput } from '@hooks/useInput';
+import { useIntersectionObserver } from '@hooks/useObserver';
 import { useChatRoomHistories, useChatRoomInfo } from '@queries/chat';
 import { Client } from '@stomp/stompjs';
 import { numberToCommaString } from '@utils/formatPrice';
@@ -24,7 +25,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 type RealtimeChattingType = {
   chatroomId: number;
   content: string;
-  read: boolean;
+  isRead: boolean;
   senderId: number;
 };
 
@@ -37,6 +38,7 @@ export const ChatRoom: React.FC = () => {
   const [realtimeChattings, setRealtimeChattings] = useState<
     RealtimeChattingType[]
   >([]);
+  const [prevScrollHeight, setPrevScrollHeight] = useState<number | null>(null);
   const {
     value: message,
     onChangeValue: onChangeMessage,
@@ -46,9 +48,18 @@ export const ChatRoom: React.FC = () => {
     validator: (value) => value.trim().length > 0,
     warningMessage: '',
   });
+  const { observeTarget } = useIntersectionObserver({
+    inviewCallback: () => {
+      if (chattingHistories.hasNextPage) {
+        setPrevScrollHeight(chatroomElement.current?.scrollHeight ?? null);
+        chattingHistories.fetchNextPage();
+      }
+    },
+  });
   const client = useRef<Client>();
+  const chatroomElement = useRef<HTMLDivElement>(null);
 
-  const serverUrl = 'ws://13.125.16.208:8080';
+  const serverUrl = import.meta.env.VITE_BASE_URL.replace('http', 'ws');
 
   useEffect(() => {
     console.log('chatroomInfo', chatroomInfo.data);
@@ -60,7 +71,7 @@ export const ChatRoom: React.FC = () => {
       connectHeaders: {
         Authorization: getAccessToken()!,
         ChatroomId: chatRoomId!,
-      },  
+      },
       disconnectHeaders: {
         Authorization: getAccessToken()!,
         ChatroomId: chatRoomId!,
@@ -75,11 +86,18 @@ export const ChatRoom: React.FC = () => {
         client.current.subscribe(`/subscribe/${chatRoomId}`, (message) => {
           const body = JSON.parse(message.body);
 
-          if ('anyoneEnterRoom' in body) {
+          if (!('content' in body)) {
+            console.log('상대방 입장', body);
+            chattingHistories.refetch();
+            setRealtimeChattings((rc) =>
+              rc.map((chatting) => {
+                chatting.isRead = true;
+                return chatting;
+              }),
+            );
             return;
           }
 
-          console.log("body", body);
           setRealtimeChattings((prev) => [...prev, body]);
         });
       },
@@ -94,6 +112,26 @@ export const ChatRoom: React.FC = () => {
       client.current?.deactivate();
     };
   }, []);
+
+  useEffect(() => {
+    if (!chatroomElement.current) {
+      return;
+    }
+
+    if (prevScrollHeight) {
+      chatroomElement.current.scrollTo({
+        top: chatroomElement.current.scrollHeight! - prevScrollHeight,
+        behavior: 'auto',
+      });
+      setPrevScrollHeight(null);
+      return;
+    }
+
+    chatroomElement.current.scrollTo({
+      top: chatroomElement.current.scrollHeight,
+      behavior: 'auto',
+    });
+  }, [chattingHistories.data, realtimeChattings]);
 
   const resetMessageInput = () => {
     onChangeMessage('');
@@ -117,7 +155,7 @@ export const ChatRoom: React.FC = () => {
   };
 
   return (
-    <div css={(theme) => pageStyle(theme)}>
+    <div css={(theme) => pageStyle(theme)} ref={chatroomElement}>
       <TopBar>
         <LeftButton>
           <Button variant="text" onClick={() => navigate(-1)}>
@@ -184,6 +222,7 @@ export const ChatRoom: React.FC = () => {
           </p>
         </div>
       </div>
+      <div ref={observeTarget} css={obseverStyle}></div>
       <div className="chat-body">
         {chattingHistories.data?.map((history) => (
           <Bubble
@@ -197,7 +236,7 @@ export const ChatRoom: React.FC = () => {
           <Bubble
             key={index}
             isMine={chatting.senderId === userInfo.id}
-            isRead={chatting.read}
+            isRead={chatting.isRead}
             message={chatting.content}
           />
         ))}
@@ -227,7 +266,24 @@ export const ChatRoom: React.FC = () => {
 const pageStyle = (theme: Theme) => {
   return css`
     ::-webkit-scrollbar {
-      display: none;
+      width: 10px;
+      background-color: ${theme.color.neutral.background};
+
+      &-button {
+        width: 0;
+        height: 0;
+      }
+
+      &-thumb {
+        width: 4px;
+        border-radius: 10px;
+        background-color: ${theme.color.neutral.border};
+        border: 3px solid ${theme.color.neutral.background};
+      }
+
+      &-track {
+        background-color: transparent;
+      }
     }
 
     height: 100vh;
@@ -285,8 +341,12 @@ const pageStyle = (theme: Theme) => {
       align-items: stretch;
       gap: 8px;
       padding: 92px 16px 12px;
-      margin-top: 57px;
       margin-bottom: 64px;
     }
   `;
 };
+
+const obseverStyle = css`
+  width: 100%;
+  height: 57px;
+`;

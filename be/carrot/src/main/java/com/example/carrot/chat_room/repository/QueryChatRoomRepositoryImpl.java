@@ -20,6 +20,7 @@ import com.example.carrot.chat_room.dto.response.ChatRoomProductInfoDto;
 import com.example.carrot.chat_room.dto.response.ChatRoomResponseDto;
 import com.example.carrot.user.entity.QUser;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
@@ -83,24 +84,31 @@ public class QueryChatRoomRepositoryImpl implements QueryChatRoomRepository {
 	@Override
 	public ChatRoomInfoResponseDto findOpponentAndProduct(Long userId, Long chatroomId) {
 		QUser productUser = new QUser("productUser");
+		QUser chatRoomUser = new QUser("chatRoomUser");
+		QUser opponentUser = new QUser("opponentUser");
+
+		BooleanExpression isProductUser = productUser.userId.eq(userId);
+		BooleanExpression isChatRoomUser = chatRoomUser.userId.eq(userId);
+		BooleanExpression opponentIsProductUser = opponentUser.userId.eq(productUser.userId).and(isChatRoomUser);
+		BooleanExpression opponentIsChatRoomUser = opponentUser.userId.eq(chatRoomUser.userId).and(isProductUser);
+
 		return queryFactory
 			.select(Projections.constructor(ChatRoomInfoResponseDto.class,
 				Projections.constructor(ChatRoomOpponentInfoDto.class,
-					user.userId, user.nickName),
+					opponentUser.userId, opponentUser.nickName),
 				Projections.constructor(ChatRoomProductInfoDto.class,
 					product.productId, product.title, product.price, image.imageUrl)))
 			.from(chatRoom)
-			.leftJoin(chatRoom.user, user)
+			.leftJoin(chatRoom.user, chatRoomUser)
 			.leftJoin(chatRoom.product, product)
 			.leftJoin(product.user, productUser)
 			.leftJoin(product.productImages, productImage)
 			.leftJoin(productImage.image, image)
-			.where(productImage.isMain.eq(true)
-				.and(product.user.userId.eq(userId)
-					.or(chatRoom.user.userId.eq(userId)))
-				.and(user.userId.ne(userId))
-				.and(chatRoom.id.eq(chatroomId)))
+			.leftJoin(opponentUser).on(opponentIsProductUser.or(opponentIsChatRoomUser))
+			.where(productImage.isMain.isTrue())
+			.where(chatRoom.id.eq(chatroomId))
 			.groupBy(chatRoom.id, image.imageUrl)
 			.fetchOne();
 	}
+
 }

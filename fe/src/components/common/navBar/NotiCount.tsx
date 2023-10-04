@@ -1,34 +1,35 @@
-import { Theme, css } from '@emotion/react';
+import { css } from '@emotion/react';
 import { Message } from '@components/common/icons';
 import { CountBadge } from '../countBadge/CountBadge';
 
 export const NotiCount: React.FC = () => {
   // TOOD count 받아오기
+  const isMessageNoti = true;
+  //TODO 추후 교체합니다
+  //TODO 개수 어떤 주기로 갱신? 전역 저장?
+
   return (
     <div css={notiCountStyle}>
-      <CountBadge size="s" count={1} className="count-box" />
+      {isMessageNoti && <CountBadge size="s" count={1} className="count-box" />}
       <Message />
     </div>
   );
 };
 
-const notiCountStyle = (theme: Theme) => {
+const notiCountStyle = () => {
   return css`
     position: relative;
     box-sizing: border-box;
-    width: 40px;
-    height: 40px;
+
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border: 1px solid ${theme.color.neutral.border};
-
     .count-box {
       position: absolute;
 
-      top: -20px;
-      right: 0px;
+      top: -5px;
+      right: -5px;
     }
   `;
 };

@@ -3,27 +3,25 @@ import { useRef, useEffect, useCallback } from 'react';
 type UseIntersectionObserverType = {
   inviewCallback: () => void;
   outviewCallback?: () => void;
-  condition?: boolean;
 };
 
 export const useIntersectionObserver = ({
   inviewCallback,
   outviewCallback,
-  condition,
 }: UseIntersectionObserverType) => {
   const observeTarget = useRef<HTMLDivElement | null>(null);
 
   const observerCallback = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting && condition) {
+        if (entry.isIntersecting) {
           inviewCallback();
-        } else if (!entry.isIntersecting && outviewCallback) {
-          outviewCallback();
+          return;
         }
+        outviewCallback?.();
       });
     },
-    [condition, inviewCallback, outviewCallback],
+    [inviewCallback, outviewCallback],
   );
 
   useEffect(() => {

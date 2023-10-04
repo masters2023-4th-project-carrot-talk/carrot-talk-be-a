@@ -68,7 +68,6 @@ export const ProductDetail: React.FC = () => {
     outviewCallback: () => {
       onScrollOutview();
     },
-    condition: true,
   });
 
   const onScrollInview = () => {

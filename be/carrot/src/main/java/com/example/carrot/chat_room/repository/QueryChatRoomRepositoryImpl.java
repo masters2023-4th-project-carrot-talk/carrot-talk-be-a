@@ -12,15 +12,22 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.example.carrot.chat_message.entity.QChatMessage;
+import com.example.carrot.chat_room.dto.response.ChatRoomInfoResponseDto;
 import com.example.carrot.chat_room.dto.response.ChatRoomOpponentDto;
+import com.example.carrot.chat_room.dto.response.ChatRoomOpponentInfoDto;
 import com.example.carrot.chat_room.dto.response.ChatRoomProductDto;
+import com.example.carrot.chat_room.dto.response.ChatRoomProductInfoDto;
 import com.example.carrot.chat_room.dto.response.ChatRoomResponseDto;
+import com.example.carrot.user.entity.QUser;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class QueryChatRoomRepositoryImpl implements QueryChatRoomRepository {
 
 	private final JPAQueryFactory queryFactory;
@@ -71,5 +78,29 @@ public class QueryChatRoomRepositoryImpl implements QueryChatRoomRepository {
 			.then(1)
 			.otherwise(0)
 			.sum();
+	}
+
+	@Override
+	public ChatRoomInfoResponseDto findOpponentAndProduct(Long userId, Long chatroomId) {
+		QUser productUser = new QUser("productUser");
+		return queryFactory
+			.select(Projections.constructor(ChatRoomInfoResponseDto.class,
+				Projections.constructor(ChatRoomOpponentInfoDto.class,
+					user.userId, user.nickName),
+				Projections.constructor(ChatRoomProductInfoDto.class,
+					product.productId, product.title, product.price, image.imageUrl)))
+			.from(chatRoom)
+			.leftJoin(chatRoom.user, user)
+			.leftJoin(chatRoom.product, product)
+			.leftJoin(product.user, productUser)
+			.leftJoin(product.productImages, productImage)
+			.leftJoin(productImage.image, image)
+			.where(productImage.isMain.eq(true)
+				.and(product.user.userId.eq(userId)
+					.or(chatRoom.user.userId.eq(userId)))
+				.and(user.userId.ne(userId))
+				.and(chatRoom.id.eq(chatroomId)))
+			.groupBy(chatRoom.id, image.imageUrl)
+			.fetchOne();
 	}
 }

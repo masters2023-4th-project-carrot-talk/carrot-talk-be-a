@@ -2,8 +2,6 @@ package com.example.carrot.notification.service;
 
 import org.springframework.stereotype.Service;
 
-import com.example.carrot.global.exception.CustomException;
-import com.example.carrot.global.exception.StatusCode;
 import com.example.carrot.notification.component.SseEmitters;
 import com.example.carrot.notification.entity.Notification;
 import com.example.carrot.user.entity.User;

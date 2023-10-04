@@ -285,8 +285,7 @@ public class ProductService {
 		String content = product.getContent();
 		LocalDateTime createdAt = product.getCreatedAt();
 
-		// TODO: 채팅 기능 완료 후 추가
-		Long chatCount = 0L;
+		Long chatCount = (long)product.getChatRooms().size();
 
 		// 상품 조회할 때마다 조회수 1 증가 (이거 때문에 @Transactional 사용)
 		product.increaseHit();

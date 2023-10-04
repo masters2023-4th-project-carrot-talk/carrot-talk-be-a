@@ -1,7 +1,6 @@
 package com.example.carrot.category.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -21,7 +20,8 @@ public class CategoryService {
 		List<Category> categories = categoryRepository.findAll();
 		return categories.stream()
 			.map(CategoryResponseDto::of)
-			.collect(Collectors.toUnmodifiableList());
+			// TODO: 일급 컬렉션으로 추출한 후 해당 메소드를 인스턴스 단위의 메소드로 구현하기(?)
+			.toList();
 	}
 
 }

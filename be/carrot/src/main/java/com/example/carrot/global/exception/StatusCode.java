@@ -46,7 +46,10 @@ public enum StatusCode {
 
 	// -- [CHAT] -- //
 	NOT_FOUND_CHATROOM(HttpStatus.NOT_FOUND, "해당하는 채팅방이 없습니다."),
-	ACCESS_DENIED_CHATROOM(HttpStatus.FORBIDDEN, "해당 채팅방에 접근할 수 없습니다.");
+	ACCESS_DENIED_CHATROOM(HttpStatus.FORBIDDEN, "해당 채팅방에 접근할 수 없습니다."),
+
+	// -- [SSE] -- //
+	SEND_SSE_EMITTER_ERROR(HttpStatus.BAD_REQUEST, "Sse Emitter를 보내는 도중 에러가 발생했습니다.");
 
 	private final HttpStatus status;
 	private final String message;

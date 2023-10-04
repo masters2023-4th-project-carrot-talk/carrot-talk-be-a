@@ -11,7 +11,7 @@ public class ChatMessageResponseDtos {
 	@JsonProperty("chattings")
 	private List<ChatMessageResponseDto> chatMessageResponseDtos;
 
-	@JsonProperty("next")
+	@JsonProperty("nextId")
 	private Long nextId;
 
 	@Builder

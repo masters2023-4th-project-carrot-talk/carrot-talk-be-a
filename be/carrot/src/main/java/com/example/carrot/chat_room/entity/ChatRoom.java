@@ -57,6 +57,15 @@ public class ChatRoom extends BaseCreatedTimeEntity implements Serializable {
 			.build();
 	}
 
+	public User getReceiver(User sender) {
+		User seller = product.getUser();
+		if (seller == sender) {
+			return this.user;
+		}
+
+		return seller;
+	}
+
 	public void addChatMessages(ChatMessage chatMessage) {
 		this.chatMessages.add(chatMessage);
 	}

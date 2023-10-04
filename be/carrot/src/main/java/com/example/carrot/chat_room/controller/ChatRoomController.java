@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.carrot.chat_room.dto.request.ChatRoomRequestDto;
 import com.example.carrot.chat_room.dto.response.ChatMessageResponseDtos;
+import com.example.carrot.chat_room.dto.response.ChatRoomInfoResponseDto;
 import com.example.carrot.chat_room.dto.response.ChatRoomResponseDto;
 import com.example.carrot.chat_room.dto.response.CreateChatRoomResponseDto;
 import com.example.carrot.chat_room.dto.response.UnReadCountResponseDto;
@@ -67,5 +68,15 @@ public class ChatRoomController {
 	public ApiResponse<List<ChatRoomResponseDto>> getChatRooms(@RequestAttribute Long userId) {
 		List<ChatRoomResponseDto> chatRoomsResponseDto = chatRoomService.getChatRooms(userId);
 		return ApiResponse.success(chatRoomsResponseDto);
+	}
+
+	/**
+	 * 채팅방 정보 조회 API
+	 */
+	@GetMapping("/chatrooms/{chatroomId}/product")
+	public ApiResponse<ChatRoomInfoResponseDto> getChatRoomInfos(@RequestAttribute Long userId,
+		@PathVariable Long chatroomId) {
+		ChatRoomInfoResponseDto chatRoomInfoResponse = chatRoomService.getChatRoomInfos(userId, chatroomId);
+		return ApiResponse.success(chatRoomInfoResponse);
 	}
 }

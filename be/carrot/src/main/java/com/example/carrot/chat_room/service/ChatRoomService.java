@@ -9,6 +9,7 @@ import com.example.carrot.chat_message.repository.ChatMessageRepository;
 import com.example.carrot.chat_room.dto.request.ChatRoomRequestDto;
 import com.example.carrot.chat_room.dto.response.ChatMessageResponseDto;
 import com.example.carrot.chat_room.dto.response.ChatMessageResponseDtos;
+import com.example.carrot.chat_room.dto.response.ChatRoomInfoResponseDto;
 import com.example.carrot.chat_room.dto.response.ChatRoomResponseDto;
 import com.example.carrot.chat_room.dto.response.CreateChatRoomResponseDto;
 import com.example.carrot.chat_room.dto.response.UnReadCountResponseDto;
@@ -132,5 +133,9 @@ public class ChatRoomService {
 
 	public List<ChatRoomResponseDto> getChatRooms(Long userId) {
 		return chatRoomRepository.findChatRoomsByUserId(userId);
+	}
+
+	public ChatRoomInfoResponseDto getChatRoomInfos(Long userId, Long chatroomId) {
+		return chatRoomRepository.findOpponentAndProduct(userId, chatroomId);
 	}
 }

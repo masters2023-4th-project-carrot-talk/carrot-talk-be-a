@@ -1,6 +1,7 @@
 package com.example.carrot.notification.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.example.carrot.notification.component.SseEmitters;
 import com.example.carrot.notification.entity.Notification;
@@ -16,8 +17,8 @@ public class NotificationService {
 	private final UserRepository userRepository;
 	private final SseEmitters sseEmitters;
 
-	public void subscribe(Long userId) {
-		sseEmitters.add(userId);
+	public SseEmitter subscribe(Long userId) {
+		return sseEmitters.add(userId);
 	}
 
 	public void send(User receiver, Notification notification) {

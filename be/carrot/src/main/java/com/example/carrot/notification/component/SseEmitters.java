@@ -28,18 +28,18 @@ public class SseEmitters {
 	@Value("${sse.timeout}")
 	private long emitterTimeout;
 
-	public void add(Long userId) {
+	public SseEmitter add(Long userId) {
 		SseEmitter emitter = new SseEmitter(emitterTimeout);
 		userSseEmitterMap.put(userId, emitter);
 
-		sendNotification(userId, EVENT_NAME_CONNECTED);
+		return sendNotification(userId, EVENT_NAME_CONNECTED);
 	}
 
 	public void sendNotification(Long receiverId, Notification notification) {
 		sendNotification(receiverId, notification.toString());
 	}
 
-	private void sendNotification(Long receiverId, String notificationData) {
+	private SseEmitter sendNotification(Long receiverId, String notificationData) {
 		SseEmitter emitter = userSseEmitterMap.get(receiverId);
 
 		try {
@@ -47,6 +47,8 @@ public class SseEmitters {
 				.id(String.valueOf(receiverId))
 				.name(EVENT_NAME_NOTIFICATION)
 				.data(notificationData));
+
+			return emitter;
 		} catch (IOException e) {
 			emitter.completeWithError(new CustomException(StatusCode.SEND_SSE_EMITTER_ERROR));
 		}

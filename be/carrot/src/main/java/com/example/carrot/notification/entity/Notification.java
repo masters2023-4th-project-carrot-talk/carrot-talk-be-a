@@ -11,11 +11,12 @@ import lombok.ToString;
 @AllArgsConstructor
 public class Notification {
 
+	private String chatroomId;
 	private String title;
 	private String content;
 
-	public static Notification create(String title, String sender, String content) {
-		return new Notification(title, sender + ": " + content);
+	public static Notification create(Long chatroomId, String title, String sender, String content) {
+		return new Notification(String.valueOf(chatroomId), title, sender + ": " + content);
 	}
 
 }

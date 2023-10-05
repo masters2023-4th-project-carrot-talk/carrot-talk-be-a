@@ -81,7 +81,7 @@ public class MessageSubscriber implements MessageListener {
 			.orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND_USER));
 		User receiver = chatRoom.getReceiver(sender);
 
-		Notification notification = Notification.create(chatRoom.getProduct().getTitle(), sender.getNickName(),
+		Notification notification = Notification.create(chatRoom.getId(), chatRoom.getProduct().getTitle(), sender.getNickName(),
 			messageDto.getContent());
 
 		notificationService.send(receiver, notification);

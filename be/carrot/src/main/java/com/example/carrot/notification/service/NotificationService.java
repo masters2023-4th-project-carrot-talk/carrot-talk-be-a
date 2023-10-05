@@ -9,19 +9,23 @@ import com.example.carrot.user.entity.User;
 import com.example.carrot.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class NotificationService {
 
 	private final UserRepository userRepository;
 	private final SseEmitters sseEmitters;
 
 	public SseEmitter subscribe(Long userId) {
+		log.info("NotificationService subscribe 메서드 진입");
 		return sseEmitters.add(userId);
 	}
 
 	public void send(User receiver, Notification notification) {
+		log.info("NotificationService send 메서드 진입");
 		sseEmitters.sendNotification(receiver.getUserId(), notification);
 	}
 

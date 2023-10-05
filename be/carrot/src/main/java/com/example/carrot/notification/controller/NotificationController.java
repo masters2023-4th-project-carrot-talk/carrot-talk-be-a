@@ -25,7 +25,7 @@ public class NotificationController {
 
 	@GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public ResponseEntity<SseEmitter> connect(@RequestAttribute Long userId) {
-		log.info("userId: {}", userId);
+		log.info("NotificationController 진입");
 
 		return ResponseEntity.ok()
 			.header("X-Accel-Buffering", "no")

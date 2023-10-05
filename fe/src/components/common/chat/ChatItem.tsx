@@ -1,6 +1,7 @@
 import { CountBadge } from '@components/common/countBadge/CountBadge';
 import { ImageBox } from '@components/common/imageBox/ImageBox';
 import { css, keyframes, Theme } from '@emotion/react';
+import { formatTimeStamp } from '@utils/formatTimeStamp';
 
 export type ChatItemProps = {
   opponent: OpponentType;
@@ -19,22 +20,23 @@ export const ChatItem: React.FC<ChatItemProps> = ({
   thumbnailUrl,
   onEnterChat,
 }) => {
+  console.log(thumbnailUrl, 'thumbnailUrl');
+  const chatTime = formatTimeStamp(lastChatTime);
+
   return (
     <li css={(theme) => chatItemStyle(theme)} onClick={onEnterChat}>
       <ImageBox size="s" imageUrl={opponent.imageUrl} variant="circle" />
       <div className="info">
         <div className="info__title">
           <span className="info__title--nickname">{opponent.nickname}</span>
-          <span className="info__title--time">
-            {lastChatTime} {/* TODO n분전 util */}
-          </span>
+          <span className="info__title--time">{chatTime}</span>
         </div>
         <div className="info__message">
           <p>{lastChatContent}</p>
         </div>
       </div>
       <div className="unread-messages">
-        <CountBadge count={unreadChatCount} />
+        {unreadChatCount > 0 && <CountBadge count={unreadChatCount} />}
       </div>
       <ImageBox size="s" imageUrl={thumbnailUrl} />
     </li>
@@ -73,6 +75,7 @@ const chatItemStyle = (theme: Theme) => css`
     &__message {
       font: ${theme.font.displayDefault12};
       color: ${theme.color.neutral.text};
+      height: 16px;
 
       & > p {
         display: -webkit-box;

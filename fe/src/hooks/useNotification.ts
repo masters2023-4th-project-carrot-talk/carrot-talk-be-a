@@ -38,19 +38,28 @@ export const useNotification = (isLogin: boolean) => {
           EVENT_NAME.notification,
           (event) => {
             console.log('notification open??: ', event);
-            addUnreadTotalCount(1);
           },
         );
 
-        eventSourceRef.current.onmessage = (event) => {
-          console.log('is connected?');
-          console.log(event);
-          const response = event.data;
-          console.log('now noti response : ', response);
+        eventSourceRef.current.onopen = () => {
+          console.log('notification open ONOPEN');
+          console.log('test: count up on connect');
 
           setShouldNotify(true);
+          // addUnreadTotalCount(1);
+        };
 
-          if (response.includes(EVENT_NAME.notification)) {
+        eventSourceRef.current.onmessage = (event) => {
+          const response1 = JSON.parse(event.data);
+          const response2 = event.data;
+          // const response = event.data;
+          console.log('now noti response 1: ', response1);
+          console.log('now noti response 2: ', response2);
+
+          // setShouldNotify(true);
+
+          if (response1.includes(EVENT_NAME.notification)) {
+            //if 없애도 될듯?
             addUnreadTotalCount(1);
             // toast?
           }

@@ -15,7 +15,7 @@ export const PATH = {
 };
 
 export const END_POINT = {
-  notify: `/api/notification/subscribe`, // TODO 백에 물어보기
+  notify: `/api/notification/subscribe`,
   signup: `/api/users/signup`,
   login: `/api/users/login`,
   logout: `/api/users/logout`,
@@ -34,8 +34,9 @@ export const END_POINT = {
   locationsOf: (query: string) => `/api/locations?keyword=${query}`,
   nicknameCheck: (nickname: string) =>
     `/api/users/nickname?nickname=${nickname}`,
-  chatroomHistories: (chatroomId:number, query?: string) => `/api/chatrooms/${chatroomId}${query ? `?${query}` : ''}`,
-  chatroomInfo: (chatroomId:number) => `/api/chatrooms/${chatroomId}/product`,
+  chatroomHistories: (chatroomId: number, query?: string) =>
+    `/api/chatrooms/${chatroomId}${query ? `?${query}` : ''}`,
+  chatroomInfo: (chatroomId: number) => `/api/chatrooms/${chatroomId}/product`,
 };
 
 export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${

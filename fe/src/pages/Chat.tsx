@@ -1,15 +1,19 @@
 import { ChatItem, SkeletonChatItem } from '@components/common/chat/ChatItem';
 import { Title } from '@components/common/topBar/Title';
 import { TopBar } from '@components/common/topBar/TopBar';
+import { PATH } from '@constants/path';
 import { Theme, css } from '@emotion/react';
 import { useChatRooms } from '@queries/chat';
+import { useNavigate } from 'react-router-dom';
 
 export const Chat: React.FC = () => {
   const { data: chatRooms, status } = useChatRooms(); // TODO
+  const navigate = useNavigate();
 
   const onEnterChat = (chatroomId: number) => {
     // TODO chatcount지우기?
     console.log(chatroomId, 'onEnterChat');
+    navigate(`${PATH.chatRoom}/${chatroomId}`);
   };
 
   const renderSkeletons = (length: number) => {
@@ -38,7 +42,7 @@ export const Chat: React.FC = () => {
               lastChatContent={chatItem.lastChatContent}
               lastChatTime={chatItem.lastChatTime}
               unreadChatCount={chatItem.unreadChatCount}
-              thumbnailUrl={chatItem.product.imageUrl}
+              thumbnailUrl={chatItem.product.thumbnail}
               onEnterChat={() => onEnterChat(chatItem.chatroomId)}
             />
           ))}

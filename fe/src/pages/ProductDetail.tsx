@@ -128,14 +128,18 @@ export const ProductDetail: React.FC = () => {
   ];
 
   const enterChatRoom = () => {
+    if (!getUserInfo()) {
+      navigate(PATH.account);
+      return;
+    }
     chatRoomIdMutation.mutate(numberedProductId, {
       onSuccess: (res) => {
         if (res.success) {
           navigate(`${PATH.chatRoom}/${res.data?.chatroomId}`);
         }
-      }
+      },
     });
-  }
+  };
 
   return (
     <div css={(theme) => pageStyle(theme, product?.isLiked, isTransparent)}>
@@ -260,6 +264,7 @@ export const ProductDetail: React.FC = () => {
             state="active"
             onClick={() => {
               console.log('채팅방 목록으로 이동');
+              navigate(PATH.chat);
             }}
           >
             대화 중인 채팅방 {realTimeChatRoomCount}

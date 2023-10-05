@@ -7,7 +7,7 @@ import {
 } from '@api/api';
 import { QUERY_KEY } from '@constants/queryKey';
 import { createQueryParams } from '@utils/createQueryParams';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
 
 export const useChatRoomId = () =>

@@ -11,6 +11,7 @@ import { LeftButton } from '@components/common/topBar/LeftButton';
 import { RightButton } from '@components/common/topBar/RightButton';
 import { Title } from '@components/common/topBar/Title';
 import { TopBar } from '@components/common/topBar/TopBar';
+import { PATH } from '@constants/path';
 import { Theme, css } from '@emotion/react';
 import { useAuth } from '@hooks/useAuth';
 import { useInput } from '@hooks/useInput';
@@ -39,6 +40,7 @@ export const ChatRoom: React.FC = () => {
     RealtimeChattingType[]
   >([]);
   const [prevScrollHeight, setPrevScrollHeight] = useState<number | null>(null);
+  const [isOpponentEnter, setIsOpponentEnter] = useState<boolean>(false);
   const {
     value: message,
     onChangeValue: onChangeMessage,
@@ -62,10 +64,6 @@ export const ChatRoom: React.FC = () => {
   const serverUrl = import.meta.env.VITE_BASE_URL.replace('http', 'ws');
 
   useEffect(() => {
-    console.log('chatroomInfo', chatroomInfo.data);
-  }, [chatroomInfo.data]);
-
-  useEffect(() => {
     client.current = new Client({
       brokerURL: `${serverUrl}/chat`,
       connectHeaders: {
@@ -81,14 +79,11 @@ export const ChatRoom: React.FC = () => {
           return;
         }
 
-        console.log('연결 성공');
-
         client.current.subscribe(`/subscribe/${chatRoomId}`, (message) => {
           const body = JSON.parse(message.body);
 
-          if (!('content' in body)) {
-            console.log('상대방 입장', body);
-            chattingHistories.refetch();
+          if ('enterMemberId' in body && body.enterMemberId !== userInfo.id) {
+            setIsOpponentEnter(true);
             setRealtimeChattings((rc) =>
               rc.map((chatting) => {
                 chatting.isRead = true;
@@ -101,9 +96,7 @@ export const ChatRoom: React.FC = () => {
           setRealtimeChattings((prev) => [...prev, body]);
         });
       },
-      onDisconnect: () => {
-        console.log('연결 끊김');
-      },
+      onDisconnect: () => {},
     });
 
     client.current.activate();
@@ -167,13 +160,7 @@ export const ChatRoom: React.FC = () => {
         <RightButton>
           <Dropdown
             opener={
-              <Button
-                variant="text"
-                className="button__topbar"
-                onClick={() => {
-                  console.log('topbar dropdown');
-                }}
-              >
+              <Button variant="text" className="button__topbar">
                 <Dots />
               </Button>
             }
@@ -196,7 +183,8 @@ export const ChatRoom: React.FC = () => {
                 <MenuItem
                   variant="warning"
                   onClick={() => {
-                    console.log(' 채팅방 나가기');
+                    console.log('채팅방 나가기(미구현)');
+                    navigate(-1);
                   }}
                 >
                   채팅방 나가기
@@ -209,7 +197,7 @@ export const ChatRoom: React.FC = () => {
       <div
         className="info-banner"
         onClick={() => {
-          console.log('상세페이지로 이동');
+          navigate(`${PATH.detail}/${chatroomInfo.data?.product.id}`);
         }}
       >
         <ImageBox size="s" imageUrl={chatroomInfo.data?.product.thumbnail} />
@@ -228,7 +216,7 @@ export const ChatRoom: React.FC = () => {
           <Bubble
             key={history.chattingId}
             isMine={history.senderId === userInfo.id}
-            isRead={history.isRead}
+            isRead={isOpponentEnter || history.isRead}
             message={history.content}
           />
         ))}

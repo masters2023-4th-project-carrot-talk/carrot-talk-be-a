@@ -67,9 +67,7 @@ export const useChatRoomHistories = (chatroomId: number) => {
   const query = useInfiniteQuery({
     queryKey: ['chatRoomHistories', chatroomId],
     queryFn: fetchHistories,
-    getNextPageParam: (lastPage) => {
-      return lastPage.data?.next || null;
-    },
+    getNextPageParam: (lastPage) => lastPage.data?.nextId,
   });
 
   const allHistories = useMemo(
@@ -77,10 +75,6 @@ export const useChatRoomHistories = (chatroomId: number) => {
       query.data?.pages.flatMap((page) => page.data.chattings).reverse() ?? [],
     [query.data?.pages],
   );
-
-  useEffect(() => {
-    console.log('chatting histories', allHistories);
-  }, [allHistories]);
 
   return {
     ...query,

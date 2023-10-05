@@ -52,5 +52,7 @@ public class SseEmitters {
 		} catch (IOException e) {
 			emitter.completeWithError(new CustomException(StatusCode.SEND_SSE_EMITTER_ERROR));
 		}
+
+		return emitter;
 	}
 }

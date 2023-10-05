@@ -7,8 +7,6 @@ services:
       - 8080:8080
     volumes:
       - bee_market_app_release:/app
-    environment:
-      TZ: "UTC"
   web:
     container_name: bee_market_web_release
     image: won4885/bee_market_web_release:latest

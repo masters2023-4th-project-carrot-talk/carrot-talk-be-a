@@ -255,7 +255,14 @@ export const ProductDetail: React.FC = () => {
           <Heart className="like-icon" onClick={onToggleLike} />
           {formattedPrice}
         </div>
-        {!isAuthor && (
+        {isAuthor ? (<Button
+            variant="rectangle"
+            size="s"
+            state="active"
+            onClick={() => navigate(PATH.chat)}
+          >
+            채팅 목록으로 이동
+          </Button>) : (
           <Button
             variant="rectangle"
             size="s"

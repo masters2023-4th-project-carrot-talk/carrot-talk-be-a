@@ -10,18 +10,20 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import com.example.carrot.chat_message.entity.QChatMessage;
 import com.example.carrot.chat_room.dto.response.ChatRoomInfoResponseDto;
 import com.example.carrot.chat_room.dto.response.ChatRoomOpponentDto;
 import com.example.carrot.chat_room.dto.response.ChatRoomOpponentInfoDto;
 import com.example.carrot.chat_room.dto.response.ChatRoomProductDto;
 import com.example.carrot.chat_room.dto.response.ChatRoomProductInfoDto;
 import com.example.carrot.chat_room.dto.response.ChatRoomResponseDto;
+import com.example.carrot.chat_room.entity.QChatRoom;
 import com.example.carrot.user.entity.QUser;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.extern.slf4j.Slf4j;
@@ -52,7 +54,7 @@ public class QueryChatRoomRepositoryImpl implements QueryChatRoomRepository {
 				chatRoom.id,
 				chatMessage.content,
 				chatMessage.createdAt,
-				getUnreadCount(userId),
+				Expressions.asNumber(getUnreadCount(chatRoom, userId)).intValue(),
 				Projections.constructor(ChatRoomOpponentDto.class, opponentUser.userId, opponentUser.nickName,
 					opponentUser.imageUrl),
 				Projections.constructor(ChatRoomProductDto.class, product.productId, image.imageUrl)))
@@ -61,7 +63,7 @@ public class QueryChatRoomRepositoryImpl implements QueryChatRoomRepository {
 			.leftJoin(chatRoom.product, product)
 			.leftJoin(product.productImages, productImage)
 			.leftJoin(productImage.image, image)
-			.leftJoin(opponentUser).on(opponentIsProductUser.or(opponentIsChatRoomUser)) // 조건에 따른 상대방 조인
+			.leftJoin(opponentUser).on(opponentIsProductUser.or(opponentIsChatRoomUser))
 			.where(productImage.isMain.eq(true)
 				.and(userIsProductUser.or(userIsChatRoomUser))
 				.and(chatMessage.createdAt.eq(
@@ -70,19 +72,23 @@ public class QueryChatRoomRepositoryImpl implements QueryChatRoomRepository {
 						.where(chatMessage.chatRoom.id.eq(chatRoom.id))
 				)))
 			.groupBy(chatRoom.id, opponentUser.userId, opponentUser.nickName, opponentUser.imageUrl, image.imageUrl,
-				chatMessage.content,
-				chatMessage.createdAt)
+				chatMessage.content, chatMessage.createdAt)
 			.orderBy(chatMessage.createdAt.desc())
 			.fetch();
 	}
 
-	private NumberExpression<Integer> getUnreadCount(Long userId) {
-		return Expressions.cases()
-			.when(chatMessage.isRead.eq(false)
-				.and(chatMessage.user.userId.ne(userId)))
-			.then(1)
-			.otherwise(0)
-			.sum();
+	private JPQLQuery<Long> getUnreadCount(QChatRoom chatRoom, Long userId) {
+		QChatMessage unreadMessage = new QChatMessage("unreadMessage");
+
+		return JPAExpressions.select(
+				Expressions.cases()
+					.when(unreadMessage.isRead.eq(false).and(unreadMessage.user.userId.ne(userId)))
+					.then(1L)
+					.otherwise(0L)
+					.sum()  // Integer 타입으로 형변환
+			)
+			.from(unreadMessage)
+			.where(unreadMessage.chatRoom.eq(chatRoom));
 	}
 
 	@Override

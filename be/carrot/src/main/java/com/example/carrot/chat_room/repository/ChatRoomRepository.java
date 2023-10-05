@@ -29,7 +29,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long>, Query
 
 	@Query("select c from ChatRoom c "
 		+ "join fetch c.product p "
-		+ "join fetch User u "
+		+ "join fetch c.user u "
 		+ "where c.id = :chatroomId")
-	Optional<ChatRoom> findChatroomFetchById(Long chatroomId);
+	Optional<ChatRoom> findChatroomFetchById(@Param("chatroomId") Long chatroomId);
 }

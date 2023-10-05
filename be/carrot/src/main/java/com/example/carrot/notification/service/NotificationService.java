@@ -6,7 +6,6 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import com.example.carrot.notification.component.SseEmitters;
 import com.example.carrot.notification.entity.Notification;
 import com.example.carrot.user.entity.User;
-import com.example.carrot.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class NotificationService {
 
-	private final UserRepository userRepository;
 	private final SseEmitters sseEmitters;
 
 	public SseEmitter subscribe(Long userId) {

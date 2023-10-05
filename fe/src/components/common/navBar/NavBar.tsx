@@ -8,25 +8,27 @@ import { useUnreadTotalCount } from '@queries/chat';
 import { useUnreadTotalCountStore } from '@stores/notificationStore';
 // import { useEffect } from 'react';
 import { useAuth } from '@hooks/useAuth';
+import { useEffect } from 'react';
 
 export const NavBar: React.FC = () => {
   const { isLogin } = useAuth();
   useNotification(isLogin);
-  const { data: count, refetch: refetchUnreadTotalCount } =
-    useUnreadTotalCount(isLogin);
   const currentLocation = useLocation();
-  const { unreadTotalCount } = useUnreadTotalCountStore();
+  const { data: count, isFetching: isCountFetching } = useUnreadTotalCount(
+    isLogin,
+    currentLocation.pathname,
+  );
+
+  const { unreadTotalCount, setUnreadTotalCount } = useUnreadTotalCountStore();
 
   console.log(count, ': count');
   console.log(unreadTotalCount, ': unreadTotalCount');
 
-  // useEffect(() => {
-  //   if (count) {
-  //     setUnreadTotalCount(count);
-  //   }
-  // }, []);
-
-  // 로그아웃하고나서 자동으로 초기화되는지 초기화해줘야하는지 확인해야함
+  useEffect(() => {
+    if (typeof count === 'number') {
+      setUnreadTotalCount(count);
+    }
+  }, [count]);
 
   const tabs = [
     {
@@ -47,9 +49,8 @@ export const NavBar: React.FC = () => {
     {
       label: '채팅',
       path: PATH.chat,
-      icon: <NotiCount count={unreadTotalCount} />,
+      icon: <NotiCount count={isCountFetching ? 0 : unreadTotalCount} />,
     },
-    // count={unreadTotalCount}
     {
       label: '내 계정',
       path: PATH.account,
@@ -65,14 +66,7 @@ export const NavBar: React.FC = () => {
       {isAllowedRoute && (
         <nav css={(theme) => navStyle(theme)}>
           {tabs.map((tab) => (
-            <NavLink
-              key={tab.path}
-              to={tab.path}
-              className="tab"
-              onClick={() => {
-                refetchUnreadTotalCount();
-              }}
-            >
+            <NavLink key={tab.path} to={tab.path} className="tab">
               {tab.icon}
               {tab.label}
             </NavLink>

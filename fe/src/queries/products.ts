@@ -23,8 +23,6 @@ export const useProducts = (
   categoryId?: number | null,
   size = 10,
 ) => {
-  console.log(locationId, categoryId, '확인중');
-
   const fetchProducts = ({ pageParam }: { pageParam?: number }) => {
     return getProducts({ locationId, categoryId, next: pageParam, size });
   };

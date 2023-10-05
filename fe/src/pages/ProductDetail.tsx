@@ -61,8 +61,6 @@ export const ProductDetail: React.FC = () => {
   const isAuthor = getUserInfo() && getUserInfo()?.id === seller?.id;
   // const isAuthor = true; // TODO 교체
 
-  const realTimeChatRoomCount = 0; //TODO 교체
-
   const { observeTarget } = useIntersectionObserver({
     inviewCallback: () => {
       onScrollInview();

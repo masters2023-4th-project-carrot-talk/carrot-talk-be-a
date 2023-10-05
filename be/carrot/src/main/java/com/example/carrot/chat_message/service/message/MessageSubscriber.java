@@ -63,6 +63,7 @@ public class MessageSubscriber implements MessageListener {
 			}
 
 			send(roomMessage);
+			log.info("Notification senderId: {}", roomMessage.getSenderId());
 
 		} catch (Exception e) {
 			log.error(e.getMessage());

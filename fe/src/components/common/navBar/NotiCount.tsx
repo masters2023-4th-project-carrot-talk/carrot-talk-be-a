@@ -1,7 +1,10 @@
 import { css } from '@emotion/react';
 import { Message } from '@components/common/icons';
 import { CountBadge } from '../countBadge/CountBadge';
-import { useNotificationStore } from '@stores/notificationStore';
+import {
+  useNotificationStore,
+  useUnreadTotalCountStore,
+} from '@stores/notificationStore';
 // import { useUnreadTotalCount } from '@queries/chat';
 
 type Props = {
@@ -14,6 +17,7 @@ export const NotiCount: React.FC<Props> = ({ count }) => {
   // const { data: count } = useUnreadTotalCount();
   //TODO 추후 교체합니다
   //TODO 개수 어떤 주기로 갱신? 전역 저장?
+  // const { unreadTotalCount } = useUnreadTotalCountStore();
 
   return (
     <div css={notiCountStyle}>

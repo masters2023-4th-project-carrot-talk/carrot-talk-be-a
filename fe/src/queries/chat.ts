@@ -7,8 +7,9 @@ import {
 } from '@api/api';
 import { QUERY_KEY } from '@constants/queryKey';
 import { createQueryParams } from '@utils/createQueryParams';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
+import { useUnreadTotalCountStore } from '@stores/notificationStore';
 
 export const useChatRooms = () =>
   useQuery({
@@ -17,14 +18,24 @@ export const useChatRooms = () =>
     select: (data) => data.data,
   });
 
-export const useUnreadTotalCount = (isLogin: boolean) =>
-  useQuery({
+export const useUnreadTotalCount = (isLogin: boolean) => {
+  const { setUnreadTotalCount } = useUnreadTotalCountStore();
+  const countData = useQuery({
     queryKey: QUERY_KEY.unreadTotalCount,
     queryFn: () => getUnreadTotalCount(),
     select: (data) => data.data.unreadTotalCount,
     // refetchInterval: 1000 * 60,
     enabled: isLogin,
   });
+
+  useEffect(() => {
+    if (countData.data) {
+      setUnreadTotalCount(countData.data);
+    }
+  }, [countData.data]);
+
+  return countData;
+};
 
 export const useChatRoomHistories = (chatroomId: number) => {
   const fetchHistories = useCallback(

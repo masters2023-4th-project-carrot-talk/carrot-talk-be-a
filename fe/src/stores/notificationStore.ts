@@ -26,7 +26,7 @@ export const useUnreadTotalCountStore = create<UnreadTotalCountState>(
       set({ unreadTotalCount }),
     addUnreadTotalCount: (incrementValue: number) =>
       set((state) => ({
-        unreadTotalCount: state.unreadTotalCount + incrementValue,
+        unreadTotalCount: (state.unreadTotalCount += incrementValue),
       })),
   }),
 );

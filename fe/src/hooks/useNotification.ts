@@ -34,16 +34,16 @@ export const useNotification = (isLogin: boolean) => {
           },
         );
 
-        eventSourceRef.current.addEventListener(EVENT_NAME.connect, (event) => {
-          // todo 둘중하나 지우기
-          console.log('connect on addEventListener: ', event);
-          setShouldNotify(true);
-        });
+        // eventSourceRef.current.addEventListener(EVENT_NAME.connect, (event) => {
+        //   // todo 둘중하나 지우기
+        //   console.log('connect on addEventListener: ', event);
+        //   setShouldNotify(true);
+        // });
 
         eventSourceRef.current.addEventListener(
           EVENT_NAME.notification,
           (event) => {
-            console.log('notification open??: ', event);
+            console.log('채팅 내용 : ', event);
             addUnreadTotalCount(1);
           },
         );

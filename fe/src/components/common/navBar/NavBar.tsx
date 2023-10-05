@@ -8,6 +8,7 @@ import { useUnreadTotalCount } from '@queries/chat';
 import { useUnreadTotalCountStore } from '@stores/notificationStore';
 // import { useEffect } from 'react';
 import { useAuth } from '@hooks/useAuth';
+import { useEffect } from 'react';
 
 export const NavBar: React.FC = () => {
   const { isLogin } = useAuth();
@@ -20,18 +21,11 @@ export const NavBar: React.FC = () => {
   console.log(count, ': count');
   console.log(unreadTotalCount, ': unreadTotalCount');
 
-  if (count !== unreadTotalCount) {
-    console.log('count', unreadTotalCount);
-    setUnreadTotalCount(count);
-  }
-
   // useEffect(() => {
   //   if (count) {
-  //     console.log('count', unreadTotalCount);
-
   //     setUnreadTotalCount(count);
   //   }
-  // }, [count]);
+  // }, []);
 
   // 로그아웃하고나서 자동으로 초기화되는지 초기화해줘야하는지 확인해야함
 

@@ -141,7 +141,6 @@ public class UserService {
 			true);
 	}
 
-	@Transactional
 	public void checkNickNameDuplicate(String nickname) {
 		if (userRepository.existsByNickName(nickname)) {
 			throw new CustomException(StatusCode.ALREADY_EXIST_USER);
@@ -156,8 +155,8 @@ public class UserService {
 	}
 
 	@Transactional
-	public void kakaoLogout(LogoutRequestDto logoutRequestDto, Long userId) {
-		userRepository.updateRefreshTokenByUserIdAndRefreshToken(userId, logoutRequestDto.getRefreshToken());
+	public int kakaoLogout(LogoutRequestDto logoutRequestDto, Long userId) {
+		return userRepository.updateRefreshTokenByUserIdAndRefreshToken(userId, logoutRequestDto.getRefreshToken());
 	}
 
 }

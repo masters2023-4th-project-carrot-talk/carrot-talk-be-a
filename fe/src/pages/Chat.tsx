@@ -5,10 +5,10 @@ import { Theme, css } from '@emotion/react';
 import { useChatRooms } from '@queries/chat';
 
 export const Chat: React.FC = () => {
-  const { data: chatRooms } = useChatRooms(); // TODO
+  const { data: chatRooms, status } = useChatRooms(); // TODO
 
   const onEnterChat = (chatroomId: number) => {
-    // TODO
+    // TODO chatcount지우기?
     console.log(chatroomId, 'onEnterChat');
   };
 
@@ -27,7 +27,10 @@ export const Chat: React.FC = () => {
       </TopBar>
       <div css={(theme) => pageStyle(theme)}>
         <ul>
-          {chatRooms?.length === 0 && renderSkeletons(5)}
+          {status === 'loading' && renderSkeletons(5)}
+          {chatRooms?.length === 0 && (
+            <div className="data-status-info">채팅방이 없습니다</div>
+          )}
           {chatRooms?.map((chatItem: ChatRoomType) => (
             <ChatItem
               key={chatItem.chatroomId}
@@ -73,6 +76,16 @@ const pageStyle = (theme: Theme) => {
 
     &::-webkit-scrollbar-track {
       background-color: transparent;
+    }
+
+    .data-status-info {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: default;
+      width: 100%;
+      height: 70px;
+      font: ${theme.font.displayDefault16};
     }
   `;
 };

@@ -4,18 +4,20 @@ import { CountBadge } from '../countBadge/CountBadge';
 import { useNotificationStore } from '@stores/notificationStore';
 import { useUnreadTotalCount } from '@queries/chat';
 
-export const NotiCount: React.FC = () => {
-  const { shouldNotify } = useNotificationStore(); // login이 포함돼있음
+type Props = {
+  count?: number;
+};
+
+export const NotiCount: React.FC<Props> = ({ count }) => {
+  const { shouldNotify } = useNotificationStore();
   // TOOD count 받아오기
-  const { data: count } = useUnreadTotalCount();
-  const isMessageNoti = true;
-  // const isMessageNoti = shouldNotify;
+  // const { data: count } = useUnreadTotalCount();
   //TODO 추후 교체합니다
   //TODO 개수 어떤 주기로 갱신? 전역 저장?
 
   return (
     <div css={notiCountStyle}>
-      {isMessageNoti && count && (
+      {shouldNotify && count && (
         <CountBadge size="s" count={count} className="count-box" />
       )}
       <Message />

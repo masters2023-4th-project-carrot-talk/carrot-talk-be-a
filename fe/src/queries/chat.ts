@@ -44,9 +44,11 @@ export const useChatRooms = () =>
 //   return { unreadTotalCount };
 // };
 
-export const useUnreadTotalCount = () =>
+export const useUnreadTotalCount = (isLogin: boolean) =>
   useQuery({
     queryKey: QUERY_KEY.unreadTotalCount,
     queryFn: () => getUnreadTotalCount(),
-    select: (data) => data.data,
+    select: (data) => data.data.unreadTotalCount,
+    // refetchInterval: 1000 * 60,
+    enabled: isLogin,
   });

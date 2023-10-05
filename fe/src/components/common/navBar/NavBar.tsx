@@ -4,10 +4,36 @@ import { Theme, css } from '@emotion/react';
 import { NavLink, matchRoutes, useLocation } from 'react-router-dom';
 import { NotiCount } from './NotiCount';
 import { useNotification } from '@hooks/useNotification';
+import { useUnreadTotalCount } from '@queries/chat';
+import { useUnreadTotalCountStore } from '@stores/notificationStore';
+import { useEffect } from 'react';
+import { useAuth } from '@hooks/useAuth';
 
 export const NavBar: React.FC = () => {
-  const currentLocation = useLocation();
   useNotification();
+  const { isLogin } = useAuth();
+  const currentLocation = useLocation();
+  const { data: count, refetch: refetchUnreadTotalCount } =
+    useUnreadTotalCount(isLogin);
+
+  const { unreadTotalCount, setUnreadTotalCount } = useUnreadTotalCountStore();
+
+  console.log(count, ': count');
+
+  if (count && count !== unreadTotalCount) {
+    console.log('count', unreadTotalCount);
+    setUnreadTotalCount(count);
+  }
+
+  // useEffect(() => {
+  //   if (count) {
+  //     console.log('count', unreadTotalCount);
+
+  //     setUnreadTotalCount(count);
+  //   }
+  // }, [count]);
+
+  // 로그아웃하고나서 자동으로 초기화되는지 초기화해줘야하는지 확인해야함
 
   const tabs = [
     {
@@ -28,8 +54,9 @@ export const NavBar: React.FC = () => {
     {
       label: '채팅',
       path: PATH.chat,
-      icon: <NotiCount />,
+      icon: <NotiCount count={unreadTotalCount} />,
     },
+    // count={unreadTotalCount}
     {
       label: '내 계정',
       path: PATH.account,
@@ -45,7 +72,14 @@ export const NavBar: React.FC = () => {
       {isAllowedRoute && (
         <nav css={(theme) => navStyle(theme)}>
           {tabs.map((tab) => (
-            <NavLink key={tab.path} to={tab.path} className="tab">
+            <NavLink
+              key={tab.path}
+              to={tab.path}
+              className="tab"
+              onClick={() => {
+                refetchUnreadTotalCount();
+              }}
+            >
               {tab.icon}
               {tab.label}
             </NavLink>

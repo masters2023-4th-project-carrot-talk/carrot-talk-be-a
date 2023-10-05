@@ -8,6 +8,7 @@ type NotificationState = {
 type UnreadTotalCountState = {
   unreadTotalCount: number;
   setUnreadTotalCount: (unreadTotalCount: number) => void;
+  addUnreadTotalCount: (incrementValue: number) => void;
 };
 
 export const useNotificationStore = create<NotificationState>((set) => ({
@@ -22,8 +23,10 @@ export const useUnreadTotalCountStore = create<UnreadTotalCountState>(
   (set) => ({
     unreadTotalCount: 0,
     setUnreadTotalCount: (unreadTotalCount: number) =>
+      set({ unreadTotalCount }),
+    addUnreadTotalCount: (incrementValue: number) =>
       set((state) => ({
-        unreadTotalCount: state.unreadTotalCount + unreadTotalCount,
+        unreadTotalCount: state.unreadTotalCount + incrementValue,
       })),
   }),
 );

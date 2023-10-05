@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.carrot.chat_message.dto.Entry;
 import com.example.carrot.chat_message.dto.MessageDto;
+import com.example.carrot.chat_message.service.ChatMessageService;
 import com.example.carrot.chat_message.service.MessageReceivedEvent;
 import com.example.carrot.chat_room.entity.ChatRoom;
 import com.example.carrot.chat_room.repository.ChatRoomRepository;
@@ -34,6 +35,7 @@ public class MessageSubscriber implements MessageListener {
 	private final UserRepository userRepository;
 	private final ChatRoomRepository chatRoomRepository;
 	private final NotificationService notificationService;
+	private final ChatMessageService chatMessageService;
 
 	/**
 	 * Redis에서 메세지가 발행(publish)되면 대기하고 있던 onMessage가 해당 메세지를 받아 처리
@@ -56,6 +58,10 @@ public class MessageSubscriber implements MessageListener {
 			eventPublisher.publishEvent(new MessageReceivedEvent(this, roomMessage));
 
 			// Send Notification
+			if (chatMessageService.isAnyoneInChatRoom(roomMessage.getChatroomId())) {
+				return;
+			}
+
 			send(roomMessage);
 
 		} catch (Exception e) {

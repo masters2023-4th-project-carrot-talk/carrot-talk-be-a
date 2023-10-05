@@ -73,7 +73,7 @@ public class ChatMessageService {
 		chatMessageRepository.updateMessageByChatRoomIdAndUserId(chatRoomId, userId);
 	}
 
-	private boolean isAnyoneInChatRoom(Long chatRoomId) {
+	public boolean isAnyoneInChatRoom(Long chatRoomId) {
 		return chatRoomSessionRepository.findByChatRoomId(chatRoomId).size() == 2;
 	}
 }

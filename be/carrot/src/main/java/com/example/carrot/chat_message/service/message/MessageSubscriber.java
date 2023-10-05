@@ -58,9 +58,9 @@ public class MessageSubscriber implements MessageListener {
 			eventPublisher.publishEvent(new MessageReceivedEvent(this, roomMessage));
 
 			// Send Notification
-			if (chatMessageService.isAnyoneInChatRoom(roomMessage.getChatroomId())) {
-				return;
-			}
+			// if (chatMessageService.isAnyoneInChatRoom(roomMessage.getChatroomId())) {
+			// 	return;
+			// }
 
 			send(roomMessage);
 

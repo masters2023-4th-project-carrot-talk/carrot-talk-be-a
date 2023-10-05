@@ -1,17 +1,16 @@
+import { EVENT_NAME } from '@constants/eventName';
 import { END_POINT } from '@constants/path';
-import { EventSourcePolyfill } from 'event-source-polyfill';
-import { useEffect, useRef } from 'react';
-import { getAccessToken } from '@utils/localStorage';
 import {
   useNotificationStore,
   useUnreadTotalCountStore,
 } from '@stores/notificationStore';
-import { EVENT_NAME } from '@constants/eventName';
+import { getAccessToken } from '@utils/localStorage';
+import { EventSourcePolyfill } from 'event-source-polyfill';
+import { useEffect, useRef } from 'react';
 
 export const useNotification = (isLogin: boolean) => {
   const { setShouldNotify } = useNotificationStore();
-  const { addUnreadTotalCount, addUnreadChatDataById } =
-    useUnreadTotalCountStore();
+  const { addUnreadTotalCount, setUnreadCounts } = useUnreadTotalCountStore();
 
   const EventSource = EventSourcePolyfill;
   const eventSourceRef = useRef<EventSource | null>(null);
@@ -44,22 +43,30 @@ export const useNotification = (isLogin: boolean) => {
           (event) => {
             console.log('채팅 내용 : ', event);
 
-            const response = event.data;
-            const regex = /chatroomId=(\d+).*title=(.*), content=.*: (\d+)/;
-            const match = response.match(regex);
+            const pattern = /(\w+)\s*=\s*([^,)]+)/g;
+            const matches = [...event.data.matchAll(pattern)];
+            const result: Record<string, string> = {};
 
-            const currentDate = new Date();
-            const isoString = currentDate.toISOString();
-            console.log(isoString);
-
-            if (match) {
-              console.log('chatroomId:', match[1]); // 131
-
-              console.log('content:', match[3]); // 111
-              addUnreadChatDataById(match[1], 1, isoString, match[3]);
+            for (const match of matches) {
+              const key = match[1];
+              let value = match[2];
+              
+              if (key === 'content') {
+                const colonIndex = value.indexOf(':');
+                if (colonIndex !== -1) {
+                  value = value.substring(colonIndex + 1).trim();
+                }
+              }
+              result[key] = value;
             }
 
+            const currentDate = new Date();
+            const dateString = currentDate.toISOString();
+
+            setUnreadCounts(Number(result.chatroomId), result.content, dateString);
+
             addUnreadTotalCount(1);
+            // setUnreadCounts 호출, 시간 기록
           },
         );
 

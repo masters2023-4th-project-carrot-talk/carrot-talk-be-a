@@ -1,14 +1,14 @@
 import { Heart, Home, News, UserCircle } from '@components/common/icons';
 import { PATH } from '@constants/path';
 import { Theme, css } from '@emotion/react';
-import { NavLink, matchRoutes, useLocation } from 'react-router-dom';
-import { NotiCount } from './NotiCount';
+import { useAuth } from '@hooks/useAuth';
 import { useNotification } from '@hooks/useNotification';
 import { useUnreadTotalCount } from '@queries/chat';
 import { useUnreadTotalCountStore } from '@stores/notificationStore';
 // import { useEffect } from 'react';
-import { useAuth } from '@hooks/useAuth';
 import { useEffect } from 'react';
+import { NavLink, matchRoutes, useLocation } from 'react-router-dom';
+import { NotiCount } from './NotiCount';
 
 export const NavBar: React.FC = () => {
   const { isLogin } = useAuth();

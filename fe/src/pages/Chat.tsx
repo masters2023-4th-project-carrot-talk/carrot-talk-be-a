@@ -4,14 +4,21 @@ import { TopBar } from '@components/common/topBar/TopBar';
 import { PATH } from '@constants/path';
 import { Theme, css } from '@emotion/react';
 import { useChatRooms } from '@queries/chat';
+import { useUnreadTotalCountStore } from '@stores/notificationStore';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export const Chat: React.FC = () => {
   const { data: chatRooms, status } = useChatRooms(); // TODO
   const navigate = useNavigate();
+  const { unreadCounts, initializeUnreadCounts } = useUnreadTotalCountStore();
+
+  // 렌더링 할 때 초기화
+  useEffect(() => {
+    initializeUnreadCounts();
+  }, [])
 
   const onEnterChat = (chatroomId: number) => {
-    // TODO chatcount지우기?
     console.log(chatroomId, 'onEnterChat');
     navigate(`${PATH.chatRoom}/${chatroomId}`);
   };
@@ -39,9 +46,9 @@ export const Chat: React.FC = () => {
             <ChatItem
               key={chatItem.chatroomId}
               opponent={chatItem.opponent}
-              lastChatContent={chatItem.lastChatContent}
-              lastChatTime={chatItem.lastChatTime}
-              unreadChatCount={chatItem.unreadChatCount}
+              lastChatContent={unreadCounts?.[chatItem.chatroomId]?.lastMessage ?? chatItem.lastChatContent}
+              lastChatTime={unreadCounts?.[chatItem.chatroomId]?.updatedAt ?? chatItem.lastChatTime}
+              unreadChatCount={chatItem.unreadChatCount + (unreadCounts?.[chatItem.chatroomId]?.unreadCount ?? 0)}
               thumbnailUrl={chatItem.product.thumbnail}
               onEnterChat={() => onEnterChat(chatItem.chatroomId)}
             />

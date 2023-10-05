@@ -5,13 +5,11 @@ import static com.example.carrot.chat_room.entity.QChatRoom.*;
 import static com.example.carrot.image.entity.QImage.*;
 import static com.example.carrot.product.entity.QProduct.*;
 import static com.example.carrot.product_image.entity.QProductImage.*;
-import static com.example.carrot.user.entity.QUser.*;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import com.example.carrot.chat_message.entity.QChatMessage;
 import com.example.carrot.chat_room.dto.response.ChatRoomInfoResponseDto;
 import com.example.carrot.chat_room.dto.response.ChatRoomOpponentDto;
 import com.example.carrot.chat_room.dto.response.ChatRoomOpponentInfoDto;
@@ -40,35 +38,41 @@ public class QueryChatRoomRepositoryImpl implements QueryChatRoomRepository {
 	@Override
 	public List<ChatRoomResponseDto> findChatRoomsByUserId(Long userId) {
 
-		QChatMessage latestMessage = new QChatMessage("latestMessage");
+		QUser opponentUser = new QUser("opponentUser");  // 상대방 정의
+
+		BooleanExpression userIsProductUser = chatRoom.product.user.userId.eq(userId);
+		BooleanExpression userIsChatRoomUser = chatRoom.user.userId.eq(userId);
+
+		BooleanExpression opponentIsProductUser = opponentUser.userId.eq(chatRoom.product.user.userId)
+			.and(userIsChatRoomUser);
+		BooleanExpression opponentIsChatRoomUser = opponentUser.userId.eq(chatRoom.user.userId).and(userIsProductUser);
 
 		return queryFactory
 			.select(Projections.constructor(ChatRoomResponseDto.class,
 				chatRoom.id,
-				latestMessage.content,
-				latestMessage.createdAt,
+				chatMessage.content,
+				chatMessage.createdAt,
 				getUnreadCount(userId),
-				Projections.constructor(ChatRoomOpponentDto.class, user.userId, user.nickName, user.imageUrl),
+				Projections.constructor(ChatRoomOpponentDto.class, opponentUser.userId, opponentUser.nickName,
+					opponentUser.imageUrl),
 				Projections.constructor(ChatRoomProductDto.class, product.productId, image.imageUrl)))
 			.from(chatRoom)
-			.leftJoin(chatRoom.chatMessages, chatMessage) // 기존 chatMessage를 JOIN
-			.leftJoin(chatRoom.chatMessages, latestMessage) // 가장 최신의 chatMessage를 JOIN
+			.leftJoin(chatRoom.chatMessages, chatMessage)
 			.leftJoin(chatRoom.product, product)
 			.leftJoin(product.productImages, productImage)
 			.leftJoin(productImage.image, image)
-			.leftJoin(chatMessage.user, user)
+			.leftJoin(opponentUser).on(opponentIsProductUser.or(opponentIsChatRoomUser)) // 조건에 따른 상대방 조인
 			.where(productImage.isMain.eq(true)
-				.and(product.user.userId.eq(userId)
-					.or(chatRoom.user.userId.eq(userId)))
-				.and(user.userId.ne(userId))
-				.and(latestMessage.createdAt.eq(  // 가장 최신의 메시지만 선택
+				.and(userIsProductUser.or(userIsChatRoomUser))
+				.and(chatMessage.createdAt.eq(
 					JPAExpressions.select(chatMessage.createdAt.max())
 						.from(chatMessage)
 						.where(chatMessage.chatRoom.id.eq(chatRoom.id))
 				)))
-			.groupBy(chatRoom.id, user.userId, user.nickName, user.imageUrl, image.imageUrl, latestMessage.content,
-				latestMessage.createdAt)
-			.orderBy(latestMessage.createdAt.desc())
+			.groupBy(chatRoom.id, opponentUser.userId, opponentUser.nickName, opponentUser.imageUrl, image.imageUrl,
+				chatMessage.content,
+				chatMessage.createdAt)
+			.orderBy(chatMessage.createdAt.desc())
 			.fetch();
 	}
 

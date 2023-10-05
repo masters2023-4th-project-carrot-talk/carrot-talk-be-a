@@ -29,6 +29,7 @@ public class SseEmitters {
 	private long emitterTimeout;
 
 	public SseEmitter add(Long userId) {
+		log.info("SseEmitters add 메서드 진입");
 		SseEmitter emitter = new SseEmitter(emitterTimeout);
 		userSseEmitterMap.put(userId, emitter);
 
@@ -36,10 +37,12 @@ public class SseEmitters {
 	}
 
 	public void sendNotification(Long receiverId, Notification notification) {
+		log.info("SseEmitters sendNotification public 메서드 진입");
 		sendNotification(receiverId, notification.toString());
 	}
 
 	private SseEmitter sendNotification(Long receiverId, String notificationData) {
+		log.info("SseEmitters sendNotification private 메서드 진입");
 		SseEmitter emitter = userSseEmitterMap.get(receiverId);
 
 		try {

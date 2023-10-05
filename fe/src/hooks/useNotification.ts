@@ -34,6 +34,12 @@ export const useNotification = (isLogin: boolean) => {
           },
         );
 
+        eventSourceRef.current.addEventListener(EVENT_NAME.connect, (event) => {
+          // todo 둘중하나 지우기
+          console.log('connect on addEventListener: ', event);
+          setShouldNotify(true);
+        });
+
         eventSourceRef.current.addEventListener(
           EVENT_NAME.notification,
           (event) => {
@@ -43,23 +49,23 @@ export const useNotification = (isLogin: boolean) => {
         );
 
         eventSourceRef.current.onopen = () => {
-          console.log('notification open ONOPEN');
-          console.log('test: count up on connect');
-
+          // todo 둘중하나 지우기
+          console.log('connect on ONOPEN');
           setShouldNotify(true);
-          // addUnreadTotalCount(1);
         };
 
-        eventSourceRef.current.onmessage = (event) => {
-          const response1 = JSON.parse(event.data);
-          const response2 = event.data;
-          // const response = event.data;
-          console.log('now noti response 1: ', response1);
-          console.log('now noti response 2: ', response2);
+        // eventSourceRef.current.onmessage = async (event) => {
+        //   console.log('onmessage 되니!!!');
 
-          addUnreadTotalCount(1);
-          // toast?
-        };
+        //   const response1 = JSON.parse(event.data);
+        //   const response2 = await event.data;
+        //   // const response = event.data;
+        //   console.log('now noti response 1: ', response1);
+        //   console.log('now noti response 2: ', response2);
+
+        //   addUnreadTotalCount(1);
+        //   // toast?
+        // };
 
         eventSourceRef.current.onerror = (error) => {
           console.log('error on connect: ', error);

@@ -18,6 +18,7 @@ export const NavBar: React.FC = () => {
   const { unreadTotalCount, setUnreadTotalCount } = useUnreadTotalCountStore();
 
   console.log(count, ': count');
+  console.log(unreadTotalCount, ': unreadTotalCount');
 
   if (count && count !== unreadTotalCount) {
     console.log('count', unreadTotalCount);

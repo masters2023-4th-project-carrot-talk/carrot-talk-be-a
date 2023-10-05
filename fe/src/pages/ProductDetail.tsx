@@ -257,19 +257,7 @@ export const ProductDetail: React.FC = () => {
           <Heart className="like-icon" onClick={onToggleLike} />
           {formattedPrice}
         </div>
-        {isAuthor ? (
-          <Button
-            variant="rectangle"
-            size="s"
-            state="active"
-            onClick={() => {
-              console.log('채팅방 목록으로 이동');
-              navigate(PATH.chat);
-            }}
-          >
-            대화 중인 채팅방 {realTimeChatRoomCount}
-          </Button>
-        ) : (
+        {!isAuthor && (
           <Button
             variant="rectangle"
             size="s"

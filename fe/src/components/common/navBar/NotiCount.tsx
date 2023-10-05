@@ -17,7 +17,7 @@ export const NotiCount: React.FC<Props> = ({ count }) => {
 
   return (
     <div css={notiCountStyle}>
-      {shouldNotify && count > 0 && (
+      {shouldNotify && count !== 0 && (
         <CountBadge size="s" count={count} className="count-box" />
       )}
       <Message />

@@ -1,7 +1,7 @@
 import { css, Theme } from '@emotion/react';
 
 type Props = {
-  count: number;
+  count?: number;
   size?: 's' | 'l';
 } & React.HTMLAttributes<HTMLDivElement>;
 

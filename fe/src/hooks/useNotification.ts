@@ -38,6 +38,7 @@ export const useNotification = (isLogin: boolean) => {
           EVENT_NAME.notification,
           (event) => {
             console.log('notification open??: ', event);
+            addUnreadTotalCount(1);
           },
         );
 
@@ -56,13 +57,8 @@ export const useNotification = (isLogin: boolean) => {
           console.log('now noti response 1: ', response1);
           console.log('now noti response 2: ', response2);
 
-          // setShouldNotify(true);
-
-          if (response1.includes(EVENT_NAME.notification)) {
-            //if 없애도 될듯?
-            addUnreadTotalCount(1);
-            // toast?
-          }
+          addUnreadTotalCount(1);
+          // toast?
         };
 
         eventSourceRef.current.onerror = (error) => {

@@ -20,7 +20,6 @@ export const ChatItem: React.FC<ChatItemProps> = ({
   thumbnailUrl,
   onEnterChat,
 }) => {
-  console.log(thumbnailUrl, 'thumbnailUrl');
   const chatTime = formatTimeStamp(lastChatTime);
 
   return (
@@ -104,9 +103,7 @@ export const SkeletonChatItem: React.FC = () => {
         </div>
         <div className="info__message"></div>
       </div>
-      <div className="unread-messages">
-        <CountBadge count={0} />
-      </div>
+      <div className="unread-messages"></div>
       <ImageBox size="s" />
     </li>
   );

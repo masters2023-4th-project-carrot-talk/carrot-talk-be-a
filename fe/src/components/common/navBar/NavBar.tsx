@@ -8,7 +8,6 @@ import { useUnreadTotalCount } from '@queries/chat';
 import { useUnreadTotalCountStore } from '@stores/notificationStore';
 // import { useEffect } from 'react';
 import { useAuth } from '@hooks/useAuth';
-import { useEffect } from 'react';
 
 export const NavBar: React.FC = () => {
   const { isLogin } = useAuth();
@@ -16,7 +15,7 @@ export const NavBar: React.FC = () => {
   const { data: count, refetch: refetchUnreadTotalCount } =
     useUnreadTotalCount(isLogin);
   const currentLocation = useLocation();
-  const { unreadTotalCount, setUnreadTotalCount } = useUnreadTotalCountStore();
+  const { unreadTotalCount } = useUnreadTotalCountStore();
 
   console.log(count, ': count');
   console.log(unreadTotalCount, ': unreadTotalCount');

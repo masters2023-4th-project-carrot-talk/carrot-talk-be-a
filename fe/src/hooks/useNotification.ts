@@ -16,8 +16,6 @@ export const useNotification = (isLogin: boolean) => {
   const eventSourceRef = useRef<EventSource | null>(null);
 
   useEffect(() => {
-    console.log(isLogin, ': isLogin');
-
     if (!isLogin) return;
 
     const connectSSE = () => {
@@ -53,19 +51,6 @@ export const useNotification = (isLogin: boolean) => {
           console.log('connect on ONOPEN');
           setShouldNotify(true);
         };
-
-        // eventSourceRef.current.onmessage = async (event) => {
-        //   console.log('onmessage 되니!!!');
-
-        //   const response1 = JSON.parse(event.data);
-        //   const response2 = await event.data;
-        //   // const response = event.data;
-        //   console.log('now noti response 1: ', response1);
-        //   console.log('now noti response 2: ', response2);
-
-        //   addUnreadTotalCount(1);
-        //   // toast?
-        // };
 
         eventSourceRef.current.onerror = (error) => {
           console.log('error on connect: ', error);

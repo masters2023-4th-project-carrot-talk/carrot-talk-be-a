@@ -30,6 +30,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const Home: React.FC = () => {
   const navigate = useNavigate();
+
   const { isLogin } = useAuth();
   const { setShouldSlideLeft } = useLayoutStore();
   const { onOpenModal } = useModal();

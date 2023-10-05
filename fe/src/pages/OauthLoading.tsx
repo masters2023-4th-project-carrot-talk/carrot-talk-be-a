@@ -40,6 +40,12 @@ export const OauthLoading: React.FC = () => {
           onLoginFailed();
         }
       },
+      onError: (error) => {
+        if (error instanceof Error) {
+          throw error;
+        }
+        navigate(PATH.account, { replace: true });
+      }
     });
   }, [loginMutate, searchParams, onLoginSucceeded, onLoginFailed]);
 

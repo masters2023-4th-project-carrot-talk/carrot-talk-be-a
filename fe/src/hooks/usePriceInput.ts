@@ -12,7 +12,7 @@ type PriceInputReturnType = {
   onChangePrice: (price: string) => void;
 };
 
-export const usePrice = ({
+export const usePriceInput = ({
   initialPrice,
 }: PriceInputType): PriceInputReturnType => {
   const { value, onChangeValue, isValidValue, warningMessage } = useInput({

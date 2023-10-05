@@ -10,7 +10,8 @@ import { EVENT_NAME } from '@constants/eventName';
 
 export const useNotification = (isLogin: boolean) => {
   const { setShouldNotify } = useNotificationStore();
-  const { addUnreadTotalCount } = useUnreadTotalCountStore();
+  const { addUnreadTotalCount, addUnreadChatDataById } =
+    useUnreadTotalCountStore();
 
   const EventSource = EventSourcePolyfill;
   const eventSourceRef = useRef<EventSource | null>(null);
@@ -32,25 +33,41 @@ export const useNotification = (isLogin: boolean) => {
           },
         );
 
-        // eventSourceRef.current.addEventListener(EVENT_NAME.connect, (event) => {
-        //   // todo 둘중하나 지우기
-        //   console.log('connect on addEventListener: ', event);
-        //   setShouldNotify(true);
-        // });
+        eventSourceRef.current.addEventListener(EVENT_NAME.connect, (event) => {
+          // todo 둘중하나 지우기
+          console.log('connect on addEventListener: ', event);
+          setShouldNotify(true);
+        });
 
         eventSourceRef.current.addEventListener(
           EVENT_NAME.notification,
           (event) => {
             console.log('채팅 내용 : ', event);
+
+            const response = event.data;
+            const regex = /chatroomId=(\d+).*title=(.*), content=.*: (\d+)/;
+            const match = response.match(regex);
+
+            const currentDate = new Date();
+            const isoString = currentDate.toISOString();
+            console.log(isoString);
+
+            if (match) {
+              console.log('chatroomId:', match[1]); // 131
+
+              console.log('content:', match[3]); // 111
+              addUnreadChatDataById(match[1], 1, isoString, match[3]);
+            }
+
             addUnreadTotalCount(1);
           },
         );
 
-        eventSourceRef.current.onopen = () => {
-          // todo 둘중하나 지우기
-          console.log('connect on ONOPEN');
-          setShouldNotify(true);
-        };
+        // eventSourceRef.current.onopen = () => { // A팀일때 테스트용 (설리에게 EVENT_NAME.connect 추가 요청)
+        //   // todo 둘중하나 지우기
+        //   console.log('connect on ONOPEN');
+        //   setShouldNotify(true);
+        // };
 
         eventSourceRef.current.onerror = (error) => {
           console.log('error on connect: ', error);

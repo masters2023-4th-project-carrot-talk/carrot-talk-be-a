@@ -23,8 +23,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Entity
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class ChatRoom extends BaseCreatedTimeEntity implements Serializable {
@@ -59,7 +61,8 @@ public class ChatRoom extends BaseCreatedTimeEntity implements Serializable {
 
 	public User getReceiver(User sender) {
 		User seller = product.getUser();
-		if (seller == sender) {
+		if (seller.getUserId().equals(sender.getUserId())) {
+			log.info("getReceiver -> receiver 들어옴!");
 			return this.user;
 		}
 

@@ -1,7 +1,6 @@
 import { END_POINT } from '@constants/path';
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import { useEffect, useRef } from 'react';
-import { useAuth } from './useAuth';
 import { getAccessToken } from '@utils/localStorage';
 import {
   useNotificationStore,
@@ -9,8 +8,7 @@ import {
 } from '@stores/notificationStore';
 import { EVENT_NAME } from '@constants/eventName';
 
-export const useNotification = () => {
-  const { isLogin } = useAuth();
+export const useNotification = (isLogin: boolean) => {
   const { setShouldNotify } = useNotificationStore();
   const { addUnreadTotalCount } = useUnreadTotalCountStore();
 
@@ -30,24 +28,37 @@ export const useNotification = () => {
             headers: {
               Authorization: `Bearer ${getAccessToken()}`,
             },
+
             withCredentials: true,
+            heartbeatTimeout: 600000,
           },
         );
 
-        eventSourceRef.current.onmessage = async (event) => {
-          const response = await event.data;
+        eventSourceRef.current.addEventListener(
+          EVENT_NAME.notification,
+          (event) => {
+            console.log('notification open??: ', event);
+            addUnreadTotalCount(1);
+          },
+        );
+
+        eventSourceRef.current.onmessage = (event) => {
+          console.log('is connected?');
+          console.log(event);
+          const response = event.data;
           console.log('now noti response : ', response);
 
           setShouldNotify(true);
 
           if (response.includes(EVENT_NAME.notification)) {
             addUnreadTotalCount(1);
+            // toast?
           }
         };
 
         eventSourceRef.current.onerror = (error) => {
           console.log('error on connect: ', error);
-          eventSourceRef.current?.close();
+          // eventSourceRef.current?.close(); 여기서 닫으면 안됨
         };
       } catch (error) {
         console.log('notify error: ', error);

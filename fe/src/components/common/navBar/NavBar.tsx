@@ -6,16 +6,15 @@ import { NotiCount } from './NotiCount';
 import { useNotification } from '@hooks/useNotification';
 import { useUnreadTotalCount } from '@queries/chat';
 import { useUnreadTotalCountStore } from '@stores/notificationStore';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { useAuth } from '@hooks/useAuth';
 
 export const NavBar: React.FC = () => {
-  useNotification();
   const { isLogin } = useAuth();
-  const currentLocation = useLocation();
+  useNotification(isLogin);
   const { data: count, refetch: refetchUnreadTotalCount } =
     useUnreadTotalCount(isLogin);
-
+  const currentLocation = useLocation();
   const { unreadTotalCount, setUnreadTotalCount } = useUnreadTotalCountStore();
 
   console.log(count, ': count');

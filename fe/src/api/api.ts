@@ -145,8 +145,6 @@ export const getProductsDetail = (id: number) => {
     method: 'GET',
   };
 
-  console.log(token, '<token');
-
   if (token) {
     requestOptions.headers = {
       Authorization: `Bearer ${token}`,

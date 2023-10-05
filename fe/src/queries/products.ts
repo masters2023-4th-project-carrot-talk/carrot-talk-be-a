@@ -149,9 +149,6 @@ export const useEditLikeStatus = () => {
 
       return { previousProduct };
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries([QUERY_KEY.productDetail]);
-    },
 
     onError: (error, variables, context) => {
       if (context?.previousProduct) {

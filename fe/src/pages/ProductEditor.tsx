@@ -17,7 +17,7 @@ import { useImageListInput } from '@hooks/useImageListInput';
 import { useInitialInputValues } from '@hooks/useInitialInputValues';
 import { useInput } from '@hooks/useInput';
 import { useLocationSelector } from '@hooks/useLocationSelector';
-import { usePrice } from '@hooks/usePrice';
+import { usePriceInput } from '@hooks/usePriceInput';
 import { useProductMutation } from '@queries/products';
 import { usePathHistoryStore } from '@stores/pathHistoryStore';
 import { commaStringToNumber } from '@utils/formatPrice';
@@ -47,9 +47,10 @@ export const ProductEditor: React.FC = () => {
   const { selectedCategory, categories, selectCategory } = useCategorySelector({
     initialCategoryName: initialInputValues.category,
   });
-  const { price, onChangePrice, priceWarningMessage, isValidPrice } = usePrice({
-    initialPrice: initialInputValues.price,
-  });
+  const { price, onChangePrice, priceWarningMessage, isValidPrice } =
+    usePriceInput({
+      initialPrice: initialInputValues.price,
+    });
   const { value: description, onChangeValue: onChangeDescription } = useInput({
     initialValue: initialInputValues.description,
   });
@@ -113,7 +114,9 @@ export const ProductEditor: React.FC = () => {
         <RightButton>
           <Button
             variant="text"
-            disabled={!isRequiredFieldsFilled || !isAllFieldsValid || !isFieldChanged}
+            disabled={
+              !isRequiredFieldsFilled || !isAllFieldsValid || !isFieldChanged
+            }
             onClick={submitProductData}
           >
             <span className="control-btn">확인</span>

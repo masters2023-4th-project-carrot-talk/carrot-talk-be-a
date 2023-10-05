@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class SseEmitters {
 
-	private static final String EVENT_NAME_CONNECTED = "connected";
+	private static final String EVENT_NAME_CONNECT = "connect";
 	private static final String EVENT_NAME_NOTIFICATION = "notification";
 
 	private final Map<Long, SseEmitter> userSseEmitterMap = new ConcurrentHashMap<>();
@@ -33,7 +33,7 @@ public class SseEmitters {
 		SseEmitter emitter = new SseEmitter(emitterTimeout);
 		userSseEmitterMap.put(userId, emitter);
 
-		return sendNotification(userId, EVENT_NAME_CONNECTED);
+		return sendNotification(userId, EVENT_NAME_CONNECT);
 	}
 
 	public void sendNotification(Long receiverId, Notification notification) {

@@ -1,7 +1,5 @@
 package com.example.carrot.notification.controller;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

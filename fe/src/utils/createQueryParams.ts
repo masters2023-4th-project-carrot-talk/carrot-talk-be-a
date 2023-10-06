@@ -1,4 +1,6 @@
-export const createQueryParams = (params: FetchProductsParams) => {
+export const createQueryParams = <T extends Record<string, unknown>>(
+  params: T,
+) => {
   const query = new URLSearchParams();
 
   Object.entries(params).forEach(([key, value]) => {
@@ -9,7 +11,3 @@ export const createQueryParams = (params: FetchProductsParams) => {
 
   return query.toString();
 };
-
-// if (params.next !== undefined && params.next !== null) {
-//   query.append('next', String(params.next));
-// }

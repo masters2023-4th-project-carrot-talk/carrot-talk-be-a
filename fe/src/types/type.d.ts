@@ -168,6 +168,11 @@ type ProductAdditionResponse = {
   };
 };
 
+type ResponseFromServer<T> = {
+  success: boolean;
+  data?: T;
+};
+
 type ChatRoomsDataFromServer = {
   success: boolean;
   data: ChatRoomType[];
@@ -179,7 +184,7 @@ type ChatRoomType = {
   lastChatTime: string;
   unreadChatCount: number;
   opponent: OpponentType;
-  product: ProductType;
+  product: ChatProductType;
 };
 
 type OpponentType = {
@@ -188,7 +193,7 @@ type OpponentType = {
   imageUrl: string;
 };
 
-type ProductType = {
+type ChatProductType = {
   id: number;
   thumbnail: string;
 };
@@ -204,4 +209,17 @@ type UnreadTotalCountType = {
 
 type ServiceWorkerGlobalScope = typeof self & {
   registration: ServiceWorkerRegistration;
+};
+
+type ChatRoomInfo = {
+  opponent: {
+    id: number;
+    nickname: string;
+  };
+  product: {
+    id: number;
+    title: string;
+    price: number;
+    thumbnail: string;
+  };
 };

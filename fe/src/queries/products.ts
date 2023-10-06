@@ -23,8 +23,6 @@ export const useProducts = (
   categoryId?: number | null,
   size = 10,
 ) => {
-  console.log(locationId, categoryId, '확인중');
-
   const fetchProducts = ({ pageParam }: { pageParam?: number }) => {
     return getProducts({ locationId, categoryId, next: pageParam, size });
   };
@@ -150,9 +148,6 @@ export const useEditLikeStatus = () => {
       }
 
       return { previousProduct };
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries([QUERY_KEY.productDetail]);
     },
 
     onError: (error, variables, context) => {

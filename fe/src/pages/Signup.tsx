@@ -38,28 +38,28 @@ export const Signup: React.FC = () => {
   const signupMutation = useSignup();
 
   const submitEnabled =
-    isUniqueNickname && localLocations && localLocations.length > 0;
+    isUniqueNickname && localLocations && localLocations.length === 2;
 
   const goToAuth = () => {
     navigate(PATH.account, { replace: true });
   };
 
   const requestSignup = () => {
-    if (!submitEnabled) {
+    const mainLocation = localLocations.find(
+      (location: LocationType) => location.isMainLocation,
+    );
+    const subLocation = localLocations.find(
+      (location: LocationType) => !location.isMainLocation,
+    );
+
+    if (!submitEnabled || !mainLocation || !subLocation) {
       return;
     }
 
-    const mainLocationId = localLocations.find(
-      (location: LocationType) => location.isMainLocation,
-    )?.id as number;
-    const subLocationId = localLocations?.find(
-      (location: LocationType) => !location.isMainLocation,
-    )?.id;
-
     const signupInfo = {
       nickname,
-      mainLocationId,
-      ...(!!subLocationId && { subLocationId }),
+      mainLocationId: mainLocation.id,
+      subLocationId: subLocation.id,
     };
 
     signupMutation.mutate(signupInfo, {
@@ -133,6 +133,11 @@ export const Signup: React.FC = () => {
               <Plus />
               위치 추가
             </Button>
+            {localLocations.length !== 2 && (
+              <div className="warning-message">
+                필수조건: 위치를 2개 등록해주세요.
+              </div>
+            )}
           </div>
         </div>
         <LocationModal locationList={localLocations} />
@@ -177,6 +182,17 @@ const pageStyle = (theme: Theme) => {
           background-color: ${theme.color.brand.primaryStrong};
           border-radius: 50%;
         }
+      }
+    }
+
+    .location__form {
+      & svg {
+        stroke: ${theme.color.neutral.textStrong};
+      }
+
+      .warning-message {
+        font: ${theme.font.enabledStrong12};
+        color: ${theme.color.system.warning};
       }
     }
   `;

@@ -46,4 +46,3 @@ export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id
 }&response_type=code&scope=profile_image`;
 
 export const BASE_URL = import.meta.env.VITE_BASE_URL;
-// export const BASE_URL = 'http://ec2-54-180-86-30.ap-northeast-2.compute.amazonaws.com:8080'

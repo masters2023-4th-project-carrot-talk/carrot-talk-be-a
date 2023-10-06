@@ -91,13 +91,11 @@ export const ProductEditor: React.FC = () => {
     productMutation.mutate(productData, {
       onSuccess: (result) => {
         if (result.success) {
-          // 등록 성공 시 상품 상세 페이지로 이동
           navigate(`${PATH.detail}/${result.data?.productId}`, {
             replace: true,
           });
           return;
         }
-        // 등록 실패 시 사용자 피드백
       },
     });
   };

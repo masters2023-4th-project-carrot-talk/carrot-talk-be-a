@@ -34,7 +34,6 @@ import { formatPrice } from '@utils/formatPrice';
 import { formatTimeStamp } from '@utils/formatTimeStamp';
 import { getUserInfo } from '@utils/localStorage';
 import { useChatRoomId } from '@queries/chat';
-// TODO 로그인하지 않은 사용자에게 데이터가 안뜨고있음
 
 export const ProductDetail: React.FC = () => {
   const { alertSource, currentDim, onOpenAlert, onCloseAlert } = useAlert();
@@ -48,7 +47,6 @@ export const ProductDetail: React.FC = () => {
     seller,
     images,
     status: fetchStatus,
-    // error, // TODO 에러 토스트 메세지
   } = useProductDetailQuery(numberedProductId);
   const deleteProductMutation = useDeleteProduct('detail');
   const editProductStatusMutation = useEditProductStatus('detail');
@@ -59,7 +57,6 @@ export const ProductDetail: React.FC = () => {
   const formattedPrice = formatPrice(product?.price);
   const formattedTimeStamp = formatTimeStamp(product?.createdAt);
   const isAuthor = getUserInfo() && getUserInfo()?.id === seller?.id;
-  // const isAuthor = true; // TODO 교체
 
   const { observeTarget } = useIntersectionObserver({
     inviewCallback: () => {
@@ -96,10 +93,7 @@ export const ProductDetail: React.FC = () => {
       navigate(PATH.account);
       return;
     } else if (isAuthor) {
-      // TODO like개수를 작성자가 늘릴 수 있는 건 별로 인 것 같음
-      // toast메시지
       console.log('내 물건에 좋아요를 누를 수 없어요');
-
       return;
     }
 
@@ -255,14 +249,16 @@ export const ProductDetail: React.FC = () => {
           <Heart className="like-icon" onClick={onToggleLike} />
           {formattedPrice}
         </div>
-        {isAuthor ? (<Button
+        {isAuthor ? (
+          <Button
             variant="rectangle"
             size="s"
             state="active"
             onClick={() => navigate(PATH.chat)}
           >
             채팅 목록으로 이동
-          </Button>) : (
+          </Button>
+        ) : (
           <Button
             variant="rectangle"
             size="s"

@@ -32,17 +32,13 @@ export const useNotification = (isLogin: boolean) => {
           },
         );
 
-        eventSourceRef.current.addEventListener(EVENT_NAME.connect, (event) => {
-          // todo 둘중하나 지우기
-          console.log('connect on addEventListener: ', event);
+        eventSourceRef.current.addEventListener(EVENT_NAME.connect, () => {
           setShouldNotify(true);
         });
 
         eventSourceRef.current.addEventListener(
           EVENT_NAME.notification,
           (event) => {
-            console.log('채팅 내용 : ', event);
-
             const pattern = /(\w+)\s*=\s*([^,)]+)/g;
             const matches = [...event.data.matchAll(pattern)];
             const result: Record<string, string> = {};
@@ -50,7 +46,7 @@ export const useNotification = (isLogin: boolean) => {
             for (const match of matches) {
               const key = match[1];
               let value = match[2];
-              
+
               if (key === 'content') {
                 const colonIndex = value.indexOf(':');
                 if (colonIndex !== -1) {
@@ -63,25 +59,22 @@ export const useNotification = (isLogin: boolean) => {
             const currentDate = new Date();
             const dateString = currentDate.toISOString();
 
-            setUnreadCounts(Number(result.chatroomId), result.content, dateString);
+            setUnreadCounts(
+              Number(result.chatroomId),
+              result.content,
+              dateString,
+            );
 
             addUnreadTotalCount(1);
-            // setUnreadCounts 호출, 시간 기록
           },
         );
 
-        // eventSourceRef.current.onopen = () => { // A팀일때 테스트용 (설리에게 EVENT_NAME.connect 추가 요청)
-        //   // todo 둘중하나 지우기
-        //   console.log('connect on ONOPEN');
-        //   setShouldNotify(true);
-        // };
+        eventSourceRef.current.onopen = () => {
+          // A팀일때 테스트용 (설리에게 EVENT_NAME.connect 추가 요청)
 
-        eventSourceRef.current.onerror = (error) => {
-          console.log('error on connect: ', error);
-          // eventSourceRef.current?.close(); 여기서 닫으면 안됨
+          setShouldNotify(true);
         };
       } catch (error) {
-        console.log('notify error: ', error);
         return;
       }
     };
@@ -89,8 +82,6 @@ export const useNotification = (isLogin: boolean) => {
     connectSSE();
 
     return () => {
-      console.log('disconnect');
-
       eventSourceRef.current?.close();
 
       setShouldNotify(false);

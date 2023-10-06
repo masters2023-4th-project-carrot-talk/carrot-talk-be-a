@@ -133,7 +133,6 @@ export const getProducts = ({
     size,
     next,
   });
-  console.log(queryParams, '쿼리확인중');
 
   return fetchData(END_POINT.products(queryParams));
 };

@@ -106,7 +106,6 @@ export const ImageCarousel: React.FC<Props> = ({ images }) => {
   );
 };
 
-// BUG 모바일은 레이아웃까지 움직임
 const carouselStyle = (
   theme: Theme,
   index: number,

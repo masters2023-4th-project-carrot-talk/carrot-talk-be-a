@@ -5,7 +5,6 @@ import { useAuth } from '@hooks/useAuth';
 import { useNotification } from '@hooks/useNotification';
 import { useUnreadTotalCount } from '@queries/chat';
 import { useUnreadTotalCountStore } from '@stores/notificationStore';
-// import { useEffect } from 'react';
 import { useEffect } from 'react';
 import { NavLink, matchRoutes, useLocation } from 'react-router-dom';
 import { NotiCount } from './NotiCount';
@@ -20,9 +19,6 @@ export const NavBar: React.FC = () => {
   );
 
   const { unreadTotalCount, setUnreadTotalCount } = useUnreadTotalCountStore();
-
-  console.log(count, ': count');
-  console.log(unreadTotalCount, ': unreadTotalCount');
 
   useEffect(() => {
     if (typeof count === 'number') {

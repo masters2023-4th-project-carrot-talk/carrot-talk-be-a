@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import { Message } from '@components/common/icons';
 import { CountBadge } from '../countBadge/CountBadge';
 import { useNotificationStore } from '@stores/notificationStore';
-// import { useUnreadTotalCount } from '@queries/chat';
 
 type Props = {
   count?: number;

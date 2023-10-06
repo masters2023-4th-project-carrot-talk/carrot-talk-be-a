@@ -9,17 +9,15 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
 export const Chat: React.FC = () => {
-  const { data: chatRooms, status } = useChatRooms(); // TODO
+  const { data: chatRooms, status } = useChatRooms();
   const navigate = useNavigate();
   const { unreadCounts, initializeUnreadCounts } = useUnreadTotalCountStore();
 
-  // 렌더링 할 때 초기화
   useEffect(() => {
     initializeUnreadCounts();
-  }, [])
+  }, []);
 
   const onEnterChat = (chatroomId: number) => {
-    console.log(chatroomId, 'onEnterChat');
     navigate(`${PATH.chatRoom}/${chatroomId}`);
   };
 
@@ -28,8 +26,6 @@ export const Chat: React.FC = () => {
       <SkeletonChatItem key={index} />
     ));
   };
-
-  // TODO 최근 보내진 채팅순으로(알림이 왔을때) 재정렬
 
   return (
     <>
@@ -46,9 +42,18 @@ export const Chat: React.FC = () => {
             <ChatItem
               key={chatItem.chatroomId}
               opponent={chatItem.opponent}
-              lastChatContent={unreadCounts?.[chatItem.chatroomId]?.lastMessage ?? chatItem.lastChatContent}
-              lastChatTime={unreadCounts?.[chatItem.chatroomId]?.updatedAt ?? chatItem.lastChatTime}
-              unreadChatCount={chatItem.unreadChatCount + (unreadCounts?.[chatItem.chatroomId]?.unreadCount ?? 0)}
+              lastChatContent={
+                unreadCounts?.[chatItem.chatroomId]?.lastMessage ??
+                chatItem.lastChatContent
+              }
+              lastChatTime={
+                unreadCounts?.[chatItem.chatroomId]?.updatedAt ??
+                chatItem.lastChatTime
+              }
+              unreadChatCount={
+                chatItem.unreadChatCount +
+                (unreadCounts?.[chatItem.chatroomId]?.unreadCount ?? 0)
+              }
               thumbnailUrl={chatItem.product.thumbnail}
               onEnterChat={() => onEnterChat(chatItem.chatroomId)}
             />

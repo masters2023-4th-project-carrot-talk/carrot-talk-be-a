@@ -14,7 +14,7 @@ export const MenuItem: React.FC<Props> = ({
   onClick,
 }) => {
   const onMenuItemClick = (e: React.MouseEvent) => {
-    onClick?.(e); // BUG dropdown 버그로 인해 임시 추가
+    onClick?.(e);
   };
 
   return (

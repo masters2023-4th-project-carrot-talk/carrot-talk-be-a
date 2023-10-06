@@ -151,9 +151,8 @@ export const useEditLikeStatus = () => {
     },
 
     onError: (error, variables, context) => {
+      console.log(error);
       if (context?.previousProduct) {
-        console.log('에러발생', error); // TODO 에러처리
-
         queryClient.setQueryData(
           [QUERY_KEY.productDetail, variables],
           context.previousProduct,

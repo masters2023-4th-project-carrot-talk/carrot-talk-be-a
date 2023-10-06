@@ -22,7 +22,6 @@ export const useUnreadTotalCount = (isLogin: boolean, pathname: string) =>
     queryKey: [QUERY_KEY.unreadTotalCount, pathname],
     queryFn: () => getUnreadTotalCount(),
     select: (data) => data.data.unreadTotalCount,
-    // refetchInterval: 1000 * 60,
     enabled: isLogin,
   });
 

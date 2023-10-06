@@ -10,7 +10,6 @@ let locations: LocationType[] = [
 ];
 
 export const handlers = [
-  //내동네
   rest.get(`/api/users/locations`, (_, res, ctx) => {
     return res(
       ctx.delay(300),
@@ -21,18 +20,16 @@ export const handlers = [
       }),
     );
   }),
-  // 내동네 삭제
+
   rest.delete(`/api/users/locations/:id`, (req, res, ctx) => {
     const { id } = req.params;
 
     locations = locations.filter((location) => location.id !== Number(id));
 
-    // 남아있는 위치가 있다면 첫 번째 위치를 주요 위치로 설정
     if (locations.length > 0) {
       locations[0].isMainLocation = true;
     }
 
-    // 반환 데이터
     const data = {
       success: true,
       data: {
@@ -43,14 +40,12 @@ export const handlers = [
 
     return res(ctx.status(200), ctx.json(data));
   }),
-  // 내동네 변경
+
   rest.patch(`/api/users/locations`, (req, res, ctx) => {
     const { locationId } = req.body as { locationId: number };
 
-    // locationId에 해당하는 location이 있는지 확인
     const exists = locations.some((location) => location.id === locationId);
 
-    // 없다면 새로운 location을 추가
     if (!exists) {
       locations.push({
         id: locationId,
@@ -74,12 +69,9 @@ export const handlers = [
     return res(ctx.status(200), ctx.json(data));
   }),
 
-  //동네 검색
-  // 핸들러 설정
   rest.get(`/api/locations`, (req, res, ctx) => {
     const query = req.url.searchParams.get('keyword');
 
-    // 쿼리에 맞는 위치를 필터링
     const filteredLocations = locationsWithQuery.data.filter((location) =>
       location.name.includes(query!),
     );
@@ -87,11 +79,9 @@ export const handlers = [
     return res(ctx.status(200), ctx.json({ data: filteredLocations }));
   }),
 
-  //카테고리
   rest.get(`/api/categories`, (_, res, ctx) => {
     return res(ctx.delay(200), ctx.status(200), ctx.json(categoryList));
   }),
-  //
 
   rest.get('/api/users/nickname', (req, res, ctx) => {
     const query = req.url.searchParams;

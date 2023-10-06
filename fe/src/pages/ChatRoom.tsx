@@ -194,12 +194,7 @@ export const ChatRoom: React.FC = () => {
           />
         </RightButton>
       </TopBar>
-      <div
-        className="info-banner"
-        onClick={() => {
-          navigate(`${PATH.detail}/${chatroomInfo.data?.product.id}`);
-        }}
-      >
+      <div className="info-banner">
         <ImageBox size="s" imageUrl={chatroomInfo.data?.product.thumbnail} />
         <div className="info-banner-body">
           <p className="info-banner-body__title">
@@ -209,6 +204,16 @@ export const ChatRoom: React.FC = () => {
             {numberToCommaString(chatroomInfo.data?.product.price ?? 0)}원
           </p>
         </div>
+        <Button
+          variant="rectangle"
+          size="s"
+          state="active"
+          onClick={() => {
+            navigate(`${PATH.detail}/${chatroomInfo.data?.product.id}`);
+          }}
+        >
+          상품 보기
+        </Button>
       </div>
       <div ref={observeTarget} css={obseverStyle}></div>
       <div className="chat-body">
@@ -286,8 +291,8 @@ const pageStyle = (theme: Theme) => {
     }
 
     .info-banner {
+      width: 100%;
       box-sizing: border-box;
-      cursor: pointer;
       height: 80px;
       position: fixed;
       top: 56px;
@@ -299,8 +304,8 @@ const pageStyle = (theme: Theme) => {
       background-color: ${theme.color.neutral.background};
 
       &-body {
+        flex: 1 0 0;
         display: flex;
-        width: 305px;
         flex-direction: column;
         align-items: flex-start;
         flex-shrink: 0;

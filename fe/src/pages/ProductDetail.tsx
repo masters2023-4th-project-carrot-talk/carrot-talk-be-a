@@ -33,7 +33,7 @@ import { usePathHistoryStore } from '@stores/pathHistoryStore';
 import { formatPrice } from '@utils/formatPrice';
 import { formatTimeStamp } from '@utils/formatTimeStamp';
 import { getUserInfo } from '@utils/localStorage';
-// TODO 로그인하지 않은 사용자에게 데이터가 안뜨고있음
+import { useChatRoomId } from '@queries/chat';
 
 export const ProductDetail: React.FC = () => {
   const { alertSource, currentDim, onOpenAlert, onCloseAlert } = useAlert();
@@ -47,19 +47,16 @@ export const ProductDetail: React.FC = () => {
     seller,
     images,
     status: fetchStatus,
-    // error, // TODO 에러 토스트 메세지
   } = useProductDetailQuery(numberedProductId);
   const deleteProductMutation = useDeleteProduct('detail');
   const editProductStatusMutation = useEditProductStatus('detail');
   const editLikeStatusMutation = useEditLikeStatus();
   const { prevPath } = usePathHistoryStore();
+  const chatRoomIdMutation = useChatRoomId();
 
   const formattedPrice = formatPrice(product?.price);
   const formattedTimeStamp = formatTimeStamp(product?.createdAt);
   const isAuthor = getUserInfo() && getUserInfo()?.id === seller?.id;
-  // const isAuthor = true; // TODO 교체
-
-  const realTimeChatRoomCount = 0; //TODO 교체
 
   const { observeTarget } = useIntersectionObserver({
     inviewCallback: () => {
@@ -92,6 +89,14 @@ export const ProductDetail: React.FC = () => {
   };
 
   const onToggleLike = () => {
+    if (!getUserInfo()) {
+      navigate(PATH.account);
+      return;
+    } else if (isAuthor) {
+      console.log('내 물건에 좋아요를 누를 수 없어요');
+      return;
+    }
+
     editLikeStatusMutation.mutate(numberedProductId);
   };
 
@@ -113,6 +118,20 @@ export const ProductDetail: React.FC = () => {
       status: '판매완료',
     },
   ];
+
+  const enterChatRoom = () => {
+    if (!getUserInfo()) {
+      navigate(PATH.account);
+      return;
+    }
+    chatRoomIdMutation.mutate(numberedProductId, {
+      onSuccess: (res) => {
+        if (res.success) {
+          navigate(`${PATH.chatRoom}/${res.data?.chatroomId}`);
+        }
+      },
+    });
+  };
 
   return (
     <div css={(theme) => pageStyle(theme, product?.isLiked, isTransparent)}>
@@ -235,20 +254,16 @@ export const ProductDetail: React.FC = () => {
             variant="rectangle"
             size="s"
             state="active"
-            onClick={() => {
-              console.log('채팅방 목록으로 이동');
-            }}
+            onClick={() => navigate(PATH.chat)}
           >
-            대화 중인 채팅방 {realTimeChatRoomCount}
+            채팅 목록으로 이동
           </Button>
         ) : (
           <Button
             variant="rectangle"
             size="s"
             state="active"
-            onClick={() => {
-              console.log('1:1 채팅방으로 이동');
-            }}
+            onClick={enterChatRoom}
           >
             채팅하기
           </Button>

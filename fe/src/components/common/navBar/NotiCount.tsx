@@ -1,16 +1,20 @@
 import { css } from '@emotion/react';
 import { Message } from '@components/common/icons';
 import { CountBadge } from '../countBadge/CountBadge';
+import { useNotificationStore } from '@stores/notificationStore';
 
-export const NotiCount: React.FC = () => {
-  // TOOD count 받아오기
-  const isMessageNoti = true;
-  //TODO 추후 교체합니다
-  //TODO 개수 어떤 주기로 갱신? 전역 저장?
+type Props = {
+  count?: number;
+};
+
+export const NotiCount: React.FC<Props> = ({ count }) => {
+  const { shouldNotify } = useNotificationStore();
 
   return (
     <div css={notiCountStyle}>
-      {isMessageNoti && <CountBadge size="s" count={1} className="count-box" />}
+      {shouldNotify && count !== 0 && (
+        <CountBadge size="s" count={count} className="count-box" />
+      )}
       <Message />
     </div>
   );

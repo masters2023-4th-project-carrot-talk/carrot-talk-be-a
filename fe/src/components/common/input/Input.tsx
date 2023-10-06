@@ -116,6 +116,10 @@ const inputStyle = (
         &::placeholder {
           color: ${theme.color.neutral.textWeak};
         }
+
+        &:focus {
+          outline: ${variant !== 'ghost' ? 'none' : 'auto'};
+        }
       }
 
       & .clear-btn {

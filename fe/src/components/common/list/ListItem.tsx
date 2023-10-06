@@ -35,7 +35,6 @@ export const ListItem: React.FC<Props> = ({
   const isAuthor = getUserInfo()
     ? getUserInfo()?.id === product.sellerId
     : false;
-  // const isAuthor = true;
 
   const onEditProductStatus = (status: ProductStatusType) => {
     editProductStatusMutation.mutate({

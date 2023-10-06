@@ -6,7 +6,6 @@ type Props = {
   onClose?: () => void;
 };
 
-// TODO alert가 아닌 딤일때만 onClose 필요
 export const Dim: FC<Props> = ({ isOpen, onClose }) => {
   return <>{isOpen && <div css={dimStyle} onClick={onClose} />}</>;
 };

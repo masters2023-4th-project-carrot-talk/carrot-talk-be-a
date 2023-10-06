@@ -11,7 +11,6 @@ export const TopBar: React.FC<Props> = ({ children, transparent }) => {
   );
 };
 
-//fill: ${theme.color.accent.text};
 const topBarStyle = (theme: Theme, transparent?: boolean) => {
   const transparentStyle = css`
     & > * {

@@ -1,19 +1,31 @@
 import { ChatItem, SkeletonChatItem } from '@components/common/chat/ChatItem';
 import { Title } from '@components/common/topBar/Title';
 import { TopBar } from '@components/common/topBar/TopBar';
+import { PATH } from '@constants/path';
 import { Theme, css } from '@emotion/react';
 import { useChatRooms } from '@queries/chat';
+import { useUnreadTotalCountStore } from '@stores/notificationStore';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export const Chat: React.FC = () => {
-  const { chatRooms } = useChatRooms(); // TODO fcm연동 고려
+  const { data: chatRooms, status } = useChatRooms();
+  const navigate = useNavigate();
+  const { unreadCounts, initializeUnreadCounts } = useUnreadTotalCountStore();
+
+  useEffect(() => {
+    initializeUnreadCounts();
+  }, []);
+
+  const onEnterChat = (chatroomId: number) => {
+    navigate(`${PATH.chatRoom}/${chatroomId}`);
+  };
 
   const renderSkeletons = (length: number) => {
     return Array.from({ length }).map((_, index) => (
       <SkeletonChatItem key={index} />
     ));
   };
-
-  // TODO 최근 보내진 채팅순으로(알림이 왔을때) 재정렬
 
   return (
     <>
@@ -22,15 +34,28 @@ export const Chat: React.FC = () => {
       </TopBar>
       <div css={(theme) => pageStyle(theme)}>
         <ul>
-          {chatRooms?.length === 0 && renderSkeletons(5)}
-          {chatRooms?.map((chatItem) => (
+          {status === 'loading' && renderSkeletons(5)}
+          {chatRooms?.length === 0 && (
+            <div className="data-status-info">채팅방이 없습니다</div>
+          )}
+          {chatRooms?.map((chatItem: ChatRoomType) => (
             <ChatItem
               key={chatItem.chatroomId}
               opponent={chatItem.opponent}
-              lastChatContent={chatItem.lastChatContent}
-              lastChatTime={chatItem.lastChatTime}
-              unreadChatCount={chatItem.unreadChatCount}
-              thumbnailUrl={chatItem.product.imageUrl}
+              lastChatContent={
+                unreadCounts?.[chatItem.chatroomId]?.lastMessage ??
+                chatItem.lastChatContent
+              }
+              lastChatTime={
+                unreadCounts?.[chatItem.chatroomId]?.updatedAt ??
+                chatItem.lastChatTime
+              }
+              unreadChatCount={
+                chatItem.unreadChatCount +
+                (unreadCounts?.[chatItem.chatroomId]?.unreadCount ?? 0)
+              }
+              thumbnailUrl={chatItem.product.thumbnail}
+              onEnterChat={() => onEnterChat(chatItem.chatroomId)}
             />
           ))}
         </ul>
@@ -67,6 +92,16 @@ const pageStyle = (theme: Theme) => {
 
     &::-webkit-scrollbar-track {
       background-color: transparent;
+    }
+
+    .data-status-info {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: default;
+      width: 100%;
+      height: 70px;
+      font: ${theme.font.displayDefault16};
     }
   `;
 };

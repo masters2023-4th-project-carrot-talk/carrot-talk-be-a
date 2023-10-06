@@ -17,7 +17,7 @@ import { useImageListInput } from '@hooks/useImageListInput';
 import { useInitialInputValues } from '@hooks/useInitialInputValues';
 import { useInput } from '@hooks/useInput';
 import { useLocationSelector } from '@hooks/useLocationSelector';
-import { usePrice } from '@hooks/usePrice';
+import { usePriceInput } from '@hooks/usePriceInput';
 import { useProductMutation } from '@queries/products';
 import { usePathHistoryStore } from '@stores/pathHistoryStore';
 import { commaStringToNumber } from '@utils/formatPrice';
@@ -47,9 +47,10 @@ export const ProductEditor: React.FC = () => {
   const { selectedCategory, categories, selectCategory } = useCategorySelector({
     initialCategoryName: initialInputValues.category,
   });
-  const { price, onChangePrice, priceWarningMessage, isValidPrice } = usePrice({
-    initialPrice: initialInputValues.price,
-  });
+  const { price, onChangePrice, priceWarningMessage, isValidPrice } =
+    usePriceInput({
+      initialPrice: initialInputValues.price,
+    });
   const { value: description, onChangeValue: onChangeDescription } = useInput({
     initialValue: initialInputValues.description,
   });
@@ -90,13 +91,11 @@ export const ProductEditor: React.FC = () => {
     productMutation.mutate(productData, {
       onSuccess: (result) => {
         if (result.success) {
-          // 등록 성공 시 상품 상세 페이지로 이동
           navigate(`${PATH.detail}/${result.data?.productId}`, {
             replace: true,
           });
           return;
         }
-        // 등록 실패 시 사용자 피드백
       },
     });
   };
@@ -113,7 +112,9 @@ export const ProductEditor: React.FC = () => {
         <RightButton>
           <Button
             variant="text"
-            disabled={!isRequiredFieldsFilled || !isAllFieldsValid || !isFieldChanged}
+            disabled={
+              !isRequiredFieldsFilled || !isAllFieldsValid || !isFieldChanged
+            }
             onClick={submitProductData}
           >
             <span className="control-btn">확인</span>

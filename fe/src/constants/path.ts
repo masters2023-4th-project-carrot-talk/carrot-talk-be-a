@@ -15,13 +15,14 @@ export const PATH = {
 };
 
 export const END_POINT = {
+  notify: `/api/notification/subscribe`,
   signup: `/api/users/signup`,
   login: `/api/users/login`,
   logout: `/api/users/logout`,
   refreshToken: `/api/users/reissue-access-token`,
   categories: `/api/categories`,
   imageUpload: `/api/images`,
-  chatRooms: `/api/chatrooms`,
+  chatroom: '/api/chatrooms',
   unreadTotalCount: `/api/chatrooms/unread-total-count`,
   products: (query?: string) => `/api/products${query ? `?${query}` : ''}`,
   productDetail: (id: number) => `/api/products/${id}`,
@@ -33,6 +34,9 @@ export const END_POINT = {
   locationsOf: (query: string) => `/api/locations?keyword=${query}`,
   nicknameCheck: (nickname: string) =>
     `/api/users/nickname?nickname=${nickname}`,
+  chatroomHistories: (chatroomId: number, query?: string) =>
+    `/api/chatrooms/${chatroomId}${query ? `?${query}` : ''}`,
+  chatroomInfo: (chatroomId: number) => `/api/chatrooms/${chatroomId}/product`,
 };
 
 export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${
@@ -42,4 +46,3 @@ export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id
 }&response_type=code&scope=profile_image`;
 
 export const BASE_URL = import.meta.env.VITE_BASE_URL;
-// export const BASE_URL = 'http://ec2-54-180-86-30.ap-northeast-2.compute.amazonaws.com:8080'

@@ -2,103 +2,103 @@ export const locationsWithQuery: LocationWithQueryDataFromServer = {
   success: true,
   data: [
     {
-      id: 1, //long
+      id: 1,
       name: '서울 강남구 역삼1동',
     },
     {
-      id: 3, //long
+      id: 3,
       name: '서울 강남구 개포1동',
     },
     {
-      id: 4, //long
+      id: 4,
       name: '서울 강남구 개포2동',
     },
     {
-      id: 5, //long
+      id: 5,
       name: '서울 강남구 개포3동',
     },
     {
-      id: 6, //long
+      id: 6,
       name: '서울 강남구 개포4동',
     },
     {
-      id: 7, //long
+      id: 7,
       name: '서울 강남구 개포5동',
     },
     {
-      id: 8, //long
+      id: 8,
       name: '서울 강남구 개포6동',
     },
     {
-      id: 9, //long
+      id: 9,
       name: '서울 강남구 개포7동',
     },
     {
-      id: 10, //long
+      id: 10,
       name: '서울 강남구 개포8동',
     },
     {
-      id: 11, //long
+      id: 11,
       name: '서울 강남구 개포8동',
     },
     {
-      id: 12, //long
+      id: 12,
       name: '서울 강남구 개포8동',
     },
     {
-      id: 13, //long
+      id: 13,
       name: '서울 강남구 개포8동',
     },
     {
-      id: 14, //long
+      id: 14,
       name: '서울 강남구 개포8동',
     },
     {
-      id: 15, //long
+      id: 15,
       name: '서울 강남구 개포8동',
     },
     {
-      id: 16, //long
+      id: 16,
       name: '서울 강남구 개포8동',
     },
     {
-      id: 17, //long
+      id: 17,
       name: '서울 강남구 개포8동',
     },
     {
-      id: 18, //long
+      id: 18,
       name: '서울 강남구 개포8동',
     },
     {
-      id: 19, //long
+      id: 19,
       name: '서울 강남구 개포8동',
     },
     {
-      id: 20, //long
+      id: 20,
       name: '서울 강남구 개포8동',
     },
     {
-      id: 21, //long
+      id: 21,
       name: '서울 강남구 개포8동',
     },
     {
-      id: 22, //long
+      id: 22,
       name: '서울 강남구 개포8동',
     },
     {
-      id: 23, //long
+      id: 23,
       name: '서울 강남구 개포8동',
     },
     {
-      id: 24, //long
+      id: 24,
       name: '서울 강남구 개포8동',
     },
     {
-      id: 25, //long
+      id: 25,
       name: '서울 강남구 개포8동',
     },
     {
-      id: 26, //long
+      id: 26,
       name: '서울 강남구 개포8동',
     },
   ],

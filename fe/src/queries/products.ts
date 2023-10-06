@@ -23,8 +23,6 @@ export const useProducts = (
   categoryId?: number | null,
   size = 10,
 ) => {
-  console.log(locationId, categoryId, '확인중');
-
   const fetchProducts = ({ pageParam }: { pageParam?: number }) => {
     return getProducts({ locationId, categoryId, next: pageParam, size });
   };
@@ -151,14 +149,10 @@ export const useEditLikeStatus = () => {
 
       return { previousProduct };
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries([QUERY_KEY.productDetail]);
-    },
 
     onError: (error, variables, context) => {
+      console.log(error);
       if (context?.previousProduct) {
-        console.log('에러발생', error); // TODO 에러처리
-
         queryClient.setQueryData(
           [QUERY_KEY.productDetail, variables],
           context.previousProduct,

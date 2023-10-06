@@ -106,7 +106,6 @@ export const ImageCarousel: React.FC<Props> = ({ images }) => {
   );
 };
 
-// BUG 모바일은 레이아웃까지 움직임
 const carouselStyle = (
   theme: Theme,
   index: number,
@@ -149,6 +148,7 @@ const carouselStyle = (
       min-width: ${imageWidth}px;
       max-width: ${imageWidth}px;
       height: 100%;
+      max-height: 491px;
       object-fit: contain;
       -webkit-user-drag: none;
     }

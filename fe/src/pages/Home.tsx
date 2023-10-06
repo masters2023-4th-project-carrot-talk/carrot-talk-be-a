@@ -45,7 +45,6 @@ export const Home: React.FC = () => {
   const [selectProduct, setSelectProduct] = useState<ProductType | null>(null);
   const serverLocationsFetchedRef = useRef(false);
 
-  // selectedLocationId 초기값 설정
   const mainLocation = serverLocations?.find(
     (location) => location.isMainLocation,
   );
@@ -72,13 +71,12 @@ export const Home: React.FC = () => {
   });
 
   useEffect(() => {
-    // serverLocations 데이터가 처음 로드되었을 때만 실행
     if (serverLocations && !serverLocationsFetchedRef.current) {
       const mainLocId = serverLocations.find(
         (location) => location.isMainLocation,
       )?.id;
       mainLocId && setSelectedLocationId(mainLocId);
-      refetchProductList(); // 초기 데이터 로드 시에만 refetch
+      refetchProductList();
       serverLocationsFetchedRef.current = true;
     }
   }, [serverLocations]);

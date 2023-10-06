@@ -170,8 +170,8 @@ type ProductAdditionResponse = {
 
 type ResponseFromServer<T> = {
   success: boolean;
-  data?: T
-}
+  data?: T;
+};
 
 type ChatRoomsDataFromServer = {
   success: boolean;
@@ -184,7 +184,7 @@ type ChatRoomType = {
   lastChatTime: string;
   unreadChatCount: number;
   opponent: OpponentType;
-  product: ProductType;
+  product: ChatProductType;
 };
 
 type OpponentType = {
@@ -193,7 +193,7 @@ type OpponentType = {
   imageUrl: string;
 };
 
-type ProductType = {
+type ChatProductType = {
   id: number;
   thumbnail: string;
 };
@@ -222,4 +222,4 @@ type ChatRoomInfo = {
     price: number;
     thumbnail: string;
   };
-}
+};

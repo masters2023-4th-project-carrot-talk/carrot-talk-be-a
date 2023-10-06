@@ -179,6 +179,9 @@ export const deleteProduct = (id: number) => {
 export const editLikeStatus = (id: number) => {
   return fetchData(END_POINT.productLike(id), {
     method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
   });
 };
 

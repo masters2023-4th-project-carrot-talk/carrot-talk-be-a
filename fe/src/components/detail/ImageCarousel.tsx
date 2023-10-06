@@ -149,6 +149,7 @@ const carouselStyle = (
       min-width: ${imageWidth}px;
       max-width: ${imageWidth}px;
       height: 100%;
+      max-height: 491px;
       object-fit: contain;
       -webkit-user-drag: none;
     }

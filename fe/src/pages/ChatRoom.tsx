@@ -82,7 +82,7 @@ export const ChatRoom: React.FC = () => {
         client.current.subscribe(`/subscribe/${chatRoomId}`, (message) => {
           const body = JSON.parse(message.body);
 
-          if ('enterMemberId' in body && body.enterMemberId !== userInfo.id) {
+          if ('enterMemberId' in body) {
             setIsOpponentEnter(true);
             setRealtimeChattings((rc) =>
               rc.map((chatting) => {

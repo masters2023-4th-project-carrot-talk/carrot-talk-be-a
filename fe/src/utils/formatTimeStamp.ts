@@ -4,7 +4,7 @@ export const formatTimeStamp = (createdAt?: string) => {
 
   // 사용자의 현재 시간대에 따라 시간을 조정
   const userTimezoneOffset = getUserTimezoneOffset();
-  const time = new Date(new Date(createdAt).getTime() + userTimezoneOffset);
+  const time = new Date(new Date(createdAt).getTime() - userTimezoneOffset);
 
   const timeDiff = currentTime.getTime() - time.getTime();
 

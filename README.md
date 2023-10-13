@@ -21,10 +21,14 @@ https://github.com/masters2023-4th-project-carrot-talk/bee-market-be-b/assets/75
 ## ⚙️ Infrastructure & CI/CD
 <img src="https://img.shields.io/badge/AWS%20EC2-FA7343?style=flat&logo=amazonec2&logoColor=white"/> <img src="https://img.shields.io/badge/AWS%20RDS-red?style=flat&logo=amazonrds&logoColor=white"/> <img src="https://img.shields.io/badge/AWS%20S3-569A31?style=flat&logo=amazons3&logoColor=white"/> <img src="https://img.shields.io/badge/nginx-009639?style=flat&logo=nginx&logoColor=white"/> <img src="https://img.shields.io/badge/Github%20Actions-2088FF?style=flat&logo=GithubActions&logoColor=white"/> <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=Docker&logoColor=white"/>
 
+
+
 <br/>
 
 ## 🚀Backend Skills
 <img src="https://img.shields.io/badge/Java-007396?style=flat&logo=java&logoColor=white"/> <img src="https://img.shields.io/badge/Gradle-02303A?style=flat&logo=Gradle&logoColor=white"/> <img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=flat&logo=SpringBoot&logoColor=white"/>  <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=MySQL&logoColor=white"/> <img src="https://img.shields.io/badge/-IntelliJ%20IDEA-FF3850?style=flat&logo=IntelliJ%20IDEA&logoColor=white"/> <img src="https://img.shields.io/badge/JPA-212121?style=  &logo=jpa&logoColor=white"/> <img src="https://img.shields.io/badge/Querydsl-0285C9?style=  &logo=querydsl&logoColor=white"/> <img src="https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=Redis&logoColor=white"/>
+
+![beemarket](https://github.com/masters2023-4th-project-carrot-talk/carrot-talk-be-a/assets/57451700/c16c3024-3457-4ef1-ae8d-82a54a352df6)
 
 <br/>
 

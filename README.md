@@ -37,7 +37,7 @@ https://github.com/masters2023-4th-project-carrot-talk/bee-market-be-b/assets/75
 
 <br/>
 
-## 📌 주요 기능
+## 📌 Main Features
 - Kakao 로그인을 지원
 - 판매글을 작성하고 사진을 업로드 할 수 있습니다. 게시글에 좋아요를 눌러줄 수 있습니다.
 - 채팅방에 새로운 채팅이 있을 경우 SSE를 이용한 실시간 알람이 발송됩니다.
@@ -46,7 +46,7 @@ https://github.com/masters2023-4th-project-carrot-talk/bee-market-be-b/assets/75
 
 <br/>
 
-## 💡 Achieved
+## 💡 Record
 - 블로그글 정리해서 링크 달기
 
 <br/>

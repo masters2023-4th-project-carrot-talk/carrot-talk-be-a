@@ -44,9 +44,4 @@ https://github.com/masters2023-4th-project-carrot-talk/bee-market-be-b/assets/75
 - 작성된 판매글을 실시간 채팅을 이용한 문의가 가능하고, 채팅을 상대가 읽었는지 여부를 확인할 수 있는 읽지 않음 표시 기능이 제공됩니다.
 - 동네 선택, 카테고리 별 등록된 판매글을 필터링 할 수 있습니다.
 
-<br/>
 
-## 💡 Record
-- 블로그글 정리해서 링크 달기
-
-<br/>

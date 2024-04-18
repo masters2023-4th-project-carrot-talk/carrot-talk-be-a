@@ -20,10 +20,14 @@ https://github.com/masters2023-4th-project-carrot-talk/bee-market-be-b/assets/75
 
 <br/>
 
-## ⚙️ Infrastructure & CI/CD
+## 🛠️ System Architecture
+
+![beemarket_system_architecture](https://github.com/masters2023-4th-project-carrot-talk/carrot-talk-be-a/assets/57451700/c5522393-be48-4462-b70a-cd6a82b5ecc0)
+
+## ⚙️ CI/CD Pipeline
 <img src="https://img.shields.io/badge/AWS%20EC2-FA7343?style=flat&logo=amazonec2&logoColor=white"/> <img src="https://img.shields.io/badge/AWS%20RDS-red?style=flat&logo=amazonrds&logoColor=white"/> <img src="https://img.shields.io/badge/AWS%20S3-569A31?style=flat&logo=amazons3&logoColor=white"/> <img src="https://img.shields.io/badge/nginx-009639?style=flat&logo=nginx&logoColor=white"/> <img src="https://img.shields.io/badge/Github%20Actions-2088FF?style=flat&logo=GithubActions&logoColor=white"/> <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=Docker&logoColor=white"/>
 
-![beemarket](https://github.com/masters2023-4th-project-carrot-talk/carrot-talk-be-a/assets/57451700/c16c3024-3457-4ef1-ae8d-82a54a352df6)
+![beemarket_devops](https://github.com/masters2023-4th-project-carrot-talk/carrot-talk-be-a/assets/57451700/4f0b885a-aadc-45ab-968f-d1e4bc804978)
 
 <br/>
 
